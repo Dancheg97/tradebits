@@ -1,12 +1,12 @@
 package POST
 
 import (
+	"bc_server/calc"
 	"bc_server/database"
-	"bc_server/hash"
 	"bc_server/lock"
-	"bc_server/verify"
 	"encoding/binary"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -14,38 +14,36 @@ import (
 
 type sendRequest struct {
 	SenderPublicKey []byte `json:"senderPublicKey"`
-	Amount          []byte `json:"amount"`
+	SendAmountBytes []byte `json:"amount"`
 	RecieverAdress  []byte `json:"user"`
 	SenderSign      []byte `json:"sign"`
+	NodePublicKey   []byte `json:"NodePublicKey"`
+	NodeSign        []byte `json:"NodeSign"`
 }
 
-func lockParticipants(senderAdress []byte, recieverAdress []byte) {
-	var senderAdressArray [64]byte
-	var recieverAdressArray [64]byte
-	copy(senderAdressArray[:], senderAdress[:64])
-	copy(recieverAdressArray[:], recieverAdress[:64])
-	lock.Lock(senderAdressArray)
-	lock.Lock(recieverAdressArray)
+func lockSenderAndReciever(sender []byte, reciever []byte) error {
+	senderLockErr := lock.Lock(sender)
+	if senderLockErr != nil {
+		return errors.New("sender locked (for antoher operation)")
+	}
+	recieverLockErr := lock.Lock(reciever)
+	if recieverLockErr != nil {
+		lock.Unlock(sender)
+		return errors.New("sender locked (for antoher operation)")
+	}
+	return nil
 }
 
-func unlockParticipants(senderAdress []byte, recieverAdress []byte) {
-	var senderAdressArray [64]byte
-	var recieverAdressArray [64]byte
-	copy(senderAdressArray[:], senderAdress[:64])
-	copy(recieverAdressArray[:], recieverAdress[:64])
-	lock.Unlock(senderAdressArray)
-	lock.Unlock(recieverAdressArray)
+func unlockSenderAndReciever(sender []byte, reciever []byte) {
+	lock.Unlock(sender)
+	lock.Unlock(reciever)
 }
 
-func TransferMoney(senderAdress []byte, recieverAdress []byte, amount uint64) {
-	senderBalance := database.ReadBalance(senderAdress)
-	recieverBalance := database.ReadBalance(recieverAdress)
-	database.WriteBalance(senderAdress, senderBalance-amount)
-	database.WriteBalance(recieverAdress, recieverBalance-amount)
-}
-
-func CheckBalance(adress []byte, minimalBalance uint64) error {
-	
+func checkBalance(user *database.User, minValue uint64) error {
+	if user.MainBalance < minValue {
+		return errors.New("bad balance error")
+	}
+	return nil
 }
 
 func SendMessage(w http.ResponseWriter, r *http.Request) {
@@ -54,28 +52,46 @@ func SendMessage(w http.ResponseWriter, r *http.Request) {
 	var message sendRequest
 	json.Unmarshal(reqBody, &message)
 	senderPublicKey := message.SenderPublicKey
-	sendAmountBytes := message.Amount
+	sendAmountBytes := message.SendAmountBytes
 	recieverAdress := message.RecieverAdress
 	senderSign := message.SenderSign
-	senderAdress := hash.HashKey(senderPublicKey)
+	// lock sender and reciever with defers to unlock
+	senderAdress := calc.HashKey(senderPublicKey)
+	lockErr := lockSenderAndReciever(senderAdress, recieverAdress)
+	if lockErr != nil {
+		json.NewEncoder(w).Encode(lockErr)
+		return
+	}
+	defer unlockSenderAndReciever(senderAdress, recieverAdress)
+	// check balance
+	sender, getSenderErr := database.GetUser(senderAdress)
+	if getSenderErr != nil {
+		json.NewEncoder(w).Encode("sender does not exist")
+		return
+	}
 	sendAmount := binary.LittleEndian.Uint64(sendAmountBytes)
-	if senderBalance < sendAmount {
-		json.NewEncoder(w).Encode("not enough balance")
+	balanceErr := checkBalance(&sender, sendAmount)
+	if balanceErr != nil {
+		json.NewEncoder(w).Encode("not enough money to send")
 		return
 	}
-	// step 2 check sign
-	fullMessage := [][]byte{senderPublicKey, sendAmountBytes, recieverAdress}
-	signError := verify.Verify(fullMessage, senderPublicKey, senderSign)
-	if signError != nil {
-		fmt.Println("sign is not ok")
-		json.NewEncoder(w).Encode("sign verificaiton error")
+	// check sign
+	messageArr := [][]byte{senderPublicKey, sendAmountBytes, recieverAdress}
+	signErr := calc.Verify(messageArr, senderAdress, senderSign)
+	if signErr != nil {
+		json.NewEncoder(w).Encode("bad sign")
 		return
 	}
-	// step 3 - lock sender and reciever for processing time
-
-	//step 4 - transfer money
-
-	// step 5 - unlock sender and reciever
-
+	// TODO send transaction to syncronized nodes for verification, with a node sign
+	// TODO allow all nodes to write transation to blockchain
+	// TODO write transaction to blockchain
+	// transfer money
+	reciever, getRecieverErr := database.GetUser(recieverAdress)
+	if getRecieverErr != nil {
+		json.NewEncoder(w).Encode("reciever does not exist")
+		return
+	}
+	sender.SetMainBalance(sender.MainBalance - sendAmount)
+	reciever.SetMainBalance(reciever.MainBalance + sendAmount)
 	json.NewEncoder(w).Encode("sucess")
 }

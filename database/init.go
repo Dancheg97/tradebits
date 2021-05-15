@@ -4,4 +4,4 @@ import (
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
-var db, _ = leveldb.OpenFile("./data", nil)
+var DB, _ = leveldb.OpenFile("database/data", nil)

@@ -1,8 +1,8 @@
 package lock
 
 import (
+	"errors"
 	"sync"
-	"time"
 )
 
 /*
@@ -25,24 +25,26 @@ func generateBlockers() map[byte]*blockedMap {
 
 var blockers = generateBlockers()
 
-func Lock(ID [64]byte) {
-	for {
-		keyByte := ID[0]
-		blocker := blockers[keyByte]
-		blocker.mutex.Lock()
-		if _, found := blocker.userId[ID]; !found {
-			blocker.userId[ID] = true
-			blocker.mutex.Unlock()
-			return
-		}
-		time.Sleep(time.Millisecond * 8)
-	}
-}
-
-func Unlock(ID [64]byte) {
+func Lock(ID []byte) error {
+	var lockID [64]byte
+	copy(lockID[:], ID[:64])
 	keyByte := ID[0]
 	blocker := blockers[keyByte]
 	blocker.mutex.Lock()
-	delete(blocker.userId, ID)
+	_, found := blocker.userId[lockID]
+	if found {
+		return errors.New("user already locked")
+	}
+	blocker.userId[lockID] = true
+	return nil
+}
+
+func Unlock(ID []byte) {
+	var lockID [64]byte
+	copy(lockID[:], ID[:64])
+	keyByte := ID[0]
+	blocker := blockers[keyByte]
+	blocker.mutex.Lock()
+	delete(blocker.userId, lockID)
 	blocker.mutex.Unlock()
 }
