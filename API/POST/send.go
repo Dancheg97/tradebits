@@ -46,7 +46,6 @@ func checkBalance(user *database.User, minValue uint64) error {
 }
 
 func SendRequest(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Got send message")
 	reqBody, _ := ioutil.ReadAll(r.Body)
 	var message sendRequest
 	wrongRequest := json.Unmarshal(reqBody, &message)
@@ -111,6 +110,5 @@ func SendRequest(w http.ResponseWriter, r *http.Request) {
 	recieverAdressBase64 := base64.RawStdEncoding.EncodeToString(recieverAdress)
 	signBase64 := base64.RawStdEncoding.EncodeToString(senderSign)
 	fmt.Printf("---\n[sender: %v]\n[send: %v]\n[reciever:%v]\n[sign:%v]\n---\n", senderAdressBase64, sendAmount, recieverAdressBase64, signBase64)
-	fmt.Println("transaction passed")
 	fmt.Fprintf(w, "transaction passed")
 }
