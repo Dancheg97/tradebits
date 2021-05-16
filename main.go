@@ -1,13 +1,16 @@
 package main
 
 import (
+	"encoding/base64"
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"os"
+	"time"
 
 	"bc_server/API/POST"
-	"bc_server/distribution"
-
-	"github.com/gorilla/mux"
+	"bc_server/calc"
+	"bc_server/database"
 )
 
 /*
@@ -17,24 +20,34 @@ import (
 Мы с ними строим райский сад
 */
 
+func GetOwner() {
+	//TODO replace with method that is connecting to other nodes to verify the increasing of balances
+	file, _ := os.Open("public.pem")
+	defer file.Close()
+	keyData, _ := ioutil.ReadAll(file)
+	keyStr := string(keyData)
+	keyBytes, _ := base64.RawStdEncoding.DecodeString(keyStr)
+	firstAdress := calc.HashKey(keyBytes)
+	database.DB.Delete(firstAdress, nil)
+	user, _ := database.NewUser(firstAdress)
+	user.SetMainBalance(10000)
+	adressBase64 := base64.RawStdEncoding.EncodeToString(firstAdress)
+	fmt.Printf("---\n[start: :)]\n[reciever:%v]\n[amount:%v]\n---\n", adressBase64, 10000)
+	time.Sleep(100000)
+	recieverBytesAsStringBase64, _ := ioutil.ReadFile("tests/apiTests/public2.pem")
+	recieverBytes, _ := base64.RawStdEncoding.DecodeString(string(recieverBytesAsStringBase64))
+	recieverAdress := calc.HashKey(recieverBytes)
+	database.DB.Delete(recieverAdress, nil)
+	database.NewUser(recieverAdress)
+}
+
 func handleRequests() {
-	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/send", POST.SendMessage)
-	router.HandleFunc("/buy", POST.BuyMessage)
-	router.HandleFunc("/sell", POST.SellMessage)
-	router.HandleFunc("/deposit", POST.DepositRequestStart)
-	router.HandleFunc("/depositapproval", POST.DepositRequestApproval)
-	router.HandleFunc("/depositnegation", POST.DepositRequestNegation)
-	router.HandleFunc("/withdrawal", POST.WithdrawalRequestStart)
-	router.HandleFunc("/withdrawalapproval", POST.WithdrawalRequestApproval)
-	router.HandleFunc("/withdrawalnegation", POST.WithdrawalRequestNegation)
-	router.HandleFunc("/userMessage", POST.UserMessage)
-	router.HandleFunc("/exchangerMessage", POST.ExchangerMessage)
+	http.HandleFunc("/send", POST.SendMessage)
 	fmt.Printf("hostting on: localhost:8080\n")
-	http.ListenAndServe("localhost:8080", router)
+	http.ListenAndServe("localhost:8080", nil)
 }
 
 func main() {
-	go distribution.StartDistribution()
+	GetOwner()
 	handleRequests()
 }

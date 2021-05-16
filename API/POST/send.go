@@ -4,6 +4,7 @@ import (
 	"bc_server/calc"
 	"bc_server/database"
 	"bc_server/lock"
+	"encoding/base64"
 	"encoding/binary"
 	"encoding/json"
 	"errors"
@@ -13,12 +14,10 @@ import (
 )
 
 type sendRequest struct {
-	SenderPublicKey []byte `json:"senderPublicKey"`
-	SendAmountBytes []byte `json:"amount"`
-	RecieverAdress  []byte `json:"user"`
-	SenderSign      []byte `json:"sign"`
-	NodePublicKey   []byte `json:"NodePublicKey"`
-	NodeSign        []byte `json:"NodeSign"`
+	SenderPublicKey []byte `json:"SenderPublicKey"`
+	SendAmountBytes []byte `json:"SendAmountBytes"`
+	RecieverAdress  []byte `json:"RecieverAdress"`
+	SenderSign      []byte `json:"SenderSign"`
 }
 
 func lockSenderAndReciever(sender []byte, reciever []byte) error {
@@ -59,27 +58,27 @@ func SendMessage(w http.ResponseWriter, r *http.Request) {
 	senderAdress := calc.HashKey(senderPublicKey)
 	lockErr := lockSenderAndReciever(senderAdress, recieverAdress)
 	if lockErr != nil {
-		json.NewEncoder(w).Encode(lockErr)
+		fmt.Fprintf(w, "sender/reciever are locked with another transaction")
 		return
 	}
 	defer unlockSenderAndReciever(senderAdress, recieverAdress)
 	// check balance
 	sender, getSenderErr := database.GetUser(senderAdress)
 	if getSenderErr != nil {
-		json.NewEncoder(w).Encode("sender does not exist")
+		fmt.Fprintf(w, "sender does not exist error")
 		return
 	}
 	sendAmount := binary.LittleEndian.Uint64(sendAmountBytes)
 	balanceErr := checkBalance(&sender, sendAmount)
 	if balanceErr != nil {
-		json.NewEncoder(w).Encode("not enough money to send")
+		fmt.Fprintf(w, "balance error")
 		return
 	}
 	// check sign
 	messageArr := [][]byte{senderPublicKey, sendAmountBytes, recieverAdress}
-	signErr := calc.Verify(messageArr, senderAdress, senderSign)
+	signErr := calc.Verify(messageArr, senderPublicKey, senderSign) //TODO ch
 	if signErr != nil {
-		json.NewEncoder(w).Encode("bad sign")
+		fmt.Fprintf(w, "sign check error")
 		return
 	}
 	// TODO send transaction to syncronized nodes for verification, with a node sign
@@ -88,10 +87,14 @@ func SendMessage(w http.ResponseWriter, r *http.Request) {
 	// transfer money
 	reciever, getRecieverErr := database.GetUser(recieverAdress)
 	if getRecieverErr != nil {
-		json.NewEncoder(w).Encode("reciever does not exist")
+		fmt.Fprintf(w, "get reciever error")
 		return
 	}
 	sender.SetMainBalance(sender.MainBalance - sendAmount)
 	reciever.SetMainBalance(reciever.MainBalance + sendAmount)
-	json.NewEncoder(w).Encode("sucess")
+	senderAdressBase64 := base64.RawStdEncoding.EncodeToString(senderAdress)
+	recieverAdressBase64 := base64.RawStdEncoding.EncodeToString(recieverAdress)
+	signBase64 := base64.RawStdEncoding.EncodeToString(senderSign)
+	fmt.Printf("---\n[sender: %v]\n[send: %v]\n[reciever:%v]\n[sign:%v]\n---\n", senderAdressBase64, sendAmount, recieverAdressBase64, signBase64)
+	fmt.Fprintf(w, "transaction passed")
 }
