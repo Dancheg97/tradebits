@@ -42,7 +42,7 @@ func GetOwner() {
 }
 
 func handleRequests() {
-	http.HandleFunc("/send", POST.SendMessage)
+	http.HandleFunc("/send", POST.SendRequest)
 	fmt.Printf("hostting on: localhost:8080\n")
 	http.ListenAndServe("localhost:8080", nil)
 }

@@ -31,6 +31,7 @@ func Lock(ID []byte) error {
 	keyByte := ID[0]
 	blocker := blockers[keyByte]
 	blocker.mutex.Lock()
+	defer blocker.mutex.Unlock()
 	_, found := blocker.userId[lockID]
 	if found {
 		return errors.New("user already locked")
@@ -45,6 +46,6 @@ func Unlock(ID []byte) {
 	keyByte := ID[0]
 	blocker := blockers[keyByte]
 	blocker.mutex.Lock()
+	defer blocker.mutex.Unlock()
 	delete(blocker.userId, lockID)
-	blocker.mutex.Unlock()
 }

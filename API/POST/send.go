@@ -45,11 +45,16 @@ func checkBalance(user *database.User, minValue uint64) error {
 	return nil
 }
 
-func SendMessage(w http.ResponseWriter, r *http.Request) {
+func SendRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Got send message")
 	reqBody, _ := ioutil.ReadAll(r.Body)
 	var message sendRequest
-	json.Unmarshal(reqBody, &message)
+	wrongRequest := json.Unmarshal(reqBody, &message)
+	if wrongRequest != nil {
+		message := "json parse error"
+		fmt.Println(message)
+		fmt.Fprintf(w, message)
+	}
 	senderPublicKey := message.SenderPublicKey
 	sendAmountBytes := message.SendAmountBytes
 	recieverAdress := message.RecieverAdress
@@ -58,27 +63,35 @@ func SendMessage(w http.ResponseWriter, r *http.Request) {
 	senderAdress := calc.HashKey(senderPublicKey)
 	lockErr := lockSenderAndReciever(senderAdress, recieverAdress)
 	if lockErr != nil {
-		fmt.Fprintf(w, "sender/reciever are locked with another transaction")
+		message := "sender/reciever are locked with another transaction"
+		fmt.Println(message)
+		fmt.Fprintf(w, message)
 		return
 	}
 	defer unlockSenderAndReciever(senderAdress, recieverAdress)
 	// check balance
 	sender, getSenderErr := database.GetUser(senderAdress)
 	if getSenderErr != nil {
-		fmt.Fprintf(w, "sender does not exist error")
+		message := "sender does not exist error"
+		fmt.Println(message)
+		fmt.Fprintf(w, message)
 		return
 	}
 	sendAmount := binary.LittleEndian.Uint64(sendAmountBytes)
 	balanceErr := checkBalance(&sender, sendAmount)
 	if balanceErr != nil {
-		fmt.Fprintf(w, "balance error")
+		message := "balance error"
+		fmt.Println(message)
+		fmt.Fprintf(w, message)
 		return
 	}
 	// check sign
 	messageArr := [][]byte{senderPublicKey, sendAmountBytes, recieverAdress}
 	signErr := calc.Verify(messageArr, senderPublicKey, senderSign) //TODO ch
 	if signErr != nil {
-		fmt.Fprintf(w, "sign check error")
+		message := "sign check error"
+		fmt.Println(message)
+		fmt.Fprintf(w, message)
 		return
 	}
 	// TODO send transaction to syncronized nodes for verification, with a node sign
@@ -87,7 +100,9 @@ func SendMessage(w http.ResponseWriter, r *http.Request) {
 	// transfer money
 	reciever, getRecieverErr := database.GetUser(recieverAdress)
 	if getRecieverErr != nil {
-		fmt.Fprintf(w, "get reciever error")
+		message := "get reciever error"
+		fmt.Println(message)
+		fmt.Fprintf(w, message)
 		return
 	}
 	sender.SetMainBalance(sender.MainBalance - sendAmount)
@@ -96,5 +111,6 @@ func SendMessage(w http.ResponseWriter, r *http.Request) {
 	recieverAdressBase64 := base64.RawStdEncoding.EncodeToString(recieverAdress)
 	signBase64 := base64.RawStdEncoding.EncodeToString(senderSign)
 	fmt.Printf("---\n[sender: %v]\n[send: %v]\n[reciever:%v]\n[sign:%v]\n---\n", senderAdressBase64, sendAmount, recieverAdressBase64, signBase64)
+	fmt.Println("transaction passed")
 	fmt.Fprintf(w, "transaction passed")
 }
