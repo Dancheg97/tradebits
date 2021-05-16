@@ -1,5 +1,7 @@
 package database
 
+import "github.com/syndtr/goleveldb/leveldb"
+
 type Exchanger struct {
 	Name               string `json:"Name"`
 	Image              []byte `json:"Image"`
@@ -10,6 +12,8 @@ type Exchanger struct {
 	RequestsLink       []byte `json:"RequestsLink"`
 }
 
-func NewExchanger(adress []byte) {
+var ExchangerDB, _ = leveldb.OpenFile("database/exchangerData", nil)
 
+func NewExchanger(adress []byte) {
+	
 }
