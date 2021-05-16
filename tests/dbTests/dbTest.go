@@ -22,7 +22,6 @@ func testNewUserGeneration() error {
 	if user.Image != nil {
 		return errors.New("generated non empty image")
 	}
-	database.UserDB.Delete(key, nil)
 	return nil
 }
 
@@ -36,7 +35,6 @@ func getUserTest() error {
 	if user.MainBalance != 0 {
 		return errors.New("user data err")
 	}
-	database.UserDB.Delete(key, nil)
 	return nil
 }
 
@@ -48,7 +46,6 @@ func setUserParamsTest() error {
 	if sameUser.MainBalance != 12 {
 		return errors.New("bad balance")
 	}
-	database.UserDB.Delete(key, nil)
 	return nil
 }
 
