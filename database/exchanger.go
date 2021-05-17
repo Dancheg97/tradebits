@@ -12,7 +12,7 @@ type Exchanger struct {
 	RequestsLink       []byte `json:"RequestsLink"`
 }
 
-var ExchangerDB, _ = leveldb.OpenFile("database/exchangerData", nil)
+var exchangerDB, _ = leveldb.OpenFile("database/exchangerData", nil)
 
 func NewExchanger(adress []byte) {
 	

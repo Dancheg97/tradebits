@@ -61,7 +61,7 @@ func main() {
 	recieverBytes, _ := base64.RawStdEncoding.DecodeString(string(recieverBytesAsStringBase64))
 	amount := make([]byte, 8)
 	binary.LittleEndian.PutUint64(amount, uint64(1500))
-	recieverAdress := calc.HashKey(recieverBytes)
+	recieverAdress := calc.Hash(recieverBytes)
 	message := [][]byte{publicBytes, amount, recieverAdress}
 	sign, _ := Sign(message, privateBytes)
 	request := sendRequest{

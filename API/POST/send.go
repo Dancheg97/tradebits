@@ -4,11 +4,10 @@ import (
 	"bc_server/calc"
 	"bc_server/database"
 	"bc_server/lock"
-	"encoding/base64"
+	"bc_server/logs"
 	"encoding/binary"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -50,47 +49,38 @@ func SendRequest(w http.ResponseWriter, r *http.Request) {
 	var message sendRequest
 	wrongRequest := json.Unmarshal(reqBody, &message)
 	if wrongRequest != nil {
-		message := "json parse error"
-		fmt.Println(message)
-		fmt.Fprintf(w, message)
+		logs.ResponseErrString(w, "json parse error")
+		return
 	}
 	senderPublicKey := message.SenderPublicKey
 	sendAmountBytes := message.SendAmountBytes
 	recieverAdress := message.RecieverAdress
 	senderSign := message.SenderSign
 	// lock sender and reciever with defers to unlock
-	senderAdress := calc.HashKey(senderPublicKey)
+	senderAdress := calc.Hash(senderPublicKey)
 	lockErr := lockSenderAndReciever(senderAdress, recieverAdress)
 	if lockErr != nil {
-		message := "sender/reciever are locked with another transaction"
-		fmt.Println(message)
-		fmt.Fprintf(w, message)
-		return
+		logs.ResponseErrString(w, "users are lcoked")
+		return 
 	}
 	defer unlockSenderAndReciever(senderAdress, recieverAdress)
 	// check balance
 	sender, getSenderErr := database.GetUser(senderAdress)
 	if getSenderErr != nil {
-		message := "sender does not exist error"
-		fmt.Println(message)
-		fmt.Fprintf(w, message)
+		logs.ResponseErrString(w, "sender does not exist error")
 		return
 	}
 	sendAmount := binary.LittleEndian.Uint64(sendAmountBytes)
 	balanceErr := checkBalance(&sender, sendAmount)
 	if balanceErr != nil {
-		message := "balance error"
-		fmt.Println(message)
-		fmt.Fprintf(w, message)
+		logs.ResponseErrString(w, "balance error")
 		return
 	}
 	// check sign
 	messageArr := [][]byte{senderPublicKey, sendAmountBytes, recieverAdress}
 	signErr := calc.Verify(messageArr, senderPublicKey, senderSign) //TODO ch
 	if signErr != nil {
-		message := "sign check error"
-		fmt.Println(message)
-		fmt.Fprintf(w, message)
+		logs.ResponseErrString(w, "sign check error")
 		return
 	}
 	// TODO send transaction to syncronized nodes for verification, with a node sign
@@ -99,16 +89,10 @@ func SendRequest(w http.ResponseWriter, r *http.Request) {
 	// transfer money
 	reciever, getRecieverErr := database.GetUser(recieverAdress)
 	if getRecieverErr != nil {
-		message := "get reciever error"
-		fmt.Println(message)
-		fmt.Fprintf(w, message)
+		logs.ResponseErrString(w, "get reciever error")
 		return
 	}
 	sender.SetMainBalance(sender.MainBalance - sendAmount)
 	reciever.SetMainBalance(reciever.MainBalance + sendAmount)
-	senderAdressBase64 := base64.RawStdEncoding.EncodeToString(senderAdress)
-	recieverAdressBase64 := base64.RawStdEncoding.EncodeToString(recieverAdress)
-	signBase64 := base64.RawStdEncoding.EncodeToString(senderSign)
-	fmt.Printf("---\n[sender: %v]\n[send: %v]\n[reciever:%v]\n[sign:%v]\n---\n", senderAdressBase64, sendAmount, recieverAdressBase64, signBase64)
-	fmt.Fprintf(w, "transaction passed")
+	logs.Response(w, "transaction passed")
 }
