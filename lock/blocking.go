@@ -1,6 +1,7 @@
 package lock
 
 import (
+	"bc_server/logs"
 	"errors"
 	"sync"
 )
@@ -25,7 +26,18 @@ func generateBlockers() map[byte]*blockedMap {
 
 var blockers = generateBlockers()
 
+func checkLen(bytes []byte) error {
+	if len(bytes) != 64 {
+		return logs.Error(errors.New("wrong bytes length"))
+	}
+	return nil
+}
+
 func Lock(ID []byte) error {
+	lengthErr := checkLen(ID)
+	if lengthErr != nil {
+		return lengthErr
+	}
 	var lockID [64]byte
 	copy(lockID[:], ID[:64])
 	keyByte := ID[0]
