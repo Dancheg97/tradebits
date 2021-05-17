@@ -2,6 +2,7 @@ package GET
 
 import (
 	"bc_server/database"
+	"bc_server/logs"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -17,16 +18,13 @@ func BalanceRequest(w http.ResponseWriter, r *http.Request) {
 	var message balanceRequest
 	wrongRequest := json.Unmarshal(reqBody, &message)
 	if wrongRequest != nil {
-		message := "json parse error"
-		fmt.Println(message)
-		fmt.Fprintf(w, message)
+		logs.ResponseErrString(w, "json parse error")
+		return
 	}
 	user, getSenderErr := database.GetUser(message.Adress)
 	if getSenderErr != nil {
-		message := "user does not exist error"
-		fmt.Println(message)
-		fmt.Fprintf(w, message)
+		logs.ResponseErrString(w, "user does not exist error")
 		return
 	}
-	json.NewEncoder(w).Encode(user.MainBalance)
+	logs.Response(w, fmt.Sprint(user.MainBalance))
 }

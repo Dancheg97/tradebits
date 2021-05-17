@@ -8,6 +8,7 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -52,10 +53,18 @@ func SendRequest(w http.ResponseWriter, r *http.Request) {
 		logs.ResponseErrString(w, "json parse error")
 		return
 	}
+	parseConditions := []bool{
+		message.SenderPublicKey != nil,
+		message.SendAmountBytes
+	}
 	senderPublicKey := message.SenderPublicKey
 	sendAmountBytes := message.SendAmountBytes
 	recieverAdress := message.RecieverAdress
 	senderSign := message.SenderSign
+	fmt.Println(senderPublicKey)
+	fmt.Println(sendAmountBytes)
+	fmt.Println(recieverAdress)
+	fmt.Println(senderSign)
 	// lock sender and reciever with defers to unlock
 	senderAdress := calc.Hash(senderPublicKey)
 	lockErr := lockSenderAndReciever(senderAdress, recieverAdress)

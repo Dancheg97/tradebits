@@ -1,6 +1,145 @@
-2021/05/17 20:49:05 [ERROR-RESPONSE] signature error
-2021/05/17 20:56:04 [ERROR-RESPONSE] signature error
-2021/05/17 20:58:00 [ERROR-RESPONSE] signature error
-2021/05/17 21:03:35 [ERROR-RESPONSE] signature error
-2021/05/17 21:07:01 [ERROR-RESPONSE] user exists error
-2021/05/17 21:07:36 [GOOD-RESPONSE] user craeted
+2021/05/17 22:23:01 [GOOD-RESPONSE] ✐
+2021/05/17 22:23:53 [GOOD-RESPONSE] 10000
+2021/05/17 22:23:55 [GOOD-RESPONSE] 10000
+2021/05/17 22:24:31 [GOOD-RESPONSE] 10000
+2021/05/17 22:24:38 [GOOD-RESPONSE] 10000
+2021/05/17 22:24:39 [GOOD-RESPONSE] 10000
+2021/05/17 22:24:40 [GOOD-RESPONSE] 10000
+2021/05/17 22:24:40 [GOOD-RESPONSE] 10000
+2021/05/17 22:24:41 [GOOD-RESPONSE] 10000
+2021/05/17 22:24:42 [GOOD-RESPONSE] 10000
+2021/05/17 22:24:43 [GOOD-RESPONSE] 10000
+2021/05/17 22:24:43 [GOOD-RESPONSE] 10000
+2021/05/17 22:24:44 [GOOD-RESPONSE] 10000
+2021/05/17 22:24:44 [GOOD-RESPONSE] 10000
+2021/05/17 22:24:55 [GOOD-RESPONSE] user craeted
+2021/05/17 22:25:01 http: panic serving 127.0.0.1:61735: runtime error: slice bounds out of range [:64] with capacity 0
+goroutine 69 [running]:
+net/http.(*conn).serve.func1(0xc000624140)
+	C:/Program Files/Go/src/net/http/server.go:1824 +0x153
+panic(0x8c6b40, 0xc0000147c8)
+	C:/Program Files/Go/src/runtime/panic.go:971 +0x49a
+bc_server/lock.Lock(0x0, 0x0, 0x0, 0x0, 0x0)
+	C:/Users/dangd/Documents/sync_tree_server/lock/blocking.go:30 +0x2b6
+bc_server/API/POST.lockSenderAndReciever(0xc00000ef80, 0x40, 0x40, 0x0, 0x0, 0x0, 0x0, 0x5)
+	C:/Users/dangd/Documents/sync_tree_server/API/POST/send.go:27 +0x78
+bc_server/API/POST.SendRequest(0x94e270, 0xc0005a8c40, 0xc000594800)
+	C:/Users/dangd/Documents/sync_tree_server/API/POST/send.go:61 +0x246
+net/http.HandlerFunc.ServeHTTP(0x901f68, 0x94e270, 0xc0005a8c40, 0xc000594800)
+	C:/Program Files/Go/src/net/http/server.go:2069 +0x4b
+net/http.(*ServeMux).ServeHTTP(0xae4d00, 0x94e270, 0xc0005a8c40, 0xc000594800)
+	C:/Program Files/Go/src/net/http/server.go:2448 +0x1b7
+net/http.serverHandler.ServeHTTP(0xc0005a8540, 0x94e270, 0xc0005a8c40, 0xc000594800)
+	C:/Program Files/Go/src/net/http/server.go:2887 +0xaa
+net/http.(*conn).serve(0xc000624140, 0x94e920, 0xc00005f140)
+	C:/Program Files/Go/src/net/http/server.go:1952 +0x8cd
+created by net/http.(*Server).Serve
+	C:/Program Files/Go/src/net/http/server.go:3013 +0x3b8
+2021/05/17 22:25:09 [ERROR-RESPONSE] users are lcoked
+2021/05/17 22:25:11 [ERROR-RESPONSE] users are lcoked
+2021/05/17 22:25:13 [ERROR-RESPONSE] users are lcoked
+2021/05/17 22:25:54 [ERROR-RESPONSE] users are lcoked
+2021/05/17 22:25:56 [ERROR-RESPONSE] users are lcoked
+2021/05/17 22:26:29 http: panic serving 127.0.0.1:61779: runtime error: slice bounds out of range [:64] with capacity 0
+goroutine 28 [running]:
+net/http.(*conn).serve.func1(0xc0001aa000)
+	C:/Program Files/Go/src/net/http/server.go:1824 +0x153
+panic(0x1096b40, 0xc00021e0c0)
+	C:/Program Files/Go/src/runtime/panic.go:971 +0x49a
+bc_server/lock.Lock(0x0, 0x0, 0x0, 0x0, 0x0)
+	C:/Users/dangd/Documents/sync_tree_server/lock/blocking.go:30 +0x2b6
+bc_server/API/POST.lockSenderAndReciever(0xc000236040, 0x40, 0x40, 0x0, 0x0, 0x0, 0x0, 0x5)
+	C:/Users/dangd/Documents/sync_tree_server/API/POST/send.go:27 +0x78
+bc_server/API/POST.SendRequest(0x111e270, 0xc0001380e0, 0xc00021a000)
+	C:/Users/dangd/Documents/sync_tree_server/API/POST/send.go:61 +0x246
+net/http.HandlerFunc.ServeHTTP(0x10d1f68, 0x111e270, 0xc0001380e0, 0xc00021a000)
+	C:/Program Files/Go/src/net/http/server.go:2069 +0x4b
+net/http.(*ServeMux).ServeHTTP(0x12b4d00, 0x111e270, 0xc0001380e0, 0xc00021a000)
+	C:/Program Files/Go/src/net/http/server.go:2448 +0x1b7
+net/http.serverHandler.ServeHTTP(0xc000606540, 0x111e270, 0xc0001380e0, 0xc00021a000)
+	C:/Program Files/Go/src/net/http/server.go:2887 +0xaa
+net/http.(*conn).serve(0xc0001aa000, 0x111e920, 0xc000202000)
+	C:/Program Files/Go/src/net/http/server.go:1952 +0x8cd
+created by net/http.(*Server).Serve
+	C:/Program Files/Go/src/net/http/server.go:3013 +0x3b8
+2021/05/17 22:26:57 [ERROR-RESPONSE] users are lcoked
+2021/05/17 22:29:09 [ERROR-RESPONSE] users are lcoked
+2021/05/17 22:29:25 [GOOD-RESPONSE] transaction passed
+2021/05/17 22:29:30 [GOOD-RESPONSE] transaction passed
+2021/05/17 22:29:31 [GOOD-RESPONSE] transaction passed
+2021/05/17 22:29:32 [GOOD-RESPONSE] transaction passed
+2021/05/17 22:29:32 [GOOD-RESPONSE] transaction passed
+2021/05/17 22:29:33 [GOOD-RESPONSE] transaction passed
+2021/05/17 22:29:33 [ERROR-RESPONSE] balance error
+2021/05/17 22:29:34 [ERROR-RESPONSE] balance error
+2021/05/17 22:29:35 [ERROR-RESPONSE] balance error
+2021/05/17 22:29:35 [ERROR-RESPONSE] balance error
+2021/05/17 22:29:35 [ERROR-RESPONSE] balance error
+2021/05/17 22:29:36 [ERROR-RESPONSE] balance error
+2021/05/17 22:30:01 http: panic serving 127.0.0.1:61890: runtime error: slice bounds out of range [:64] with capacity 0
+goroutine 87 [running]:
+net/http.(*conn).serve.func1(0xc0000a4780)
+	C:/Program Files/Go/src/net/http/server.go:1824 +0x153
+panic(0x376b40, 0xc0000ae510)
+	C:/Program Files/Go/src/runtime/panic.go:971 +0x49a
+bc_server/lock.Lock(0x0, 0x0, 0x0, 0x0, 0x0)
+	C:/Users/dangd/Documents/sync_tree_server/lock/blocking.go:30 +0x2b6
+bc_server/API/POST.lockSenderAndReciever(0xc0000c6b80, 0x40, 0x40, 0x0, 0x0, 0x0, 0x0, 0x5)
+	C:/Users/dangd/Documents/sync_tree_server/API/POST/send.go:27 +0x78
+bc_server/API/POST.SendRequest(0x3fe270, 0xc000100a80, 0xc000090600)
+	C:/Users/dangd/Documents/sync_tree_server/API/POST/send.go:61 +0x246
+net/http.HandlerFunc.ServeHTTP(0x3b1f68, 0x3fe270, 0xc000100a80, 0xc000090600)
+	C:/Program Files/Go/src/net/http/server.go:2069 +0x4b
+net/http.(*ServeMux).ServeHTTP(0x594d00, 0x3fe270, 0xc000100a80, 0xc000090600)
+	C:/Program Files/Go/src/net/http/server.go:2448 +0x1b7
+net/http.serverHandler.ServeHTTP(0xc000100620, 0x3fe270, 0xc000100a80, 0xc000090600)
+	C:/Program Files/Go/src/net/http/server.go:2887 +0xaa
+net/http.(*conn).serve(0xc0000a4780, 0x3fe920, 0xc0000deb40)
+	C:/Program Files/Go/src/net/http/server.go:1952 +0x8cd
+created by net/http.(*Server).Serve
+	C:/Program Files/Go/src/net/http/server.go:3013 +0x3b8
+2021/05/17 23:08:03 http: panic serving 127.0.0.1:62772: runtime error: slice bounds out of range [:64] with capacity 0
+goroutine 43 [running]:
+net/http.(*conn).serve.func1(0xc0000a4aa0)
+	C:/Program Files/Go/src/net/http/server.go:1824 +0x153
+panic(0x10d6b40, 0xc0000ae180)
+	C:/Program Files/Go/src/runtime/panic.go:971 +0x49a
+bc_server/lock.Lock(0x0, 0x0, 0x0, 0x0, 0x0)
+	C:/Users/dangd/Documents/sync_tree_server/lock/blocking.go:30 +0x2b6
+bc_server/API/POST.lockSenderAndReciever(0xc0000c6040, 0x40, 0x40, 0x0, 0x0, 0x0, 0x0, 0x5)
+	C:/Users/dangd/Documents/sync_tree_server/API/POST/send.go:27 +0x78
+bc_server/API/POST.SendRequest(0x115e270, 0xc000648000, 0xc000582100)
+	C:/Users/dangd/Documents/sync_tree_server/API/POST/send.go:61 +0x246
+net/http.HandlerFunc.ServeHTTP(0x1111f68, 0x115e270, 0xc000648000, 0xc000582100)
+	C:/Program Files/Go/src/net/http/server.go:2069 +0x4b
+net/http.(*ServeMux).ServeHTTP(0x12f4d00, 0x115e270, 0xc000648000, 0xc000582100)
+	C:/Program Files/Go/src/net/http/server.go:2448 +0x1b7
+net/http.serverHandler.ServeHTTP(0xc000100620, 0x115e270, 0xc000648000, 0xc000582100)
+	C:/Program Files/Go/src/net/http/server.go:2887 +0xaa
+net/http.(*conn).serve(0xc0000a4aa0, 0x115e920, 0xc000626000)
+	C:/Program Files/Go/src/net/http/server.go:1952 +0x8cd
+created by net/http.(*Server).Serve
+	C:/Program Files/Go/src/net/http/server.go:3013 +0x3b8
+2021/05/17 23:08:03 [ERROR-RESPONSE] users are lcoked
+2021/05/17 23:09:22 http: panic serving 127.0.0.1:62806: runtime error: slice bounds out of range [:64] with capacity 0
+goroutine 66 [running]:
+net/http.(*conn).serve.func1(0xc00063c000)
+	C:/Program Files/Go/src/net/http/server.go:1824 +0x153
+panic(0x8e6b40, 0xc000014588)
+	C:/Program Files/Go/src/runtime/panic.go:971 +0x49a
+bc_server/lock.Lock(0x0, 0x0, 0x0, 0x0, 0x0)
+	C:/Users/dangd/Documents/sync_tree_server/lock/blocking.go:30 +0x2b6
+bc_server/API/POST.lockSenderAndReciever(0xc0000e28c0, 0x40, 0x40, 0x0, 0x0, 0x0, 0x0, 0x0)
+	C:/Users/dangd/Documents/sync_tree_server/API/POST/send.go:28 +0x78
+bc_server/API/POST.SendRequest(0x96e270, 0xc0000b6460, 0xc0000a2200)
+	C:/Users/dangd/Documents/sync_tree_server/API/POST/send.go:66 +0x47e
+net/http.HandlerFunc.ServeHTTP(0x921f68, 0x96e270, 0xc0000b6460, 0xc0000a2200)
+	C:/Program Files/Go/src/net/http/server.go:2069 +0x4b
+net/http.(*ServeMux).ServeHTTP(0xb04d00, 0x96e270, 0xc0000b6460, 0xc0000a2200)
+	C:/Program Files/Go/src/net/http/server.go:2448 +0x1b7
+net/http.serverHandler.ServeHTTP(0xc0000b62a0, 0x96e270, 0xc0000b6460, 0xc0000a2200)
+	C:/Program Files/Go/src/net/http/server.go:2887 +0xaa
+net/http.(*conn).serve(0xc00063c000, 0x96e920, 0xc00005e9c0)
+	C:/Program Files/Go/src/net/http/server.go:1952 +0x8cd
+created by net/http.(*Server).Serve
+	C:/Program Files/Go/src/net/http/server.go:3013 +0x3b8
