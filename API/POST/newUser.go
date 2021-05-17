@@ -30,7 +30,7 @@ func NewUserRequest(w http.ResponseWriter, r *http.Request) {
 	SenderSign := message.SenderSign
 	//check sign
 	mes := [][]byte{SenderPublicKey, MessageKey, Image}
-	signErr := calc.Verify(mes, MessageKey, SenderSign)
+	signErr := calc.Verify(mes, SenderPublicKey, SenderSign)
 	if signErr != nil {
 		logs.ResponseErrString(w, "signature error")
 		return

@@ -55,14 +55,15 @@ func main() {
 	publicBytes, _ := base64.RawStdEncoding.DecodeString(string(publicBytesAsStringBase64))
 	privateBytesAsStringBase64, _ := ioutil.ReadFile("private2.pem")
 	privateBytes, _ := base64.RawStdEncoding.DecodeString(string(privateBytesAsStringBase64))
-	message := [][]byte{publicBytes, []byte{0}, []byte{0}}
+	message := [][]byte{publicBytes, nil, nil}
 	sign, _ := Sign(message, privateBytes)
 	request := newUserRequest{
 		SenderPublicKey: publicBytes,
-		MessageKey:      []byte{0},
-		Image:           []byte{0},
+		MessageKey:      nil,
+		Image:           nil,
 		SenderSign:      sign,
 	}
 	req, _ := json.Marshal(request)
-	fmt.Println(string(req))
+	fmt.Println(req)
+	Verify(message, privateBytes, sign)
 }
