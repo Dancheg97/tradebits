@@ -15,13 +15,7 @@ func Sign(message [][]byte, privateKey []byte) ([]byte, error) {
 		__logs.Error(errors.New("failed to parse private key"))
 		return
 	}
-	hasher, hasherErr := blake2b.New512([]byte("1u89hdsaj098as12"))
-	if hasherErr != nil {
-		__logs.Critical(errors.New("unexpected error craeting hasher"))
-		return
-	}
-	hasher.Write(ConcatenateMessage(message))
-	msgHashSum := hasher.Sum(nil)
+	msgHashSum := Hash(ConcatenateMessage(message))
 	signatureBytes, signErr := rsa.SignPSS(
 		rand.Reader,
 		private,

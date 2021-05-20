@@ -8,6 +8,8 @@ import (
 	"encoding/pem"
 	"errors"
 	"sync_tree/__logs"
+
+	"golang.org/x/crypto/blake2b"
 )
 
 func Verify(message [][]byte, keyBytes []byte, sign []byte) error {
@@ -16,9 +18,7 @@ func Verify(message [][]byte, keyBytes []byte, sign []byte) error {
 		__logs.Error(errors.New("error parsing public key while signing"))
 		return
 	}
-	hasher, _ := blake2b.New512([]byte("1u89hdsaj098as12"))
-	hasher.Write([]byte(ConcatenateMessage(message)))
-	hash := hasher.Sum(nil)
+	hash := Hash(ConcatenateMessage(message))
 	return rsa.VerifyPSS(publicKey, crypto.BLAKE2b_512, hash, sign, nil)
 }
 
