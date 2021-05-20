@@ -7,23 +7,23 @@ import (
 	"net/http"
 )
 
-type exchangerMessage struct {
-	ExchangerPublicKey string `json:"ExchangerPublicKey"`
-	ExchangerSign      string `json:"ExchangerSign"`
-	OperationID        string `json:"OperationID"`
-	ExchangerMessage   string `json:"ExchangerMessage"`
+type assetMessage struct {
+	AssetPublicKey string `json:"AssetPublicKey"`
+	AssetSign      string `json:"AssetSign"`
+	OperationID    string `json:"OperationID"`
+	AssetMessage   string `json:"AssetMessage"`
 }
 
-func ExchangerMessage(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Message from exchanger")
+func AssetMessage(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Message from asset")
 	requestBody, _ := ioutil.ReadAll(r.Body)
-	var message exchangerMessage
+	var message assetMessage
 	json.Unmarshal(requestBody, &message)
-	var ExchangerPublicKey string = message.ExchangerPublicKey
-	var ExchangerSign string = message.ExchangerSign
+	var AssetPublicKey string = message.AssetPublicKey
+	var AssetSign string = message.AssetSign
 	var OperationID string = message.OperationID
-	var exchangerMessage string = message.ExchangerMessage
-	fmt.Println(ExchangerPublicKey, ExchangerSign, OperationID, exchangerMessage)
+	var assetMessage string = message.AssetMessage
+	fmt.Println(AssetPublicKey, AssetSign, OperationID, assetMessage)
 }
 
 type userMessage struct {

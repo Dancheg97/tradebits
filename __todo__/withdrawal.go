@@ -8,12 +8,12 @@ import (
 )
 
 type withdrawalRequestStart struct {
-	UserPublicKey   string `json:"UserPublicKey"`
-	UserSign        string `json:"UserSign"`
-	ExchangerAdress string `json:"ExchangerAdress"`
-	OperationID     string `json:"OperationID"`
-	Amount          int64  `json:"Amount"`
-	Message         string `json:"Message"`
+	UserPublicKey string `json:"UserPublicKey"`
+	UserSign      string `json:"UserSign"`
+	AssetAdress   string `json:"AssetAdress"`
+	OperationID   string `json:"OperationID"`
+	Amount        int64  `json:"Amount"`
+	Message       string `json:"Message"`
 }
 
 func WithdrawalRequestStart(w http.ResponseWriter, r *http.Request) {
@@ -23,11 +23,11 @@ func WithdrawalRequestStart(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(reqBody, &message)
 	var UserPublicKey string = message.UserPublicKey
 	var UserSign string = message.UserSign
-	var ExchangerAdress string = message.ExchangerAdress
+	var AssetAdress string = message.AssetAdress
 	var OperationID string = message.OperationID
 	var Amount int64 = message.Amount
 	var Message string = message.Message
-	fmt.Println(UserPublicKey, UserSign, ExchangerAdress, OperationID, Amount, Message)
+	fmt.Println(UserPublicKey, UserSign, AssetAdress, OperationID, Amount, Message)
 }
 
 type withdrawalRequestApproval struct {

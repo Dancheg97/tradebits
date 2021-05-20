@@ -1,22 +1,22 @@
-package database
+package user
 
 import (
+	"bc_server/lock"
 	"encoding/json"
 	"errors"
-	"github.com/syndtr/goleveldb/leveldb"
+	"runtime"
 )
 
 type User struct {
-	MainBalance       uint64            `json:"MainBalance"`
-	MessageKey        []byte            `json:"MessageKey"`
-	Image             []byte            `json:"Image"`
-	ExchangerBalances map[string]uint64 `json:"ExchangerBalances"`
-	adress            []byte
+	MainBalance   uint64            `json:"MainBalance"`
+	MessageKey    []byte            `json:"MessageKey"`
+	Image         []byte            `json:"Image"`
+	AssetBalances map[string]uint64 `json:"AssetBalances"`
+	adress        []byte
 }
 
-var userDB, _ = leveldb.OpenFile("database/userData", nil)
-
 func NewUser(adress []byte) (User, error) {
+	lock.Lock(adress)
 	user := User{}
 	user.adress = adress
 	_, dbErr := userDB.Get(adress, nil)
@@ -26,9 +26,13 @@ func NewUser(adress []byte) (User, error) {
 	user.MainBalance = 0
 	user.MessageKey = nil
 	user.Image = nil
-	user.ExchangerBalances = make(map[string]uint64)
+	user.AssetBalances = make(map[string]uint64)
 	userAsBytes, _ := json.Marshal(&user)
 	userDB.Put(adress, userAsBytes, nil)
+	runtime.SetFinalizer(
+		&user,
+		user.unlcok,
+	)
 	return user, nil
 }
 
@@ -41,6 +45,10 @@ func GetUser(adress []byte) (User, error) {
 	}
 	json.Unmarshal(userBytes, &user)
 	return user, nil
+}
+
+func (user User) unlcok() {
+	lock.Unlock(user.adress)
 }
 
 func (user User) SetMainBalance(balance uint64) {
@@ -61,8 +69,8 @@ func (user User) SetImage(image []byte) {
 	userDB.Put(user.adress, userAsBytes, nil)
 }
 
-func (user User) SetExchangerBalance(exchanger []byte, balance uint64) {
-	user.ExchangerBalances[string(exchanger)] = balance
+func (user User) SetAssetBalance(asset []byte, balance uint64) {
+	user.AssetBalances[string(asset)] = balance
 	userAsBytes, _ := json.Marshal(&user)
 	userDB.Put(user.adress, userAsBytes, nil)
 }

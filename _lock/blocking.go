@@ -3,6 +3,7 @@ package lock
 import (
 	"bc_server/logs"
 	"errors"
+	"fmt"
 	"sync"
 )
 
@@ -34,6 +35,7 @@ func checkLen(bytes []byte) error {
 }
 
 func Lock(ID []byte) error {
+	fmt.Println("lock start")
 	lengthErr := checkLen(ID)
 	if lengthErr != nil {
 		return lengthErr
@@ -53,6 +55,7 @@ func Lock(ID []byte) error {
 }
 
 func Unlock(ID []byte) {
+	fmt.Println("lock end")
 	var lockID [64]byte
 	copy(lockID[:], ID[:64])
 	keyByte := ID[0]

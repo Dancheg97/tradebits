@@ -169,3 +169,16 @@ created by net/http.(*Server).Serve
 2021/05/17 23:27:41 [ERROR-RESPONSE] users are lcoked
 2021/05/17 23:27:41 [ERROR] wrong bytes length
 2021/05/17 23:27:41 [ERROR-RESPONSE] users are lcoked
+2021/05/17 23:28:23 [ERROR] wrong bytes length
+2021/05/17 23:28:23 [ERROR-RESPONSE] users are lcoked
+2021/05/17 23:35:46 [ERROR] wrong bytes length
+2021/05/17 23:35:46 [ERROR-RESPONSE] users are lcoked
+2021/05/17 23:35:47 [ERROR] wrong bytes length
+2021/05/17 23:35:47 [ERROR-RESPONSE] users are lcoked
+2021/05/17 23:36:13 [GOOD-RESPONSE] transaction passed
+2021/05/17 23:36:15 [GOOD-RESPONSE] transaction passed
+2021/05/17 23:36:15 [GOOD-RESPONSE] transaction passed
+2021/05/17 23:36:15 [GOOD-RESPONSE] transaction passed
+2021/05/17 23:36:15 [GOOD-RESPONSE] transaction passed
+2021/05/17 23:36:16 [GOOD-RESPONSE] transaction passed
+2021/05/17 23:36:17 [ERROR-RESPONSE] balance error
