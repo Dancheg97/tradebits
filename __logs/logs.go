@@ -1,4 +1,4 @@
-package logs
+package __logs
 
 import (
 	"encoding/json"
