@@ -1,16 +1,61 @@
-ДЕЛАТЬ:
-/ - Для каждой транзакции делать следующие проверки:
-- проверка парсинга запроса
-- проверка наличия всех необходимых полей
-- проверка возможности приведения типов у всех полей
-- проверка блокировки
-- проверка балансов
-- проверка подписи
+# Sync tree server
+
+Server software to run sync tree server model.
+
+Every dependency can go only from bottom level to top (as they are listed in folder), so that `main` package can import evrything, while package `__logs` is unabale to import anything.
+
+Here is current listing (arrow represents import ability):
 
 
-СДЕЛАНО:
-/ - Протестировать базу данных OK - быстрая и крутая бд, заебись
-/ - Вынести все криптографические операции в отдельную директорию, определить самые нужные и поставить их сверху, второстепенные оставить снизу
-/ - Добавить систему получения публичного публичного ключа, получаемого из хэша закрытого публичного ключа
+- `__logs` (low utils)
 
+  ↑ ↑ ↑
+- `_calc` (utils)
+- `_data` (utils)
+- `_lock` (utils)
+- `_net` (utils)
+
+  ↑ ↑
+- `asset` (entities)
+- `node` (entities)
+- `user` (entities)
+
+  ↑
+- `main`
+
+## Logs
+
+Methods that are used according to level of importance of some message.
+
+- `Info`
+- `Warning`
+- `Error`
+- `Fatal`
+
+## Data
+
+All of the methods has checks and logging. Every attemt to do some unexpected action (put instead of change/ get value that does not exist) or any external database issues are gonna be logged with CRITICAL tag.
+In current implementation leveldb is used to store data, function list:
+- `Get` - method to get bytes from database
+- `Put` - method to put element to database
+- `Change` - method to change element in database
+- `Check` - method is cheking some value is written by some key
+
+
+## Calc
+
+This package implements methods used to calculate hashes, verify and sign messages.
+
+- `Hash` - take a hash from value
+- `Sign` - sign a byte message using private key bytes
+- `Verify` - verify byte message by sign using public key bytes
+
+## Lock
+
+This package provides functions to lock and unlock byte slices (with length of 64), to prevent double spending. Functions:
+
+- `Lock` - lock byte slice (len 64, according to blake2b hash length)
+- `Unlcok` - unlock byte slice
+
+## Net
 

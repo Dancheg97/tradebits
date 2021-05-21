@@ -18,11 +18,11 @@ func Verify(message [][]byte, keyBytes []byte, sign []byte) error {
 		__logs.Error(errors.New("error parsing public key while signing"))
 		return
 	}
-	hash := Hash(ConcatenateMessage(message))
+	hash := Hash(concatenateMessage(message))
 	return rsa.VerifyPSS(publicKey, crypto.BLAKE2b_512, hash, sign, nil)
 }
 
-func ConcatenateMessage(message [][]byte) []byte {
+func concatenateMessage(message [][]byte) []byte {
 	concatenated := []byte{}
 	for i := 0; i < len(message); i++ {
 		concatenated = append(concatenated, message[i]...)

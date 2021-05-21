@@ -1,8 +1,7 @@
-package lock
+package _lock
 
 import (
-	"bc_server/logs"
-	"errors"
+	"sync_tree/__logs"
 	"fmt"
 	"sync"
 )
@@ -29,13 +28,13 @@ var blockers = generateBlockers()
 
 func checkLen(bytes []byte) error {
 	if len(bytes) != 64 {
-		return logs.Error(errors.New("wrong bytes length"))
+		return __logs.Error("wrong bytes length")
 	}
 	return nil
 }
 
 func Lock(ID []byte) error {
-	fmt.Println("lock start")
+	__logs.Info("lock start ID: " + string(ID))
 	lengthErr := checkLen(ID)
 	if lengthErr != nil {
 		return lengthErr
@@ -48,7 +47,7 @@ func Lock(ID []byte) error {
 	defer blocker.mutex.Unlock()
 	_, found := blocker.userId[lockID]
 	if found {
-		return errors.New("user already locked")
+		return __logs.Error("user already locked")
 	}
 	blocker.userId[lockID] = true
 	return nil

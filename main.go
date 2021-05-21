@@ -9,6 +9,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"bc_server/GET"
+	"bc_server/POST"
 )
 
 func handleRequests() {
