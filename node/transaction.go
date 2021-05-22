@@ -2,7 +2,6 @@ package database
 
 import (
 	"encoding/json"
-	"sync_tree/_calc"
 
 	"github.com/syndtr/goleveldb/leveldb"
 )
