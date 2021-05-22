@@ -1,7 +1,6 @@
 package user
 
 import (
-	"bc_server/_lock"
 	"encoding/json"
 	"errors"
 	"runtime"

@@ -59,3 +59,4 @@ This package provides functions to lock and unlock byte slices (with length of 6
 
 ## Net
 
+That package contains interfaces that are used to communicate to outer space.
