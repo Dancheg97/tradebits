@@ -30,6 +30,7 @@ func createExistingUserTest() {
 
 func getFreeUserTest() {
 	freeUser := user.Get(adress)
+	defer freeUser.Save()
 	if freeUser.ImgLink == "user image link" {
 		fmt.Println("\033[32m[TEST] (USER) {Get free} - passed\033[0m")
 		return
@@ -38,7 +39,14 @@ func getFreeUserTest() {
 }
 
 func getBusyUserTest() {
-	
+	freeUser := user.Get(adress)
+	defer freeUser.Save()
+	busyUser := user.Get(adress)
+	if busyUser != nil {
+		fmt.Println("\033[31m[TEST] (USER) {Get busy} - failed\033[0m")
+		return
+	}
+	fmt.Println("\033[32m[TEST] (USER) {Get busy} - passed\033[0m")
 }
 
 func main() {
@@ -46,4 +54,5 @@ func main() {
 	createNewUserTest()
 	createExistingUserTest()
 	getFreeUserTest()
+	getBusyUserTest()
 }

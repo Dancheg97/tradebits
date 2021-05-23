@@ -16,16 +16,16 @@ type user struct {
 	Assets  map[string]uint64
 }
 
-// Create new user, in case there is already user same adress
+// Create new user, in case there is already user with same adress
 // the error will be logged
-func Create(adress []byte, mesKey []byte, img string) error {
+func Create(adress []byte, MesKey []byte, ImgLink string) error {
 	if _data.Check(adress) {
 		return __logs.Error("create user by existing key ", adress)
 	}
 	u := user{
 		Balance: 0,
-		MesKey:  mesKey,
-		ImgLink: img,
+		MesKey:  MesKey,
+		ImgLink: ImgLink,
 		Assets:  make(map[string]uint64),
 	}
 	cache := new(bytes.Buffer)

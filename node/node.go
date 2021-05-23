@@ -9,5 +9,7 @@ import (
 )
 
 type node struct {
-	adress 
+	adress      []byte
+	Balance     uint64
+	connections []string
 }

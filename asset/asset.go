@@ -1,19 +1,41 @@
 package database
 
-import "github.com/syndtr/goleveldb/leveldb"
+import (
+	"bytes"
+	"encoding/gob"
+	"sync_tree/__logs"
+	"sync_tree/_calc"
+	"sync_tree/_data"
+)
 
-type Asset struct {
-	Name               string `json:"Name"`
-	Image              []byte `json:"Image"`
-	Pledge             uint64 `json:"Pledge"`
-	MessageKey         []byte `json:"MessageKey"`
-	GoodFeedBacksCount uint64 `json:"GoodFeedBacksCount"`
-	BadFeedBacksCount  uint64 `json:"BadFeedBacksCount"`
-	RequestsLink       []byte `json:"RequestsLink"`
+type asset struct {
+	adress   []byte
+	Name     string
+	ImgLink  []byte
+	MesKey   []byte
+	Likes    []byte
+	Dislikes []byte
+	Trades   []byte
 }
 
-var assetDB, _ = leveldb.OpenFile("database/assetData", nil)
-
-func NewAsset(adress []byte) {
-
+// Create new exchanger, in case there is already one with same adress
+// or other technical troubles be logged
+func Create(adress []byte, Name string, ImgLink []byte, MesKey []byte) error {
+	if _data.Check(adress) {
+		return __logs.Error("create asset by existing key ", adress)
+	}
+	newAsset := asset{
+		adress:   adress,
+		Name:     Name,
+		ImgLink:  ImgLink,
+		MesKey:   MesKey,
+		Likes:    _calc.RandBytes(),
+		Dislikes: _calc.RandBytes(),
+		Trades:   _calc.RandBytes(),
+	}
+	cache := new(bytes.Buffer)
+	gob.NewEncoder(cache).Encode(newAsset)
+	_data.Put(adress, cache.Bytes())
+	__logs.Info("new user create success, adress: %v", adress)
+	return nil
 }
