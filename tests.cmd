@@ -1,1 +1,1 @@
-del _data/dbase
+rmdir /s "_data/base"
