@@ -1,9 +1,8 @@
 package _lock
 
 import (
-	"fmt"
-	"sync"
 	"sync_tree/__logs"
+	"sync"
 )
 
 /*
@@ -33,11 +32,11 @@ func checkLen(bytes []byte) error {
 	return nil
 }
 
-func Lock(ID []byte) bool {
-	__logs.Info("lock start ID: " + string(ID))
+func Lock(ID []byte) error {
+	__logs.Info("lock start ID: ", ID)
 	lengthErr := checkLen(ID)
 	if lengthErr != nil {
-		return false
+		return lengthErr
 	}
 	var lockID [64]byte
 	copy(lockID[:], ID[:64])
@@ -47,15 +46,14 @@ func Lock(ID []byte) bool {
 	defer blocker.mutex.Unlock()
 	_, found := blocker.userId[lockID]
 	if found {
-		__logs.Error("user already locked")
-		return false
+		return __logs.Error("user already locked")
 	}
 	blocker.userId[lockID] = true
-	return true
+	return nil
 }
 
 func Unlock(ID []byte) {
-	fmt.Println("lock end")
+	__logs.Info("lock end", ID)
 	var lockID [64]byte
 	copy(lockID[:], ID[:64])
 	keyByte := ID[0]
