@@ -16,8 +16,10 @@ type user struct {
 	Assets  map[string]uint64
 }
 
-// Create new user, in case there is already user with same adress
-// the error will be logged
+/*
+Create new user, in case there is already user with same adress
+the error will be logged
+*/
 func Create(adress []byte, MesKey []byte, ImgLink string) error {
 	if _data.Check(adress) {
 		return __logs.Error("create user by existing key ", adress)
@@ -35,8 +37,10 @@ func Create(adress []byte, MesKey []byte, ImgLink string) error {
 	return nil
 }
 
-// Get existing user from database, by getting user his ID is gonna be
-// locked, so another of that user are not gonna appear
+/*
+Get existing user from database, by getting user his ID is gonna be
+locked, so another of that user are not gonna appear
+*/
 func Get(adress []byte) *user {
 	lockErr := _lock.Lock(adress)
 	if lockErr != nil {
@@ -50,9 +54,11 @@ func Get(adress []byte) *user {
 	return &u
 }
 
-// This function is used to save user, after that function his state is
-// gonna be fixed in database, adress will be unlocked, and adress will be
-// set to nil, so other changes won't be saved (user will have to be recreated)
+/*
+This function is used to save user, after that function his state is
+gonna be fixed in database, adress will be unlocked, and adress will be
+set to nil, so other changes won't be saved (user will have to be recreated)
+*/
 func (u user) Save() {
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(u)
