@@ -12,26 +12,21 @@ func Init() {
 	log.SetOutput(file)
 }
 
-func Info(message string, a ...interface{}) string {
-	converted := fmt.Sprintf(message, a)
-	log.Printf("[INFO] %v\n", converted)
-	return converted
+func Info(a ...interface{}) {
+	log.Printf("[INFO] %v\n", fmt.Sprintln(a))
 }
 
-func Warning(message string, a ...interface{}) error {
-	converted := fmt.Sprintf(message, a)
-	log.Printf("[WARN] %v\n", converted)
-	return errors.New(converted)
+func Warning(a ...interface{}) error {
+	log.Printf("[WARN] %v\n", fmt.Sprintln(a))
+	return errors.New(fmt.Sprint(a))
 }
 
-func Error(message string, a ...interface{}) error {
-	converted := fmt.Sprintf(message, a)
-	log.Printf("[ERROR] %v\n", converted)
-	return errors.New(converted)
+func Error(a ...interface{}) error {
+	log.Printf("[ERROR] %v\n", fmt.Sprintln(a))
+	return errors.New(fmt.Sprint(a))
 }
 
-func Critical(message string, a ...interface{}) error {
-	converted := fmt.Sprintf(message, a)
-	log.Printf("[FATAL] %v\n", converted)
-	return errors.New(converted)
+func Critical(a ...interface{}) error {
+	log.Printf("[FATAL] %v\n", fmt.Sprintln(a))
+	return errors.New(fmt.Sprint(a))
 }

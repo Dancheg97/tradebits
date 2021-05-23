@@ -7,6 +7,8 @@ import (
 	"sync_tree/__logs"
 )
 
+// check some sign with some public key for some and message, message
+// will be concatenated to 1d byte slice
 func Verify(message [][]byte, keyBytes []byte, sign []byte) error {
 	publicKey, publicKeyError := x509.ParsePKCS1PublicKey(keyBytes)
 	if publicKeyError != nil {

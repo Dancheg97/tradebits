@@ -8,6 +8,8 @@ import (
 	"sync_tree/__logs"
 )
 
+// sign message with private key (message is taken by 2d ar, and will be 
+// cncatenated to single one before signing)
 func Sign(message [][]byte, privateKey []byte) ([]byte, error) {
 	private, privateKeyErr := x509.ParsePKCS1PrivateKey(privateKey)
 	if privateKeyErr != nil {
