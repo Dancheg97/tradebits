@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync_tree/__logs"
 	"sync_tree/_lock"
 )
 
@@ -46,6 +47,7 @@ func lockWrongIDTest() {
 }
 
 func main() {
+	__logs.Init()
 	lockUnlockTest()
 	lockLockedTest()
 	lockWrongIDTest()
