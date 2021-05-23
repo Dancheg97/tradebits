@@ -30,7 +30,7 @@ func Error(message string, a ...interface{}) error {
 	return errors.New(converted)
 }
 
-func Fatal(message string, a ...interface{}) error {
+func Critical(message string, a ...interface{}) error {
 	converted := fmt.Sprintf(message, a)
 	log.Printf("[FATAL] %v\n", converted)
 	return errors.New(converted)

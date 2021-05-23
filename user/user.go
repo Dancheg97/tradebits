@@ -5,38 +5,42 @@ import (
 	"encoding/gob"
 	"sync_tree/__logs"
 	"sync_tree/_data"
-	"sync_tree/_lock"
 )
 
 type User interface {
-	get(adress []byte) (*user, error)
-	create(adress []byte, messageKey []byte, imageLink string)
-	unlock()
-	balance() uint64
-	assetBalance(adress []byte) uint64
-	messageKey() []byte
-	imageLink() string
-	changeBalance(balance uint64)
-	changeAssetBalance(adress []byte, balance uint64)
-	changeMessageKey(newPublicKeyBytes []byte)
-	changeImageLink(string)
+	Create(adress []byte, messageKey []byte, imageLink string) error
+	Get(adress []byte) (*user, error)
+	Unlock()
+	Balance() uint64
+	AssetBalance(adress []byte) uint64
+	MessageKey() []byte
+	ImageLink() string
+	ChangeBalance(balance uint64)
+	ChangeAssetBalance(adress []byte, balance uint64)
+	ChangeMessageKey(newPublicKeyBytes []byte)
+	ChangeImageLink(string)
 }
 
 type user struct {
-	mainBalance   uint64            `gob:"MainBalance"`
-	messageKey    []byte            `gob:"MessageKey"`
-	image         string            `gob:"Image"`
-	assetBalances map[string]uint64 `gob:"AssetBalances"`
+	balance uint64            `gob:"b"`
+	mesKey  []byte            `gob:"k"`
+	img     string            `gob:"i"`
+	assets  map[string]uint64 `gob:"a"`
 }
 
-func (u user) get(adress []byte) (*user, error) {
-	lock_err := _lock.Lock(adress)
-	if lock_err != nil {
-		return nil, __logs.Error("User is locked for another operation")
+func Create(adress []byte, mesKey []byte, img string) error {
+	if _data.Check(adress) {
+		return __logs.Error("create user existing key %v err", adress)
 	}
-	user := 
-	userBytes := _data.Get(adress)
-	
+	u := user{
+		balance: 0,
+		mesKey:  mesKey,
+		img:     img,
+		assets:  make(map[string]uint64),
+	}
+	userBytesBuffer := new(bytes.Buffer)
+	gob.NewEncoder(userBytesBuffer).Encode(u)
+	_data.Put(adress, userBytesBuffer.Bytes())
+	__logs.Info("new user create success, adress: %v", adress)
+	return nil
 }
-
-func 
