@@ -1,26 +1,26 @@
 =============== May 23, 2021 (MSK) ===============
-21:35:12.752749 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-21:35:12.774294 db@open opening
-21:35:12.775325 version@stat F·[] S·0B[] Sc·[]
-21:35:12.777366 db@janitor F·2 G·0
-21:35:12.777874 db@open done T·3.0722ms
+22:42:17.837948 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+22:42:17.858896 db@open opening
+22:42:17.860436 version@stat F·[] S·0B[] Sc·[]
+22:42:17.861973 db@janitor F·2 G·0
+22:42:17.861973 db@open done T·3.0769ms
 =============== May 23, 2021 (MSK) ===============
-21:35:13.608807 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-21:35:13.627243 version@stat F·[] S·0B[] Sc·[]
-21:35:13.627243 db@open opening
-21:35:13.627243 journal@recovery F·1
-21:35:13.627759 journal@recovery recovering @1
-21:35:13.631344 memdb@flush created L0@2 N·2 S·135B "\x01\x02\x03,v2":"\x01\x02\x03,v1"
-21:35:13.631857 version@stat F·[1] S·135B[135B] Sc·[0.25]
-21:35:13.638011 db@janitor F·3 G·0
-21:35:13.638016 db@open done T·10.7721ms
+22:42:18.649189 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+22:42:18.668674 version@stat F·[] S·0B[] Sc·[]
+22:42:18.668674 db@open opening
+22:42:18.668674 journal@recovery F·1
+22:42:18.669695 journal@recovery recovering @1
+22:42:18.672256 memdb@flush created L0@2 N·2 S·135B "\x01\x02\x03,v2":"\x01\x02\x03,v1"
+22:42:18.672772 version@stat F·[1] S·135B[135B] Sc·[0.25]
+22:42:18.677904 db@janitor F·3 G·0
+22:42:18.677904 db@open done T·9.2299ms
 =============== May 23, 2021 (MSK) ===============
-21:35:14.154155 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-21:35:14.172524 version@stat F·[1] S·135B[135B] Sc·[0.25]
-21:35:14.172524 db@open opening
-21:35:14.173034 journal@recovery F·1
-21:35:14.173546 journal@recovery recovering @3
-21:35:14.176615 memdb@flush created L0@5 N·3 S·356B "\x01\x02\x03..>?@,v6":"\x01\x02\x03..>?@,v4"
-21:35:14.177126 version@stat F·[2] S·491B[491B] Sc·[0.50]
-21:35:14.182773 db@janitor F·4 G·0
-21:35:14.182773 db@open done T·10.2497ms
+22:42:19.274038 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+22:42:19.292424 version@stat F·[1] S·135B[135B] Sc·[0.25]
+22:42:19.292424 db@open opening
+22:42:19.292934 journal@recovery F·1
+22:42:19.293448 journal@recovery recovering @3
+22:42:19.296000 memdb@flush created L0@5 N·3 S·356B "\x01\x02\x03..>?@,v6":"\x01\x02\x03..>?@,v4"
+22:42:19.296515 version@stat F·[2] S·491B[491B] Sc·[0.50]
+22:42:19.301637 db@janitor F·4 G·0
+22:42:19.301637 db@open done T·9.2133ms

@@ -7,3 +7,4 @@ type trade struct {
 	Offer     uint64
 	Course    uint64
 }
+

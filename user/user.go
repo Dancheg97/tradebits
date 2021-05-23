@@ -31,7 +31,7 @@ func Create(adress []byte, MesKey []byte, ImgLink string) error {
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(u)
 	_data.Put(adress, cache.Bytes())
-	__logs.Info("new user create success, adress: %v", adress)
+	__logs.Info("new user create success, adress: ", adress)
 	return nil
 }
 
@@ -40,7 +40,7 @@ func Create(adress []byte, MesKey []byte, ImgLink string) error {
 func Get(adress []byte) *user {
 	lockErr := _lock.Lock(adress)
 	if lockErr != nil {
-		__logs.Error("unable to get locked user %v", adress)
+		__logs.Error("unable to get user (locked): ", adress)
 		return nil
 	}
 	u := user{adress: adress}

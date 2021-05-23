@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"encoding/gob"
 	"sync_tree/__logs"
+	"sync_tree/_calc"
 	"sync_tree/_data"
+	"sync_tree/_lock"
 )
 
 type asset struct {
@@ -14,7 +16,7 @@ type asset struct {
 	MesKey   []byte
 	Likes    uint64
 	Dislikes uint64
-	Trades   []string
+	Market   []byte
 }
 
 // Create new exchanger, in case there is already one with same adress
@@ -30,11 +32,26 @@ func Create(adress []byte, Name string, ImgLink string, MesKey []byte) error {
 		MesKey:   MesKey,
 		Likes:    0,
 		Dislikes: 0,
-		Trades:   []string{},
+		Market:   _calc.RandBytes(),
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newAsset)
 	_data.Put(adress, cache.Bytes())
-	__logs.Info("new user create success, adress: %v", adress)
+	__logs.Info("new user create success, adress: ", adress)
 	return nil
+}
+
+// Get asset to make some changes with it's contents, that func is blocking
+// so use it only when making some changes to asset data
+func Get(adress []byte) *asset {
+	lockErr := _lock.Lock(adress)
+	if lockErr != nil {
+		__logs.Error("unable to get asset, locked: ", adress)
+		return nil
+	}
+	u := asset{adress: adress}
+	userBytes := _data.Get(adress)
+	cache := bytes.NewBuffer(userBytes)
+	gob.NewDecoder(cache).Decode(&u)
+	return &u
 }

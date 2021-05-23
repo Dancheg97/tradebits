@@ -1,5 +1,4 @@
 go run "c:\Users\dangd\Documents\sync_tree_server\____tests\info.go"
-rmdir /s "_data/base" 
 go run "c:\Users\dangd\Documents\sync_tree_server\____tests\calc_tests\main.go"
 go run "c:\Users\dangd\Documents\sync_tree_server\____tests\data_tests\main.go"
 go run "c:\Users\dangd\Documents\sync_tree_server\____tests\lock_tests\main.go"

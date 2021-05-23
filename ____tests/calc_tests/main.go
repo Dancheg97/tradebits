@@ -50,6 +50,7 @@ func main() {
 	hashTest()
 	signTest()
 	verifyTest()
+	
 }
 
 //fmt.Println(strings.Trim(strings.Join(strings.Fields(fmt.Sprint(sign)), ", "), "[]"))
