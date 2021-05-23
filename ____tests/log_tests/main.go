@@ -6,5 +6,5 @@ func main() {
 	__logs.Info("some info piece")
 	__logs.Error("asda")
 	__logs.Warning("lilt warn")
-	__logs.Fatal("askjdnhk %v ")
+	__logs.Critical("askjdnhk %v ")
 }

@@ -33,7 +33,6 @@ func checkLen(bytes []byte) error {
 }
 
 func Lock(ID []byte) error {
-	__logs.Info("lock start ID: ", ID)
 	lengthErr := checkLen(ID)
 	if lengthErr != nil {
 		return lengthErr
@@ -53,7 +52,6 @@ func Lock(ID []byte) error {
 }
 
 func Unlock(ID []byte) {
-	__logs.Info("lock end", ID)
 	var lockID [64]byte
 	copy(lockID[:], ID[:64])
 	keyByte := ID[0]

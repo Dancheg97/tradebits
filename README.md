@@ -65,4 +65,4 @@ This package is automatically generated, by `api.proto` file, which is in `_net`
 
 # Tests
 
-To run all tests just run tests.cmd command
+To run all tests just run `tests.cmd` command
