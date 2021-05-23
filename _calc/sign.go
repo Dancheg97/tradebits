@@ -5,15 +5,13 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
-	"errors"
 	"sync_tree/__logs"
 )
 
 func Sign(message [][]byte, privateKey []byte) ([]byte, error) {
 	private, privateKeyErr := x509.ParsePKCS1PrivateKey(privateKey)
 	if privateKeyErr != nil {
-		__logs.Error(errors.New("failed to parse private key"))
-		return
+		return nil, __logs.Error("failed to parse private key")
 	}
 	msgHashSum := Hash(concatenateMessage(message))
 	signatureBytes, signErr := rsa.SignPSS(
@@ -23,9 +21,8 @@ func Sign(message [][]byte, privateKey []byte) ([]byte, error) {
 		msgHashSum,
 		nil,
 	)
-	if hasherErr != nil {
-		__logs.Critical(errors.New("unexpected error signing message"))
-		return
+	if signErr != nil {
+		return nil, __logs.Critical("unexpected error signing message")
 	}
 	return signatureBytes, nil
 }

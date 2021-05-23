@@ -4,19 +4,13 @@ import (
 	"crypto"
 	"crypto/rsa"
 	"crypto/x509"
-	"encoding/base64"
-	"encoding/pem"
-	"errors"
 	"sync_tree/__logs"
-
-	"golang.org/x/crypto/blake2b"
 )
 
 func Verify(message [][]byte, keyBytes []byte, sign []byte) error {
 	publicKey, publicKeyError := x509.ParsePKCS1PublicKey(keyBytes)
 	if publicKeyError != nil {
-		__logs.Error(errors.New("error parsing public key while signing"))
-		return
+		return __logs.Error("error parsing public key while signing")
 	}
 	hash := Hash(concatenateMessage(message))
 	return rsa.VerifyPSS(publicKey, crypto.BLAKE2b_512, hash, sign, nil)
