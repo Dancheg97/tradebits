@@ -46,11 +46,18 @@ func verifyTest() {
 	fmt.Println("\033[31m[TEST] (CALC) {Verify} - test failed\033[0m")
 }
 
+func generateBytesTest() {
+	bytes := _calc.RandBytes()
+	if bytes != nil {
+		fmt.Println("\033[32m[TEST] (CALC) {RandBytes} - passed\033[0m")
+		return
+	}
+	fmt.Println("\033[31m[TEST] (CALC) {RandBytes} - test failed\033[0m")
+}
+
 func main() {
 	hashTest()
 	signTest()
 	verifyTest()
-	
+	generateBytesTest()
 }
-
-//fmt.Println(strings.Trim(strings.Join(strings.Fields(fmt.Sprint(sign)), ", "), "[]"))
