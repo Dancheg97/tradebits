@@ -27,6 +27,6 @@ func Error(a ...interface{}) error {
 }
 
 func Critical(a ...interface{}) error {
-	log.Printf("[FATAL] %v\n", fmt.Sprintw(a))
+	log.Printf("[FATAL] %v\n", fmt.Sprint(a))
 	return errors.New(fmt.Sprint(a))
 }

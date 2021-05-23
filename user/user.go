@@ -20,7 +20,7 @@ type user struct {
 // the error will be logged
 func Create(adress []byte, mesKey []byte, img string) error {
 	if _data.Check(adress) {
-		return __logs.Error("create user by existing key %v", adress)
+		return __logs.Error("create user by existing key ", adress)
 	}
 	u := user{
 		Balance: 0,
