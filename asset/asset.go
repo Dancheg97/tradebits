@@ -16,7 +16,6 @@ type asset struct {
 	MesKey   []byte
 	Likes    uint64
 	Dislikes uint64
-	market   []byte
 	Market   []byte
 }
 
@@ -67,17 +66,15 @@ func Get(adress []byte) *asset {
 	userBytes := _data.Get(adress)
 	cache := bytes.NewBuffer(userBytes)
 	gob.NewDecoder(cache).Decode(&a)
-	a.market = a.Market
 	return &a
 }
 
 /*
 This function is saving changes to the asset in database and removes ability
-to make a double save by removing adress from class struct. 
+to make a double save by removing adress from class struct.
 */
 func (a asset) Save() {
 	cache := new(bytes.Buffer)
-	a.Market = a.market
 	gob.NewEncoder(cache).Encode(a)
 	unlock_adress := a.adress
 	_data.Change(a.adress, cache.Bytes())
