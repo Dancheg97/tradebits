@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/gob"
 	"sync_tree/__logs"
-	"sync_tree/_calc"
 	"sync_tree/_data"
 	"sync_tree/_lock"
 )
@@ -16,7 +15,14 @@ type asset struct {
 	MesKey   []byte
 	Likes    uint64
 	Dislikes uint64
-	Market   []byte
+	Market   map[string]Trade
+}
+
+type Trade struct {
+	Maker   []byte
+	Way     bool
+	Offer   uint64
+	Recieve uint64
 }
 
 /*
@@ -34,7 +40,7 @@ func Create(adress []byte, Name string, ImgLink string, MesKey []byte) error {
 		MesKey:   MesKey,
 		Likes:    0,
 		Dislikes: 0,
-		Market:   _calc.RandBytes(),
+		Market:   make(map[string]Trade),
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newAsset)
@@ -63,8 +69,8 @@ func Get(adress []byte) *asset {
 		return nil
 	}
 	a := asset{adress: adress}
-	userBytes := _data.Get(adress)
-	cache := bytes.NewBuffer(userBytes)
+	assetBytes := _data.Get(adress)
+	cache := bytes.NewBuffer(assetBytes)
 	gob.NewDecoder(cache).Decode(&a)
 	return &a
 }
@@ -80,4 +86,27 @@ func (a asset) Save() {
 	_data.Change(a.adress, cache.Bytes())
 	a.adress = nil
 	_lock.Unlock(unlock_adress)
+}
+
+// Non blocking function to get current market trades by asset key
+func GetTrades(adress []byte) map[string]Trade {
+	currAsset := asset{}
+	assetBytes := _data.Get(adress)
+	assetCache := bytes.NewBuffer(assetBytes)
+	gob.NewDecoder(assetCache).Decode(&currAsset)
+	return currAsset.Market
+}
+
+/*
+Function to open trade for some market. Open trade is going by the
+following steps:
+ 1) Checks wether some trades could be closed with that trade
+	- Get opposite side trades
+	- Sort them by relevance
+	- 1 by one close them untill
+ 2) Partially or fully closing them
+ 3) Opening new trade, for the rest of value
+*/
+func (a asset) OpenTrade(trade Trade) {
+
 }

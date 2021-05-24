@@ -49,6 +49,7 @@ This package implements methods used to calculate hashes, verify and sign messag
 - `Hash` - take a hash from value
 - `Sign` - sign a byte message using private key bytes
 - `Verify` - verify byte message by sign using public key bytes
+- `Sign` - Create random 64 bytes for some adress
 
 ## Lock
 
