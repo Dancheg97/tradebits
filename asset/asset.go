@@ -15,15 +15,20 @@ type asset struct {
 	MesKey   []byte
 	Likes    uint64
 	Dislikes uint64
-	Buys     map[string]Trade
-	Sells    map[string]Trade
+	Buys     map[string]Buy
+	Sells    map[string]Sell
 }
 
-type Trade struct {
-	Maker   []byte
-	Way     bool
+type Buy struct {
 	Offer   uint64
 	Recieve uint64
+	Ratio   float64
+}
+
+type Sell struct {
+	Offer   uint64
+	Recieve uint64
+	Ratio   float64
 }
 
 /*
@@ -41,8 +46,8 @@ func Create(adress []byte, Name string, ImgLink string, MesKey []byte) error {
 		MesKey:   MesKey,
 		Likes:    0,
 		Dislikes: 0,
-		Buys:     make(map[string]Trade),
-		Sells:    make(map[string]Trade),
+		Buys:     make(map[string]Buy),
+		Sells:    make(map[string]Sell),
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newAsset)
@@ -90,13 +95,16 @@ func (a asset) Save() {
 	_lock.Unlock(unlock_adress)
 }
 
-// Non blocking function to get current market trades by asset key
-func GetTrades(adress []byte) map[string]Trade {
+/*
+Non blocking function to look for asset contents, it's impossible to save
+instance of that asset to database.
+*/
+func Look(adress []byte) *asset {
 	currAsset := asset{}
 	assetBytes := _data.Get(adress)
 	assetCache := bytes.NewBuffer(assetBytes)
 	gob.NewDecoder(assetCache).Decode(&currAsset)
-	return currAsset.Market
+	return &currAsset
 }
 
 /*
@@ -109,11 +117,11 @@ following steps:
  2) Partially or fully closing them
  3) Opening new trade, for the rest of value
 */
-func (a asset) OpenTrade(trade Trade) {
+func (a asset) Buy(maker []byte, trade Buy) {
 
 }
 
 // this function is made to close the currently open trade
-func (a asset) CloseTrade(Maker []byte) {
-
+func (a asset) Sell(maker []byte, trade Sell) {
+	a.Sells[string(maker)] = trade
 }

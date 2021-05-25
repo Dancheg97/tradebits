@@ -1,12 +1,6 @@
 package node
 
-import (
-	"bytes"
-	"encoding/gob"
-	"sync_tree/__logs"
-	"sync_tree/_data"
-	"sync_tree/_lock"
-)
+import ()
 
 type node struct {
 	adress      []byte
