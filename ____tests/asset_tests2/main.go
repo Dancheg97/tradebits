@@ -22,23 +22,30 @@ func check_full_close(sell asset.Sell, buy asset.Buy) bool {
 
 // остаток sell Offer, новый buy
 func full_close(sell asset.Sell, buy asset.Buy) (uint64, asset.Buy) {
+	buyRatio := float64(buy.Recieve / buy.Offer)
 	buy.Offer = buy.Offer - sell.Recieve
-	buy.Recieve = sell.Recieve*
+	newRecieve := buy.Recieve - uint64(float64(sell.Recieve)*buyRatio)
+	rest := sell.Offer - uint64(float64(sell.Recieve)*buyRatio)
+	buy.Recieve = newRecieve
+	return rest, buy
 }
 
 func main() {
 	sell := asset.Sell{
 		Offer:   900,
 		Recieve: 100,
-		Ratio:   900 / 100,
 	}
 
 	buy := asset.Buy{
 		Offer:   300,
-		Recieve: 2400,
-		Ratio:   800 / 100,
+		Recieve: 1600,
+	}
+	if check_if_match(sell, buy) {
+		fmt.Println(check_if_match(sell, buy))
+		if check_full_close(sell, buy) {
+			fmt.Println(check_full_close(sell, buy))
+			fmt.Println(full_close(sell, buy))
+		}
 	}
 
-	fmt.Println(check_if_match(sell, buy))
-	fmt.Println(check_full_close(sell, buy))
 }

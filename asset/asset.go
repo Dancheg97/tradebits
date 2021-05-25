@@ -22,13 +22,11 @@ type asset struct {
 type Buy struct {
 	Offer   uint64
 	Recieve uint64
-	Ratio   float64
 }
 
 type Sell struct {
 	Offer   uint64
 	Recieve uint64
-	Ratio   float64
 }
 
 /*
