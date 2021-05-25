@@ -15,7 +15,8 @@ type asset struct {
 	MesKey   []byte
 	Likes    uint64
 	Dislikes uint64
-	Market   map[string]Trade
+	Buys     map[string]Trade
+	Sells    map[string]Trade
 }
 
 type Trade struct {
@@ -40,7 +41,8 @@ func Create(adress []byte, Name string, ImgLink string, MesKey []byte) error {
 		MesKey:   MesKey,
 		Likes:    0,
 		Dislikes: 0,
-		Market:   make(map[string]Trade),
+		Buys:     make(map[string]Trade),
+		Sells:    make(map[string]Trade),
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newAsset)
@@ -108,5 +110,10 @@ following steps:
  3) Opening new trade, for the rest of value
 */
 func (a asset) OpenTrade(trade Trade) {
+
+}
+
+// this function is made to close the currently open trade
+func (a asset) CloseTrade(Maker []byte) {
 
 }

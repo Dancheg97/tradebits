@@ -55,6 +55,18 @@ func Get(adress []byte) *user {
 }
 
 /*
+Non blocking function to look for user contents, it's impossible to save
+instance of that user to database.
+*/
+func Look(adress []byte) *user {
+	u := user{}
+	userBytes := _data.Get(adress)
+	cache := bytes.NewBuffer(userBytes)
+	gob.NewDecoder(cache).Decode(&u)
+	return &u
+}
+
+/*
 This function is used to save user, after that function his state is
 gonna be fixed in database, adress will be unlocked, and adress will be
 set to nil, so other changes won't be saved (user will have to be recreated)
