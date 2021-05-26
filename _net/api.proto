@@ -16,4 +16,3 @@ message SendRequest{
 message SendResponse{
     bool passed = 1;
 }
-
