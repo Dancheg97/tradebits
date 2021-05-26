@@ -15,29 +15,29 @@ var name = "newAsset"
 func createNewTest() {
 	err := asset.Create(adress, name, img, mesKey)
 	if err != nil {
-		fmt.Println("\033[31m[TEST] (ASSET) {Create new} - failed\033[0m")
+		fmt.Println("\033[31m(ASSET) {Create new} - failed\033[0m")
 		return
 	}
-	fmt.Println("\033[32m[TEST] (ASSET) {Create new} - passed\033[0m")
+	fmt.Println("\033[32m(ASSET) {Create new} - passed\033[0m")
 }
 
 func createExistingAssetTest() {
 	creationErr := asset.Create(adress, name, img, mesKey)
 	if creationErr != nil {
-		fmt.Println("\033[32m[TEST] (ASSET) {Create existing} - passed\033[0m")
+		fmt.Println("\033[32m(ASSET) {Create existing} - passed\033[0m")
 		return
 	}
-	fmt.Println("\033[31m[TEST] (ASSET) {Create existing} - failed\033[0m")
+	fmt.Println("\033[31m(ASSET) {Create existing} - failed\033[0m")
 }
 
 func getFreeAssetTest() {
 	asset := asset.Get(adress)
 	defer asset.Save()
 	if reflect.DeepEqual(asset.MesKey, mesKey) {
-		fmt.Println("\033[32m[TEST] (ASSET) {Get} - passed\033[0m")
+		fmt.Println("\033[32m(ASSET) {Get} - passed\033[0m")
 		return
 	}
-	fmt.Println("\033[31m[TEST] (ASSET) {Get} - failed\033[0m")
+	fmt.Println("\033[31m(ASSET) {Get} - failed\033[0m")
 }
 
 func getBusyAssetTest() {
@@ -45,10 +45,10 @@ func getBusyAssetTest() {
 	defer freeAsset.Save()
 	busyAsset := asset.Get(adress)
 	if busyAsset != nil {
-		fmt.Println("\033[31m[TEST] (ASSET) {Get busy} - failed\033[0m")
+		fmt.Println("\033[31m(ASSET) {Get busy} - failed\033[0m")
 		return
 	}
-	fmt.Println("\033[32m[TEST] (ASSET) {Get busy} - passed\033[0m")
+	fmt.Println("\033[32m(ASSET) {Get busy} - passed\033[0m")
 }
 
 func main() {
