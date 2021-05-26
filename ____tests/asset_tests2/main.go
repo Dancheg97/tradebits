@@ -12,49 +12,50 @@ make with close
 make with open
 */
 
-func check_if_sell_match(sell asset.Sell, buy asset.Buy) bool {
+func sellMatches(sell asset.Sell, buy asset.Buy) bool {
 	return float64(sell.Offer/sell.Recieve) > float64(buy.Recieve/buy.Offer)
 }
 
-func check_full_close(sell asset.Sell, buy asset.Buy) bool {
+func fullForSeller(sell asset.Sell, buy asset.Buy) bool {
 	return buy.Offer >= sell.Recieve
 }
 
-// остаток sell Offer, новый buy
-func full_close(sell asset.Sell, buy asset.Buy) (uint64, asset.Buy) {
-	buyRatio := float64(buy.Recieve / buy.Offer)
-	buy.Offer = buy.Offer - sell.Recieve
-	newRecieve := buy.Recieve - uint64(float64(sell.Recieve)*buyRatio)
-	rest := sell.Offer - uint64(float64(sell.Recieve)*buyRatio)
-	buy.Recieve = newRecieve
-	return rest, buy
+func closeSeller(sell asset.Sell, buy asset.Buy) (asset.Sell, asset.Buy) {
+	newSellerOffer := uint64(buy.Recieve / buy.Offer *
+		(buy.Offer - sell.Recieve))
+	newBuyOffer := buy.Offer - sell.Recieve
+	newBuyRecieve := sell.Offer - newSellerOffer
+	sell.Offer = newSellerOffer
+	sell.Recieve = 0
+	buy.Offer = newBuyOffer
+	buy.Recieve = newBuyRecieve
+	return sell, buy
 }
 
-func match(sell asset.Sell, buy asset.Buy) (asset.Sell, asset.Buy) {
-	buyRatio := 
+func closeBuyer(sell asset.Sell, buy asset.Buy) (asset.Sell, asset.Buy) {
+	sell.Offer = sell.Offer - buy.Recieve
+	sell.Recieve = sell.Recieve - buy.Offer
+	buy.Offer = 0
+	buy.Recieve = 0
+	return sell, buy
 }
 
 func main() {
-	/* 
-	всего есть 3 кейса:
-	1 - сделка не состоится
-	2 - сделка состоится частично для покупателя
-	3 - сделка состоится частично для продавца
-	*/
 	sell := asset.Sell{
 		Offer:   900,
 		Recieve: 100,
 	}
 
 	buy := asset.Buy{
-		Offer:   200,
-		Recieve: 856,
+		Offer:   50,
+		Recieve: 400,
 	}
-	if check_if_sell_match(sell, buy) {
-		fmt.Println(check_if_sell_match(sell, buy))
-		if check_full_close(sell, buy) {
-			fmt.Println(check_full_close(sell, buy))
-			fmt.Println(full_close(sell, buy))
+
+	if sellMatches(sell, buy) {
+		if fullForSeller(sell, buy) {
+			fmt.Println(closeSeller(sell, buy))
+		} else {
+			fmt.Println(closeBuyer(sell, buy))
 		}
 	}
 
