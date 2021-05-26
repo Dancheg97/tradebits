@@ -12,7 +12,7 @@ make with close
 make with open
 */
 
-func check_if_match(sell asset.Sell, buy asset.Buy) bool {
+func check_if_sell_match(sell asset.Sell, buy asset.Buy) bool {
 	return float64(sell.Offer/sell.Recieve) > float64(buy.Recieve/buy.Offer)
 }
 
@@ -36,7 +36,10 @@ func match(sell asset.Sell, buy asset.Buy) (asset.Sell, asset.Buy) {
 
 func main() {
 	/* 
-	всего есть 4 кейса
+	всего есть 3 кейса:
+	1 - сделка не состоится
+	2 - сделка состоится частично для покупателя
+	3 - сделка состоится частично для продавца
 	*/
 	sell := asset.Sell{
 		Offer:   900,
@@ -47,8 +50,8 @@ func main() {
 		Offer:   200,
 		Recieve: 856,
 	}
-	if check_if_match(sell, buy) {
-		fmt.Println(check_if_match(sell, buy))
+	if check_if_sell_match(sell, buy) {
+		fmt.Println(check_if_sell_match(sell, buy))
 		if check_full_close(sell, buy) {
 			fmt.Println(check_full_close(sell, buy))
 			fmt.Println(full_close(sell, buy))
