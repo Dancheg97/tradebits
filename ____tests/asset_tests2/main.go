@@ -30,15 +30,22 @@ func full_close(sell asset.Sell, buy asset.Buy) (uint64, asset.Buy) {
 	return rest, buy
 }
 
+func match(sell asset.Sell, buy asset.Buy) (asset.Sell, asset.Buy) {
+	buyRatio := 
+}
+
 func main() {
+	/* 
+	всего есть 4 кейса
+	*/
 	sell := asset.Sell{
 		Offer:   900,
 		Recieve: 100,
 	}
 
 	buy := asset.Buy{
-		Offer:   300,
-		Recieve: 1600,
+		Offer:   200,
+		Recieve: 856,
 	}
 	if check_if_match(sell, buy) {
 		fmt.Println(check_if_match(sell, buy))
