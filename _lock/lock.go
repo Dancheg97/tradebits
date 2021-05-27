@@ -5,10 +5,6 @@ import (
 	"sync"
 )
 
-/*
-переделать в блок по первому символу из кодировки base64
-*/
-
 type blockedMap struct {
 	mutex  sync.Mutex
 	userId map[[64]byte]bool

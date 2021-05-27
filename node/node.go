@@ -3,7 +3,8 @@ package node
 import ()
 
 type node struct {
-	adress      []byte
-	Balance     uint64
+	privKey     []byte
+	pubKey      []byte
+	ownerAdress []byte
 	connections []string
 }

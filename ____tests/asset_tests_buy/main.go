@@ -9,8 +9,12 @@ func checkMatch(sell asset.Sell, buy asset.Buy) bool {
 	return float64(buy.Recieve/buy.Offer) < float64(sell.Offer/sell.Recieve)
 }
 
-func restSeller(sell asset.Sell, buy asset.Buy) bool {
+func ifCloseBuyer(sell asset.Sell, buy asset.Buy) bool {
 	return sell.Recieve > buy.Offer
+}
+
+func closeBuyer(sell asset.Sell, buy asset.Buy) (asset.Sell )  {
+
 }
 
 func testMatch() {
@@ -45,7 +49,7 @@ func testNonMatch() {
 	fmt.Println("\033[32m(ASSET_BUY) {NON_MATCH} - passed\033[0m")
 }
 
-func testCloseSeller() {
+func testIfBuyerIsClosing() {
 	sell := asset.Sell{
 		Offer:   500,
 		Recieve: 100,
@@ -55,7 +59,7 @@ func testCloseSeller() {
 		Recieve: 200,
 	}
 	if checkMatch(sell, buy) {
-		if restSeller(sell, buy) {
+		if ifCloseBuyer(sell, buy) {
 			fmt.Println("\033[32m(ASSET_BUY) {REST_SELLER} - passed\033[0m")
 			return
 		}
@@ -63,7 +67,7 @@ func testCloseSeller() {
 	fmt.Println("\033[31m(ASSET_BUY) {REST_SELLER} - failed\033[0m")
 }
 
-func testCloseBuyer() {
+func testIfSellerIsClosing() {
 	sell := asset.Sell{
 		Offer:   500,
 		Recieve: 100,
@@ -73,7 +77,7 @@ func testCloseBuyer() {
 		Recieve: 2000,
 	}
 	if checkMatch(sell, buy) {
-		if restSeller(sell, buy) {
+		if ifCloseBuyer(sell, buy) {
 			fmt.Println("\033[31m(ASSET_BUY) {REST_BUYER} - failed\033[0m")
 			return
 		}
@@ -81,9 +85,31 @@ func testCloseBuyer() {
 	fmt.Println("\033[32m(ASSET_BUY) {REST_BUYER} - passed\033[0m")
 }
 
+func testCloseSell() {
+	sell := asset.Sell{
+		Offer:   500, // B
+		Recieve: 100, // A
+	}
+	buy := asset.Buy{
+		Offer:   120, // A
+		Recieve: 200, // B 
+	}
+	if checkMatch(sell, buy) {
+		if ifCloseBuyer(sell, buy) {
+
+		}
+	}
+}
+
+func closeSeller(sell asset.Sell, buy asset.Buy) (asset.Sell, asset.Buy) {
+	goesToSeller = uint64(buy.Recieve/buy.Offer*sell.Recieve)
+	leavesToBuyer = buy.Recieve - goesToSeller
+
+}
+
 func main() {
 	testMatch()
 	testNonMatch()
-	testCloseSeller()
-	testCloseBuyer()
+	testRestSeller()
+	testRestBuyer()
 }
