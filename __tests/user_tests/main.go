@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"sync_tree/__tests"
 	"sync_tree/__logs"
 	"sync_tree/user"
 )
@@ -13,29 +13,29 @@ var img = "user image link"
 func createNewUserTest() {
 	creationErr := user.Create(adress, mesKey, img)
 	if creationErr != nil {
-		fmt.Println("\033[31m(USER) {Create new} - failed\033[0m")
+		__tests.Failed("user", "Create", "attempt to create new user")
 		return
 	}
-	fmt.Println("\033[32m(USER) {Create new} - passed\033[0m")
+	__tests.Passed("user", "Create", "attempt to create new user")
 }
 
 func createExistingUserTest() {
 	creationErr := user.Create(adress, mesKey, img)
 	if creationErr != nil {
-		fmt.Println("\033[32m(USER) {Create existing} - passed\033[0m")
+		__tests.Passed("user", "Create", "attempt to create existing user")
 		return
 	}
-	fmt.Println("\033[31m(USER) {Create existing} - failed\033[0m")
+	__tests.Failed("user", "Create", "attempt to create existing user")
 }
 
 func getFreeUserTest() {
 	freeUser := user.Get(adress)
 	defer freeUser.Save()
 	if freeUser.ImgLink == "user image link" {
-		fmt.Println("\033[32m(USER) {Get free} - passed\033[0m")
+		__tests.Passed("user", "Get", "attempt get free user")
 		return
 	}
-	fmt.Println("\033[31m(USER) {Get free} - failed\033[0m")
+	__tests.Failed("user", "Get", "attempt get free user")
 }
 
 func getBusyUserTest() {
@@ -43,10 +43,10 @@ func getBusyUserTest() {
 	defer freeUser.Save()
 	busyUser := user.Get(adress)
 	if busyUser != nil {
-		fmt.Println("\033[31m(USER) {Get busy} - failed\033[0m")
+		__tests.Failed("user", "Create", "attempt get free user")
 		return
 	}
-	fmt.Println("\033[32m(USER) {Get busy} - passed\033[0m")
+	__tests.Passed("user", "Create", "attempt get free user")
 }
 
 func main() {

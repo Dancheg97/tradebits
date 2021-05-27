@@ -1,9 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"reflect"
-	"sync_tree/____tests"
+	"sync_tree/__tests"
 	"sync_tree/__logs"
 	"sync_tree/asset"
 )
@@ -16,29 +15,29 @@ var name = "newAsset"
 func createNewTest() {
 	err := asset.Create(adress, name, img, mesKey)
 	if err != nil {
-		____tests.Failed("asset", "Create", "attempt to create new asset")
+		__tests.Failed("asset", "Create", "attempt to create new asset")
 		return
 	}
-	____tests.Passed("asset", "Create", "attempt to create new asset")
+	__tests.Passed("asset", "Create", "attempt to create new asset")
 }
 
 func createExistingAssetTest() {
 	err := asset.Create(adress, name, img, mesKey)
 	if err != nil {
-		____tests.Passed("asset", "Create", "attempt to create existing asset")
+		__tests.Passed("asset", "Create", "attempt to create existing asset")
 		return
 	}
-	____tests.Failed("asset", "Create", "attempt to create existing asset")
+	__tests.Failed("asset", "Create", "attempt to create existing asset")
 }
 
 func getFreeAssetTest() {
 	asset := asset.Get(adress)
 	defer asset.Save()
 	if reflect.DeepEqual(asset.MesKey, mesKey) {
-		____tests.Passed("asset", "Get", "attempt to get asset from db")
+		__tests.Passed("asset", "Get", "attempt to get free asset from db")
 		return
 	}
-	____tests.Failed("asset", "Get", "attempt to get asset from db")
+	__tests.Failed("asset", "Get", "attempt to get free asset from db")
 }
 
 func getBusyAssetTest() {
@@ -46,10 +45,10 @@ func getBusyAssetTest() {
 	defer freeAsset.Save()
 	busyAsset := asset.Get(adress)
 	if busyAsset != nil {
-		fmt.Println("\033[31m(ASSET) {Get busy} - failed\033[0m")
+		__tests.Failed("asset", "Get", "attempt to get busy asset from db")
 		return
 	}
-	fmt.Println("\033[32m(ASSET) {Get busy} - passed\033[0m")
+	__tests.Passed("asset", "Get", "attempt to get busy asset from db")
 }
 
 func main() {
