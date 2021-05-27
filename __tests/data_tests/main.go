@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"reflect"
 	"sync_tree/_data"
+	"sync_tree/__tests"
 )
 
 func main() {
@@ -11,27 +11,27 @@ func main() {
 	testPutValue := []byte{1, 2, 3, 4, 5}
 	testChangeValue := []byte{1, 2, 3, 4, 5, 6}
 	_data.Put(testPutKey, testPutValue)
-	fmt.Println("\033[32m(DATA) {Put} - passed\033[0m")
+	__tests.Passed("data", "Put", "put item to database")
 
 	checked := _data.Check(testPutKey)
 	if checked {
-		fmt.Println("\033[32m(DATA) {Check} - passed\033[0m")
+		__tests.Passed("data", "Check", "put item to database")
 	} else {
-		fmt.Println("\033[31m(DATA) {Check} - failed\033[0m")
+		__tests.Failed("data", "Check", "put item to database")
 	}
 
 	testGetValue := _data.Get(testPutKey)
 	if reflect.DeepEqual(testGetValue, testPutValue) {
-		fmt.Println("\033[32m(DATA) {Get} - passed\033[0m")
+		__tests.Passed("data", "Get", "get item from database")
 	} else {
-		fmt.Println("\033[31m(DATA) {Get} - failed\033[0m")
+		__tests.Failed("data", "Get", "get item from database")
 	}
 
 	_data.Change(testPutKey, testChangeValue)
 	changed := _data.Get(testPutKey)
 	if reflect.DeepEqual(changed, testChangeValue) {
-		fmt.Println("\033[32m(DATA) {Change} - passed\033[0m")
+		__tests.Passed("data", "Change", "change item value in database")
 	} else {
-		fmt.Println("\033[32m(DATA) {Change} - failed\033[0m")
+		__tests.Failed("data", "Change", "change item value in database")
 	}
 }

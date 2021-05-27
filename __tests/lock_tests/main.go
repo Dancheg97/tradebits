@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"sync_tree/__logs"
+	"sync_tree/__tests"
 	"sync_tree/_lock"
 )
 
@@ -12,11 +12,11 @@ func lockUnlockTest() {
 	lockBytes[1] = 66
 	err := _lock.Lock(lockBytes)
 	if err != nil {
-		fmt.Println("\033[31m(LOCK) {Lock} - failed\033[0m")
+		__tests.Failed("lock", "lock", "attemt to lock and unlock user")
 		return
 	}
 	_lock.Unlock(lockBytes)
-	fmt.Println("\033[32m(LOCK) {Lock} - passed\033[0m")
+	__tests.Passed("lock", "lock", "attemt to lock and unlock user")
 }
 
 func lockLockedTest() {
@@ -26,10 +26,10 @@ func lockLockedTest() {
 	_lock.Lock(lockBytes)
 	err := _lock.Lock(lockBytes)
 	if err != nil {
-		fmt.Println("\033[32m(LOCK) {Lock locked} - passed\033[0m")
+		__tests.Passed("lock", "lock", "attemt to lock locked user")
 		return
 	}
-	fmt.Println("\033[31m(LOCK) {Lock locked} - failed\033[0m")
+	__tests.Failed("lock", "lock", "attemt to lock locked user")
 	_lock.Unlock(lockBytes)
 }
 
@@ -40,10 +40,10 @@ func lockWrongIDTest() {
 	_lock.Lock(lockBytes)
 	err := _lock.Lock(lockBytes)
 	if err == nil {
-		fmt.Println("\033[31m(LOCK) {Lock bad id} - failed\033[0m")
+		__tests.Failed("lock", "lock", "attemt to lock bad id")
 		return
 	}
-	fmt.Println("\033[32m(LOCK) {Lock bad id} - passed\033[0m")
+	__tests.Passed("lock", "lock", "attemt to lock bad id")
 }
 
 func main() {

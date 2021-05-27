@@ -2,8 +2,8 @@ package main
 
 import (
 	"crypto/x509"
-	"fmt"
 	"reflect"
+	"sync_tree/__tests"
 	"sync_tree/_calc"
 )
 
@@ -13,20 +13,20 @@ func hashTest() {
 	hash := _calc.Hash([]byte{0})
 	expected := []byte{82, 183, 9, 232, 198, 142, 69, 166, 187, 232, 192, 96, 68, 75, 73, 151, 112, 183, 61, 164, 253, 193, 184, 5, 181, 233, 156, 208, 175, 166, 26, 164, 209, 27, 80, 16, 145, 0, 78, 104, 11, 151, 150, 131, 100, 121, 160, 43, 34, 196, 98, 251, 92, 80, 223, 142, 20, 163, 21, 232, 171, 85, 72, 39}
 	if reflect.DeepEqual(hash, expected) {
-		fmt.Println("\033[32m(CALC) {Hash} - passed\033[0m")
+		__tests.Passed("calc", "Hash", "taking blake2b hash")
 		return
 	}
-	fmt.Println("\033[31m(CALC) {Hash} - test failed\033[0m")
+	__tests.Failed("calc", "Hash", "taking blake2b hash")
 }
 
 func signTest() {
 	mes := []byte{1, 2, 3}
 	sign, _ := _calc.Sign([][]byte{mes, mes}, keyBytes)
 	if len(sign) == 512 {
-		fmt.Println("\033[32m(CALC) {Sign} - passed\033[0m")
+		__tests.Passed("calc", "Hash", "taking blake2b hash")
 		return
 	}
-	fmt.Println("\033[31m(CALC) {Sign} - test failed\033[0m")
+	__tests.Failed("calc", "Hash", "taking blake2b hash")
 }
 
 func verifyTest() {
@@ -40,19 +40,19 @@ func verifyTest() {
 		sign,
 	)
 	if verified == nil {
-		fmt.Println("\033[32m(CALC) {Verify} - passed\033[0m")
+		__tests.Passed("calc", "Verify", "verify message RSAPSS")
 		return
 	}
-	fmt.Println("\033[31m(CALC) {Verify} - test failed\033[0m")
+	__tests.Failed("calc", "Verify", "verify message RSAPSS")
 }
 
 func generateBytesTest() {
 	bytes := _calc.RandBytes()
 	if bytes != nil {
-		fmt.Println("\033[32m(CALC) {RandBytes} - passed\033[0m")
+		__tests.Passed("calc", "genBytes", "generate random")
 		return
 	}
-	fmt.Println("\033[31m(CALC) {RandBytes} - test failed\033[0m")
+	__tests.Failed("calc", "genBytes", "generate random")
 }
 
 func main() {
