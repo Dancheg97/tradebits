@@ -29,6 +29,10 @@ type Sell struct {
 	Recieve uint64
 }
 
+type Output struct {
+	
+}
+
 /*
 Create new asset by passed values. Checks wether asset with passed adress
 exists and creates new one

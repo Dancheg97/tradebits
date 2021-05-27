@@ -13,10 +13,6 @@ func ifCloseBuyer(sell asset.Sell, buy asset.Buy) bool {
 	return sell.Recieve > buy.Offer
 }
 
-func closeBuyer(sell asset.Sell, buy asset.Buy) (asset.Sell )  {
-
-}
-
 func testMatch() {
 	sell := asset.Sell{
 		Offer:   500,
@@ -92,19 +88,26 @@ func testCloseSell() {
 	}
 	buy := asset.Buy{
 		Offer:   120, // A
-		Recieve: 200, // B 
+		Recieve: 200, // B
 	}
 	if checkMatch(sell, buy) {
 		if ifCloseBuyer(sell, buy) {
-
+			
 		}
 	}
 }
 
-func closeSeller(sell asset.Sell, buy asset.Buy) (asset.Sell, asset.Buy) {
-	goesToSeller = uint64(buy.Recieve/buy.Offer*sell.Recieve)
-	leavesToBuyer = buy.Recieve - goesToSeller
-
+/*
+This function is taking sell and buy transaction, and closing sell transaction,
+giving out the rest of buy transaction and 
+*/
+func closeSeller(sell asset.Sell, buy asset.Buy) asset.Buy {
+	goesToSeller := uint64(buy.Recieve / buy.Offer * sell.Recieve)
+	fmt.Println("goes to seller/Offer-: ", goesToSeller)
+	fmt.Println("goes to seller/Recieve: ", sell.Recieve)
+	buy.Offer = buy.Offer - sell.Recieve
+	buy.Recieve = buy.Recieve - goesToSeller
+	return buy
 }
 
 func main() {
