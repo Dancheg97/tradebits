@@ -15,27 +15,34 @@ type asset struct {
 	MesKey   []byte
 	Likes    uint64
 	Dislikes uint64
-	Buys     map[string]Buy
-	Sells    map[string]Sell
+	Buys     []Buy
+	Sells    []Sell
 }
 
+// request to buy some asset
 type Buy struct {
-	Offer   uint64
-	Recieve uint64
+	Adress       []byte
+	OfferMain    uint64
+	RecieveAsset uint64
 }
 
+// request to sell some asset
 type Sell struct {
-	Offer   uint64
-	Recieve uint64
+	Adress      []byte
+	OfferAsset  uint64
+	RecieveMain uint64
 }
 
+// struct containing info about outputs
 type Output struct {
-	
+	Adress   []byte
+	MainOut  uint64
+	AssetOut uint64
 }
 
 /*
 Create new asset by passed values. Checks wether asset with passed adress
-exists and creates new one
+exists and creates new one.
 */
 func Create(adress []byte, Name string, ImgLink string, MesKey []byte) error {
 	if _data.Check(adress) {
@@ -48,8 +55,8 @@ func Create(adress []byte, Name string, ImgLink string, MesKey []byte) error {
 		MesKey:   MesKey,
 		Likes:    0,
 		Dislikes: 0,
-		Buys:     make(map[string]Buy),
-		Sells:    make(map[string]Sell),
+		Buys:     []Buy{},
+		Sells:    []Sell{},
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newAsset)
@@ -109,21 +116,34 @@ func Look(adress []byte) *asset {
 	return &currAsset
 }
 
+// checker: if 2 trades matches
+func CheckMatch(sell Sell, buy Buy) bool {
+	return float64(buy.RecieveAsset/buy.OfferMain) < float64(sell.OfferAsset/sell.RecieveMain)
+}
+
+// checker: if trade closed on buy side
+func IfCloseBuyer(sell Sell, buy Buy) bool {
+	return sell.RecieveMain > buy.OfferMain
+}
+
 /*
-Function to open trade for some market. Open trade is going by the
-following steps:
- 1) Checks wether some trades could be closed with that trade
-	- Get opposite side trades
-	- Sort them by relevance
-	- 1 by one close them untill
- 2) Partially or fully closing them
- 3) Opening new trade, for the rest of value
+This function is taking sell and buy transaction, and closing sell transaction,
+giving out the rest of buy transaction and. Outputs:
+ - new Buy request for buyer
+ - output for seller
+ - output for buyer
 */
-func (a asset) Buy(maker []byte, trade Buy) {
-
+func CloseSeller(sell Sell, buy Buy) (Buy, Output, Output) {
+	goesToSeller := uint64(buy.RecieveAsset / buy.OfferMain * sell.RecieveMain)
+	sellerOutput := Output{
+		AssetOut: goesToSeller,
+		MainOut:  sell.RecieveMain,
+	}
+	buyerOutput := Output{
+		AssetOut: sell.OfferAsset,
+	}
+	buy.OfferMain = sell.RecieveMain - buy.OfferMain
+	buy.RecieveAsset = buy.RecieveAsset - goesToSeller
+	return buy, sellerOutput, buyerOutput
 }
 
-// this function is made to close the currently open trade
-func (a asset) Sell(maker []byte, trade Sell) {
-	a.Sells[string(maker)] = trade
-}
