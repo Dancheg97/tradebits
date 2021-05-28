@@ -9,7 +9,7 @@ func RandBytes() []byte {
 	randomBytes := make([]byte, 64)
 	_, randomGenerateErr := rand.Read(randomBytes)
 	if randomGenerateErr != nil {
-		logs.Critical("error generating random bytes for asset")
+		logs.Critical("error generating random bytes for market")
 		return nil
 	}
 	return randomBytes

@@ -16,7 +16,7 @@ Here is current listing (arrow represents import ability):
 - `_net` (utils)
 
   ↑ ↑
-- `asset` (entities)
+- `market` (entities)
 - `node` (entities)
 - `user` (entities)
 

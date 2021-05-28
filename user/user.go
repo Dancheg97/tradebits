@@ -13,7 +13,7 @@ type user struct {
 	Balance uint64
 	MesKey  []byte
 	ImgLink string
-	Assets  map[string]uint64
+	Markets map[string]uint64
 }
 
 /*
@@ -28,7 +28,7 @@ func Create(adress []byte, MesKey []byte, ImgLink string) error {
 		Balance: 0,
 		MesKey:  MesKey,
 		ImgLink: ImgLink,
-		Assets:  make(map[string]uint64),
+		Markets: make(map[string]uint64),
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(u)
@@ -80,12 +80,12 @@ func (u user) Save() {
 	lock.Unlock(unlock_adress)
 }
 
-// Get user balance for some specific asset
-func (u user) AssetBalance(asset []byte) uint64 {
-	return u.Assets[string(asset)]
+// Get user balance for some specific market
+func (u user) MarketBalance(market []byte) uint64 {
+	return u.Markets[string(market)]
 }
 
-// Change user balance for some specific asset
-func (u user) ChangeAssetBalance(asset []byte, balance uint64) {
-	u.Assets[string(asset)] = balance
+// Change user balance for some specific market
+func (u user) ChangeMarketBalance(market []byte, balance uint64) {
+	u.Markets[string(market)] = balance
 }
