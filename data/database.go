@@ -9,7 +9,7 @@ import (
 )
 
 var dir, _ = filepath.Abs(filepath.Dir(os.Args[0]))
-var db, _ = leveldb.OpenFile(dir +"/base", nil)
+var db, _ = leveldb.OpenFile(dir+"data/base", nil)
 
 // get value by key from database
 func Get(key []byte) []byte {
@@ -39,7 +39,7 @@ func Put(key []byte, value []byte) {
 // change existing value in database by key
 func Change(key []byte, value []byte) {
 	if Check(key) {
-
+		logs.Critical("unexpected error in db on Change func")
 	}
 	dbErr := db.Put(key, value, nil)
 	if dbErr != nil {
