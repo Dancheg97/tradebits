@@ -44,3 +44,11 @@ func TestGetBusyAssetFromDB(t *testing.T) {
 		return
 	}
 }
+
+func TestAssetLook(t *testing.T) {
+	market := Look(adress)
+	if reflect.DeepEqual(market.MesKey, mesKey) {
+		return
+	}
+	t.Error("keys are not the same, look asset error")
+}
