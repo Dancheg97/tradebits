@@ -15,8 +15,8 @@ type market struct {
 	MesKey   []byte
 	Likes    uint64
 	Dislikes uint64
-	Buys     []Buy
-	Sells    []Sell
+	Buys     []Trade
+	Sells    []Trade
 }
 
 type output struct {
@@ -40,8 +40,8 @@ func Create(adress []byte, Name string, ImgLink string, MesKey []byte) error {
 		MesKey:   MesKey,
 		Likes:    0,
 		Dislikes: 0,
-		Buys:     []Buy{},
-		Sells:    []Sell{},
+		Buys:     []Trade{},
+		Sells:    []Trade{},
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newMarket)
@@ -100,3 +100,7 @@ func Look(adress []byte) *market {
 	gob.NewDecoder(marketCache).Decode(&currMarket)
 	return &currMarket
 }
+
+/*
+Operate transaction 
+*/
