@@ -15,12 +15,28 @@ func testRatioMatch() {
 		RecieveMain: 200,
 	}
 	if asset.B2SCheckMatch(buy, sell) {
-		__tests.Passed("asset", "CheckMatch", "checks if trade matches")
+		__tests.Passed("asset", "Sell/Match", "checks if trade matches")
 		return
 	}
-	__tests.Failed("asset", "CheckMatch", "checks if trade matches")
+	__tests.Failed("asset", "Sell/Match", "checks if trade matches")
+}
+
+func testRatioNonMatch() {
+	buy := asset.Buy{
+		OfferMain:    100,
+		RecieveAsset: 200,
+	}
+	sell := asset.Sell{
+		OfferAsset:  100,
+		RecieveMain: 200,
+	}
+	if asset.B2SCheckMatch(buy, sell) {
+		__tests.Failed("asset", "Sell/Match", "check if trade not matches")
+	}
+	__tests.Passed("asset", "Sell/Match", "check if trade not matches")
 }
 
 func main() {
 	testRatioMatch()
+	testRatioNonMatch()
 }
