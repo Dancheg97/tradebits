@@ -14,20 +14,20 @@ func Init() {
 }
 
 func Info(a ...interface{}) {
-	log.Printf("[INFO] %v\n", fmt.Sprint(a))
+	log.Printf("[INFO] %v\n", fmt.Sprint(a...))
 }
 
 func Warning(a ...interface{}) error {
-	log.Printf("[WARN] %v\n", fmt.Sprint(a))
-	return errors.New(fmt.Sprint(a))
+	log.Printf("[WARN] %v\n", fmt.Sprint(a...))
+	return errors.New(fmt.Sprint(a...))
 }
 
 func Error(a ...interface{}) error {
-	log.Printf("[ERROR] %v\n", fmt.Sprint(a))
-	return errors.New(fmt.Sprint(a))
+	log.Printf("[ERROR] %v\n", fmt.Sprint(a...))
+	return errors.New(fmt.Sprint(a...))
 }
 
 func Critical(a ...interface{}) error {
-	log.Printf("[FATAL] %v\n", fmt.Sprint(a))
-	return errors.New(fmt.Sprint(a))
+	log.Printf("[FATAL] %v\n", fmt.Sprint(a...))
+	return errors.New(fmt.Sprint(a...))
 }
