@@ -4,7 +4,6 @@ import "testing"
 
 func TestCheckMatching(t *testing.T) {
 	sell := Trade{
-		IsSell:  true,
 		Offer:   101,
 		Recieve: 100,
 	}

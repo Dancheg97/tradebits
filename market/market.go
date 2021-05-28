@@ -19,6 +19,12 @@ type market struct {
 	Sells    []Trade
 }
 
+type output struct {
+	Adress    []byte
+	MainOut   uint64
+	MarketOut uint64
+}
+
 /*
 Create new market by passed values. Checks wether market with passed adress
 exists and creates new one.
