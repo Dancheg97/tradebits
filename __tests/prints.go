@@ -6,7 +6,6 @@ import (
 )
 
 func Passed(module string, function string, description string) {
-
 	fmt.Println("\033[32m[PASSED]  >>>  ",
 		"[MODULE]:", module, strings.Repeat(" ", 12-len(module)),
 		"[FUNCTION]:", function, strings.Repeat(" ", 12-len(function)),

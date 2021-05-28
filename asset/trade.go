@@ -62,3 +62,8 @@ func B2SCheckMatch(buy Buy, sell Sell) bool {
 	buyRatio := float64(sell.OfferAsset / sell.RecieveMain)
 	return sellRatio < buyRatio
 }
+
+func B2SIfCloseBuyer(buy Buy, sell Sell) bool {
+	return buy.RecieveAsset < sell.OfferAsset
+}
+

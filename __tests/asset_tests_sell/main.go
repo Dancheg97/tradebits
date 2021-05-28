@@ -36,6 +36,10 @@ func testRatioNonMatch() {
 	__tests.Passed("asset", "Sell/Match", "check if trade not matches")
 }
 
+func testCloseSeller() {
+	
+}
+
 func main() {
 	testRatioMatch()
 	testRatioNonMatch()
