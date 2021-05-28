@@ -1,9 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"sync_tree/__tests"
 	"sync_tree/asset"
-	"sync_tree/____tests"
 )
 
 func testMatch() {
@@ -16,10 +15,10 @@ func testMatch() {
 		RecieveAsset: 400,
 	}
 	if asset.CheckMatch(sell, buy) {
-		____tests.Passed("asset", "CheckMatch", "checks if asset matches")
+		__tests.Passed("asset", "CheckMatch", "checks if trade matches")
 		return
 	}
-	fmt.Println("\033[31m(ASSET_BUY) {MATCH} - failed\033[0m")
+	__tests.Failed("asset", "CheckMatch", "checks if trade matches")
 }
 
 func testNonMatch() {
@@ -32,13 +31,13 @@ func testNonMatch() {
 		RecieveAsset: 600,
 	}
 	if asset.CheckMatch(sell, buy) {
-		fmt.Println("\033[31m(ASSET_BUY) {NON_MATCH} - failed\033[0m")
+		__tests.Failed("asset", "CheckMatch", "checks if trade not matches")
 		return
 	}
-	fmt.Println("\033[32m(ASSET_BUY) {NON_MATCH} - passed\033[0m")
+	__tests.Passed("asset", "CheckMatch", "checks if trade not matches")
 }
 
-func testIfBuyerIsClosing() {
+func testIfSellIsClosing() {
 	sell := asset.Sell{
 		OfferAsset:  500,
 		RecieveMain: 100,
@@ -48,15 +47,15 @@ func testIfBuyerIsClosing() {
 		RecieveAsset: 200,
 	}
 	if asset.CheckMatch(sell, buy) {
-		if asset.IfCloseBuyer(sell, buy) {
-			fmt.Println("\033[32m(ASSET_BUY) {REST_SELLER} - passed\033[0m")
+		if asset.IfCloseSeller(sell, buy) {
+			__tests.Failed("asset", "CheckClose", "checks if trade closes sell")
 			return
 		}
 	}
-	fmt.Println("\033[31m(ASSET_BUY) {REST_SELLER} - failed\033[0m")
+	__tests.Passed("asset", "CheckClose", "checks if trade closes sell")
 }
 
-func testIfSellerIsClosing() {
+func testIfBuyIsClosing() {
 	sell := asset.Sell{
 		OfferAsset:  500,
 		RecieveMain: 100,
@@ -66,15 +65,46 @@ func testIfSellerIsClosing() {
 		RecieveAsset: 2000,
 	}
 	if asset.CheckMatch(sell, buy) {
-		if asset.IfCloseBuyer(sell, buy) {
-			fmt.Println("\033[31m(ASSET_BUY) {REST_BUYER} - failed\033[0m")
+		if asset.IfCloseSeller(sell, buy) {
+			__tests.Passed("asset", "CheckClose", "checks if trade closes buy")
 			return
 		}
 	}
-	fmt.Println("\033[32m(ASSET_BUY) {REST_BUYER} - passed\033[0m")
+	__tests.Failed("asset", "CheckClose", "checks if trade closes buy")
 }
 
 func testCloseSell() {
+	sell := asset.Sell{
+		OfferAsset:  500,
+		RecieveMain: 100,
+	}
+	buy := asset.Buy{
+		OfferMain:    120,
+		RecieveAsset: 200,
+	}
+	if asset.CheckMatch(sell, buy) {
+		if asset.IfCloseSeller(sell, buy) {
+			newBuy, sellOut, buyOut := asset.CloseSeller(sell, buy)
+			ch1 := sellOut.MainOut == 100
+			ch2 := sellOut.AssetOut == 333
+			ch3 := buyOut.AssetOut == 167
+			ch4 := newBuy.OfferMain == 20
+			ch5 := newBuy.RecieveAsset == 33
+			if ch1 && ch2 && ch3 && ch4 && ch5 {
+				__tests.Passed("asset", "CloseSeller", "pretty good numbers")
+				return
+			}
+			__tests.Failed("asset", "CloseSeller", "bad numbers")
+			return
+		} else {
+			__tests.Failed("asset", "CloseSeller", "not closing")
+			return
+		}
+	}
+	__tests.Failed("asset", "CloseSeller", "not even matching")
+}
+
+func testCloseBuyer() {
 	sell := asset.Sell{
 		OfferAsset:  500,
 		RecieveMain: 100,
@@ -84,23 +114,31 @@ func testCloseSell() {
 		RecieveAsset: 200,
 	}
 	if asset.CheckMatch(sell, buy) {
-		if asset.IfCloseBuyer(sell, buy) {
-			fmt.Println("\033[31m(ASSET_BUY) {REST_BUYER} - failed\033[0m")
+		if asset.IfCloseSeller(sell, buy) {
+			__tests.Failed("asset", "CloseBuyer", "not closing")
 			return
 		} else {
-			newBuy, sellOut, buyOut := asset.CloseSeller(sell, buy)
-			fmt.Println("new buy request", newBuy)
-			fmt.Println("output for seller", sellOut)
-			fmt.Println("output for buyer", buyOut)
-
+			newSell, sellOut, buyOut := asset.CloseBuyer(sell, buy)
+			ch1 := sellOut.MainOut == 80
+			ch2 := buyOut.AssetOut == 200
+			ch3 := newSell.OfferAsset == 300
+			ch4 := newSell.RecieveMain == 20
+			if ch1 && ch2 && ch3 && ch4 {
+				__tests.Passed("asset", "CloseBuyer", "pretty good numbers")
+				return
+			}
+			__tests.Failed("asset", "CloseBuyer", "bad numbers")
+			return
 		}
 	}
+	__tests.Failed("asset", "CloseBuyer", "not even matching")
 }
 
 func main() {
 	testMatch()
 	testNonMatch()
-	testIfBuyerIsClosing()
-	testIfSellerIsClosing()
+	testIfSellIsClosing()
+	testIfBuyIsClosing()
 	testCloseSell()
+	testCloseBuyer()
 }

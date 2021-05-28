@@ -19,26 +19,6 @@ type asset struct {
 	Sells    []Sell
 }
 
-// request to buy some asset
-type Buy struct {
-	Adress       []byte
-	OfferMain    uint64
-	RecieveAsset uint64
-}
-
-// request to sell some asset
-type Sell struct {
-	Adress      []byte
-	OfferAsset  uint64
-	RecieveMain uint64
-}
-
-// struct containing info about outputs
-type Output struct {
-	Adress   []byte
-	MainOut  uint64
-	AssetOut uint64
-}
 
 /*
 Create new asset by passed values. Checks wether asset with passed adress
@@ -115,35 +95,3 @@ func Look(adress []byte) *asset {
 	gob.NewDecoder(assetCache).Decode(&currAsset)
 	return &currAsset
 }
-
-// checker: if 2 trades matches
-func CheckMatch(sell Sell, buy Buy) bool {
-	return float64(buy.RecieveAsset/buy.OfferMain) < float64(sell.OfferAsset/sell.RecieveMain)
-}
-
-// checker: if trade closed on buy side
-func IfCloseBuyer(sell Sell, buy Buy) bool {
-	return sell.RecieveMain > buy.OfferMain
-}
-
-/*
-This function is taking sell and buy transaction, and closing sell transaction,
-giving out the rest of buy transaction and. Outputs:
- - new Buy request for buyer
- - output for seller
- - output for buyer
-*/
-func CloseSeller(sell Sell, buy Buy) (Buy, Output, Output) {
-	goesToSeller := uint64(buy.RecieveAsset / buy.OfferMain * sell.RecieveMain)
-	sellerOutput := Output{
-		AssetOut: goesToSeller,
-		MainOut:  sell.RecieveMain,
-	}
-	buyerOutput := Output{
-		AssetOut: sell.OfferAsset,
-	}
-	buy.OfferMain = sell.RecieveMain - buy.OfferMain
-	buy.RecieveAsset = buy.RecieveAsset - goesToSeller
-	return buy, sellerOutput, buyerOutput
-}
-
