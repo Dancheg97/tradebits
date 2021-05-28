@@ -10,7 +10,7 @@ var mesKey = []byte{1, 2, 3, 4, 5}
 var img = "asset image link . example"
 var name = "newAsset"
 
-func createNewTest(t *testing.T) {
+func TestCreateNewMarket(t *testing.T) {
 	err := Create(adress, name, img, mesKey)
 	if err != nil {
 		t.Error("failed to craete new market")
@@ -18,7 +18,7 @@ func createNewTest(t *testing.T) {
 	}
 }
 
-func createExistingAssetTest(t *testing.T) {
+func TestCreateExistingMarket(t *testing.T) {
 	err := Create(adress, name, img, mesKey)
 	if err != nil {
 		return
@@ -26,7 +26,7 @@ func createExistingAssetTest(t *testing.T) {
 	t.Error("failed to craete new market")
 }
 
-func getFreeAssetTest(t *testing.T) {
+func TestGetFreeAssetFromDB(t *testing.T) {
 	market := Get(adress)
 	defer market.Save()
 	if reflect.DeepEqual(market.MesKey, mesKey) {
@@ -35,7 +35,7 @@ func getFreeAssetTest(t *testing.T) {
 	t.Error("keys are not the same, get asset error")
 }
 
-func getBusyAssetTest(t *testing.T) {
+func TestGetBusyAssetFromDB(t *testing.T) {
 	freeAsset := Get(adress)
 	defer freeAsset.Save()
 	busyAsset := Get(adress)
