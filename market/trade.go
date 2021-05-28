@@ -13,7 +13,7 @@ type Sell struct {
 	OfferMarket uint64
 	RecieveMain uint64
 }
-
+ 
 type Output struct {
 	Adress    []byte
 	MainOut   uint64

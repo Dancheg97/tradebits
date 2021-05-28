@@ -18,7 +18,7 @@ type market struct {
 	Buys     []Buy
 	Sells    []Sell
 }
-
+ 
 /*
 Create new market by passed values. Checks wether market with passed adress
 exists and creates new one.

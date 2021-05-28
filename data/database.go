@@ -1,12 +1,15 @@
 package data
 
 import (
+	"os"
+	"path/filepath"
 	"sync_tree/logs"
 
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
-var db, _ = leveldb.OpenFile("data/base", nil)
+var dir, _ = filepath.Abs(filepath.Dir(os.Args[0]))
+var db, _ = leveldb.OpenFile(dir +"/base", nil)
 
 // get value by key from database
 func Get(key []byte) []byte {
