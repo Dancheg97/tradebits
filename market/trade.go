@@ -12,4 +12,3 @@ func (x Trade) checkMatch(y Trade) bool {
 	outRatio := float64(y.Recieve) / float64(y.Offer)
 	return inRatio > outRatio
 }
-
