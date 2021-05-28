@@ -43,7 +43,7 @@ func TestVerify(t *testing.T) {
 }
 
 func TestGenerateRandomBytes(t *testing.T) {
-	bytes := RandBytes()
+	bytes := Rand()
 	if bytes != nil {
 		return
 	}

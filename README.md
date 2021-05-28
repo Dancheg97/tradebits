@@ -9,13 +9,13 @@ Here is current listing (arrow represents import ability):
 
 - `logs` (low utils)
 
-  ↑ ↑ ↑
-- `_calc` (utils)
-- `_data` (utils)
-- `_lock` (utils)
-- `_net` (utils)
+  ↑
+- `calc` (utils)
+- `data` (utils)
+- `lock` (utils)
+- `net` (utils)
 
-  ↑ ↑
+  ↑
 - `market` (entities)
 - `node` (entities)
 - `user` (entities)
@@ -49,7 +49,7 @@ This package implements methods used to calculate hashes, verify and sign messag
 - `Hash` - take a hash from value
 - `Sign` - sign a byte message using private key bytes
 - `Verify` - verify byte message by sign using public key bytes
-- `Sign` - Create random 64 bytes for some adress
+- `Rand` - Create random 64 bytes for some adress
 
 ## Lock
 
@@ -62,7 +62,7 @@ This package provides functions to lock and unlock byte slices (with length of 6
 
 That package contains interfaces that are used to communicate to outer space. In current implementation gRPC is used for compact messages and fast serialization.
 
-This package is automatically generated, by `api.proto` file, which is in `_net` package
+This package is automatically generated, by `api.proto` file, which is in `net` package
 
 # Tests
 

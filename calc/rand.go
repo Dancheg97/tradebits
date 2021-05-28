@@ -5,7 +5,7 @@ import (
 	"sync_tree/logs"
 )
 
-func RandBytes() []byte {
+func Rand() []byte {
 	randomBytes := make([]byte, 64)
 	_, randomGenerateErr := rand.Read(randomBytes)
 	if randomGenerateErr != nil {
