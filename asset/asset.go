@@ -5,7 +5,7 @@ import (
 	"encoding/gob"
 	"sync_tree/__logs"
 	"sync_tree/_data"
-	"sync_tree/_lock"
+	"sync_tree/lock"
 )
 
 type asset struct {
@@ -59,7 +59,7 @@ This function should be used only in case those values are modified:
  - DisLikes
 */
 func Get(adress []byte) *asset {
-	lockErr := _lock.Lock(adress)
+	lockErr := lock.Lock(adress)
 	if lockErr != nil {
 		__logs.Error("unable to get asset, locked: ", adress)
 		return nil
@@ -81,7 +81,7 @@ func (a asset) Save() {
 	unlock_adress := a.adress
 	_data.Change(a.adress, cache.Bytes())
 	a.adress = nil
-	_lock.Unlock(unlock_adress)
+	lock.Unlock(unlock_adress)
 }
 
 /*

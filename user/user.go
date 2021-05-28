@@ -5,7 +5,7 @@ import (
 	"encoding/gob"
 	"sync_tree/__logs"
 	"sync_tree/_data"
-	"sync_tree/_lock"
+	"sync_tree/lock"
 )
 
 type user struct {
@@ -42,7 +42,7 @@ Get existing user from database, by getting user his ID is gonna be
 locked, so another of that user are not gonna appear
 */
 func Get(adress []byte) *user {
-	lockErr := _lock.Lock(adress)
+	lockErr := lock.Lock(adress)
 	if lockErr != nil {
 		__logs.Error("unable to get user (locked): ", adress)
 		return nil
@@ -77,7 +77,7 @@ func (u user) Save() {
 	unlock_adress := u.adress
 	_data.Change(u.adress, cache.Bytes())
 	u.adress = nil
-	_lock.Unlock(unlock_adress)
+	lock.Unlock(unlock_adress)
 }
 
 // Get user balance for some specific asset

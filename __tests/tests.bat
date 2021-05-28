@@ -1,7 +1,0 @@
-go run "__tests/start/main.go"
-go run "__tests/calc_tests/main.go"
-go run "__tests/data_tests/main.go"
-go run "__tests/lock_tests/main.go"
-go run "__tests/user_tests/main.go"
-go run "__tests/asset_tests/main.go"
-go run "__tests/asset_tests_buy/main.go"

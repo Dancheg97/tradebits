@@ -1,4 +1,4 @@
-package _lock
+package lock
 
 import (
 	"sync_tree/__logs"
