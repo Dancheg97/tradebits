@@ -60,5 +60,5 @@ func S2BCloseBuyer(sell Sell, buy Buy) (Sell, Output, Output) {
 func B2SCheckMatch(buy Buy, sell Sell) bool {
 	sellRatio := float64(buy.RecieveAsset / buy.OfferMain)
 	buyRatio := float64(sell.OfferAsset / sell.RecieveMain)
-	return sellRatio > buyRatio
+	return sellRatio < buyRatio
 }

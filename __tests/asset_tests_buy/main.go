@@ -30,7 +30,7 @@ func testNonMatch() {
 		OfferMain:    100,
 		RecieveAsset: 600,
 	}
-	if asset.B2SCheckMatch(sell, buy) {
+	if asset.S2BCheckMatch(sell, buy) {
 		__tests.Failed("asset", "Buy/-Match", "checks if trade not matches")
 		return
 	}
@@ -83,8 +83,8 @@ func testCloseSell() {
 		RecieveAsset: 200,
 	}
 	if asset.S2BCheckMatch(sell, buy) {
-		if asset.S2BIfCloseSeller()(sell, buy) {
-			newBuy, sellOut, buyOut := asset.S2BCloseSeller()(sell, buy)
+		if asset.S2BIfCloseSeller(sell, buy) {
+			newBuy, sellOut, buyOut := asset.S2BCloseSeller(sell, buy)
 			ch1 := sellOut.MainOut == 100
 			ch2 := sellOut.AssetOut == 333
 			ch3 := buyOut.AssetOut == 167
@@ -114,7 +114,7 @@ func testCloseBuyer() {
 		RecieveAsset: 200,
 	}
 	if asset.S2BCheckMatch(sell, buy) {
-		if asset.S2BIfCloseSeller()(sell, buy) {
+		if asset.S2BIfCloseSeller(sell, buy) {
 			__tests.Failed("asset", "Buy/CLBuy", "not closing")
 			return
 		} else {
