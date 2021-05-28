@@ -1,21 +1,22 @@
 package market
 
+import "testing"
 
-// func testRatioMatch() {
-// 	buy := Buy{
-// 		OfferMain:    400,
-// 		RecieveAsset: 200,
-// 	}
-// 	sell := Sell{
-// 		OfferAsset:  400,
-// 		RecieveMain: 200,
-// 	}
-// 	if B2SCheckMatch(buy, sell) {
-// 		__tests.Passed("asset", "Sell/Match", "checks if trade matches")
-// 		return
-// 	}
-// 	__tests.Failed("asset", "Sell/Match", "checks if trade matches")
-// }
+func TestSellRatio() {
+	buy := Buy{
+		OfferMain:    400,
+		RecieveAsset: 200,
+	}
+	sell := Sell{
+		OfferAsset:  400,
+		RecieveMain: 200,
+	}
+	if B2SCheckMatch(buy, sell) {
+		__tests.Passed("asset", "Sell/Match", "checks if trade matches")
+		return
+	}
+	__tests.Failed("asset", "Sell/Match", "checks if trade matches")
+}
 
 // func testRatioNonMatch() {
 // 	buy := Buy{
