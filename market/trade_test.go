@@ -3,19 +3,43 @@ package market
 import "testing"
 
 func TestCheckMatching(t *testing.T) {
-	sell := Trade{
-		Offer:   101,
+	t1 := Trade{
+		IsSell:  true,
+		Offer:   200,
 		Recieve: 100,
 	}
-	buy := Trade{
+	t2 := Trade{
 		IsSell:  false,
-		Offer:   101,
+		Offer:   200,
 		Recieve: 100,
 	}
-	firstMatch := sell.checkMatch(buy)
-	secondMatch := buy.checkMatch(sell)
+	firstMatch := t1.checkMatch(t2)
+	secondMatch := t2.checkMatch(t1)
 	if firstMatch && secondMatch {
 		return
+	}
+	t.Error("trades do not match")
+}
+
+func TestCloseInput(t *testing.T) {
+	t1 := Trade{
+		IsSell:  true,
+		Offer:   200,
+		Recieve: 100,
+	}
+	t2 := Trade{
+		IsSell:  false,
+		Offer:   800,
+		Recieve: 400,
+	}
+	firstMatch := t1.checkMatch(t2)
+	secondMatch := t2.checkMatch(t1)
+	firstClose := t1.checkCloseInput(t2)
+	secondClose := t2.checkCloseInput(t1)
+	if firstMatch && secondMatch {
+		if firstClose || secondClose {
+			return
+		}
 	}
 	t.Error("trades do not match")
 }
