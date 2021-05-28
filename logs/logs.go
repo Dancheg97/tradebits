@@ -1,4 +1,4 @@
-package __logs
+package logs
 
 import (
 	"errors"
@@ -6,7 +6,8 @@ import (
 	"log"
 	"os"
 )
-var file, _ = os.OpenFile("__logs/info.log", os.O_CREATE|os.O_APPEND, 0644)
+
+var file, _ = os.OpenFile("logs/info.log", os.O_CREATE|os.O_APPEND, 0644)
 
 func Init() {
 	log.SetOutput(file)

@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"sync_tree/_calc"
+	"sync_tree/calc"
 )
 
 func main() {
-	fmt.Println(_calc.RandBytes())
+	fmt.Println(calc.RandBytes())
 }

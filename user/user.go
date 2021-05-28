@@ -3,9 +3,9 @@ package user
 import (
 	"bytes"
 	"encoding/gob"
-	"sync_tree/__logs"
-	"sync_tree/_data"
+	"sync_tree/data"
 	"sync_tree/lock"
+	"sync_tree/logs"
 )
 
 type user struct {
@@ -21,8 +21,8 @@ Create new user, in case there is already user with same adress
 the error will be logged
 */
 func Create(adress []byte, MesKey []byte, ImgLink string) error {
-	if _data.Check(adress) {
-		return __logs.Error("create user by existing key ", adress)
+	if data.Check(adress) {
+		return logs.Error("create user by existing key ", adress)
 	}
 	u := user{
 		Balance: 0,
@@ -32,8 +32,8 @@ func Create(adress []byte, MesKey []byte, ImgLink string) error {
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(u)
-	_data.Put(adress, cache.Bytes())
-	__logs.Info("new user create success, adress: ", adress)
+	data.Put(adress, cache.Bytes())
+	logs.Info("new user create success, adress: ", adress)
 	return nil
 }
 
@@ -44,11 +44,11 @@ locked, so another of that user are not gonna appear
 func Get(adress []byte) *user {
 	lockErr := lock.Lock(adress)
 	if lockErr != nil {
-		__logs.Error("unable to get user (locked): ", adress)
+		logs.Error("unable to get user (locked): ", adress)
 		return nil
 	}
 	u := user{adress: adress}
-	userBytes := _data.Get(adress)
+	userBytes := data.Get(adress)
 	cache := bytes.NewBuffer(userBytes)
 	gob.NewDecoder(cache).Decode(&u)
 	return &u
@@ -60,7 +60,7 @@ instance of that user to database.
 */
 func Look(adress []byte) *user {
 	u := user{}
-	userBytes := _data.Get(adress)
+	userBytes := data.Get(adress)
 	cache := bytes.NewBuffer(userBytes)
 	gob.NewDecoder(cache).Decode(&u)
 	return &u
@@ -75,7 +75,7 @@ func (u user) Save() {
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(u)
 	unlock_adress := u.adress
-	_data.Change(u.adress, cache.Bytes())
+	data.Change(u.adress, cache.Bytes())
 	u.adress = nil
 	lock.Unlock(unlock_adress)
 }

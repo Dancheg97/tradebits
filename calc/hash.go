@@ -1,7 +1,7 @@
-package _calc
+package calc
 
 import (
-	"sync_tree/__logs"
+	"sync_tree/logs"
 
 	"golang.org/x/crypto/blake2b"
 )
@@ -10,7 +10,7 @@ import (
 func Hash(bytes []byte) []byte {
 	hasher, hashErr := blake2b.New512([]byte("1u89hdsaj098as12"))
 	if hashErr != nil {
-		__logs.Critical("unexpected error craeting hasher")
+		logs.Critical("unexpected error craeting hasher")
 		return nil
 	}
 	hasher.Write(bytes)

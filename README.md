@@ -2,12 +2,12 @@
 
 Server software to run sync tree server model.
 
-Every dependency can go only from bottom level to top (as they are listed in folder), so that `main` package can import evrything, while package `__logs` is unabale to import anything.
+Every dependency can go only from bottom level to top (as they are listed in folder), so that `main` package can import evrything, while package `logs` is unabale to import anything.
 
 Here is current listing (arrow represents import ability):
 
 
-- `__logs` (low utils)
+- `logs` (low utils)
 
   ↑ ↑ ↑
 - `_calc` (utils)

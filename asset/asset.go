@@ -3,9 +3,9 @@ package asset
 import (
 	"bytes"
 	"encoding/gob"
-	"sync_tree/__logs"
-	"sync_tree/_data"
+	"sync_tree/data"
 	"sync_tree/lock"
+	"sync_tree/logs"
 )
 
 type asset struct {
@@ -19,14 +19,13 @@ type asset struct {
 	Sells    []Sell
 }
 
-
 /*
 Create new asset by passed values. Checks wether asset with passed adress
 exists and creates new one.
 */
 func Create(adress []byte, Name string, ImgLink string, MesKey []byte) error {
-	if _data.Check(adress) {
-		return __logs.Error("create asset by existing key: ", adress)
+	if data.Check(adress) {
+		return logs.Error("create asset by existing key: ", adress)
 	}
 	newAsset := asset{
 		adress:   adress,
@@ -40,8 +39,8 @@ func Create(adress []byte, Name string, ImgLink string, MesKey []byte) error {
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newAsset)
-	_data.Put(adress, cache.Bytes())
-	__logs.Info("new user create success, adress: ", adress)
+	data.Put(adress, cache.Bytes())
+	logs.Info("new user create success, adress: ", adress)
 	return nil
 }
 
@@ -61,11 +60,11 @@ This function should be used only in case those values are modified:
 func Get(adress []byte) *asset {
 	lockErr := lock.Lock(adress)
 	if lockErr != nil {
-		__logs.Error("unable to get asset, locked: ", adress)
+		logs.Error("unable to get asset, locked: ", adress)
 		return nil
 	}
 	a := asset{adress: adress}
-	assetBytes := _data.Get(adress)
+	assetBytes := data.Get(adress)
 	cache := bytes.NewBuffer(assetBytes)
 	gob.NewDecoder(cache).Decode(&a)
 	return &a
@@ -79,7 +78,7 @@ func (a asset) Save() {
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(a)
 	unlock_adress := a.adress
-	_data.Change(a.adress, cache.Bytes())
+	data.Change(a.adress, cache.Bytes())
 	a.adress = nil
 	lock.Unlock(unlock_adress)
 }
@@ -90,7 +89,7 @@ instance of that asset to database.
 */
 func Look(adress []byte) *asset {
 	currAsset := asset{}
-	assetBytes := _data.Get(adress)
+	assetBytes := data.Get(adress)
 	assetCache := bytes.NewBuffer(assetBytes)
 	gob.NewDecoder(assetCache).Decode(&currAsset)
 	return &currAsset
