@@ -44,3 +44,42 @@ func TestCloseCheck(t *testing.T) {
 	t.Error("trades do not match")
 }
 
+func TestCloseInput(t *testing.T) {
+	t1 := Trade{
+		IsSell:  true,
+		Offer:   200,
+		Recieve: 100,
+	}
+	t2 := Trade{
+		IsSell:  false,
+		Offer:   900,
+		Recieve: 400,
+	}
+	if t1.checkMatch(t2) {
+		if t1.checkCloseInput(t2) {
+			trade, firstOut, secondOut := t1.closeInput(t2)
+			if trade.IsSell != false {
+				t.Error("output trade should be buy")
+			}
+			if firstOut.MainOut != 100 {
+				t.Error("first output should be 100")
+			}
+			if secondOut.MarketOut != 200 {
+				t.Error("second output should be 200")
+			}
+			if trade.Recieve != 200 {
+				t.Error("new trade revieve should be 200")
+			}
+			if trade.Offer != 800 {
+				t.Error("new trade offer should be 800")
+			}
+			checkSumOne := t1.Offer + t1.Recieve + t2.Offer + t2.Recieve
+			checkSumTwo := (firstOut.MainOut + secondOut.MarketOut +
+				trade.Offer + trade.Recieve)
+			if checkSumOne != checkSumTwo {
+				t.Error("checksum error! careful")
+			}
+		}
+	}
+	t.Error("trade didn't even start")
+}

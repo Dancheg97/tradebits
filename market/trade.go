@@ -17,6 +17,6 @@ func (in Trade) checkCloseInput(out Trade) bool {
 	return in.Offer > out.Recieve
 }
 
-func (in Trade) closeInput(out Trade) Trade {
+func (in Trade) closeInput(out Trade) (Trade, output, output) {
 	
 }
