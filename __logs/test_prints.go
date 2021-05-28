@@ -1,4 +1,4 @@
-package main
+package __logs
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ func TestPassed(module string, function string, descr string) {
 		"[DESCRIPTION]:", descr,
 		"\033[0m",
 	)
-	
+
 }
 
 func TestFailed(module string, function string, descr string, t *testing.T) {

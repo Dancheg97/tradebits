@@ -1,11 +1,11 @@
-package main
+package sync_tree
 
 import (
 	"sync_tree/_lock"
 	"testing"
 )
 
-func lockUnlockTest(t *testing.T) {
+func LockUnlockTest(t *testing.T) {
 	lockBytes := make([]byte, 64)
 	lockBytes[0] = 65
 	lockBytes[1] = 66
@@ -18,7 +18,7 @@ func lockUnlockTest(t *testing.T) {
 	TestPassed("lock", "lock", "attemt to lock and unlock user")
 }
 
-func lockLockedTest(t *testing.T) {
+func LockLockedTest(t *testing.T) {
 	lockBytes := make([]byte, 64)
 	lockBytes[0] = 65
 	lockBytes[1] = 66
@@ -32,7 +32,7 @@ func lockLockedTest(t *testing.T) {
 	TestFailed("lock", "lock", "attemt to lock locked user", t)
 }
 
-func lockWrongIDTest(t *testing.T) {
+func LockWrongIDTest(t *testing.T) {
 	lockBytes := make([]byte, 68)
 	lockBytes[0] = 65
 	lockBytes[1] = 66
