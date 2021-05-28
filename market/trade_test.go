@@ -21,7 +21,7 @@ func TestCheckMatching(t *testing.T) {
 	t.Error("trades do not match")
 }
 
-func TestCloseInput(t *testing.T) {
+func TestCloseCheck(t *testing.T) {
 	t1 := Trade{
 		IsSell:  true,
 		Offer:   200,
@@ -43,3 +43,4 @@ func TestCloseInput(t *testing.T) {
 	}
 	t.Error("trades do not match")
 }
+
