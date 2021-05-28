@@ -75,12 +75,12 @@ This function is saving changes to the market in database and removes ability
 to make a double save by removing adress from class struct.
 */
 func (a market) Save() {
+	saveAdress := a.adress
+	a.adress = nil
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(a)
-	unlock_adress := a.adress
-	data.Change(a.adress, cache.Bytes())
-	a.adress = nil
-	lock.Unlock(unlock_adress)
+	data.Change(saveAdress, cache.Bytes())
+	lock.Unlock(saveAdress)
 }
 
 /*
