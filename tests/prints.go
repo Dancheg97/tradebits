@@ -1,24 +1,27 @@
-package __tests
+package main
 
 import (
 	"fmt"
 	"strings"
+	"testing"
 )
 
-func Passed(module string, function string, description string) {
+func TestPassed(module string, function string, descr string) {
 	fmt.Println("\033[32m[PASSED]  >>>  ",
 		"[MODULE]:", module, strings.Repeat(" ", 12-len(module)),
 		"[FUNCTION]:", function, strings.Repeat(" ", 12-len(function)),
-		"[DESCRIPTION]:", description,
+		"[DESCRIPTION]:", descr,
 		"\033[0m",
 	)
+	
 }
 
-func Failed(module string, function string, description string) {
+func TestFailed(module string, function string, descr string, t *testing.T) {
 	fmt.Println("\033[31m[FAILED]  >>>  ",
 		"[MODULE]:", module, strings.Repeat(" ", 12-len(module)),
 		"[FUNCTION]:", function, strings.Repeat(" ", 12-len(function)),
-		"[DESCRIPTION]:", description,
+		"[DESCRIPTION]:", descr,
 		"\033[0m",
 	)
+	t.FailNow()
 }
