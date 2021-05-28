@@ -63,7 +63,3 @@ This package provides functions to lock and unlock byte slices (with length of 6
 That package contains interfaces that are used to communicate to outer space. In current implementation gRPC is used for compact messages and fast serialization.
 
 This package is automatically generated, by `api.proto` file, which is in `net` package
-
-# Tests
-
-To run all tests just run `tests.cmd` command
