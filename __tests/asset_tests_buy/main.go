@@ -14,11 +14,11 @@ func testMatch() {
 		OfferMain:    100,
 		RecieveAsset: 400,
 	}
-	if asset.CheckMatch(sell, buy) {
-		__tests.Passed("asset", "CheckMatch", "checks if trade matches")
+	if asset.B2SCheckMatch(sell, buy) {
+		__tests.Passed("asset", "Buy/Match", "checks if trade matches")
 		return
 	}
-	__tests.Failed("asset", "CheckMatch", "checks if trade matches")
+	__tests.Failed("asset", "Buy/Match", "checks if trade matches")
 }
 
 func testNonMatch() {
@@ -30,11 +30,11 @@ func testNonMatch() {
 		OfferMain:    100,
 		RecieveAsset: 600,
 	}
-	if asset.CheckMatch(sell, buy) {
-		__tests.Failed("asset", "CheckMatch", "checks if trade not matches")
+	if asset.B2SCheckMatch(sell, buy) {
+		__tests.Failed("asset", "Buy/-Match", "checks if trade not matches")
 		return
 	}
-	__tests.Passed("asset", "CheckMatch", "checks if trade not matches")
+	__tests.Passed("asset", "Buy/-Match", "checks if trade not matches")
 }
 
 func testIfSellIsClosing() {
@@ -46,13 +46,13 @@ func testIfSellIsClosing() {
 		OfferMain:    80,
 		RecieveAsset: 200,
 	}
-	if asset.CheckMatch(sell, buy) {
-		if asset.IfCloseSeller(sell, buy) {
-			__tests.Failed("asset", "CheckClose", "checks if trade closes sell")
+	if asset.B2SCheckMatch(sell, buy) {
+		if asset.B2SIfCloseSeller(sell, buy) {
+			__tests.Failed("asset", "Buy/Sell-", "checks if trade closes sell")
 			return
 		}
 	}
-	__tests.Passed("asset", "CheckClose", "checks if trade closes sell")
+	__tests.Passed("asset", "Buy/Sell-", "checks if trade closes sell")
 }
 
 func testIfBuyIsClosing() {
@@ -64,13 +64,13 @@ func testIfBuyIsClosing() {
 		OfferMain:    800,
 		RecieveAsset: 2000,
 	}
-	if asset.CheckMatch(sell, buy) {
-		if asset.IfCloseSeller(sell, buy) {
-			__tests.Passed("asset", "CheckClose", "checks if trade closes buy")
+	if asset.B2SCheckMatch(sell, buy) {
+		if asset.B2SIfCloseSeller(sell, buy) {
+			__tests.Passed("asset", "Buy/Buy-", "checks if trade closes buy")
 			return
 		}
 	}
-	__tests.Failed("asset", "CheckClose", "checks if trade closes buy")
+	__tests.Failed("asset", "Buy/Buy-", "checks if trade closes buy")
 }
 
 func testCloseSell() {
@@ -82,9 +82,9 @@ func testCloseSell() {
 		OfferMain:    120,
 		RecieveAsset: 200,
 	}
-	if asset.CheckMatch(sell, buy) {
-		if asset.IfCloseSeller(sell, buy) {
-			newBuy, sellOut, buyOut := asset.CloseSeller(sell, buy)
+	if asset.B2SCheckMatch(sell, buy) {
+		if asset.B2SIfCloseSeller(sell, buy) {
+			newBuy, sellOut, buyOut := asset.B2SCloseSeller(sell, buy)
 			ch1 := sellOut.MainOut == 100
 			ch2 := sellOut.AssetOut == 333
 			ch3 := buyOut.AssetOut == 167
@@ -113,12 +113,12 @@ func testCloseBuyer() {
 		OfferMain:    80,
 		RecieveAsset: 200,
 	}
-	if asset.CheckMatch(sell, buy) {
-		if asset.IfCloseSeller(sell, buy) {
+	if asset.B2SCheckMatch(sell, buy) {
+		if asset.B2SIfCloseSeller(sell, buy) {
 			__tests.Failed("asset", "CloseBuyer", "not closing")
 			return
 		} else {
-			newSell, sellOut, buyOut := asset.CloseBuyer(sell, buy)
+			newSell, sellOut, buyOut := asset.B2SCloseBuyer(sell, buy)
 			ch1 := sellOut.MainOut == 80
 			ch2 := buyOut.AssetOut == 200
 			ch3 := newSell.OfferAsset == 300
