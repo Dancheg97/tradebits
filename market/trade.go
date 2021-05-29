@@ -6,6 +6,7 @@ type Trade struct {
 	Offer   uint64
 	Recieve uint64
 }
+
 // checks if 2 trades match by the ratio
 func (new Trade) match(old Trade) bool {
 	newRatio := float64(new.Offer) / float64(new.Recieve)
