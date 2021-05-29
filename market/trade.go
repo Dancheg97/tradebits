@@ -1,68 +1,48 @@
 package market
 
-import "math"
-
-type Buy struct {
-	Adress        []byte
-	OfferMain     uint64
-	RecieveMarket uint64
+type Trade struct {
+	Adress  []byte
+	IsSell  bool
+	Offer   uint64
+	Recieve uint64
 }
 
-type Sell struct {
-	Adress      []byte
-	OfferMarket uint64
-	RecieveMain uint64
-}
- 
-type Output struct {
-	Adress    []byte
-	MainOut   uint64
-	MarketOut uint64
+func (new Trade) match(old Trade) bool {
+	newRatio := float64(new.Offer) / float64(new.Recieve)
+	oldRatio := float64(old.Recieve) / float64(old.Offer)
+	return newRatio > oldRatio
 }
 
-func S2BCheckMatch(sell Sell, buy Buy) bool {
-	sellRatio := float64(buy.RecieveMarket / buy.OfferMain)
-	buyRatio := float64(sell.OfferMarket / sell.RecieveMain)
-	return sellRatio < buyRatio
+func (new Trade) compare(old Trade) bool {
+	return new.Offer < old.Recieve
 }
 
-func S2BIfCloseSeller(sell Sell, buy Buy) bool {
-	return sell.RecieveMain < buy.OfferMain
-}
-
-func S2BCloseSeller(sell Sell, buy Buy) (Buy, Output, Output) {
-	ratio := float64(buy.RecieveMarket) / float64(buy.OfferMain)
-	upRoundOut := uint64(math.Ceil(ratio * float64(sell.RecieveMain)))
-	sellerOutput := Output{
-		MarketOut: sell.OfferMarket - upRoundOut,
-		MainOut:   sell.RecieveMain,
+/*
+Conditions to close trade:
+1) Trades should match by ratio
+2) One that is left open should increase it's ratio
+3) The sum of input for each 'main' and 'market' should be the same as output
+*/
+func (small Trade) close(big Trade) (Trade, output, output) {
+	if small.IsSell {
+		newOutput := output{
+			Adress:  small.Adress,
+			MainOut: small.Recieve,
+		}
+		oldOutput := output{
+			Adress:    big.Adress,
+			MarketOut: small.Offer,
+		}
+		big.Offer = big.Offer - small.Recieve   // TODO check that
+		big.Recieve = big.Recieve - small.Offer // TODO check that
+		return big, newOutput, oldOutput
 	}
-	buyerOutput := Output{
-		MarketOut: upRoundOut,
+	oldOutput := output{
+		Adress:  small.Adress,
+		MainOut: small.Recieve,
 	}
-	buy.OfferMain = buy.OfferMain - sell.RecieveMain
-	buy.RecieveMarket = buy.RecieveMarket - upRoundOut
-	return buy, sellerOutput, buyerOutput
-}
-
-func S2BCloseBuyer(sell Sell, buy Buy) (Sell, Output, Output) {
-	sellerOutput := Output{
-		MainOut: buy.OfferMain,
+	newOutput := output{
+		Adress:    big.Adress,
+		MarketOut: small.Offer,
 	}
-	buyerOutput := Output{
-		MarketOut: buy.RecieveMarket,
-	}
-	sell.OfferMarket = sell.OfferMarket - buy.RecieveMarket
-	sell.RecieveMain = sell.RecieveMain - buy.OfferMain
-	return sell, sellerOutput, buyerOutput
-}
-
-func B2SCheckMatch(buy Buy, sell Sell) bool {
-	sellRatio := float64(buy.RecieveMarket / buy.OfferMain)
-	buyRatio := float64(sell.OfferMarket / sell.RecieveMain)
-	return sellRatio < buyRatio
-}
-
-func B2SIfCloseBuyer(buy Buy, sell Sell) bool {
-	return buy.RecieveMarket < sell.OfferMarket
 }
