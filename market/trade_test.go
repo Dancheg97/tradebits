@@ -94,7 +94,17 @@ func TestCloseOutput(t *testing.T) {
 		if new.compare(old) {
 			t.Error("old one should be closing")
 		}
-
+		trade, firstOut, secondOut := new.close(old)
+		if trade.IsSell == false {
+			t.Error("trade should be sell")
+		}
+		if trade.Offer != 700 {
+			t.Error("trade offer should be 700")
+		}
+		if trade.Recieve != 100 {
+			t.Error("trade recieve should be 200")
+		}
+		if 
 		return
 	}
 	t.Error("trade didn't even start")

@@ -18,15 +18,25 @@ func (new Trade) compare(old Trade) bool {
 }
 
 func (new Trade) close(old Trade) (Trade, output, output) {
-	firstOutput := output{
+	if new.IsSell {
+		oldOutput := output{
+			Adress:  new.Adress,
+			MainOut: new.Recieve,
+		}
+		newOutput := output{
+			Adress:    old.Adress,
+			MarketOut: new.Offer,
+		}
+		old.Offer = old.Offer - new.Recieve   // TODO check that
+		old.Recieve = old.Recieve - new.Offer // TODO check that
+		return old, oldOutput, newOutput
+	}
+	oldOutput := output{
 		Adress:  new.Adress,
 		MainOut: new.Recieve,
 	}
-	secondOutput := output{
+	newOutput := output{
 		Adress:    old.Adress,
 		MarketOut: new.Offer,
 	}
-	old.Offer = old.Offer - new.Recieve   // TODO check that
-	old.Recieve = old.Recieve - new.Offer // TODO check that
-	return old, firstOutput, secondOutput
 }
