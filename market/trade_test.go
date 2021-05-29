@@ -44,58 +44,23 @@ func TestCloseCheck(t *testing.T) {
 	t.Error("trades do not match")
 }
 
-func TestCloseInput(t *testing.T) {
-	new := Trade{
+func TestBigRecieveOverSmallOffer(t *testing.T) {
+	small := Trade{
+		Adress:  []byte("smallSeller"),
 		IsSell:  true,
-		Offer:   200,
-		Recieve: 100,
-	}
-	old := Trade{
-		IsSell:  false,
-		Offer:   700,
-		Recieve: 400,
-	}
-	if new.match(old) {
-		if new.compare(old) {
-			trade, firstOut, secondOut := new.close(old)
-			if trade.IsSell != false {
-				t.Error("output trade should be buy")
-			}
-			if firstOut.MainOut != 100 {
-				t.Error("first output should be 100")
-			}
-			if secondOut.MarketOut != 200 {
-				t.Error("second output should be 200")
-			}
-			if trade.Recieve != 200 {
-				t.Error("new trade revieve should be 200")
-			}
-			if trade.Offer != 600 {
-				t.Error("new trade offer should be 600")
-			}
-			return
-		}
-	}
-	t.Error("trade didn't even start")
-}
-
-func TestCloseOutput(t *testing.T) {
-	new := Trade{
-		IsSell:  false,
-		Offer:   900,
+		Offer:   201,
 		Recieve: 300,
 	}
-	old := Trade{
-		IsSell:  true,
-		Offer:   250,
+	big := Trade{
+		Adress:  []byte("bigBuyer"),
+		IsSell:  false,
+		Offer:   700,
 		Recieve: 200,
 	}
-	if new.match(old) {
-		if new.compare(old) {
-			t.Error("old one should be closing")
+	if small.match(big) {
+		if small.compare(big) {
+			
 		}
-		
-		
 	}
-	t.Error("trade didn't even start")
+	t.Error("trade didn't start")
 }
