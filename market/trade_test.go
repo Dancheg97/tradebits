@@ -1,6 +1,9 @@
 package market
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestCheckMatching(t *testing.T) {
 	t1 := Trade{
@@ -45,33 +48,44 @@ func TestCloseCheck(t *testing.T) {
 }
 
 func TestCloseInput(t *testing.T) {
-	new := Trade{
+	sell := Trade{
+		Adress:  []byte("old buyer"),
 		IsSell:  true,
 		Offer:   200,
 		Recieve: 100,
 	}
-	old := Trade{
+	buy := Trade{
+		Adress:  []byte("new seller"),
 		IsSell:  false,
 		Offer:   700,
 		Recieve: 400,
 	}
-	if new.match(old) {
-		if new.compare(old) {
-			trade, firstOut, secondOut := new.close(old)
+	if sell.match(buy) {
+		if sell.compare(buy) {
+			trade, firstOut, secondOut := sell.close(buy)
+			if !reflect.DeepEqual(trade.Adress, []byte("new seller")) {
+				t.Error("left trade should be on seller")
+			}
+			if trade.Offer != 200 {
+				t.Error("trade offer should be 200")
+			}
+			if trade.Recieve != 600 {
+				t.Error("trade recieve should be 100")
+			}
 			if trade.IsSell != false {
-				t.Error("output trade should be buy")
+				t.Error("trade should be sell")
+			}
+			if reflect.DeepEqual(firstOut.Adress, []byte("old buyer")) {
+				t.Error("first output should be for buyer")
 			}
 			if firstOut.MainOut != 100 {
-				t.Error("first output should be 100")
+				t.Error("output for buyer should be 100")
+			}
+			if reflect.DeepEqual(secondOut.Adress, []byte("new seller")) {
+				t.Error("second output should be for seller")
 			}
 			if secondOut.MarketOut != 200 {
-				t.Error("second output should be 200")
-			}
-			if trade.Recieve != 200 {
-				t.Error("new trade revieve should be 200")
-			}
-			if trade.Offer != 600 {
-				t.Error("new trade offer should be 600")
+				t.Error("Output ")
 			}
 			return
 		}
