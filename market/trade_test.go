@@ -79,3 +79,6 @@ func TestCloseInput(t *testing.T) {
 	t.Error("trade didn't even start")
 }
 
+func TestCloseOutput(t *testing.T) {
+	
+}
