@@ -84,7 +84,7 @@ func TestCloseInput(t *testing.T) {
 			if reflect.DeepEqual(secondOut.Adress, []byte("old buyer")) {
 				t.Error("first output should be for buyer")
 			}
-			if secondOut.MainOut != 200 {
+			if secondOut.MarketOut != 200 {
 				t.Error("output for buyer should be 200 market")
 			}
 			return
@@ -93,6 +93,6 @@ func TestCloseInput(t *testing.T) {
 	t.Error("trade didn't even start")
 }
 
-func TestCloseOutput(t *testing.T) {
+func TestAttemptToGetBigUINT(t *testing.T) {
 
 }
