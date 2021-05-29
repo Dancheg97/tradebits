@@ -13,8 +13,12 @@ func (new Trade) match(old Trade) bool {
 	return newRatio > oldRatio
 }
 
+<<<<<<< HEAD
 // checks wether the first trade should be closed instead of second
 func (new Trade) compare(old Trade) bool {
+=======
+func (new Trade) isLessThan(old Trade) bool {
+>>>>>>> 1c8ebedf912a7189019c32b9e3a4b95e78b39ea9
 	return new.Offer < old.Recieve
 }
 
@@ -22,16 +26,16 @@ func (new Trade) compare(old Trade) bool {
 This function is closing the trade on which operation is performed. So the
 trade on which operation is performed should be smaller.
 
-Conditions to close trade:
+Conditions to closingBy trade:
  1) Trades should match by ratio
- 2) One that is left open should increase its ratio
+ 2) Output trade should incraese its ratio
  3) The sum of input for each "main" and "market" should be the same as output
 */
-func (small Trade) close(big Trade) (Trade, output, output) {
+func (small Trade) closingBy(big Trade) (Trade, output, output) {
 	if small.IsSell {
 		firstOutput := output{
-			Adress:    small.Adress,
-			MarketOut: small.Recieve,
+			Adress:  small.Adress,
+			MainOut: small.Recieve,
 		}
 		secondOutput := output{
 			Adress:    big.Adress,
@@ -42,14 +46,26 @@ func (small Trade) close(big Trade) (Trade, output, output) {
 		return big, firstOutput, secondOutput
 	}
 	firstOutput := output{
-		Adress:  small.Adress,
-		MainOut: small.Recieve,
+		Adress:    small.Adress,
+		MarketOut: small.Recieve,
 	}
 	secondOutput := output{
-		Adress:    big.Adress,
-		MarketOut: small.Offer,
+		Adress:  big.Adress,
+		MainOut: small.Offer,
 	}
 	big.Offer = big.Offer - small.Recieve
 	big.Recieve = big.Recieve - small.Offer
 	return big, firstOutput, secondOutput
+}
+
+func (new Trade) processTrade(old Trade) (bool, Trade, output, output) {
+	if !new.match(old) {
+		return false, new, output{}, output{}
+	}
+	if new.isLessThan(old) {
+		updatedOld, output1, output2 := new.closingBy(old)
+		return true, updatedOld, output1, output2
+	}
+	updatedNew, output1, output2 := old.closingBy(new)
+	return true, updatedNew, output1, output2
 }
