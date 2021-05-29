@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
 )
 
 func main() {
@@ -36,5 +37,12 @@ func main() {
 	)
 	os.RemoveAll("data/base")
    os.RemoveAll("data/data")
-   os.RemoveAll("")
+   os.RemoveAll("market/data")
+   os.RemoveAll("user/data")
+   exec.Command("go", "test", "./...")
+	os.RemoveAll("data/base")
+   os.RemoveAll("data/data")
+   os.RemoveAll("market/data")
+   os.RemoveAll("user/data")
+   fmt.Println("TESTING FINISHED")
 }
