@@ -47,33 +47,13 @@ func TestCloseCheck(t *testing.T) {
 	t.Error("trades do not match")
 }
 
-<<<<<<< HEAD
-func TestBigRecieveOverSmallOffer(t *testing.T) {
-	small := Trade{
-		Adress:  []byte("smallSeller"),
-=======
 func TestCloseInput(t *testing.T) {
 	sell := Trade{
 		Adress:  []byte("old buyer"),
->>>>>>> 1c8ebedf912a7189019c32b9e3a4b95e78b39ea9
 		IsSell:  true,
 		Offer:   201,
 		Recieve: 300,
 	}
-<<<<<<< HEAD
-	big := Trade{
-		Adress:  []byte("bigBuyer"),
-		IsSell:  false,
-		Offer:   700,
-		Recieve: 200,
-	}
-	if small.match(big) {
-		if small.compare(big) {
-			
-		}
-	}
-	t.Error("trade didn't start")
-=======
 	buy := Trade{
 		Adress:  []byte("new seller"),
 		IsSell:  false,
@@ -131,5 +111,4 @@ func TestAttemptToGetBigUINT(t *testing.T) {
 	t.Error(trade)
 	t.Error(output1)
 	t.Error(output2)
->>>>>>> 1c8ebedf912a7189019c32b9e3a4b95e78b39ea9
 }

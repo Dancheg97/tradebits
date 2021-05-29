@@ -13,12 +13,7 @@ func (new Trade) match(old Trade) bool {
 	return newRatio > oldRatio
 }
 
-<<<<<<< HEAD
-// checks wether the first trade should be closed instead of second
-func (new Trade) compare(old Trade) bool {
-=======
 func (new Trade) isLessThan(old Trade) bool {
->>>>>>> 1c8ebedf912a7189019c32b9e3a4b95e78b39ea9
 	return new.Offer < old.Recieve
 }
 
