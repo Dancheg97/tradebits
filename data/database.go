@@ -6,7 +6,7 @@ import (
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
-var db, _ = leveldb.OpenFile("~/sync_tree/data/base", nil)
+var db, _ = leveldb.OpenFile("data/base", nil)
 
 // get value by key from database
 func Get(key []byte) []byte {
@@ -36,13 +36,14 @@ func Put(key []byte, value []byte) {
 // change existing value in database by key
 func Change(key []byte, value []byte) {
 	if Check(key) {
-		logs.Critical("unexpected error in db on Change func")
-	}
-	dbErr := db.Put(key, value, nil)
-	if dbErr != nil {
-		logs.Critical("unexpected error in db on Change func")
+		dbErr := db.Put(key, value, nil)
+		if dbErr != nil {
+			logs.Critical("unexpected error in db on Change func")
+			return
+		}
 		return
 	}
+	logs.Critical("unexpected error in db on Change func")
 }
 
 // check if value exists in database
