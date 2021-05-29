@@ -41,12 +41,12 @@ func (small Trade) closingBy(big Trade) (Trade, output, output) {
 		return big, firstOutput, secondOutput
 	}
 	firstOutput := output{
-		Adress:  small.Adress,
-		MainOut: small.Recieve,
+		Adress:    small.Adress,
+		MarketOut: small.Recieve,
 	}
 	secondOutput := output{
-		Adress:    big.Adress,
-		MarketOut: small.Offer,
+		Adress:  big.Adress,
+		MainOut: small.Offer,
 	}
 	big.Offer = big.Offer - small.Recieve
 	big.Recieve = big.Recieve - small.Offer
