@@ -21,16 +21,16 @@ func (new Trade) compare(old Trade) bool {
 This function is closing the trade on which operation is performed. So the
 trade on which operation is performed should be smaller.
 
-Conditions to close trade:
+Conditions to closingBy trade:
  1) Trades should match by ratio
  2) One that is left open should increase its ratio
  3) The sum of input for each "main" and "market" should be the same as output
 */
-func (small Trade) close(big Trade) (Trade, output, output) {
+func (small Trade) closingBy(big Trade) (Trade, output, output) {
 	if small.IsSell {
 		firstOutput := output{
-			Adress:    small.Adress,
-			MarketOut: small.Recieve,
+			Adress:  small.Adress,
+			MainOut: small.Recieve,
 		}
 		secondOutput := output{
 			Adress:    big.Adress,

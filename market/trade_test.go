@@ -62,30 +62,30 @@ func TestCloseInput(t *testing.T) {
 	}
 	if sell.match(buy) {
 		if sell.compare(buy) {
-			trade, firstOut, secondOut := sell.close(buy)
+			trade, firstOut, secondOut := sell.closingBy(buy)
 			if !reflect.DeepEqual(trade.Adress, []byte("new seller")) {
 				t.Error("left trade should be on seller")
 			}
-			if trade.Offer != 200 {
-				t.Error("trade offer should be 200")
+			if trade.Offer != 600 {
+				t.Error("trade offer should be 600")
 			}
-			if trade.Recieve != 600 {
-				t.Error("trade recieve should be 100")
+			if trade.Recieve != 200 {
+				t.Error("trade recieve should be 200")
 			}
 			if trade.IsSell != false {
 				t.Error("trade should be sell")
 			}
-			if reflect.DeepEqual(firstOut.Adress, []byte("old buyer")) {
-				t.Error("first output should be for buyer")
-			}
-			if firstOut.MainOut != 100 {
-				t.Error("output for buyer should be 100")
-			}
-			if reflect.DeepEqual(secondOut.Adress, []byte("new seller")) {
+			if reflect.DeepEqual(firstOut.Adress, []byte("new seller")) {
 				t.Error("second output should be for seller")
 			}
-			if secondOut.MarketOut != 200 {
-				t.Error("Output ")
+			if firstOut.MainOut != 100 {
+				t.Error("Output for seller should be 100 market")
+			}
+			if reflect.DeepEqual(secondOut.Adress, []byte("old buyer")) {
+				t.Error("first output should be for buyer")
+			}
+			if secondOut.MainOut != 200 {
+				t.Error("output for buyer should be 200 market")
 			}
 			return
 		}
