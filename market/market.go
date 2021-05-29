@@ -100,7 +100,3 @@ func Look(adress []byte) *market {
 	gob.NewDecoder(marketCache).Decode(&currMarket)
 	return &currMarket
 }
-
-/*
-Operate transaction
-*/
