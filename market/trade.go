@@ -18,31 +18,37 @@ func (new Trade) compare(old Trade) bool {
 }
 
 /*
+This function is closing the trade on which operation is performed. So the
+trade on which operation is performed should be smaller.
+
 Conditions to close trade:
-1) Trades should match by ratio
-2) One that is left open should increase it's ratio
-3) The sum of input for each 'main' and 'market' should be the same as output
+ 1) Trades should match by ratio
+ 2) One that is left open should increase its ratio
+ 3) The sum of input for each "main" and "market" should be the same as output
 */
 func (small Trade) close(big Trade) (Trade, output, output) {
 	if small.IsSell {
-		newOutput := output{
-			Adress:  small.Adress,
-			MainOut: small.Recieve,
+		firstOutput := output{
+			Adress:    small.Adress,
+			MarketOut: small.Recieve,
 		}
-		oldOutput := output{
+		secondOutput := output{
 			Adress:    big.Adress,
 			MarketOut: small.Offer,
 		}
-		big.Offer = big.Offer - small.Recieve   // TODO check that
-		big.Recieve = big.Recieve - small.Offer // TODO check that
-		return big, newOutput, oldOutput
+		big.Offer = big.Offer - small.Recieve
+		big.Recieve = big.Recieve - small.Offer
+		return big, firstOutput, secondOutput
 	}
-	oldOutput := output{
+	firstOutput := output{
 		Adress:  small.Adress,
 		MainOut: small.Recieve,
 	}
-	newOutput := output{
+	secondOutput := output{
 		Adress:    big.Adress,
 		MarketOut: small.Offer,
 	}
+	big.Offer = big.Offer - small.Recieve
+	big.Recieve = big.Recieve - small.Offer
+	return big, firstOutput, secondOutput
 }
