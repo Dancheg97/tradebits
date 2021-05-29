@@ -94,7 +94,7 @@ func TestCloseOutput(t *testing.T) {
 		if new.compare(old) {
 			t.Error("old one should be closing")
 		}
-		//
+		
 		
 	}
 	t.Error("trade didn't even start")
