@@ -81,13 +81,13 @@ func TestCloseInput(t *testing.T) {
 
 func TestCloseOutput(t *testing.T) {
 	new := Trade{
-		IsSell:  true,
+		IsSell:  false,
 		Offer:   900,
 		Recieve: 300,
 	}
 	old := Trade{
-		IsSell:  false,
-		Offer:   200,
+		IsSell:  true,
+		Offer:   250,
 		Recieve: 200,
 	}
 	if new.match(old) {
@@ -98,14 +98,7 @@ func TestCloseOutput(t *testing.T) {
 		if trade.IsSell == false {
 			t.Error("trade should be sell")
 		}
-		if trade.Offer != 700 {
-			t.Error("trade offer should be 700")
-		}
-		if trade.Recieve != 100 {
-			t.Error("trade recieve should be 200")
-		}
-		if 
-		return
+		
 	}
 	t.Error("trade didn't even start")
 }
