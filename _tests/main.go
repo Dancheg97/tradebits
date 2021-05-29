@@ -35,4 +35,6 @@ func main() {
 		"\033[0m",
 	)
 	os.RemoveAll("data/base")
+   os.RemoveAll("data/data")
+   os.RemoveAll("")
 }
