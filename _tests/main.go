@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"os/exec"
 )
 
 func main() {
@@ -35,7 +34,7 @@ func main() {
 `,
 		"\033[0m",
 	)
-   os.RemoveAll("data/data")
-   os.RemoveAll("market/data")
-   os.RemoveAll("user/data")
+	os.RemoveAll("data/data")
+	os.RemoveAll("market/data")
+	os.RemoveAll("user/data")
 }
