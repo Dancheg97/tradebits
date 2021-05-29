@@ -6,8 +6,7 @@ import (
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
-//var options = leveldb.Options
-var db, _ = leveldb.OpenFile("C:/Users/dangd/Documents/sync_tree_server/data/base", nil)
+var db, _ = leveldb.OpenFile("~/sync_tree/data/base", nil)
 
 // get value by key from database
 func Get(key []byte) []byte {

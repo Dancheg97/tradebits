@@ -94,10 +94,7 @@ func TestCloseOutput(t *testing.T) {
 		if new.compare(old) {
 			t.Error("old one should be closing")
 		}
-		trade, firstOut, secondOut := new.close(old)
-		if trade.IsSell == false {
-			t.Error("trade should be sell")
-		}
+		//
 		
 	}
 	t.Error("trade didn't even start")
