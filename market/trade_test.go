@@ -13,8 +13,8 @@ func TestCheckMatching(t *testing.T) {
 		Offer:   200,
 		Recieve: 100,
 	}
-	firstMatch := t1.checkMatch(t2)
-	secondMatch := t2.checkMatch(t1)
+	firstMatch := t1.match(t2)
+	secondMatch := t2.match(t1)
 	if firstMatch && secondMatch {
 		return
 	}
@@ -32,10 +32,10 @@ func TestCloseCheck(t *testing.T) {
 		Offer:   800,
 		Recieve: 400,
 	}
-	firstMatch := t1.checkMatch(t2)
-	secondMatch := t2.checkMatch(t1)
-	firstClose := t1.checkCloseInput(t2)
-	secondClose := t2.checkCloseInput(t1)
+	firstMatch := t1.match(t2)
+	secondMatch := t2.match(t1)
+	firstClose := t1.compare(t2)
+	secondClose := t2.compare(t1)
 	if firstMatch && secondMatch {
 		if firstClose || secondClose {
 			return
@@ -45,19 +45,19 @@ func TestCloseCheck(t *testing.T) {
 }
 
 func TestCloseInput(t *testing.T) {
-	t1 := Trade{
+	new := Trade{
 		IsSell:  true,
 		Offer:   200,
 		Recieve: 100,
 	}
-	t2 := Trade{
+	old := Trade{
 		IsSell:  false,
 		Offer:   700,
 		Recieve: 400,
 	}
-	if t1.checkMatch(t2) {
-		if t1.checkCloseInput(t2) {
-			trade, firstOut, secondOut := t1.closeInput(t2)
+	if new.match(old) {
+		if new.compare(old) {
+			trade, firstOut, secondOut := new.close(old)
 			if trade.IsSell != false {
 				t.Error("output trade should be buy")
 			}
@@ -80,5 +80,22 @@ func TestCloseInput(t *testing.T) {
 }
 
 func TestCloseOutput(t *testing.T) {
-	
+	new := Trade{
+		IsSell:  true,
+		Offer:   900,
+		Recieve: 300,
+	}
+	old := Trade{
+		IsSell:  false,
+		Offer:   200,
+		Recieve: 200,
+	}
+	if new.match(old) {
+		if new.compare(old) {
+			t.Error("old one should be closing")
+		}
+
+		return
+	}
+	t.Error("trade didn't even start")
 }

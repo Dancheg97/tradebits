@@ -7,30 +7,26 @@ type Trade struct {
 	Recieve uint64
 }
 
-func (in Trade) checkMatch(out Trade) bool {
-	inRatio := float64(in.Offer) / float64(in.Recieve)
-	outRatio := float64(out.Recieve) / float64(out.Offer)
-	return inRatio > outRatio
+func (new Trade) match(old Trade) bool {
+	newRatio := float64(new.Offer) / float64(new.Recieve)
+	oldRatio := float64(old.Recieve) / float64(old.Offer)
+	return newRatio > oldRatio
 }
 
-func (in Trade) checkCloseInput(out Trade) bool {
-	return in.Offer < out.Recieve
+func (new Trade) compare(old Trade) bool {
+	return new.Offer < old.Recieve
 }
 
-func (in Trade) closeInput(out Trade) (Trade, output, output) {
+func (new Trade) close(old Trade) (Trade, output, output) {
 	firstOutput := output{
-		Adress:  in.Adress,
-		MainOut: in.Recieve,
+		Adress:  new.Adress,
+		MainOut: new.Recieve,
 	}
 	secondOutput := output{
-		Adress:    out.Adress,
-		MarketOut: in.Offer,
+		Adress:    old.Adress,
+		MarketOut: new.Offer,
 	}
-	out.Offer = out.Offer - in.Recieve   // TODO check that
-	out.Recieve = out.Recieve - in.Offer // TODO check that
-	return out, firstOutput, secondOutput
-}
-
-func (in Trade) closeOutput(out Trade) (Trade, output, output) {
-	
+	old.Offer = old.Offer - new.Recieve   // TODO check that
+	old.Recieve = old.Recieve - new.Offer // TODO check that
+	return old, firstOutput, secondOutput
 }
