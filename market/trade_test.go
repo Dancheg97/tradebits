@@ -37,8 +37,8 @@ func TestCloseCheck(t *testing.T) {
 	}
 	firstMatch := t1.match(t2)
 	secondMatch := t2.match(t1)
-	firstClose := t1.compare(t2)
-	secondClose := t2.compare(t1)
+	firstClose := t1.isLessThan(t2)
+	secondClose := t2.isLessThan(t1)
 	if firstMatch && secondMatch {
 		if firstClose || secondClose {
 			return
@@ -61,7 +61,7 @@ func TestCloseInput(t *testing.T) {
 		Recieve: 400,
 	}
 	if sell.match(buy) {
-		if sell.compare(buy) {
+		if sell.isLessThan(buy) {
 			trade, firstOut, secondOut := sell.closingBy(buy)
 			if !reflect.DeepEqual(trade.Adress, []byte("new seller")) {
 				t.Error("left trade should be on seller")
@@ -94,5 +94,21 @@ func TestCloseInput(t *testing.T) {
 }
 
 func TestAttemptToGetBigUINT(t *testing.T) {
-
+	sell := Trade{
+		Adress:  []byte("seller"),
+		IsSell:  true,
+		Offer:   500,
+		Recieve: 300,
+	}
+	buy := Trade{
+		Adress:  []byte("buyer"),
+		IsSell:  false,
+		Offer:   700,
+		Recieve: 300,
+	}
+	isProcessed, trade, output1, output2 := sell.processTrade(buy)
+	t.Error(isProcessed)
+	t.Error(trade)
+	t.Error(output1)
+	t.Error(output2)
 }

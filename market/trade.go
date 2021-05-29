@@ -13,7 +13,7 @@ func (new Trade) match(old Trade) bool {
 	return newRatio > oldRatio
 }
 
-func (new Trade) compare(old Trade) bool {
+func (new Trade) isLessThan(old Trade) bool {
 	return new.Offer < old.Recieve
 }
 
@@ -23,7 +23,7 @@ trade on which operation is performed should be smaller.
 
 Conditions to closingBy trade:
  1) Trades should match by ratio
- 2) One that is left open should increase its ratio
+ 2) Output trade should incraese its ratio
  3) The sum of input for each "main" and "market" should be the same as output
 */
 func (small Trade) closingBy(big Trade) (Trade, output, output) {
@@ -51,4 +51,16 @@ func (small Trade) closingBy(big Trade) (Trade, output, output) {
 	big.Offer = big.Offer - small.Recieve
 	big.Recieve = big.Recieve - small.Offer
 	return big, firstOutput, secondOutput
+}
+
+func (new Trade) processTrade(old Trade) (bool, Trade, output, output) {
+	if !new.match(old) {
+		return false, new, output{}, output{}
+	}
+	if new.isLessThan(old) {
+		updatedOld, output1, output2 := new.closingBy(old)
+		return true, updatedOld, output1, output2
+	}
+	updatedNew, output1, output2 := old.closingBy(new)
+	return true, updatedNew, output1, output2
 }
