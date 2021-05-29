@@ -35,14 +35,7 @@ func main() {
 `,
 		"\033[0m",
 	)
-	os.RemoveAll("data/base")
    os.RemoveAll("data/data")
    os.RemoveAll("market/data")
    os.RemoveAll("user/data")
-   exec.Command("go", "test", "./...")
-	os.RemoveAll("data/base")
-   os.RemoveAll("data/data")
-   os.RemoveAll("market/data")
-   os.RemoveAll("user/data")
-   fmt.Println("TESTING FINISHED")
 }
