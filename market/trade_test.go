@@ -17,7 +17,7 @@ func TestOperate(t *testing.T) {
 		randNumbers := []uint64{}
 		for i := 0; i < 4; i++ {
 			min := 1
-			max := 10000
+			max := 100
 			randNum := rand.Intn(max-min) + min
 			randNumbers = append(randNumbers, uint64(randNum))
 		}
