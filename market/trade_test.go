@@ -32,22 +32,28 @@ func TestOperate(t *testing.T) {
 		if !match {
 			if len(trades) != 2 {
 				t.Error("if trades dont match, there should 2 trades output")
+				return
 			}
 			if len(outputs) != 0 {
 				t.Error("if trades dont match, there should be 0 outputs")
+				return
 			}
 			if !reflect.DeepEqual(trades[0], firstRandTrade) {
 				t.Error("if trades dont match, first output trade should be the same to input")
+				return
 			}
 			if !reflect.DeepEqual(trades[1], secondRandTrade) {
 				t.Error("if trades dont match, second output trade should be the same to input")
+				return
 			}
 		} else {
 			if len(trades) != 1 {
 				t.Error("if trades match, output should be one trade")
+				return
 			}
 			if len(outputs) != 2 {
 				t.Error("if trades match, there should be 2 outputs")
+				return
 			}
 			sumInpMarket := uint64(0)
 			sumInpMain := uint64(0)
@@ -71,9 +77,11 @@ func TestOperate(t *testing.T) {
 			}
 			if sumInpMarket != sumOutputMarket {
 				t.Error("input and output for market should be the same")
+				return
 			}
 			if sumInpMain != sumOutputMain {
 				t.Error("input and output for main should be the same")
+				return
 			}
 		}
 	}
