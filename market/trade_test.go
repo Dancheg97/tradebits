@@ -35,7 +35,34 @@ func TestOperate(t *testing.T) {
 				t.Error("if trades dont operate they should be the smae")
 			}
 		} else {
-			
+			mainOutputSum := uint64(0)
+			marketOutputSum := uint64(0)
+			for _, output := range outputs {
+				mainOutputSum = mainOutputSum + output.MainOut
+				marketOutputSum = marketOutputSum + output.MarketOut
+			}
+			for _, trade := range trades {
+				if trade.IsSell {
+					marketOutputSum = marketOutputSum + trade.Offer
+				} else {
+					mainOutputSum = mainOutputSum + trade.Offer
+				}
+			}
+			if firstRandTrade.IsSell {
+				if firstRandTrade.Offer != marketOutputSum {
+					t.Error("market sum dont match")
+				}
+				if secondRandTrade.Offer != mainOutputSum {
+					t.Error("main sum dont match")
+				}
+			} else {
+				if firstRandTrade.Offer != mainOutputSum {
+					t.Error("main sum dont match")
+				}
+				if secondRandTrade.Offer != marketOutputSum {
+					t.Error("market sum dont match")
+				}
+			}
 		}
 	}
 }
