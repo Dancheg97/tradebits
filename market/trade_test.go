@@ -2,9 +2,9 @@ package market
 
 import (
 	"math/rand"
+	"reflect"
 	"testing"
 	"time"
-	//"time"
 )
 
 func TestOperate(t *testing.T) {
@@ -26,7 +26,16 @@ func TestOperate(t *testing.T) {
 		randBool := rand.Intn(2) != 0
 		firstRandTrade.IsSell = randBool
 		secondRandTrade.IsSell = !randBool
-		firstRandTrade.operate(secondRandTrade)
-		
+		trades, outputs := firstRandTrade.operate(secondRandTrade)
+		if outputs == nil {
+			if !reflect.DeepEqual(firstRandTrade, trades[0]) {
+				t.Error("if trades dont operate they should be same")
+			}
+			if !reflect.DeepEqual(secondRandTrade, trades[1]) {
+				t.Error("if trades dont operate they should be the smae")
+			}
+		} else {
+			
+		}
 	}
 }
