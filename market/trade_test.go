@@ -17,14 +17,21 @@ func TestOperate(t *testing.T) {
 		}
 		randNumbers := []uint64{}
 		for i := 0; i < 4; i++ {
-			num := uint64(rand.Uint32())<<32 + uint64(rand.Uint32())
-			randNumbers = append(randNumbers, num)
+			min := 0
+			max := 30000000
+			randNum := rand.Intn(max-min) + min
+			randNumbers = append(randNumbers, uint64(randNum))
 		}
 		sell.Offer = randNumbers[0]
 		sell.Recieve = randNumbers[1]
 		buy.Offer = randNumbers[2]
 		buy.Recieve = randNumbers[3]
-		sell.operate(buy)
-		
+		operated, trades, outputs := sell.operate(buy)
+		if operated {
+			if len(trades) != 1 {
+				t.Error("there should be only one outgoing trade")
+			}
+			if 
+		}
 	}
 }
