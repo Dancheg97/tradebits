@@ -9,10 +9,10 @@ import (
 func TestOperate(t *testing.T) {
 	for i := 0; i < 10000; i++ {
 		firstRandTrade := Trade{
-			Adress: []byte("b"),
+			Adress: []byte("a"),
 		}
 		secondRandTrade := Trade{
-			Adress: []byte("c"),
+			Adress: []byte("b"),
 		}
 		randNumbers := []uint64{}
 		for i := 0; i < 4; i++ {
@@ -49,7 +49,11 @@ func TestOperate(t *testing.T) {
 			if len(outputs) != 2 {
 				t.Error("if trades match, there should be 2 outputs")
 			}
+			mainSum := 0
+			marketSum := 0
+			if  {
 
+			}
 		}
 	}
 }

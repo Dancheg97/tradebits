@@ -43,10 +43,10 @@ func (new Trade) operate(old Trade) (bool, []Trade, []output) {
 		old.Recieve = old.Recieve - potentialNewOffer
 		return true, []Trade{old}, []output{newOutput, oldOutput}
 	}
-	newRatio := float64(new.Offer / new.Recieve)
-	oldRatio := float64(old.Offer / new.Recieve)
+	newRatio := float64(new.Recieve / new.Offer)
+	oldRatio := float64(old.Offer / old.Recieve)
 	if newRatio < oldRatio {
-		return false, []Trade{old, new}, []output{}
+		return false, []Trade{new, old}, []output{}
 	}
 	if new.IsSell {
 		newOutput := output{
