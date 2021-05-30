@@ -49,9 +49,21 @@ func TestOperate(t *testing.T) {
 			if len(outputs) != 2 {
 				t.Error("if trades match, there should be 2 outputs")
 			}
-			inpMarket := uint64(0)
-			inpMain := uint64(0)
-			
+			sumInpMarket := uint64(0)
+			sumInpMain := uint64(0)
+			if firstRandTrade.IsSell {
+				sumInpMarket = sumInpMarket + firstRandTrade.Offer
+				sumInpMain = sumInpMain + secondRandTrade.Offer
+			} else {
+				sumInpMain = sumInpMain + firstRandTrade.Offer
+				sumInpMarket = sumInpMarket + secondRandTrade.Offer
+			}
+			sumOutputMarket := uint64(0)
+			sumOutputMain := uint64(0)
+			for _, out := range outputs {
+				sumOutputMarket = sumOutputMarket + out.MarketOut
+				sumOutputMain = sumOutputMain + out.MainOut
+			}
 		}
 	}
 }
