@@ -9,12 +9,12 @@ type Trade struct {
 	Recieve uint64
 }
 
-func (new Trade) operate(old Trade) (bool, []Trade, []output) {
+func (new Trade) operate(old Trade) ([]Trade, []output) {
 	if new.Recieve < old.Offer {
 		ratio := float64(old.Recieve) / float64(old.Offer)
 		potentialNewOffer := uint64(math.Ceil(float64(new.Recieve) * ratio))
 		if potentialNewOffer > new.Offer {
-			return false, []Trade{new, old}, nil
+			return []Trade{new, old}, nil
 		}
 		newOutput := output{Adress: new.Adress}
 		oldOutput := output{Adress: old.Adress}
@@ -29,12 +29,12 @@ func (new Trade) operate(old Trade) (bool, []Trade, []output) {
 		}
 		old.Offer = old.Offer - new.Recieve
 		old.Recieve = old.Recieve - potentialNewOffer
-		return true, []Trade{old}, []output{newOutput, oldOutput}
+		return []Trade{old}, []output{newOutput, oldOutput}
 	}
 	newRatio := float64(new.Recieve) / float64(new.Offer)
 	oldRatio := float64(old.Offer) / float64(old.Recieve)
 	if newRatio > oldRatio {
-		return false, []Trade{new, old}, []output{}
+		return []Trade{new, old}, nil
 	}
 	newOutput := output{Adress: new.Adress}
 	oldOutput := output{Adress: old.Adress}
@@ -47,5 +47,8 @@ func (new Trade) operate(old Trade) (bool, []Trade, []output) {
 	}
 	new.Offer = new.Offer - old.Recieve
 	new.Recieve = new.Recieve - old.Offer
-	return true, []Trade{new}, []output{newOutput, oldOutput}
+	if new.Offer == 0 && new.Recieve == 0 {
+		return []Trade{}, []output{newOutput, oldOutput}
+	}
+	return []Trade{new}, []output{newOutput, oldOutput}
 }
