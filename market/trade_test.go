@@ -31,7 +31,9 @@ func TestOperate(t *testing.T) {
 			if len(trades) != 1 {
 				t.Error("there should be only one outgoing trade")
 			}
-			if 
+			if len(outputs) != 2 {
+				t.Error("there should be 2 outputs outgoing")
+			}
 		}
 	}
 }
