@@ -52,7 +52,7 @@ func TestOperate(t *testing.T) {
 			mainSum := 0
 			marketSum := 0
 			if  {
-
+				
 			}
 		}
 	}
