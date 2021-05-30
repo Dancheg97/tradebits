@@ -64,6 +64,17 @@ func TestOperate(t *testing.T) {
 				sumOutputMarket = sumOutputMarket + out.MarketOut
 				sumOutputMain = sumOutputMain + out.MainOut
 			}
+			if trades[0].IsSell {
+				sumOutputMarket = sumOutputMarket + trades[0].Offer
+			} else {
+				sumOutputMain = sumOutputMain + trades[0].Offer
+			}
+			if sumInpMarket != sumOutputMarket {
+				t.Error("input and output for market should be the same")
+			}
+			if sumInpMain != sumOutputMain {
+				t.Error("input and output for main should be the same")
+			}
 		}
 	}
 }
