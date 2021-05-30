@@ -16,58 +16,34 @@ func (new Trade) operate(old Trade) (bool, []Trade, []output) {
 		if potentialNewOffer > new.Offer {
 			return false, []Trade{new, old}, nil
 		}
+		newOutput := output{Adress: new.Adress}
+		oldOutput := output{Adress: old.Adress}
 		if new.IsSell {
-			newOutput := output{
-				Adress:    new.Adress,
-				MainOut:   new.Offer - potentialNewOffer,
-				MarketOut: new.Recieve,
-			}
-			oldOutput := output{
-				Adress:  old.Adress,
-				MainOut: potentialNewOffer,
-			}
-			old.Offer = old.Offer - new.Recieve
-			old.Recieve = old.Recieve - potentialNewOffer
-			return true, []Trade{old}, []output{newOutput, oldOutput}
-		}
-		newOutput := output{
-			Adress:    new.Adress,
-			MarketOut: new.Offer - potentialNewOffer,
-			MainOut:   new.Recieve,
-		}
-		oldOutput := output{
-			Adress:    old.Adress,
-			MarketOut: potentialNewOffer,
+			newOutput.MainOut = new.Offer - potentialNewOffer
+			newOutput.MarketOut = new.Recieve
+			oldOutput.MainOut = potentialNewOffer
+		} else {
+			newOutput.MarketOut = new.Offer - potentialNewOffer
+			newOutput.MainOut = new.Recieve
+			oldOutput.MarketOut = potentialNewOffer
 		}
 		old.Offer = old.Offer - new.Recieve
 		old.Recieve = old.Recieve - potentialNewOffer
 		return true, []Trade{old}, []output{newOutput, oldOutput}
 	}
-	newRatio := float64(new.Recieve / new.Offer)
-	oldRatio := float64(old.Offer / old.Recieve)
-	if newRatio < oldRatio {
+	newRatio := float64(new.Recieve) / float64(new.Offer)
+	oldRatio := float64(old.Offer) / float64(old.Recieve)
+	if newRatio > oldRatio {
 		return false, []Trade{new, old}, []output{}
 	}
+	newOutput := output{Adress: new.Adress}
+	oldOutput := output{Adress: old.Adress}
 	if new.IsSell {
-		newOutput := output{
-			Adress:  new.Adress,
-			MainOut: old.Offer,
-		}
-		oldOutput := output{
-			Adress:    old.Adress,
-			MarketOut: old.Recieve,
-		}
-		new.Offer = new.Offer - old.Recieve
-		new.Recieve = new.Recieve - old.Offer
-		return true, []Trade{new}, []output{newOutput, oldOutput}
-	}
-	newOutput := output{
-		Adress:    new.Adress,
-		MarketOut: old.Offer,
-	}
-	oldOutput := output{
-		Adress:  old.Adress,
-		MainOut: old.Recieve,
+		newOutput.MainOut = old.Offer
+		oldOutput.MarketOut = old.Recieve
+	} else {
+		newOutput.MarketOut = old.Offer
+		oldOutput.MainOut = old.Recieve
 	}
 	new.Offer = new.Offer - old.Recieve
 	new.Recieve = new.Recieve - old.Offer
