@@ -49,11 +49,9 @@ func TestOperate(t *testing.T) {
 			if len(outputs) != 2 {
 				t.Error("if trades match, there should be 2 outputs")
 			}
-			mainSum := 0
-			marketSum := 0
-			if  {
-				
-			}
+			inpMarket := uint64(0)
+			inpMain := uint64(0)
+			
 		}
 	}
 }
