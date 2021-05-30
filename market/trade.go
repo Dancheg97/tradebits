@@ -18,7 +18,7 @@ func (new Trade) operate(old Trade) ([]Trade, []output) {
 		}
 		newOutput := output{Adress: new.Adress}
 		oldOutput := output{Adress: old.Adress}
-		if new.IsSell {
+		if old.IsSell {
 			newOutput.MainOut = new.Offer - potentialNewOffer
 			newOutput.MarketOut = new.Recieve
 			oldOutput.MainOut = potentialNewOffer
@@ -27,7 +27,7 @@ func (new Trade) operate(old Trade) ([]Trade, []output) {
 			newOutput.MainOut = new.Recieve
 			oldOutput.MarketOut = potentialNewOffer
 		}
-		old.Offer = old.Offer - new.Recieve
+		old.Offer = old.Offer - new.Recieve // add dot after old in var name
 		old.Recieve = old.Recieve - potentialNewOffer
 		return []Trade{old}, []output{newOutput, oldOutput}
 	}

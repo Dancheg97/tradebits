@@ -8,14 +8,14 @@ import (
 )
 
 func TestOperate(t *testing.T) {
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 10000; i++ {
 		firstRandTrade := Trade{Adress: []byte("a")}
 		secondRandTrade := Trade{Adress: []byte("b")}
 		randNumbers := []uint64{}
 		for i := 0; i < 4; i++ {
 			rand.Seed(time.Now().UnixNano())
 			min := 1
-			max := 100
+			max := 10000
 			randNum := rand.Intn(max-min) + min
 			randNumbers = append(randNumbers, uint64(randNum))
 		}
