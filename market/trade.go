@@ -49,6 +49,27 @@ func (new Trade) operate(old Trade) (bool, []Trade, []output) {
 		return false, []Trade{old, new}, []output{}
 	}
 	if new.IsSell {
-		
+		newOutput := output{
+			Adress:  new.Adress,
+			MainOut: old.Offer,
+		}
+		oldOutput := output{
+			Adress:    old.Adress,
+			MarketOut: old.Recieve,
+		}
+		new.Offer = new.Offer - old.Recieve
+		new.Recieve = new.Recieve - old.Offer
+		return true, []Trade{new}, []output{newOutput, oldOutput}
 	}
+	newOutput := output{
+		Adress:    new.Adress,
+		MarketOut: old.Offer,
+	}
+	oldOutput := output{
+		Adress:  old.Adress,
+		MainOut: old.Recieve,
+	}
+	new.Offer = new.Offer - old.Recieve
+	new.Recieve = new.Recieve - old.Offer
+	return true, []Trade{new}, []output{newOutput, oldOutput}
 }
