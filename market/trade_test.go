@@ -2,37 +2,57 @@ package market
 
 import (
 	"math/rand"
+	"reflect"
 	"testing"
 )
 
 func TestOperate(t *testing.T) {
 	for i := 0; i < 10000; i++ {
-		sell := Trade{
-			Adress: []byte("b"),
-			IsSell: true,
+		firstRandTrade := Trade{
+			Adress: []byte("a"),
 		}
-		buy := Trade{
-			Adress: []byte("c"),
-			IsSell: false,
+		secondRandTrade := Trade{
+			Adress: []byte("b"),
 		}
 		randNumbers := []uint64{}
 		for i := 0; i < 4; i++ {
 			min := 0
-			max := 30000000
+			max := 3000000000
 			randNum := rand.Intn(max-min) + min
 			randNumbers = append(randNumbers, uint64(randNum))
 		}
-		sell.Offer = randNumbers[0]
-		sell.Recieve = randNumbers[1]
-		buy.Offer = randNumbers[2]
-		buy.Recieve = randNumbers[3]
-		operated, trades, outputs := sell.operate(buy)
-		if operated {
+		firstRandTrade.Offer = randNumbers[0]
+		firstRandTrade.Recieve = randNumbers[1]
+		secondRandTrade.Offer = randNumbers[2]
+		secondRandTrade.Recieve = randNumbers[3]
+		randBool := rand.Intn(2) != 0
+		firstRandTrade.IsSell = randBool
+		secondRandTrade.IsSell = !randBool
+		match, trades, outputs := firstRandTrade.operate(secondRandTrade)
+		if !match {
+			if len(trades) != 2 {
+				t.Error("if trades dont match, there should 2 trades output")
+			}
+			if len(outputs) != 0 {
+				t.Error("if trades dont match, there should be 0 outputs")
+			}
+			if !reflect.DeepEqual(trades[0], firstRandTrade) {
+				t.Error("if trades dont match, first output trade should be the same to input")
+			}
+			if !reflect.DeepEqual(trades[1], secondRandTrade) {
+				t.Error("if trades dont match, second output trade should be the same to input")
+			}
+		} else {
 			if len(trades) != 1 {
-				t.Error("there should be only one outgoing trade")
+				t.Error("if trades match, output should be one trade")
 			}
 			if len(outputs) != 2 {
-				t.Error("there should be 2 outputs outgoing")
+				t.Error("if trades match, there should be 2 outputs")
+			}
+			mainSum := 0
+			marketSum := 0
+			if  {
+				
 			}
 		}
 	}
