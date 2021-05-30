@@ -7,7 +7,7 @@ import (
 )
 
 func TestOperate(t *testing.T) {
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < 100; i++ {
 		firstRandTrade := Trade{
 			Adress: []byte("a"),
 		}
@@ -16,8 +16,8 @@ func TestOperate(t *testing.T) {
 		}
 		randNumbers := []uint64{}
 		for i := 0; i < 4; i++ {
-			min := 0
-			max := 3000000000
+			min := 1
+			max := 10000
 			randNum := rand.Intn(max-min) + min
 			randNumbers = append(randNumbers, uint64(randNum))
 		}
