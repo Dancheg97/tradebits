@@ -105,8 +105,9 @@ func Look(adress []byte) *market {
 Function to add some trade to existing market.
 Fuction is working by that way:
  1) Getting prepared empty slice of outputs
- 2) In infinite loop operating the trade
- 3) Checking wether there are output trades
+ 2) In infinite loop operating the trade on first elem in array
+ 3) Checking if output is nil
+ 4) 
 */
 func (mark market) AddTrade(newTrade Trade) []output {
 	all_outputs := []output{}
