@@ -105,5 +105,12 @@ func Look(adress []byte) *market {
 Function to add some trade to existing market.
 */
 func (mark market) AddTrade(newTrade Trade) []output {
-	
+	outputs := []output{}
+	for {
+		if newTrade.IsSell {
+			newTrade.operate(mark.Buys[0])
+		} else {
+			newTrade.operate(mark.Sells[0])
+		}
+	}
 }
