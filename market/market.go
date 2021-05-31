@@ -115,10 +115,15 @@ func (mark market) AddTrade(newTrade Trade) []output {
 	for {
 		if newTrade.IsSell {
 			trades, outputs := newTrade.operate(mark.Buys[0])
-			
+			if outputs == nil {
+				//logic to add new trade to list of sells
+			}
 		} else {
-			trades, outputs := newTrade.operate(mark.Buys[0])
+			trades, outputs := newTrade.operate(mark.Sells[0])
+			if outputs == nil {
+				//logic to add new trade to list of buys
+			}
 		}
 	}
-	return 
+	return
 }
