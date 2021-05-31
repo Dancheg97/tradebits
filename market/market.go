@@ -100,3 +100,10 @@ func Look(adress []byte) *market {
 	gob.NewDecoder(marketCache).Decode(&currMarket)
 	return &currMarket
 }
+
+/*
+Function to add some trade to existing market.
+*/
+func (mark market) AddTrade(newTrade Trade) []output {
+	
+}
