@@ -106,13 +106,19 @@ Function to add some trade to existing market.
 Fuction is working by that way:
  1) Getting prepared empty slice of outputs
  2) In infinite loop operating the trade on first elem in array
- 3) Checking if output is nil
- 4) 
+ 3) Checking if output is nil/breaking
+ 4) Adding new trades to
 */
 func (mark market) AddTrade(newTrade Trade) []output {
-	all_outputs := []output{}
+	allOutputs := []output{}
+	allNewTrades := []Trade{}
 	for {
-		break
+		if newTrade.IsSell {
+			trades, outputs := newTrade.operate(mark.Buys[0])
+			
+		} else {
+			trades, outputs := newTrade.operate(mark.Buys[0])
+		}
 	}
-	return all_outputs
+	return 
 }

@@ -14,7 +14,7 @@ func (new Trade) operate(old Trade) ([]Trade, []output) {
 		ratio := float64(old.Recieve) / float64(old.Offer)
 		potentialNewOffer := uint64(math.Ceil(float64(new.Recieve) * ratio))
 		if potentialNewOffer > new.Offer {
-			return []Trade{new, old}, nil
+			return nil, nil
 		}
 		newOutput := output{Adress: new.Adress}
 		oldOutput := output{Adress: old.Adress}
@@ -34,7 +34,7 @@ func (new Trade) operate(old Trade) ([]Trade, []output) {
 	newRatio := float64(new.Recieve) / float64(new.Offer)
 	oldRatio := float64(old.Offer) / float64(old.Recieve)
 	if newRatio > oldRatio {
-		return []Trade{new, old}, nil
+		return nil, nil
 	}
 	newOutput := output{Adress: new.Adress}
 	oldOutput := output{Adress: old.Adress}
