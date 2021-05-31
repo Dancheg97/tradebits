@@ -48,7 +48,7 @@ func (new Trade) operate(old Trade) ([]Trade, []output) {
 	new.Offer = new.Offer - old.Recieve
 	new.Recieve = new.Recieve - old.Offer
 	if new.Offer == 0 && new.Recieve == 0 {
-		return []Trade{}, []output{newOutput, oldOutput}
+		return nil, []output{newOutput, oldOutput}
 	}
 	return []Trade{new}, []output{newOutput, oldOutput}
 }
