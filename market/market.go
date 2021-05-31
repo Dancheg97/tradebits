@@ -111,19 +111,43 @@ Fuction is working by that way:
 */
 func (mark market) AddTrade(newTrade Trade) []output {
 	allOutputs := []output{}
-	allNewTrades := []Trade{}
+	newTrades := []Trade{newTrade}
 	for {
+		currTrade := newTrades[0]
+		newTrades = newTrades[1:]
 		if newTrade.IsSell {
-			trades, outputs := newTrade.operate(mark.Buys[0])
+			trades, outputs := currTrade.operate(mark.Buys[0])
+			for _, trade := range trades {
+				newTrades = append(newTrades, trade)
+			}
 			if outputs == nil {
+				TR := float64(currTrade.Offer) / float64(currTrade.Recieve)
+				if len(mark.Sells) == 0 {
+					mark.Sells = append(mark.Sells, trades[])
+				}
 				//logic to add new trade to list of sells
+				// бежать по всем сделкам
+				// проверить больше ли ratio если да, то вставить на место
+				// проверенной сделки
+				break
+			} else {
+				for _, output := range outputs {
+					allOutputs = append(allOutputs, output)
+				}
 			}
 		} else {
-			trades, outputs := newTrade.operate(mark.Sells[0])
+			trades, outputs := currTrade.operate(mark.Sells[0])
+			for _, trade := range trades {
+				newTrades = append(newTrades, trade)
+			}
 			if outputs == nil {
 				//logic to add new trade to list of buys
+				break
+			} else {
+				for _, output := range outputs {
+					allOutputs = append(allOutputs, output)
+				}
 			}
 		}
 	}
-	return
 }
