@@ -102,52 +102,19 @@ func Look(adress []byte) *market {
 }
 
 /*
-Function to add some trade to existing market.
-Fuction is working by that way:
- 1) Getting prepared empty slice of outputs
- 2) In infinite loop operating the trade on first elem in array
- 3) Checking if output is nil/breaking
- 4) Adding new trades to
+Recursive function to add trades to existing market. Each new iteration
 */
-func (mark market) AddTrade(newTrade Trade) []output {
-	allOutputs := []output{}
-	newTrades := []Trade{newTrade}
-	for {
-		currTrade := newTrades[0]
-		newTrades = newTrades[1:]
-		if newTrade.IsSell {
-			trades, outputs := currTrade.operate(mark.Buys[0])
-			for _, trade := range trades {
-				newTrades = append(newTrades, trade)
-			}
-			if outputs == nil {
-				TR := float64(currTrade.Offer) / float64(currTrade.Recieve)
-				if len(mark.Sells) == 0 {
-					mark.Sells = append(mark.Sells, trades[])
-				}
-				//logic to add new trade to list of sells
-				// бежать по всем сделкам
-				// проверить больше ли ratio если да, то вставить на место
-				// проверенной сделки
-				break
-			} else {
-				for _, output := range outputs {
-					allOutputs = append(allOutputs, output)
-				}
-			}
-		} else {
-			trades, outputs := currTrade.operate(mark.Sells[0])
-			for _, trade := range trades {
-				newTrades = append(newTrades, trade)
-			}
-			if outputs == nil {
-				//logic to add new trade to list of buys
-				break
-			} else {
-				for _, output := range outputs {
-					allOutputs = append(allOutputs, output)
-				}
-			}
+func (m market) OperateTrade(newTrade Trade) []output {
+	if newTrade.IsSell {
+		newTrades, ouputs := newTrade.operate(m.Sells[0])
+	}
+}
+
+// assistive func to add trade to curr trade list in proper place by ratio
+func (m market) addTrade(t Trade) {
+	if t.IsSell {
+		for _, sell := range m.Sells {
+			
 		}
 	}
 }
