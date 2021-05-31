@@ -17,6 +17,7 @@ type market struct {
 	Dislikes uint64
 	Buys     []Trade
 	Sells    []Trade
+	outputs  []output
 }
 
 type output struct {
@@ -104,17 +105,62 @@ func Look(adress []byte) *market {
 /*
 Recursive function to add trades to existing market. Each new iteration
 */
-func (m market) OperateTrade(newTrade Trade) []output {
+func (m *market) OperateTrade(newTrade Trade) {
 	if newTrade.IsSell {
-		newTrades, ouputs := newTrade.operate(m.Sells[0])
+		if len(m.Sells) == 0 {
+			m.Sells = append(m.Sells, newTrade)
+			return
+		}
+		trades, outputs := newTrade.operate(m.Sells[0])
+		m.Sells = m.Sells[1:]
+		m.outputs = append(m.outputs, outputs...)
+		if len(trades) == 2 {
+			m.addTrade(trades[0])
+			m.addTrade(trades[1])
+			return
+		}
+		if len(trades) == 1 {
+			m.OperateTrade(newTrade)
+		}
+		return
+	} else {
+		if len(m.Buys) == 0 {
+			m.Buys = []Trade{newTrade}
+			return
+		}
+		trades, outputs := newTrade.operate(m.Buys[0])
+		m.Buys = m.Buys[1:]
+		m.outputs = append(m.outputs, outputs...)
+		if len(trades) == 2 {
+			m.addTrade(trades[0])
+			m.addTrade(trades[1])
+			return
+		}
+		if len(trades) == 1 {
+			m.OperateTrade(newTrade)
+		}
+		return
 	}
 }
 
 // assistive func to add trade to curr trade list in proper place by ratio
 func (m market) addTrade(t Trade) {
+	currRatio := float64(t.Offer) / float64(t.Recieve)
 	if t.IsSell {
-		for _, sell := range m.Sells {
-			
+		for index, sell := range m.Sells {
+			sellRatio := float64(sell.Offer) / float64(sell.Recieve)
+			if currRatio > sellRatio {
+				m.Sells = append(m.Sells[:index+1], m.Sells[index:]...)
+				m.Sells[index] = t
+			}
+		}
+	} else {
+		for index, buy := range m.Buys {
+			buyRatio := float64(buy.Offer) / float64(buy.Recieve)
+			if currRatio > buyRatio {
+				m.Buys = append(m.Buys[:index+1], m.Buys[index:]...)
+				m.Buys[index] = t
+			}
 		}
 	}
 }
