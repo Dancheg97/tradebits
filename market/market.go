@@ -107,25 +107,8 @@ Recursive function to add trades to existing market. Each new iteration
 */
 func (m *market) OperateTrade(newTrade Trade) {
 	if newTrade.IsSell {
-		if len(m.Sells) == 0 {
-			m.Sells = append(m.Sells, newTrade)
-			return
-		}
-		trades, outputs := newTrade.operate(m.Sells[0])
-		m.Sells = m.Sells[1:]
-		m.outputs = append(m.outputs, outputs...)
-		if len(trades) == 2 {
-			m.addTrade(trades[0])
-			m.addTrade(trades[1])
-			return
-		}
-		if len(trades) == 1 {
-			m.OperateTrade(newTrade)
-		}
-		return
-	} else {
 		if len(m.Buys) == 0 {
-			m.Buys = []Trade{newTrade}
+			m.Sells = append(m.Sells, newTrade)
 			return
 		}
 		trades, outputs := newTrade.operate(m.Buys[0])
@@ -140,13 +123,34 @@ func (m *market) OperateTrade(newTrade Trade) {
 			m.OperateTrade(newTrade)
 		}
 		return
+	} else {
+		if len(m.Sells) == 0 {
+			m.Buys = append(m.Buys, newTrade)
+			return
+		}
+		trades, outputs := newTrade.operate(m.Sells[0])
+		m.Sells = m.Sells[1:]
+		m.outputs = append(m.outputs, outputs...)
+		if len(trades) == 2 {
+			m.addTrade(trades[0])
+			m.addTrade(trades[1])
+			return
+		}
+		if len(trades) == 1 {
+			m.OperateTrade(newTrade)
+		}
+		return
 	}
 }
 
 // assistive func to add trade to curr trade list in proper place by ratio
-func (m market) addTrade(t Trade) {
+func (m *market) addTrade(t Trade) {
 	currRatio := float64(t.Offer) / float64(t.Recieve)
 	if t.IsSell {
+		if len(m.Sells) == 0 {
+			m.Sells = append(m.Sells, t)
+			return
+		}
 		for index, sell := range m.Sells {
 			sellRatio := float64(sell.Offer) / float64(sell.Recieve)
 			if currRatio > sellRatio {
@@ -155,6 +159,10 @@ func (m market) addTrade(t Trade) {
 			}
 		}
 	} else {
+		if len(m.Buys) == 0 {
+			m.Buys = append(m.Buys, t)
+			return
+		}
 		for index, buy := range m.Buys {
 			buyRatio := float64(buy.Offer) / float64(buy.Recieve)
 			if currRatio > buyRatio {
