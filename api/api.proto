@@ -3,7 +3,7 @@ syntax = "proto3";
 package _api;
 
 service UserCreate{
-    rpc Add(UserCreateRequest) returns (SendResponse) {}
+    rpc Add(UserCreateRequest) returns (Response) {}
 }
 
 message UserCreateRequest{
@@ -13,6 +13,6 @@ message UserCreateRequest{
     bytes sign = 4;
 }
 
-message SendResponse{
+message Response{
     bool passed = 1;
 }
