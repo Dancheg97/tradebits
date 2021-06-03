@@ -1,9 +1,11 @@
 syntax = "proto3";
 
-package _api;
+option go_package = "sync_tree/api";
+
+package api;
 
 service UserCreate{
-    rpc Add(UserCreateRequest) returns (Response) {}
+    rpc AddUser(UserCreateRequest) returns (Response) {}
 }
 
 message UserCreateRequest{

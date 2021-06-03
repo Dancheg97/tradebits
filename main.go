@@ -1,10 +1,37 @@
 package main
 
 import (
-	"fmt"
-	"sync_tree/calc"
+	"context"
+	"log"
+	"net"
+
+	"google.golang.org/grpc"
+	pb "sync_tree/api"
 )
 
+const (
+	port = ":50051"
+)
+
+// server is used to implement helloworld.GreeterServer.
+type server struct {
+	pb.UnimplementedUserCreateServer
+}
+
+// SayHello implements helloworld.GreeterServer
+func (s *server) SayHello(ctx context.Context, in *pb.UserCreateRequest) (*pb.Response, error) {
+	log.Printf("Received: %v", in.GetName())
+	return &pb.Response{Message: "Hello " + in.GetName()}, nil
+}
+
 func main() {
-	fmt.Println(calc.Rand())
+	lis, err := net.Listen("tcp", port)
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	s := grpc.NewServer()
+	pb.RegisterUserCreateServer(s, &server{})
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 }
