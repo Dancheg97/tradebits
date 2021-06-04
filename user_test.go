@@ -7,6 +7,8 @@ import (
 	"testing"
 	"time"
 
+	"sync_tree/calc"
+
 	"google.golang.org/grpc"
 	pb "sync_tree/api"
 )
@@ -25,6 +27,6 @@ func TestUserCreateRequest() {
 	defer conn.Close()
 	c := pb.NewSyncTreeClient(conn)
 
-	new_user = 
-
+	new_keys = calc.Gen()
+	user = 
 }
