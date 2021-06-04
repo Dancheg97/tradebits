@@ -16,7 +16,7 @@ const (
 	defaultName = "world"
 )
 
-func TestUserCreate(t testing.T) {
+func TestUserCreate(t *testing.T) {
 	// TEST
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
@@ -34,7 +34,7 @@ func TestUserCreate(t testing.T) {
 	sign, _ := calc.Sign(message, keys.PersPriv)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	r, err := c.AddUser(
+	r, _ := c.AddUser(
 		ctx,
 		&pb.UserCreateRequest{
 			PublicKey: keys.PersPub,
