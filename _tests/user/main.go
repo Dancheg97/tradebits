@@ -45,5 +45,7 @@ func main() {
 	)
 	if !r.Passed {
 		fmt.Println("user have not been created")
+		return
 	}
+	fmt.Println("user have been created successfully")
 }
