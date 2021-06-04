@@ -22,7 +22,7 @@ message Response{
 
 message UserSendRequest{
     bytes PublicKey = 1;
-    uint64 sum = 2;
+    uint64 SendAmount = 2;
     bytes RecieverAdress = 3;
     bytes sign = 4;
 }
