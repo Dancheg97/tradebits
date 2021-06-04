@@ -34,7 +34,7 @@ func main() {
 	sign, _ := calc.Sign(message, keys.PersPriv)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	r, err := c.AddUser(
+	r, _ := c.AddUser(
 		ctx,
 		&pb.UserCreateRequest{
 			PublicKey: keys.PersPub,
@@ -43,7 +43,7 @@ func main() {
 			Sign:      sign,
 		},
 	)
-	fmt.Println("smth")
-	fmt.Println(err)
-	fmt.Println(r.Passed)
+	if !r.Passed {
+		fmt.Println("user have not been created")
+	}
 }
