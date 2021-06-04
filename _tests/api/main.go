@@ -2,11 +2,12 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
-	"testing"
-	"time"
-	"sync_tree/calc"
 	pb "sync_tree/api"
+	"sync_tree/calc"
+	"time"
+
 	"google.golang.org/grpc"
 )
 
@@ -15,8 +16,8 @@ const (
 	defaultName = "world"
 )
 
-func main(t *testing.T) {
-	// Set up a connection to the server.
+func main() {
+	// TEST
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -42,7 +43,7 @@ func main(t *testing.T) {
 			Sign:      sign,
 		},
 	)
-	if !r.Passed {
-		t.Error("user was not created")
-	}
+	fmt.Println("smth")
+	fmt.Println(err)
+	fmt.Println(r.Passed)
 }

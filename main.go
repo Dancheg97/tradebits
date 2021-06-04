@@ -4,6 +4,13 @@ import (
 	"log"
 	"net"
 
+	"context"
+	"fmt"
+
+	"sync_tree/calc"
+	"sync_tree/lock"
+	"sync_tree/user"
+
 	"google.golang.org/grpc"
 	pb "sync_tree/api"
 )
@@ -14,6 +21,29 @@ const (
 
 type server struct {
 	pb.UnimplementedSyncTreeServer
+}
+
+func (s *server) AddUser(ctx context.Context, in *pb.UserCreateRequest) (*pb.Response, error) {
+	fmt.Println("recieved request")
+	senderAdress := calc.Hash(in.PublicKey)
+	lock.Lock(senderAdress)
+	defer lock.Unlock(senderAdress)
+	check_err := calc.Verify(
+		[][]byte{
+			in.PublicKey,
+			in.MesKey,
+			[]byte(in.ImgLink),
+		},
+		in.PublicKey,
+		in.Sign,
+	)
+	if check_err == nil {
+		create_err := user.Create(senderAdress, in.MesKey, in.ImgLink)
+		if create_err == nil {
+			return &pb.Response{Passed: true}, nil
+		}
+	}
+	return &pb.Response{Passed: false}, nil
 }
 
 func main() {
