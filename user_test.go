@@ -3,14 +3,14 @@ package main
 import (
 	"context"
 	"log"
-	"os"
 	"testing"
 	"time"
 
 	"sync_tree/calc"
 
-	"google.golang.org/grpc"
 	pb "sync_tree/api"
+
+	"google.golang.org/grpc"
 )
 
 const (
@@ -18,7 +18,7 @@ const (
 	defaultName = "world"
 )
 
-func TestUserCreateRequest() {
+func TestUserCreateRequest(t testing.T) {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
@@ -27,6 +27,25 @@ func TestUserCreateRequest() {
 	defer conn.Close()
 	c := pb.NewSyncTreeClient(conn)
 
-	new_keys = calc.Gen()
-	user = 
+	keys := calc.Gen()
+	message := [][]byte{
+		keys.PersPub,
+		keys.MesPub,
+		[]byte("nan"),
+	}
+	sign, _ := calc.Sign(message, keys.PersPriv)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	r, err := c.AddUser(
+		ctx,
+		&pb.UserCreateRequest{
+			PublicKey: keys.PersPub,
+			ImgLink:   "nan",
+			MesKey:    keys.MesPriv,
+			Sign:      sign,
+		},
+	)
+	if !r.Passed {
+		t.Error("user was not created")
+	}
 }

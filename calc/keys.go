@@ -6,11 +6,11 @@ import (
 	"crypto/x509"
 )
 
-type keys struct {
-	persPriv []byte
-	persPub  []byte
-	mesPriv  []byte
-	mesPub   []byte
+type Keys struct {
+	PersPriv []byte
+	PersPub  []byte
+	MesPriv  []byte
+	MesPub   []byte
 }
 
 /* This function is made to generate a pair fof pairs of priv/pub keys,
@@ -20,13 +20,13 @@ it returns 4 byte arrays for each key in that order:
  - mes priv
  - mes pub
 */
-func Gen() *keys {
+func Gen() *Keys {
 	persKey, _ := rsa.GenerateKey(rand.Reader, 4096)
 	mesKey, _ := rsa.GenerateKey(rand.Reader, 2048)
-	return &keys{
-		persPriv: x509.MarshalPKCS1PrivateKey(persKey),
-		persPub:  x509.MarshalPKCS1PublicKey(&persKey.PublicKey),
-		mesPriv:  x509.MarshalPKCS1PrivateKey(mesKey),
-		mesPub:   x509.MarshalPKCS1PublicKey(&mesKey.PublicKey),
+	return &Keys{
+		PersPriv: x509.MarshalPKCS1PrivateKey(persKey),
+		PersPub:  x509.MarshalPKCS1PublicKey(&persKey.PublicKey),
+		MesPriv:  x509.MarshalPKCS1PrivateKey(mesKey),
+		MesPub:   x509.MarshalPKCS1PublicKey(&mesKey.PublicKey),
 	}
 }
