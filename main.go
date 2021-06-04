@@ -23,7 +23,10 @@ type server struct {
 	pb.UnimplementedSyncTreeServer
 }
 
-func (s *server) UserCreate(ctx context.Context, in *pb.UserCreateRequest) (*pb.Response, error) {
+func (s *server) UserCreate(
+	ctx context.Context,
+	in *pb.UserCreateRequest,
+) (*pb.Response, error) {
 	fmt.Println("recieved request")
 	senderAdress := calc.Hash(in.PublicKey)
 	lock.Lock(senderAdress)
@@ -51,7 +54,10 @@ func (s *server) UserCreate(ctx context.Context, in *pb.UserCreateRequest) (*pb.
 	return &pb.Response{Passed: false}, nil
 }
 
-func (s *server) UserSend(ctx context.Context, in *pb.UserSendRequest) (*pb.Response, error) {
+func (s *server) UserSend(
+	ctx context.Context,
+	in *pb.UserSendRequest,
+) (*pb.Response, error) {
 	fmt.Println("user send request created")
 	senderAdrees := calc.Hash(in.PublicKey)
 	sender := user.Get(senderAdrees)
@@ -69,7 +75,11 @@ func (s *server) UserSend(ctx context.Context, in *pb.UserSendRequest) (*pb.Resp
 	if reciever == nil {
 		return &pb.Response{Passed: false}, nil
 	}
-
+	sender.Balance = sender.Balance - in.SendAmount
+	reciever.Balance = reciever.Balance + in.SendAmount
+	sender.Save()
+	reciever.Save()
+	return &pb.Response{Passed: true}, nil
 }
 
 func main() {
