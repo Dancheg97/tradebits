@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	pb "sync_tree/api"
 	"sync_tree/calc"
+	"testing"
 	"time"
 
 	"google.golang.org/grpc"
@@ -16,7 +16,7 @@ const (
 	defaultName = "world"
 )
 
-func main() {
+func TestUserCreate(t testing.T) {
 	// TEST
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
@@ -43,7 +43,7 @@ func main() {
 			Sign:      sign,
 		},
 	)
-	fmt.Println("smth")
-	fmt.Println(err)
-	fmt.Println(r.Passed)
+	if !r.Passed {
+		t.Error("user have not been created")
+	}
 }

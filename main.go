@@ -37,8 +37,13 @@ func (s *server) AddUser(ctx context.Context, in *pb.UserCreateRequest) (*pb.Res
 		in.PublicKey,
 		in.Sign,
 	)
+	fmt.Print(check_err)
 	if check_err == nil {
-		create_err := user.Create(senderAdress, in.MesKey, in.ImgLink)
+		create_err := user.Create(
+			senderAdress, 
+			in.MesKey, 
+			in.ImgLink,
+		)
 		if create_err == nil {
 			return &pb.Response{Passed: true}, nil
 		}
