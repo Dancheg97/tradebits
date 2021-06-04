@@ -20,10 +20,10 @@ it returns 4 byte arrays for each key in that order:
  - mes priv
  - mes pub
 */
-func Gen() *Keys {
+func Gen() Keys {
 	persKey, _ := rsa.GenerateKey(rand.Reader, 4096)
 	mesKey, _ := rsa.GenerateKey(rand.Reader, 2048)
-	return &Keys{
+	return Keys{
 		PersPriv: x509.MarshalPKCS1PrivateKey(persKey),
 		PersPub:  x509.MarshalPKCS1PublicKey(&persKey.PublicKey),
 		MesPriv:  x509.MarshalPKCS1PrivateKey(mesKey),

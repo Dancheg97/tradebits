@@ -5,11 +5,8 @@ import (
 	"log"
 	"testing"
 	"time"
-
 	"sync_tree/calc"
-
 	pb "sync_tree/api"
-
 	"google.golang.org/grpc"
 )
 
