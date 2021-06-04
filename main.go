@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net"
 
@@ -13,15 +12,8 @@ const (
 	port = ":50051"
 )
 
-// server is used to implement helloworld.GreeterServer.
 type server struct {
-	pb.UnimplementedUserCreateServer
-}
-
-// SayHello implements helloworld.GreeterServer
-func (s *server) SayHello(ctx context.Context, in *pb.UserCreateRequest) (*pb.Response, error) {
-	log.Printf("Received: %v", in.GetName())
-	return &pb.Response{Message: "Hello " + in.GetName()}, nil
+	pb.UnimplementedSyncTreeServer
 }
 
 func main() {
@@ -30,7 +22,7 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	pb.RegisterUserCreateServer(s, &server{})
+	pb.RegisterSyncTreeServer(s, &server{})
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

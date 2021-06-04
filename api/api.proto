@@ -4,17 +4,17 @@ option go_package = "sync_tree/api";
 
 package api;
 
-service UserCreate{
+service SyncTree{
     rpc AddUser(UserCreateRequest) returns (Response) {}
 }
 
 message UserCreateRequest{
-    bytes publicKey = 1;
-    bytes mesKey = 2;
-    string imgLink = 3;
-    bytes sign = 4;
+    bytes PublicKey = 1;
+    bytes MesKey = 2;
+    string ImgLink = 3;
+    bytes Sign = 4;
 }
 
 message Response{
-    bool passed = 1;
+    bool Passed = 1;
 }

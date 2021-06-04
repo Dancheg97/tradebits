@@ -14,86 +14,86 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// UserCreateClient is the client API for UserCreate service.
+// SyncTreeClient is the client API for SyncTree service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type UserCreateClient interface {
+type SyncTreeClient interface {
 	AddUser(ctx context.Context, in *UserCreateRequest, opts ...grpc.CallOption) (*Response, error)
 }
 
-type userCreateClient struct {
+type syncTreeClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewUserCreateClient(cc grpc.ClientConnInterface) UserCreateClient {
-	return &userCreateClient{cc}
+func NewSyncTreeClient(cc grpc.ClientConnInterface) SyncTreeClient {
+	return &syncTreeClient{cc}
 }
 
-func (c *userCreateClient) AddUser(ctx context.Context, in *UserCreateRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *syncTreeClient) AddUser(ctx context.Context, in *UserCreateRequest, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.UserCreate/AddUser", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.SyncTree/AddUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// UserCreateServer is the server API for UserCreate service.
-// All implementations must embed UnimplementedUserCreateServer
+// SyncTreeServer is the server API for SyncTree service.
+// All implementations must embed UnimplementedSyncTreeServer
 // for forward compatibility
-type UserCreateServer interface {
+type SyncTreeServer interface {
 	AddUser(context.Context, *UserCreateRequest) (*Response, error)
-	mustEmbedUnimplementedUserCreateServer()
+	mustEmbedUnimplementedSyncTreeServer()
 }
 
-// UnimplementedUserCreateServer must be embedded to have forward compatible implementations.
-type UnimplementedUserCreateServer struct {
+// UnimplementedSyncTreeServer must be embedded to have forward compatible implementations.
+type UnimplementedSyncTreeServer struct {
 }
 
-func (UnimplementedUserCreateServer) AddUser(context.Context, *UserCreateRequest) (*Response, error) {
+func (UnimplementedSyncTreeServer) AddUser(context.Context, *UserCreateRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddUser not implemented")
 }
-func (UnimplementedUserCreateServer) mustEmbedUnimplementedUserCreateServer() {}
+func (UnimplementedSyncTreeServer) mustEmbedUnimplementedSyncTreeServer() {}
 
-// UnsafeUserCreateServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to UserCreateServer will
+// UnsafeSyncTreeServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to SyncTreeServer will
 // result in compilation errors.
-type UnsafeUserCreateServer interface {
-	mustEmbedUnimplementedUserCreateServer()
+type UnsafeSyncTreeServer interface {
+	mustEmbedUnimplementedSyncTreeServer()
 }
 
-func RegisterUserCreateServer(s grpc.ServiceRegistrar, srv UserCreateServer) {
-	s.RegisterService(&UserCreate_ServiceDesc, srv)
+func RegisterSyncTreeServer(s grpc.ServiceRegistrar, srv SyncTreeServer) {
+	s.RegisterService(&SyncTree_ServiceDesc, srv)
 }
 
-func _UserCreate_AddUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _SyncTree_AddUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserCreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserCreateServer).AddUser(ctx, in)
+		return srv.(SyncTreeServer).AddUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.UserCreate/AddUser",
+		FullMethod: "/api.SyncTree/AddUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserCreateServer).AddUser(ctx, req.(*UserCreateRequest))
+		return srv.(SyncTreeServer).AddUser(ctx, req.(*UserCreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// UserCreate_ServiceDesc is the grpc.ServiceDesc for UserCreate service.
+// SyncTree_ServiceDesc is the grpc.ServiceDesc for SyncTree service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var UserCreate_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.UserCreate",
-	HandlerType: (*UserCreateServer)(nil),
+var SyncTree_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.SyncTree",
+	HandlerType: (*SyncTreeServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "AddUser",
-			Handler:    _UserCreate_AddUser_Handler,
+			Handler:    _SyncTree_AddUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
