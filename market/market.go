@@ -3,9 +3,9 @@ package market
 import (
 	"bytes"
 	"encoding/gob"
+	"errors"
 	"sync_tree/data"
 	"sync_tree/lock"
-	"sync_tree/logs"
 )
 
 type market struct {
@@ -32,7 +32,7 @@ exists and creates new one.
 */
 func Create(adress []byte, Name string, ImgLink string, MesKey []byte) error {
 	if data.Check(adress) {
-		return logs.Error("create market by existing key: ", adress)
+		return errors.New("possibly user already exists")
 	}
 	newMarket := market{
 		adress:   adress,
@@ -47,7 +47,6 @@ func Create(adress []byte, Name string, ImgLink string, MesKey []byte) error {
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newMarket)
 	data.Put(adress, cache.Bytes())
-	logs.Info("new user create success, adress: ", adress)
 	return nil
 }
 
@@ -67,7 +66,6 @@ This function should be used only in case those values are modified:
 func Get(adress []byte) *market {
 	lockErr := lock.Lock(adress)
 	if lockErr != nil {
-		logs.Error("unable to get market, locked: ", adress)
 		return nil
 	}
 	a := market{adress: adress}

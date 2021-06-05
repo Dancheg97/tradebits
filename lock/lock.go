@@ -1,8 +1,8 @@
 package lock
 
 import (
+	"errors"
 	"sync"
-	"sync_tree/logs"
 )
 
 type blockedMap struct {
@@ -23,7 +23,7 @@ var blockers = generateBlockers()
 
 func checkLen(bytes []byte) error {
 	if len(bytes) != 64 {
-		return logs.Error("wrong bytes length")
+		return errors.New("error on checking length of bytes")
 	}
 	return nil
 }
@@ -41,7 +41,7 @@ func Lock(ID []byte) error {
 	defer blocker.mutex.Unlock()
 	_, found := blocker.userId[lockID]
 	if found {
-		return logs.Error("user already locked")
+		return errors.New("this key is already locked")
 	}
 	blocker.userId[lockID] = true
 	return nil
