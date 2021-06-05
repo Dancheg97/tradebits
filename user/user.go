@@ -70,12 +70,12 @@ gonna be fixed in database, adress will be unlocked, and adress will be
 set to nil, so other changes won't be saved (user will have to be recreated)
 */
 func (u user) Save() {
+	saveAdress := u.adress
+	u.adress = nil
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(u)
-	unlock_adress := u.adress
-	data.Change(u.adress, cache.Bytes())
-	u.adress = nil
-	lock.Unlock(unlock_adress)
+	data.Change(saveAdress, cache.Bytes())
+	lock.Unlock(saveAdress)
 }
 
 // Get user balance for some specific market
