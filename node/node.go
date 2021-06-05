@@ -8,3 +8,7 @@ type node struct {
 	ownerAdress []byte
 	connections []string
 }
+
+/*
+
+*/

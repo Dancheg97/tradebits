@@ -7,9 +7,6 @@ Every dependency can go only from bottom level to top (as they are listed in fol
 Here is current listing (arrow represents import ability):
 
 
-- `logs` (low utils)
-
-  ↑
 - `calc` (utils)
 - `data` (utils)
 - `lock` (utils)
@@ -58,7 +55,7 @@ This package provides functions to lock and unlock byte slices (with length of 6
 - `Lock` - lock byte slice (len 64, according to blake2b hash length)
 - `Unlcok` - unlock byte slice
 
-## Net
+## Api
 
 That package contains interfaces that are used to communicate to outer space. In current implementation gRPC is used for compact messages and fast serialization.
 
