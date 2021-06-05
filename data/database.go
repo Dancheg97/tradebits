@@ -4,11 +4,12 @@ import (
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
-var db, _ = leveldb.OpenFile("data/base", nil)
+var leafs, _ = leveldb.OpenFile("data/leafs", nil)
+var branches, _ = leveldb.OpenFile("data/branches", nil)
 
 // get value by key from database
 func Get(key []byte) []byte {
-	output, getErr := db.Get(key, nil)
+	output, getErr := leafs.Get(key, nil)
 	if getErr != nil {
 		return nil
 	}
@@ -18,28 +19,33 @@ func Get(key []byte) []byte {
 // put key by some value to database (if value exists use Change()
 // func instead)
 func Put(key []byte, value []byte) {
-	valueExists, unexpected := db.Has(key, nil)
+	valueExists, unexpected := leafs.Has(key, nil)
 	if unexpected != nil {
 		return
 	}
 	if valueExists {
 		return
 	}
-	db.Put(key, value, nil)
+	leafs.Put(key, value, nil)
 }
 
 // change existing value in database by key
 func Change(key []byte, value []byte) {
 	if Check(key) {
-		db.Put(key, value, nil)
+		leafs.Put(key, value, nil)
 	}
 }
 
 // check if value exists in database
 func Check(key []byte) bool {
-	valueExists, unexpected := db.Has(key, nil)
+	valueExists, unexpected := leafs.Has(key, nil)
 	if unexpected != nil {
 		return false
 	}
 	return valueExists
+}
+
+// write transaction to database
+func WriteTransaction(hash []byte, content []byte) {
+	branches.Put(hash, content, nil)
 }
