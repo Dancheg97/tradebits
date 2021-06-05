@@ -9,6 +9,3 @@ type node struct {
 	connections []string
 }
 
-/*
-
-*/
