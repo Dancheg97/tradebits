@@ -5,7 +5,7 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
-	"sync_tree/logs"
+	"errors"
 )
 
 // sign message with private key (message is taken by 2d ar, and will be
@@ -13,18 +13,15 @@ import (
 func Sign(message [][]byte, privateKey []byte) ([]byte, error) {
 	private, privateKeyErr := x509.ParsePKCS1PrivateKey(privateKey)
 	if privateKeyErr != nil {
-		return nil, logs.Error("failed to parse private key")
+		return nil, errors.New("parse private key error")
 	}
 	msgHashSum := Hash(concatenateMessage(message))
-	signatureBytes, signErr := rsa.SignPSS(
+	signatureBytes, _ := rsa.SignPSS(
 		rand.Reader,
 		private,
 		crypto.BLAKE2b_512,
 		msgHashSum,
 		nil,
 	)
-	if signErr != nil {
-		return nil, logs.Critical("unexpected error signing message")
-	}
 	return signatureBytes, nil
 }

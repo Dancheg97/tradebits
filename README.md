@@ -2,20 +2,20 @@
 
 Server software to run sync tree server model.
 
-Every dependency can go only from bottom level to top (as they are listed in folder), so that `main` package can import evrything, while package `logs` is unabale to import anything.
+Every dependency can go only from bottom level to top (as they are listed in folder), so that `main` package can import evrything, packages on above can not import anything and depend on each other.
 
 Here is current listing (arrow represents import ability):
 
-
-- `calc` (utils)
-- `data` (utils)
-- `lock` (utils)
-- `net` (utils)
+- `api`
+- `calc`
+- `data`
+- `lock`
+- `net`
 
   ↑
-- `market` (entities)
-- `node` (entities)
-- `user` (entities)
+- `market`
+- `node`
+- `user`
 
   ↑
 - `main`
@@ -62,3 +62,7 @@ That package contains interfaces that are used to communicate to outer space. In
 This package is automatically generated, by `api.proto` file, which is in `net` package
 
 `protoc --go-grpc_out=. --go-grpc_opt=. api/api.proto`
+
+
+
+##
