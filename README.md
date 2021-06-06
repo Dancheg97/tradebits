@@ -2,23 +2,20 @@
 
 Server software to run sync tree server model.
 
-Every dependency can go only from bottom level to top (as they are listed in folder), so that `main` package can import evrything, while package `logs` is unabale to import anything.
+Every dependency can go only from bottom level to top (as they are listed in folder), so that `main` package can import evrything, packages on above can not import anything and depend on each other.
 
 Here is current listing (arrow represents import ability):
 
-
-- `logs` (low utils)
-
-  ↑
-- `calc` (utils)
-- `data` (utils)
-- `lock` (utils)
-- `net` (utils)
+- `api`
+- `calc`
+- `data`
+- `lock`
+- `net`
 
   ↑
-- `market` (entities)
-- `node` (entities)
-- `user` (entities)
+- `market`
+- `node`
+- `user`
 
   ↑
 - `main`
@@ -40,6 +37,7 @@ In current implementation leveldb is used to store data, function list:
 - `Put` - method to put element to database
 - `Change` - method to change element in database
 - `Check` - method is cheking some value is written by some key
+- `Trns` - method used to write new transaction
 
 
 ## Calc
@@ -58,8 +56,12 @@ This package provides functions to lock and unlock byte slices (with length of 6
 - `Lock` - lock byte slice (len 64, according to blake2b hash length)
 - `Unlcok` - unlock byte slice
 
-## Net
+## Api
 
 That package contains interfaces that are used to communicate to outer space. In current implementation gRPC is used for compact messages and fast serialization.
 
 This package is automatically generated, by `api.proto` file, which is in `net` package
+
+`protoc --go-grpc_out=. --go-grpc_opt=. api/api.proto`
+
+## 

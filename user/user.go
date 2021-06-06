@@ -3,9 +3,9 @@ package user
 import (
 	"bytes"
 	"encoding/gob"
+	"errors"
 	"sync_tree/data"
 	"sync_tree/lock"
-	"sync_tree/logs"
 )
 
 type user struct {
@@ -22,7 +22,7 @@ the error will be logged
 */
 func Create(adress []byte, MesKey []byte, ImgLink string) error {
 	if data.Check(adress) {
-		return logs.Error("create user by existing key ", adress)
+		return errors.New("possibly user already exists")
 	}
 	u := user{
 		Balance: 0,
@@ -33,7 +33,6 @@ func Create(adress []byte, MesKey []byte, ImgLink string) error {
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(u)
 	data.Put(adress, cache.Bytes())
-	logs.Info("new user create success, adress: ", adress)
 	return nil
 }
 
@@ -44,7 +43,6 @@ locked, so another of that user are not gonna appear
 func Get(adress []byte) *user {
 	lockErr := lock.Lock(adress)
 	if lockErr != nil {
-		logs.Error("unable to get user (locked): ", adress)
 		return nil
 	}
 	u := user{adress: adress}
@@ -72,12 +70,12 @@ gonna be fixed in database, adress will be unlocked, and adress will be
 set to nil, so other changes won't be saved (user will have to be recreated)
 */
 func (u user) Save() {
+	saveAdress := u.adress
+	u.adress = nil
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(u)
-	unlock_adress := u.adress
-	data.Change(u.adress, cache.Bytes())
-	u.adress = nil
-	lock.Unlock(unlock_adress)
+	data.Change(saveAdress, cache.Bytes())
+	lock.Unlock(saveAdress)
 }
 
 // Get user balance for some specific market

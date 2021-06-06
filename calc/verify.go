@@ -4,7 +4,7 @@ import (
 	"crypto"
 	"crypto/rsa"
 	"crypto/x509"
-	"sync_tree/logs"
+	"errors"
 )
 
 // check some sign with some public key for some and message, message
@@ -12,7 +12,7 @@ import (
 func Verify(message [][]byte, keyBytes []byte, sign []byte) error {
 	publicKey, publicKeyError := x509.ParsePKCS1PublicKey(keyBytes)
 	if publicKeyError != nil {
-		return logs.Error("error parsing public key while signing")
+		return errors.New("error parsing public key")
 	}
 	hash := Hash(concatenateMessage(message))
 	return rsa.VerifyPSS(publicKey, crypto.BLAKE2b_512, hash, sign, nil)

@@ -1,18 +1,28 @@
 syntax = "proto3";
 
+option go_package = "sync_tree/api";
+
 package api;
 
-service UserCreate{
-    rpc Add(UserCreateInput) returns (UserCreateOutput) {}
+service SyncTree{
+    rpc UserCreate(UserCreateRequest) returns (Response) {}
+    rpc UserSend(UserSendRequest) returns (Response) {}
 }
 
-message UserCreateInput{
-    bytes senderPublicKey = 1;
-    bytes messageKey = 2;
-    bytes imageLink = 3;
+message UserCreateRequest{
+    bytes PublicKey = 1;
+    bytes MesKey = 2;
+    string ImgLink = 3;
+    bytes Sign = 4;
+}
+
+message Response{
+    bool Passed = 1;
+}
+
+message UserSendRequest{
+    bytes PublicKey = 1;
+    uint64 SendAmount = 2;
+    bytes RecieverAdress = 3;
     bytes sign = 4;
-}
-
-message UserCreateOutput{
-    bool passed = 1;
 }
