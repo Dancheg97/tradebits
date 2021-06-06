@@ -37,6 +37,7 @@ In current implementation leveldb is used to store data, function list:
 - `Put` - method to put element to database
 - `Change` - method to change element in database
 - `Check` - method is cheking some value is written by some key
+- `Trns` - method used to write new transaction
 
 
 ## Calc
@@ -63,6 +64,4 @@ This package is automatically generated, by `api.proto` file, which is in `net` 
 
 `protoc --go-grpc_out=. --go-grpc_opt=. api/api.proto`
 
-
-
-##
+## 
