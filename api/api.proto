@@ -11,6 +11,7 @@ service SyncTree{
     rpc MarketCraete(MarketCraeteRequest) returns (Response) {}
     rpc MarketTrade(MarketTradeRequest) returns (Response) {}
     rpc MarketLook(MarketLookRequest) returns (MarketLookResponse) {}
+    rpc MarketDeepLook(MarketTradesRequest) returns (MarketTradesResponse) {}
 }
 
 message Response{
@@ -60,6 +61,20 @@ message MarketLookRequest{
     bytes adress = 1;
 }
 
-message MarketTradeResponse{
+message MarketLookResponse{
+    string Name = 1;
+    string ImgLink = 2;
+    bytes MesKey = 3;
+    uint64 Likes = 4;
+    uint64 Dislikes = 5;
+    float BestOfferRatio = 6;
+    float BestRecieveRatio = 7;
+}
+
+message MarketTradesRequest{
     
+}
+
+message MarketTradesResponse{
+
 }
