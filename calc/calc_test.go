@@ -49,3 +49,19 @@ func TestGenerateRandomBytes(t *testing.T) {
 	}
 	t.Error("failed to generate random bytes")
 }
+
+func TestGetKeys(t *testing.T) {
+	keys := Gen()
+	if len(keys.MesPriv) != 1190 || len(keys.MesPriv) != 1192 {
+		t.Error("Wrong mes priv key length", len(keys.MesPriv))
+	}
+	if len(keys.MesPub) != 270 {
+		t.Error("Wrong mes pub key ltngth")
+	}
+	if len(keys.PersPriv) != 2348 {
+		t.Error("Wrong pers priv key length")
+	}
+	if len(keys.PersPub) != 526 {
+		t.Error("Wrong pers pub key length")
+	}
+}

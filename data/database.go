@@ -44,8 +44,3 @@ func Check(key []byte) bool {
 	}
 	return valueExists
 }
-
-// write transaction to database
-func Trns(hash []byte, content []byte) {
-	branches.Put(hash, content, nil)
-}

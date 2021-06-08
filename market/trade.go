@@ -52,3 +52,33 @@ func (new Trade) operate(old Trade) ([]Trade, []output) {
 	}
 	return []Trade{new}, []output{newOutput, oldOutput}
 }
+
+// assistive func to add trade to curr trade list in proper place by ratio
+func (m *market) addTrade(t Trade) {
+	currRatio := float64(t.Offer) / float64(t.Recieve)
+	if t.IsSell {
+		if len(m.Sells) == 0 {
+			m.Sells = append(m.Sells, t)
+			return
+		}
+		for index, sell := range m.Sells {
+			sellRatio := float64(sell.Offer) / float64(sell.Recieve)
+			if currRatio > sellRatio {
+				m.Sells = append(m.Sells[:index+1], m.Sells[index:]...)
+				m.Sells[index] = t
+			}
+		}
+	} else {
+		if len(m.Buys) == 0 {
+			m.Buys = append(m.Buys, t)
+			return
+		}
+		for index, buy := range m.Buys {
+			buyRatio := float64(buy.Offer) / float64(buy.Recieve)
+			if currRatio > buyRatio {
+				m.Buys = append(m.Buys[:index+1], m.Buys[index:]...)
+				m.Buys[index] = t
+			}
+		}
+	}
+}
