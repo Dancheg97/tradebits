@@ -4,9 +4,6 @@ import (
 	"log"
 	"net"
 
-	"context"
-	"fmt"
-
 	"sync_tree/calc"
 	"sync_tree/lock"
 	"sync_tree/user"
@@ -16,7 +13,6 @@ import (
 )
 
 const (
-	port = ":50051"
 )
 
 type server struct {
