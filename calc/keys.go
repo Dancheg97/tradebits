@@ -20,6 +20,7 @@ it returns 4 byte arrays for each key in that order:
  - mes priv
  - mes pub
 */
+
 func Gen() Keys {
 	persKey, _ := rsa.GenerateKey(rand.Reader, 4096)
 	mesKey, _ := rsa.GenerateKey(rand.Reader, 2048)

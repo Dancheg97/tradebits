@@ -16,12 +16,11 @@ func Sign(message [][]byte, privateKey []byte) ([]byte, error) {
 		return nil, errors.New("parse private key error")
 	}
 	msgHashSum := Hash(concatenateMessage(message))
-	signatureBytes, _ := rsa.SignPSS(
+	signatureBytes, _ := rsa.SignPKCS1v15(
 		rand.Reader,
 		private,
-		crypto.BLAKE2b_512,
+		crypto.SHA512,
 		msgHashSum,
-		nil,
 	)
 	return signatureBytes, nil
 }
