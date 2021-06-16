@@ -7,15 +7,20 @@ package api;
 service SyncTree{
     rpc UserCreate(UserCreateRequest) returns (Response) {}
     rpc UserSend(UserSendRequest) returns (Response) {}
-    rpc UserLook(UserLookRequest) returns (UserLookResponse) {}
+    rpc UserLook(Adress) returns (UserLookResponse) {}
     rpc MarketCraete(MarketCraeteRequest) returns (Response) {}
-    rpc MarketTrade(MarketTradeRequest) returns (Response) {}
-    rpc MarketLook(MarketLookRequest) returns (MarketLookResponse) {}
-    rpc MarketDeepLook(MarketTradesRequest) returns (MarketTradesResponse) {}
+    rpc MarketOpenTrade(MarketTradeRequest) returns (Response) {}
+    rpc MarketCloseTrade(MarketCloseTrade) returns (Response) {}
+    rpc MarketLook(Adress) returns (MarketLookResponse) {}
+    rpc MarketLookTrades(Adress) returns (MarketTradesResponse) {}
 }
 
 message Response{
     bool Passed = 1;
+}
+
+message Adress{
+    bytes Adress = 1;
 }
 
 message UserCreateRequest{
@@ -30,10 +35,6 @@ message UserSendRequest{
     uint64 SendAmount = 2;
     bytes RecieverAdress = 3;
     bytes Sign = 4;
-}
-
-message UserLookRequest{
-    bytes Adress = 1;
 }
 
 message UserLookResponse{
@@ -57,10 +58,6 @@ message MarketTradeRequest{
     bytes Sign = 5;
 }
 
-message MarketLookRequest{
-    bytes adress = 1;
-}
-
 message MarketLookResponse{
     string Name = 1;
     string ImgLink = 2;
@@ -71,10 +68,10 @@ message MarketLookResponse{
     float BestRecieveRatio = 7;
 }
 
-message MarketTradesRequest{
-    
-}
-
 message MarketTradesResponse{
 
+}
+
+message MarketCloseTrade{
+    
 }
