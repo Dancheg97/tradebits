@@ -27,7 +27,7 @@ func TestCreateExisting(t *testing.T) {
 func TestGetFreeUser(t *testing.T) {
 	freeUser := Get(adress)
 	defer freeUser.Save()
-	if freeUser.ImgLink == "user image link" {
+	if freeUser.PublicName == "user image link" {
 		return
 	}
 	t.Error("get free user error")
