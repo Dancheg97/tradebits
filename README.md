@@ -62,6 +62,4 @@ That package contains interfaces that are used to communicate to outer space. In
 
 This package is automatically generated, by `api.proto` file, which is in `net` package
 
-`protoc --go-grpc_out=. --go-grpc_opt=. api/api.proto`
-
-## 
+protoc api/api.proto --go-grpc_out=api
