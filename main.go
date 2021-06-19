@@ -12,8 +12,7 @@ import (
 	pb "sync_tree/api"
 )
 
-const (
-)
+const ()
 
 type server struct {
 	pb.UnimplementedSyncTreeServer
@@ -48,34 +47,6 @@ func (s *server) UserCreate(
 		}
 	}
 	return &pb.Response{Passed: false}, nil
-}
-
-func (s *server) UserSend(
-	ctx context.Context,
-	in *pb.UserSendRequest,
-) (*pb.Response, error) {
-	fmt.Println("user send request created")
-	senderAdrees := calc.Hash(in.PublicKey)
-	sender := user.Get(senderAdrees)
-	if sender == nil {
-		return &pb.Response{Passed: false}, nil
-	}
-	lock.Lock(senderAdrees)
-	defer lock.Unlock(senderAdrees)
-	lock.Lock(in.RecieverAdress)
-	defer lock.Unlock(in.RecieverAdress)
-	if sender.Balance < in.SendAmount {
-		return &pb.Response{Passed: false}, nil
-	}
-	reciever := user.Get(in.RecieverAdress)
-	if reciever == nil {
-		return &pb.Response{Passed: false}, nil
-	}
-	sender.Balance = sender.Balance - in.SendAmount
-	reciever.Balance = reciever.Balance + in.SendAmount
-	sender.Save()
-	reciever.Save()
-	return &pb.Response{Passed: true}, nil
 }
 
 func main() {

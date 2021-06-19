@@ -10,9 +10,9 @@ service SyncTree{
     rpc UserLook(Adress) returns (UserLookResponse) {}
     rpc MarketCraete(MarketCraeteRequest) returns (Response) {}
     rpc MarketOpenTrade(MarketTradeRequest) returns (Response) {}
-    rpc MarketCloseTrade(MarketCloseTrade) returns (Response) {}
+    //rpc MarketCloseTrade(MarketCloseTrade) returns (Response) {}
     rpc MarketLook(Adress) returns (MarketLookResponse) {}
-    rpc MarketLookTrades(Adress) returns (MarketTradesResponse) {}
+    //rpc MarketLookTrades(Adress) returns (MarketTradesResponse) {}
 }
 
 message Response{
@@ -66,12 +66,4 @@ message MarketLookResponse{
     uint64 Dislikes = 5;
     float BestOfferRatio = 6;
     float BestRecieveRatio = 7;
-}
-
-message MarketTradesResponse{
-
-}
-
-message MarketCloseTrade{
-    
 }
