@@ -19,12 +19,9 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SyncTreeClient interface {
 	UserCreate(ctx context.Context, in *UserCreateRequest, opts ...grpc.CallOption) (*Response, error)
+	UserUpdate(ctx context.Context, in *UserUpdateRequest, opts ...grpc.CallOption) (*Response, error)
 	UserSend(ctx context.Context, in *UserSendRequest, opts ...grpc.CallOption) (*Response, error)
-	UserLook(ctx context.Context, in *Adress, opts ...grpc.CallOption) (*UserLookResponse, error)
-	MarketCraete(ctx context.Context, in *MarketCraeteRequest, opts ...grpc.CallOption) (*Response, error)
-	MarketOpenTrade(ctx context.Context, in *MarketTradeRequest, opts ...grpc.CallOption) (*Response, error)
-	//rpc MarketCloseTrade(MarketCloseTrade) returns (Response) {}
-	MarketLook(ctx context.Context, in *Adress, opts ...grpc.CallOption) (*MarketLookResponse, error)
+	UserLook(ctx context.Context, in *UserLookRequest, opts ...grpc.CallOption) (*UserLookResponse, error)
 }
 
 type syncTreeClient struct {
@@ -44,6 +41,15 @@ func (c *syncTreeClient) UserCreate(ctx context.Context, in *UserCreateRequest, 
 	return out, nil
 }
 
+func (c *syncTreeClient) UserUpdate(ctx context.Context, in *UserUpdateRequest, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
+	err := c.cc.Invoke(ctx, "/api.SyncTree/UserUpdate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *syncTreeClient) UserSend(ctx context.Context, in *UserSendRequest, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
 	err := c.cc.Invoke(ctx, "/api.SyncTree/UserSend", in, out, opts...)
@@ -53,36 +59,9 @@ func (c *syncTreeClient) UserSend(ctx context.Context, in *UserSendRequest, opts
 	return out, nil
 }
 
-func (c *syncTreeClient) UserLook(ctx context.Context, in *Adress, opts ...grpc.CallOption) (*UserLookResponse, error) {
+func (c *syncTreeClient) UserLook(ctx context.Context, in *UserLookRequest, opts ...grpc.CallOption) (*UserLookResponse, error) {
 	out := new(UserLookResponse)
 	err := c.cc.Invoke(ctx, "/api.SyncTree/UserLook", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *syncTreeClient) MarketCraete(ctx context.Context, in *MarketCraeteRequest, opts ...grpc.CallOption) (*Response, error) {
-	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.SyncTree/MarketCraete", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *syncTreeClient) MarketOpenTrade(ctx context.Context, in *MarketTradeRequest, opts ...grpc.CallOption) (*Response, error) {
-	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.SyncTree/MarketOpenTrade", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *syncTreeClient) MarketLook(ctx context.Context, in *Adress, opts ...grpc.CallOption) (*MarketLookResponse, error) {
-	out := new(MarketLookResponse)
-	err := c.cc.Invoke(ctx, "/api.SyncTree/MarketLook", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -94,12 +73,9 @@ func (c *syncTreeClient) MarketLook(ctx context.Context, in *Adress, opts ...grp
 // for forward compatibility
 type SyncTreeServer interface {
 	UserCreate(context.Context, *UserCreateRequest) (*Response, error)
+	UserUpdate(context.Context, *UserUpdateRequest) (*Response, error)
 	UserSend(context.Context, *UserSendRequest) (*Response, error)
-	UserLook(context.Context, *Adress) (*UserLookResponse, error)
-	MarketCraete(context.Context, *MarketCraeteRequest) (*Response, error)
-	MarketOpenTrade(context.Context, *MarketTradeRequest) (*Response, error)
-	//rpc MarketCloseTrade(MarketCloseTrade) returns (Response) {}
-	MarketLook(context.Context, *Adress) (*MarketLookResponse, error)
+	UserLook(context.Context, *UserLookRequest) (*UserLookResponse, error)
 	mustEmbedUnimplementedSyncTreeServer()
 }
 
@@ -110,20 +86,14 @@ type UnimplementedSyncTreeServer struct {
 func (UnimplementedSyncTreeServer) UserCreate(context.Context, *UserCreateRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserCreate not implemented")
 }
+func (UnimplementedSyncTreeServer) UserUpdate(context.Context, *UserUpdateRequest) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserUpdate not implemented")
+}
 func (UnimplementedSyncTreeServer) UserSend(context.Context, *UserSendRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserSend not implemented")
 }
-func (UnimplementedSyncTreeServer) UserLook(context.Context, *Adress) (*UserLookResponse, error) {
+func (UnimplementedSyncTreeServer) UserLook(context.Context, *UserLookRequest) (*UserLookResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserLook not implemented")
-}
-func (UnimplementedSyncTreeServer) MarketCraete(context.Context, *MarketCraeteRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MarketCraete not implemented")
-}
-func (UnimplementedSyncTreeServer) MarketOpenTrade(context.Context, *MarketTradeRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MarketOpenTrade not implemented")
-}
-func (UnimplementedSyncTreeServer) MarketLook(context.Context, *Adress) (*MarketLookResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MarketLook not implemented")
 }
 func (UnimplementedSyncTreeServer) mustEmbedUnimplementedSyncTreeServer() {}
 
@@ -156,6 +126,24 @@ func _SyncTree_UserCreate_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SyncTree_UserUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserUpdateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SyncTreeServer).UserUpdate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.SyncTree/UserUpdate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SyncTreeServer).UserUpdate(ctx, req.(*UserUpdateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _SyncTree_UserSend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserSendRequest)
 	if err := dec(in); err != nil {
@@ -175,7 +163,7 @@ func _SyncTree_UserSend_Handler(srv interface{}, ctx context.Context, dec func(i
 }
 
 func _SyncTree_UserLook_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Adress)
+	in := new(UserLookRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -187,61 +175,7 @@ func _SyncTree_UserLook_Handler(srv interface{}, ctx context.Context, dec func(i
 		FullMethod: "/api.SyncTree/UserLook",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SyncTreeServer).UserLook(ctx, req.(*Adress))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _SyncTree_MarketCraete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MarketCraeteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SyncTreeServer).MarketCraete(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.SyncTree/MarketCraete",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SyncTreeServer).MarketCraete(ctx, req.(*MarketCraeteRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _SyncTree_MarketOpenTrade_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MarketTradeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SyncTreeServer).MarketOpenTrade(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.SyncTree/MarketOpenTrade",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SyncTreeServer).MarketOpenTrade(ctx, req.(*MarketTradeRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _SyncTree_MarketLook_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Adress)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SyncTreeServer).MarketLook(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.SyncTree/MarketLook",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SyncTreeServer).MarketLook(ctx, req.(*Adress))
+		return srv.(SyncTreeServer).UserLook(ctx, req.(*UserLookRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -258,24 +192,16 @@ var SyncTree_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SyncTree_UserCreate_Handler,
 		},
 		{
+			MethodName: "UserUpdate",
+			Handler:    _SyncTree_UserUpdate_Handler,
+		},
+		{
 			MethodName: "UserSend",
 			Handler:    _SyncTree_UserSend_Handler,
 		},
 		{
 			MethodName: "UserLook",
 			Handler:    _SyncTree_UserLook_Handler,
-		},
-		{
-			MethodName: "MarketCraete",
-			Handler:    _SyncTree_MarketCraete_Handler,
-		},
-		{
-			MethodName: "MarketOpenTrade",
-			Handler:    _SyncTree_MarketOpenTrade_Handler,
-		},
-		{
-			MethodName: "MarketLook",
-			Handler:    _SyncTree_MarketLook_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
