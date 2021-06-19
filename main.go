@@ -12,8 +12,7 @@ import (
 	pb "sync_tree/api"
 )
 
-const (
-)
+const ()
 
 type server struct {
 	pb.UnimplementedSyncTreeServer
