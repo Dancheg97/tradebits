@@ -1,16 +1,18 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"log"
 	"net"
-	"context"
 
 	"sync_tree/calc"
 	"sync_tree/lock"
 	"sync_tree/user"
 
-	"google.golang.org/grpc"
 	pb "sync_tree/api"
+
+	"google.golang.org/grpc"
 )
 
 const ()
@@ -49,6 +51,7 @@ func (s *server) UserCreate(
 }
 
 func main() {
+	fmt.Println("the game goes on")
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
