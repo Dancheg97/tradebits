@@ -12,6 +12,7 @@ service SyncTree{
     rpc UserLook(UserLookRequest) returns (UserLookResponse) {}
 }
 
+// most common response, checks if operation goes ok
 message Response{
     bool Passed = 1;
 }
