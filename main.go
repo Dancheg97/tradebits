@@ -25,6 +25,7 @@ func (s *server) UserCreate(
 	ctx context.Context,
 	in *pb.UserCreateRequest,
 ) (*pb.Response, error) {
+	fmt.Println("hello phone")
 	senderAdress := calc.Hash(in.PublicKey)
 	lock.Lock(senderAdress)
 	defer lock.Unlock(senderAdress)
@@ -44,9 +45,11 @@ func (s *server) UserCreate(
 			in.PublicName,
 		)
 		if create_err == nil {
+			fmt.Println("created")
 			return &pb.Response{Passed: true}, nil
 		}
 	}
+	fmt.Println("not created")
 	return &pb.Response{Passed: false}, nil
 }
 
