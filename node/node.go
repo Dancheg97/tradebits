@@ -30,25 +30,12 @@ type node struct {
 */
 
 /*
-# Подключение
-Процедура подключения других держателей сети выглядит следующим образом:
- - Проверка баланса держателя подключаемой ноды
- - Проверка количества существующих подключений
- - Запись ноды presynced
- - Фиксация времени поступления запроса
- - Отправка всех поступаемых сообщений
- - Отправка всех когда либо совершенных в сети транзакций
- - Ожидание ответа по проверке всех транзакций в сети
+# It is possible to connect to leading node by following algo:
+ 1) Getting connection request
+ 2) Checking minimal balance
+ 3) 
+
 */
-
-func (n *node) Start() {
-
-}
-
-func (n *node) Connect() {
-
-}
-
-func (n *node) writeTransaction() {
+func ConnectTo() {
 
 }
