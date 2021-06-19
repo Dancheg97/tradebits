@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"log"
 	"net"
 
@@ -8,8 +10,9 @@ import (
 	"sync_tree/lock"
 	"sync_tree/user"
 
-	"google.golang.org/grpc"
 	pb "sync_tree/api"
+
+	"google.golang.org/grpc"
 )
 
 const ()
@@ -22,25 +25,23 @@ func (s *server) UserCreate(
 	ctx context.Context,
 	in *pb.UserCreateRequest,
 ) (*pb.Response, error) {
-	fmt.Println("recieved request")
 	senderAdress := calc.Hash(in.PublicKey)
 	lock.Lock(senderAdress)
 	defer lock.Unlock(senderAdress)
 	check_err := calc.Verify(
 		[][]byte{
 			in.PublicKey,
-			in.MesKey,
-			[]byte(in.ImgLink),
+			in.MesssageKey,
+			[]byte(in.PublicName),
 		},
 		in.PublicKey,
 		in.Sign,
 	)
-	fmt.Print(check_err)
 	if check_err == nil {
 		create_err := user.Create(
 			senderAdress,
-			in.MesKey,
-			in.ImgLink,
+			in.MesssageKey,
+			in.PublicName,
 		)
 		if create_err == nil {
 			return &pb.Response{Passed: true}, nil
@@ -50,7 +51,8 @@ func (s *server) UserCreate(
 }
 
 func main() {
-	lis, err := net.Listen("tcp", port)
+	fmt.Println("the game goes on")
+	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}

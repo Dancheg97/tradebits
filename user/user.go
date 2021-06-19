@@ -12,7 +12,7 @@ type user struct {
 	adress  []byte
 	Balance uint64
 	MesKey  []byte
-	ImgLink string
+	PublicName string
 	Markets map[string]uint64
 }
 
@@ -20,14 +20,14 @@ type user struct {
 Create new user, in case there is already user with same adress
 the error will be logged
 */
-func Create(adress []byte, MesKey []byte, ImgLink string) error {
+func Create(adress []byte, MesKey []byte, PublicName string) error {
 	if data.Check(adress) {
 		return errors.New("possibly user already exists")
 	}
 	u := user{
 		Balance: 0,
 		MesKey:  MesKey,
-		ImgLink: ImgLink,
+		PublicName: PublicName,
 		Markets: make(map[string]uint64),
 	}
 	cache := new(bytes.Buffer)
