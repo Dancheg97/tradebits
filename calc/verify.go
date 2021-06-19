@@ -15,7 +15,7 @@ func Verify(message [][]byte, keyBytes []byte, sign []byte) error {
 		return errors.New("error parsing public key")
 	}
 	hash := Hash(concatenateMessage(message))
-	return rsa.VerifyPSS(publicKey, crypto.BLAKE2b_512, hash, sign, nil)
+	return rsa.VerifyPKCS1v15(publicKey, crypto.SHA512, hash, sign)
 }
 
 func concatenateMessage(message [][]byte) []byte {

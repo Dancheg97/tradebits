@@ -1,28 +1,69 @@
 syntax = "proto3";
 
-option go_package = "sync_tree/api";
+option go_package = "sync_tree_server/api";
 
 package api;
 
 service SyncTree{
     rpc UserCreate(UserCreateRequest) returns (Response) {}
     rpc UserSend(UserSendRequest) returns (Response) {}
-}
-
-message UserCreateRequest{
-    bytes PublicKey = 1;
-    bytes MesKey = 2;
-    string ImgLink = 3;
-    bytes Sign = 4;
+    rpc UserLook(Adress) returns (UserLookResponse) {}
+    rpc MarketCraete(MarketCraeteRequest) returns (Response) {}
+    rpc MarketOpenTrade(MarketTradeRequest) returns (Response) {}
+    //rpc MarketCloseTrade(MarketCloseTrade) returns (Response) {}
+    rpc MarketLook(Adress) returns (MarketLookResponse) {}
+    //rpc MarketLookTrades(Adress) returns (MarketTradesResponse) {}
 }
 
 message Response{
     bool Passed = 1;
 }
 
+message Adress{
+    bytes Adress = 1;
+}
+
+message UserCreateRequest{
+    bytes PublicKey = 1;
+    bytes MesssageKey = 2;
+    string PublicName = 3;
+    bytes Sign = 4;
+}
+
 message UserSendRequest{
     bytes PublicKey = 1;
     uint64 SendAmount = 2;
     bytes RecieverAdress = 3;
-    bytes sign = 4;
+    bytes Sign = 4;
+}
+
+message UserLookResponse{
+    bool Exists = 1;
+    string ImgLink = 2; 
+}
+
+message MarketCraeteRequest{
+    bytes PublicKey = 1;
+    string Name = 2;
+    string ImgLink = 3;
+    bytes MesKey = 4;
+    bytes Sign = 5;
+}
+
+message MarketTradeRequest{
+    bytes PublicKey = 1;
+    bool isSell = 2;
+    uint64 Offer = 3;
+    uint64 Recieve = 4;
+    bytes Sign = 5;
+}
+
+message MarketLookResponse{
+    string Name = 1;
+    string ImgLink = 2;
+    bytes MesKey = 3;
+    uint64 Likes = 4;
+    uint64 Dislikes = 5;
+    float BestOfferRatio = 6;
+    float BestRecieveRatio = 7;
 }
