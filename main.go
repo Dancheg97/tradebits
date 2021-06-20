@@ -8,15 +8,12 @@ import (
 	"net"
 
 	"sync_tree/calc"
-	"sync_tree/lock"
 	"sync_tree/user"
 
 	pb "sync_tree/api"
 
 	"google.golang.org/grpc"
 )
-
-const ()
 
 type server struct {
 	pb.UnimplementedSyncTreeServer
@@ -26,10 +23,8 @@ func (s *server) UserCreate(
 	ctx context.Context,
 	in *pb.UserCreateRequest,
 ) (*pb.Response, error) {
-	fmt.Println("mes got")
 	senderAdress := calc.Hash(in.PublicKey)
-	lock.Lock(senderAdress)
-	defer lock.Unlock(senderAdress)
+	fmt.Println("craeting new user with name", in.PublicName)
 	signError := calc.Verify(
 		[][]byte{
 			in.PublicKey,
@@ -52,14 +47,12 @@ func (s *server) UserCreate(
 	return &pb.Response{Passed: false}, nil
 }
 
-func (s *server) UserChangePubName(
+func (s *server) UserUpdate(
 	ctx context.Context,
 	in *pb.UserUpdateRequest,
 ) (*pb.Response, error) {
-	fmt.Println("mes got")
 	senderAdress := calc.Hash(in.PublicKey)
-	lock.Lock(senderAdress)
-	defer lock.Unlock(senderAdress)
+	fmt.Println("updating user name", in.PublicName)
 	signError := calc.Verify(
 		[][]byte{
 			in.PublicKey,
@@ -71,21 +64,22 @@ func (s *server) UserChangePubName(
 	)
 	if signError == nil {
 		user := user.Get(senderAdress)
-		user.PublicName = in.PublicName
-		user.Save()
-		return &pb.Response{Passed: true}, nil
+		fmt.Println(user)
+		if user != nil {
+			user.PublicName = in.PublicName
+			user.Save()
+			return &pb.Response{Passed: true}, nil
+		}
 	}
 	return &pb.Response{Passed: false}, nil
 }
 
-func (s *server) UserSendRequest(
+func (s *server) UserSend(
 	ctx context.Context,
 	in *pb.UserSendRequest,
 ) (*pb.Response, error) {
-	fmt.Println("mes got")
+	fmt.Println("sending money, of amount: ", in.SendAmount)
 	senderAdress := calc.Hash(in.PublicKey)
-	lock.Lock(senderAdress)
-	defer lock.Unlock(senderAdress)
 	amountBytes := make([]byte, 8)
 	binary.LittleEndian.PutUint64(amountBytes, in.SendAmount)
 	signError := calc.Verify(
@@ -102,8 +96,6 @@ func (s *server) UserSendRequest(
 		if sender.Balance > in.SendAmount {
 			reciever := user.Get(in.RecieverAdress)
 			if reciever != nil {
-				lock.Lock(in.RecieverAdress)
-				defer lock.Unlock(in.RecieverAdress)
 				sender.Balance = sender.Balance - in.SendAmount
 				reciever.Balance = reciever.Balance + in.SendAmount
 				sender.Save()
@@ -114,7 +106,6 @@ func (s *server) UserSendRequest(
 	}
 	return &pb.Response{Passed: false}, nil
 }
-
 
 func main() {
 	fmt.Println("the game goes on")
