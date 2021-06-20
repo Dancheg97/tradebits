@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/binary"
 	"fmt"
 	"log"
 	"net"
@@ -25,11 +26,11 @@ func (s *server) UserCreate(
 	ctx context.Context,
 	in *pb.UserCreateRequest,
 ) (*pb.Response, error) {
-	fmt.Println("hello phone")
+	fmt.Println("mes got")
 	senderAdress := calc.Hash(in.PublicKey)
 	lock.Lock(senderAdress)
 	defer lock.Unlock(senderAdress)
-	check_err := calc.Verify(
+	signError := calc.Verify(
 		[][]byte{
 			in.PublicKey,
 			in.MesssageKey,
@@ -38,18 +39,79 @@ func (s *server) UserCreate(
 		in.PublicKey,
 		in.Sign,
 	)
-	if check_err == nil {
+	if signError == nil {
 		create_err := user.Create(
 			senderAdress,
 			in.MesssageKey,
 			in.PublicName,
 		)
 		if create_err == nil {
-			fmt.Println("created")
 			return &pb.Response{Passed: true}, nil
 		}
 	}
-	fmt.Println("not created")
+	return &pb.Response{Passed: false}, nil
+}
+
+func (s *server) UserChangePubName(
+	ctx context.Context,
+	in *pb.UserUpdateRequest,
+) (*pb.Response, error) {
+	fmt.Println("mes got")
+	senderAdress := calc.Hash(in.PublicKey)
+	lock.Lock(senderAdress)
+	defer lock.Unlock(senderAdress)
+	signError := calc.Verify(
+		[][]byte{
+			in.PublicKey,
+			in.MesssageKey,
+			[]byte(in.PublicName),
+		},
+		in.PublicKey,
+		in.Sign,
+	)
+	if signError == nil {
+		user := user.Get(senderAdress)
+		user.PublicName = in.PublicName
+		user.Save()
+		return &pb.Response{Passed: true}, nil
+	}
+	return &pb.Response{Passed: false}, nil
+}
+
+func (s *server) UserSendRequest(
+	ctx context.Context,
+	in *pb.UserSendRequest,
+) (*pb.Response, error) {
+	fmt.Println("mes got")
+	senderAdress := calc.Hash(in.PublicKey)
+	lock.Lock(senderAdress)
+	defer lock.Unlock(senderAdress)
+	amountBytes := make([]byte, 8)
+	binary.LittleEndian.PutUint64(amountBytes, in.SendAmount)
+	signError := calc.Verify(
+		[][]byte{
+			in.PublicKey,
+			amountBytes,
+			in.RecieverAdress,
+		},
+		in.PublicKey,
+		in.Sign,
+	)
+	if signError == nil {
+		sender := user.Get(senderAdress)
+		if sender.Balance > in.SendAmount {
+			reciever := user.Get(in.RecieverAdress)
+			if reciever != nil {
+				lock.Lock(in.RecieverAdress)
+				defer lock.Unlock(in.RecieverAdress)
+				sender.Balance = sender.Balance - in.SendAmount
+				reciever.Balance = reciever.Balance + in.SendAmount
+				sender.Save()
+				reciever.Save()
+				return &pb.Response{Passed: true}, nil
+			}
+		}
+	}
 	return &pb.Response{Passed: false}, nil
 }
 
