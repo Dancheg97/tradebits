@@ -106,7 +106,7 @@ func (s *server) UserSend(
 	return &pb.Response{Passed: false}, nil
 }
 
-func (s *server) UserLook(
+func (s *server) UserInfo(
 	ctx context.Context,
 	in *pb.UserInfoRequest,
 ) (*pb.UserInfoResponse, error) {

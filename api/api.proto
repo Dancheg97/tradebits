@@ -4,11 +4,10 @@ option go_package = "sync_tree_server/api";
 
 package api;
 
-
 /*
-Go generation:
+Go gen:
 protoc api/api.proto --go-grpc_out=. --go_out=.
-Dart generation:
+Dart gen:
 protoc lib/api/api.proto --dart_out=grpc:.
 */
 
@@ -16,17 +15,13 @@ service SyncTree{
     rpc UserCreate(UserCreateRequest) returns (Response) {}
     rpc UserUpdate(UserUpdateRequest) returns (Response) {}
     rpc UserSend(UserSendRequest) returns (Response) {}
-    rpc UserLook(UserInfoRequest) returns (UserInfoResponse) {}
-
-    
+    rpc UserInfo(UserInfoRequest) returns (UserInfoResponse) {}
 }
 
-// most common response, checks if operation goes ok
 message Response{
     bool Passed = 1;
 }
 
-// request to craete a new user
 message UserCreateRequest{
     bytes PublicKey = 1;
     bytes MesssageKey = 2;
@@ -34,7 +29,6 @@ message UserCreateRequest{
     bytes Sign = 4;
 }
 
-// request to update user information
 message UserUpdateRequest{
     bytes PublicKey = 1;
     bytes MesssageKey = 2;
@@ -42,21 +36,18 @@ message UserUpdateRequest{
     bytes Sign = 4;
 }
 
-// request to get info about some user balance
-message UserInfoRequest{
-    bytes Adress = 1;
-}
-
-// reqsponse giving public name of requested adress
-message UserInfoResponse{
-    string PublicName = 1;
-    uint64 Balance = 2;
-}
-
-// reqsponse giving public name of requested adress
 message UserSendRequest{
     bytes PublicKey = 1;
     uint64 SendAmount = 2;
     bytes RecieverAdress = 3;
     bytes Sign = 4;
+}
+
+message UserInfoRequest{
+    bytes Adress = 1;
+}
+
+message UserInfoResponse{
+    string PublicName = 1;
+    uint64 Balance = 2;
 }
