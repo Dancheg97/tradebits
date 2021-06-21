@@ -18,10 +18,10 @@ func setStartBalance() {
 	block, _ := pem.Decode(pemBytes)
 	adress := calc.Hash(block.Bytes)
 	firstOne := user.Get(adress)
+	defer firstOne.Save()
 	if firstOne != nil {
 		if firstOne.Balance == 0 {
 			firstOne.Balance = 50000
-			firstOne.Save()
 		}
 	}
 }

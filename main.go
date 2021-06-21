@@ -111,10 +111,10 @@ func (s *server) UserInfo(
 	in *pb.UserInfoRequest,
 ) (*pb.UserInfoResponse, error) {
 	fmt.Println("giving information about", in.Adress)
-	user := user.Get(in.Adress)
+	user := user.Look(in.Adress)
 	if user == nil {
 		return &pb.UserInfoResponse{
-			PublicName: "",
+			PublicName: "$#$#",
 			Balance:    0,
 		}, nil
 	}
