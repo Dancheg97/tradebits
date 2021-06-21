@@ -21,7 +21,7 @@ type SyncTreeClient interface {
 	UserCreate(ctx context.Context, in *UserCreateRequest, opts ...grpc.CallOption) (*Response, error)
 	UserUpdate(ctx context.Context, in *UserUpdateRequest, opts ...grpc.CallOption) (*Response, error)
 	UserSend(ctx context.Context, in *UserSendRequest, opts ...grpc.CallOption) (*Response, error)
-	UserLook(ctx context.Context, in *UserLookRequest, opts ...grpc.CallOption) (*UserLookResponse, error)
+	UserLook(ctx context.Context, in *UserInfoRequest, opts ...grpc.CallOption) (*UserInfoResponse, error)
 }
 
 type syncTreeClient struct {
@@ -59,8 +59,8 @@ func (c *syncTreeClient) UserSend(ctx context.Context, in *UserSendRequest, opts
 	return out, nil
 }
 
-func (c *syncTreeClient) UserLook(ctx context.Context, in *UserLookRequest, opts ...grpc.CallOption) (*UserLookResponse, error) {
-	out := new(UserLookResponse)
+func (c *syncTreeClient) UserLook(ctx context.Context, in *UserInfoRequest, opts ...grpc.CallOption) (*UserInfoResponse, error) {
+	out := new(UserInfoResponse)
 	err := c.cc.Invoke(ctx, "/api.SyncTree/UserLook", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -75,7 +75,7 @@ type SyncTreeServer interface {
 	UserCreate(context.Context, *UserCreateRequest) (*Response, error)
 	UserUpdate(context.Context, *UserUpdateRequest) (*Response, error)
 	UserSend(context.Context, *UserSendRequest) (*Response, error)
-	UserLook(context.Context, *UserLookRequest) (*UserLookResponse, error)
+	UserLook(context.Context, *UserInfoRequest) (*UserInfoResponse, error)
 	mustEmbedUnimplementedSyncTreeServer()
 }
 
@@ -92,7 +92,7 @@ func (UnimplementedSyncTreeServer) UserUpdate(context.Context, *UserUpdateReques
 func (UnimplementedSyncTreeServer) UserSend(context.Context, *UserSendRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserSend not implemented")
 }
-func (UnimplementedSyncTreeServer) UserLook(context.Context, *UserLookRequest) (*UserLookResponse, error) {
+func (UnimplementedSyncTreeServer) UserLook(context.Context, *UserInfoRequest) (*UserInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserLook not implemented")
 }
 func (UnimplementedSyncTreeServer) mustEmbedUnimplementedSyncTreeServer() {}
@@ -163,7 +163,7 @@ func _SyncTree_UserSend_Handler(srv interface{}, ctx context.Context, dec func(i
 }
 
 func _SyncTree_UserLook_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserLookRequest)
+	in := new(UserInfoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -175,7 +175,7 @@ func _SyncTree_UserLook_Handler(srv interface{}, ctx context.Context, dec func(i
 		FullMethod: "/api.SyncTree/UserLook",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SyncTreeServer).UserLook(ctx, req.(*UserLookRequest))
+		return srv.(SyncTreeServer).UserLook(ctx, req.(*UserInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

@@ -64,7 +64,6 @@ func (s *server) UserUpdate(
 	)
 	if signError == nil {
 		user := user.Get(senderAdress)
-		fmt.Println(user)
 		if user != nil {
 			user.PublicName = in.PublicName
 			user.Save()
@@ -105,6 +104,23 @@ func (s *server) UserSend(
 		}
 	}
 	return &pb.Response{Passed: false}, nil
+}
+
+func (s *server) UserLook(
+	ctx context.Context,
+	in *pb.UserInfoRequest,
+) (*pb.UserInfoResponse, error) {
+	user := user.Get(in.Adress)
+	if user == nil {
+		return &pb.UserInfoResponse{
+			PublicName: "",
+			Balance:    0,
+		}, nil
+	}
+	return &pb.UserInfoResponse{
+		PublicName: user.PublicName,
+		Balance:    user.Balance,
+	}, nil
 }
 
 func main() {
