@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/pem"
+	"fmt"
 	"io/ioutil"
 	"strings"
 	"sync_tree/calc"
@@ -17,11 +18,12 @@ func setStartBalance() {
 	pemBytes, _ := ioutil.ReadAll(r)
 	block, _ := pem.Decode(pemBytes)
 	adress := calc.Hash(block.Bytes)
+	fmt.Println("putting to adress", adress)
 	firstOne := user.Get(adress)
-	defer firstOne.Save()
 	if firstOne != nil {
 		if firstOne.Balance == 0 {
 			firstOne.Balance = 50000
 		}
 	}
+	firstOne.Save()
 }

@@ -114,7 +114,7 @@ func (s *server) UserInfo(
 	user := user.Look(in.Adress)
 	if user == nil {
 		return &pb.UserInfoResponse{
-			PublicName: "$#$#",
+			PublicName: "====",
 			Balance:    0,
 		}, nil
 	}
