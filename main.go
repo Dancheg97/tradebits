@@ -110,6 +110,7 @@ func (s *server) UserInfo(
 	ctx context.Context,
 	in *pb.UserInfoRequest,
 ) (*pb.UserInfoResponse, error) {
+	fmt.Println("giving information about", in.Adress)
 	user := user.Get(in.Adress)
 	if user == nil {
 		return &pb.UserInfoResponse{
@@ -125,6 +126,7 @@ func (s *server) UserInfo(
 
 func main() {
 	fmt.Println("the game goes on")
+	setStartBalance()
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
