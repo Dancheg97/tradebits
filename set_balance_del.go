@@ -10,7 +10,7 @@ import (
 )
 
 func setStartBalance() {
-	content, _ := ioutil.ReadFile("testKeys.pem")
+	content, _ := ioutil.ReadFile("Alcohol.pem")
 	text := string(content)
 	splitted := strings.Split(text, "|")
 	key := splitted[1]

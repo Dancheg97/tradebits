@@ -9,11 +9,11 @@ import (
 )
 
 type user struct {
-	adress  []byte
-	Balance uint64
-	MesKey  []byte
+	adress     []byte
+	Balance    uint64
+	MesKey     []byte
 	PublicName string
-	Markets map[string]uint64
+	Markets    map[string]uint64
 }
 
 /*
@@ -25,10 +25,10 @@ func Create(adress []byte, MesKey []byte, PublicName string) error {
 		return errors.New("possibly user already exists")
 	}
 	u := user{
-		Balance: 0,
-		MesKey:  MesKey,
+		Balance:    0,
+		MesKey:     MesKey,
 		PublicName: PublicName,
-		Markets: make(map[string]uint64),
+		Markets:    make(map[string]uint64),
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(u)
@@ -69,7 +69,7 @@ This function is used to save user, after that function his state is
 gonna be fixed in database, adress will be unlocked, and adress will be
 set to nil, so other changes won't be saved (user will have to be recreated)
 */
-func (u user) Save() {
+func (u *user) Save() {
 	saveAdress := u.adress
 	u.adress = nil
 	cache := new(bytes.Buffer)
@@ -79,11 +79,11 @@ func (u user) Save() {
 }
 
 // Get user balance for some specific market
-func (u user) MarketBalance(market []byte) uint64 {
+func (u *user) MarketBalance(market []byte) uint64 {
 	return u.Markets[string(market)]
 }
 
 // Change user balance for some specific market
-func (u user) ChangeMarketBalance(market []byte, balance uint64) {
+func (u *user) ChangeMarketBalance(market []byte, balance uint64) {
 	u.Markets[string(market)] = balance
 }

@@ -28,14 +28,16 @@ func (s *server) UserSend(
 	)
 	if signError == nil {
 		sender := user.Get(senderAdress)
-		if sender.Balance > in.SendAmount {
-			reciever := user.Get(in.RecieverAdress)
-			if reciever != nil {
-				sender.Balance = sender.Balance - in.SendAmount
-				reciever.Balance = reciever.Balance + in.SendAmount
-				sender.Save()
-				reciever.Save()
-				return &pb.Response{Passed: true}, nil
+		if sender != nil {
+			defer sender.Save()
+			if sender.Balance >= in.SendAmount {
+				reciever := user.Get(in.RecieverAdress)
+				if reciever != nil {
+					defer reciever.Save()
+					sender.Balance = sender.Balance - in.SendAmount
+					reciever.Balance = reciever.Balance + in.SendAmount
+					return &pb.Response{Passed: true}, nil
+				}
 			}
 		}
 	}
