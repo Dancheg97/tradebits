@@ -14,7 +14,7 @@ type market struct {
 	MesKey  []byte
 	Descr   string
 	Img     string
-	Count   uint64 // all market operations count (withdrawal, buy/sell...)
+	OpCount uint64
 	Buys    []Trade
 	Sells   []Trade
 	outputs []output
@@ -41,14 +41,14 @@ func Create(
 		return errors.New("possibly market already exists")
 	}
 	newMarket := market{
-		adress: adress,
-		Name:   Name,
-		Descr:  Descr,
-		Img:    Img,
-		MesKey: MesKey,
-		Count:  0,
-		Buys:   []Trade{},
-		Sells:  []Trade{},
+		adress:  adress,
+		Name:    Name,
+		Descr:   Descr,
+		Img:     Img,
+		MesKey:  MesKey,
+		OpCount: 0,
+		Buys:    []Trade{},
+		Sells:   []Trade{},
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newMarket)
@@ -85,7 +85,7 @@ func Get(adress []byte) *market {
 This function is saving changes to the market in database and removes ability
 to make a double save by removing adress from class struct.
 */
-func (a market) Save() {
+func (a *market) Save() {
 	saveAdress := a.adress
 	a.adress = nil
 	cache := new(bytes.Buffer)
@@ -110,6 +110,7 @@ func Look(adress []byte) *market {
 Recursive function to add trades to existing market. Each new iteration
 */
 func (m *market) OperateTrade(newTrade Trade) {
+	m.OpCount = m.OpCount + 1
 	if newTrade.IsSell {
 		if len(m.Buys) == 0 {
 			m.Sells = append(m.Sells, newTrade)
