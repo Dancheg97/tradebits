@@ -16,11 +16,14 @@ service SyncTree{
     rpc UserUpdate(UserUpdateRequest) returns (Response) {}
     rpc UserSend(UserSendRequest) returns (Response) {}
     rpc UserInfo(UserInfoRequest) returns (UserInfoResponse) {}
+
+    rpc MarketCraete(MarketCreateRequest) returns (Response) {}
 }
 
 message Response{
     bool Passed = 1;
 }
+
 
 message UserCreateRequest{
     bytes PublicKey = 1;
@@ -50,4 +53,9 @@ message UserInfoRequest{
 message UserInfoResponse{
     string PublicName = 1;
     uint64 Balance = 2;
+}
+
+
+message MarketCreateRequest{
+    
 }
