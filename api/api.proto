@@ -12,18 +12,35 @@ protoc lib/api/api.proto --dart_out=grpc:.
 */
 
 service SyncTree{
+    rpc Message(MessageRequest) returns (Response) {}
+
     rpc UserCreate(UserCreateRequest) returns (Response) {}
     rpc UserUpdate(UserUpdateRequest) returns (Response) {}
     rpc UserSend(UserSendRequest) returns (Response) {}
     rpc UserInfo(UserInfoRequest) returns (UserInfoResponse) {}
+    rpc UserCreateTrade(UserTradeRequest) returns (Response) {}
+    rpc UserCancelTrade(UserCancelTradeRequest) returns (Response) {}
+    rpc UserDeposit(UserDepositRequest) returns (Response) {}
+    rpc UserWithdrawal(UserWithDrawalRequest) returns (Response) {}
+    rpc UserFindMarkets(UserFindMarketsRequest) returns (Markets) {}
+
 
     rpc MarketCraete(MarketCreateRequest) returns (Response) {}
+    rpc MarketUpdate(MarketUpdateRequest) returns (Response) {}
+    rpc MarketInfo(MarketInfoRequest) returns (MarketInfoResponse) {}
+    rpc MarketDeposit(MarketDepositRequest) returns (Response) {}
+    rpc MarketWithDrawal(MarketWithDrawalRequest) returns (Response) {}
+}
+
+message MessageRequest{
+    bytes SenderPublicKey = 1;
+    string Contents = 2;
+    bytes Sign = 3;
 }
 
 message Response{
     bool Passed = 1;
 }
-
 
 message UserCreateRequest{
     bytes PublicKey = 1;
@@ -55,7 +72,88 @@ message UserInfoResponse{
     uint64 Balance = 2;
 }
 
+message UserTradeRequest{
+    bytes PublicKey = 1;
+    bytes MarketAdress = 2;
+    uint64 Offer = 3;
+    uint64 Recieve = 4;
+    bool IsSell = 5;
+    bytes Sign = 6;
+}
+
+message UserCancelTradeRequest{
+    bytes PublicKey = 1;
+    bytes MarketAdress = 2;
+    bytes Sign = 3;
+}
+
+message UserDepositRequest{
+    bytes PublicKey = 1;
+    bytes MarketAdress = 2;
+    uint64 Amount = 3;
+    bytes Sign = 4;
+}
+
+message UserWithDrawalRequest{
+    bytes PublicKey = 1;
+    bytes MarketAdress = 2;
+    uint64 Amount = 3;
+    bytes Sign = 4;
+}
+
+message UserFindMarketsRequest{
+    string Name = 1;
+}
+
+// each 64 bytes in this array refer to another market
+message Markets{
+    bytes Adresses = 1;
+}
+
+
+
+
 
 message MarketCreateRequest{
-    
+    bytes PublicKey = 1;
+    bytes MesssageKey = 2;
+    string Name = 3;
+    string Img = 4;
+    string Descr = 5;
+    bytes Sign = 6;
+}
+
+message MarketUpdateRequest{
+    bytes PublicKey = 1;
+    bytes MesssageKey = 2;
+    string Name = 3;
+    string Img = 4;
+    string Descr = 5;
+    bytes Sign = 6;
+}
+
+message MarketInfoRequest{
+    bytes adress = 1;
+}
+
+message MarketInfoResponse{
+    bytes MesssageKey = 2;
+    string Name = 3;
+    string Img = 4;
+    string Descr = 5;
+    bytes Sign = 6;
+}
+
+message MarketDepositRequest{
+    bytes PublicKey = 1;
+    bytes UserAdress = 2;
+    uint64 Amount = 3;
+    bytes Sign = 4;
+}
+
+message MarketWithDrawalRequest{
+    bytes PublicKey = 1;
+    bytes UserAdress = 2;
+    uint64 Amount = 3;
+    bytes Sign = 4;
 }

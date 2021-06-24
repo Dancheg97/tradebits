@@ -9,15 +9,15 @@ import (
 )
 
 type market struct {
-	adress      []byte
-	Name        string
-	MesKey      []byte
-	Description string
-	
-	Count       uint64 // all market operations count (withdrawal, buy/sell...)
-	Buys        []Trade
-	Sells       []Trade
-	outputs     []output
+	adress  []byte
+	Name    string
+	MesKey  []byte
+	Descr   string
+	Img     string
+	Count   uint64 // all market operations count (withdrawal, buy/sell...)
+	Buys    []Trade
+	Sells   []Trade
+	outputs []output
 }
 
 type output struct {
@@ -30,18 +30,25 @@ type output struct {
 Create new market by passed values. Checks wether market with passed adress
 exists and creates new one.
 */
-func Create(adress []byte, Name string, ImgLink string, MesKey []byte) error {
+func Create(
+	adress []byte,
+	Name string,
+	MesKey []byte,
+	Descr string,
+	Img string,
+) error {
 	if data.Check(adress) {
-		return errors.New("possibly user already exists")
+		return errors.New("possibly market already exists")
 	}
 	newMarket := market{
-		adress:  adress,
-		Name:    Name,
-		ImgLink: ImgLink,
-		MesKey:  MesKey,
-		Count:   0,
-		Buys:    []Trade{},
-		Sells:   []Trade{},
+		adress: adress,
+		Name:   Name,
+		Descr:  Descr,
+		Img:    Img,
+		MesKey: MesKey,
+		Count:  0,
+		Buys:   []Trade{},
+		Sells:  []Trade{},
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newMarket)

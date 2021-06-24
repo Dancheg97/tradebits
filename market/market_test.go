@@ -11,9 +11,10 @@ var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1
 var mesKey = []byte{1, 2, 3, 4, 5}
 var img = "asset image link . example"
 var name = "newAsset"
+var descr = "descrx"
 
 func TestCreateNewMarket(t *testing.T) {
-	err := Create(adress, name, img, mesKey)
+	err := Create(adress, name, mesKey, descr, img)
 	if err != nil {
 		t.Error("failed to craete new market")
 		return
@@ -21,7 +22,7 @@ func TestCreateNewMarket(t *testing.T) {
 }
 
 func TestCreateExistingMarket(t *testing.T) {
-	err := Create(adress, name, img, mesKey)
+	err := Create(adress, name, mesKey, descr, img)
 	if err != nil {
 		return
 	}
@@ -56,7 +57,7 @@ func TestAssetLook(t *testing.T) {
 }
 
 func TestMarketAddTrade(t *testing.T) {
-	Create(adress, name, img, mesKey)
+	Create(adress, name, mesKey, descr, img)
 	market := Get(adress)
 	for i := 0; i < 15; i++ {
 		randNumbers := []uint64{}
@@ -68,10 +69,10 @@ func TestMarketAddTrade(t *testing.T) {
 			randNumbers = append(randNumbers, uint64(randNum))
 		}
 		randTrade := Trade{
-			Offer: randNumbers[0],
+			Offer:   randNumbers[0],
 			Recieve: randNumbers[1],
-			IsSell: rand.Intn(2) != 0,
-			Adress: []byte{byte(rand.Intn(254)), byte(rand.Intn(254))},
+			IsSell:  rand.Intn(2) != 0,
+			Adress:  []byte{byte(rand.Intn(254)), byte(rand.Intn(254))},
 		}
 		market.OperateTrade(randTrade)
 	}
