@@ -10,6 +10,7 @@ import (
 )
 
 func setStartBalance() {
+	// dont forget that this section works only in case user with requered adress is already created
 	content, _ := ioutil.ReadFile("Alcohol.pem")
 	text := string(content)
 	splitted := strings.Split(text, "|")
@@ -20,20 +21,8 @@ func setStartBalance() {
 	adress := calc.Hash(block.Bytes)
 	firstOne := user.Get(adress)
 	if firstOne.Balance == 0 {
-		firstOne.Balance = 50000
+		fmt.Println("yes, first user balance was 0, changing that to 100.000")
+		firstOne.Balance = 100000
 	}
 	firstOne.Save()
-}
-
-func lookAtBalance() {
-	content, _ := ioutil.ReadFile("Alcohol.pem")
-	text := string(content)
-	splitted := strings.Split(text, "|")
-	key := splitted[1]
-	r := strings.NewReader(key)
-	pemBytes, _ := ioutil.ReadAll(r)
-	block, _ := pem.Decode(pemBytes)
-	adress := calc.Hash(block.Bytes)
-	firstOne := user.Look(adress)
-	fmt.Println(firstOne)
 }

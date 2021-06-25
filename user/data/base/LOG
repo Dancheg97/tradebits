@@ -151,3 +151,14 @@
 14:23:58.280590 db@janitor F·14 G·0
 14:23:58.280666 db@open done T·73.900784ms
 14:23:58.280877 table@compaction L0·12 -> L1·0 S·3KiB Q·24
+=============== Jun 25, 2021 (MSK) ===============
+14:25:39.828463 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:25:39.828910 version@stat F·[12] S·3KiB[3KiB] Sc·[3.00]
+14:25:39.828937 db@open opening
+14:25:39.829034 journal@recovery F·1
+14:25:39.829405 journal@recovery recovering @40
+14:25:39.844469 memdb@flush created L0@42 N·1 S·318B "\x01\x02\x03..>?@,v25":"\x01\x02\x03..>?@,v25"
+14:25:39.845399 version@stat F·[13] S·4KiB[4KiB] Sc·[3.25]
+14:25:39.888972 db@janitor F·15 G·0
+14:25:39.889025 db@open done T·60.066956ms
+14:25:39.889173 table@compaction L0·13 -> L1·0 S·4KiB Q·26
