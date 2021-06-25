@@ -10,7 +10,8 @@ import (
 )
 
 func setStartBalance() {
-	// dont forget that this section works only in case user with requered adress is already created
+	// dont forget that this section works only in case user with requered
+	// adress is already created
 	content, _ := ioutil.ReadFile("Alcohol.pem")
 	text := string(content)
 	splitted := strings.Split(text, "|")
