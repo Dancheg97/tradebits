@@ -13,14 +13,15 @@ gonna be saved to same.
 
 var searcher, _ = bleve.Open("data/search")
 
-func SearchAdd(info string, adress []byte) {
-	searcher.Index(info, adress)
+func SearchAdd(name string, adress []byte) {
+	adressAsString := string(adress)
+	searcher.Index(adressAsString, name)
 }
 
-func Search(info string) string {
+func Search(info string) []byte {
 	query := bleve.NewMatchQuery("text")
 	search := bleve.NewSearchRequest(query)
 	searchResults, _ := searcher.Search(search)
-	rez := searchResults.String()
+	rez := []byte(searchResults.String())
 	return rez
 }
