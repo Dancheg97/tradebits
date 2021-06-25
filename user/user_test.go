@@ -42,3 +42,13 @@ func TestGetBusyUser(t *testing.T) {
 		return
 	}
 }
+
+func TestChangeParameters(t *testing.T) {
+	someUser := Get(adress)
+	someUser.Balance = 1234
+	someUser.Save()
+	sameUser := Look(adress)
+	if sameUser.Balance != 1234 {
+		t.Error("same user balance should be 1000")
+	}
+}

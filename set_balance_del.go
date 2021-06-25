@@ -18,12 +18,22 @@ func setStartBalance() {
 	pemBytes, _ := ioutil.ReadAll(r)
 	block, _ := pem.Decode(pemBytes)
 	adress := calc.Hash(block.Bytes)
-	fmt.Println("putting to adress", adress)
 	firstOne := user.Get(adress)
-	if firstOne != nil {
-		if firstOne.Balance == 0 {
-			firstOne.Balance = 50000
-		}
+	if firstOne.Balance == 0 {
+		firstOne.Balance = 50000
 	}
 	firstOne.Save()
+}
+
+func lookAtBalance() {
+	content, _ := ioutil.ReadFile("Alcohol.pem")
+	text := string(content)
+	splitted := strings.Split(text, "|")
+	key := splitted[1]
+	r := strings.NewReader(key)
+	pemBytes, _ := ioutil.ReadAll(r)
+	block, _ := pem.Decode(pemBytes)
+	adress := calc.Hash(block.Bytes)
+	firstOne := user.Look(adress)
+	fmt.Println(firstOne)
 }
