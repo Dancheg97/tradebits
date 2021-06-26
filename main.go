@@ -16,7 +16,7 @@ type server struct {
 
 func main() {
 	fmt.Println("the game goes on")
-	setStartBalance()
+	createNewUsers()
 	createStartMarket()
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {

@@ -4,52 +4,59 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 	"sync_tree/calc"
-	"sync_tree/data"
 	"sync_tree/market"
 	"sync_tree/user"
+
+	"github.com/blevesearch/bleve/v2"
 )
 
-func stringToKey() {
-	
+func stringToKeyBytes(key string) []byte {
+	r := strings.NewReader(key)
+	pemBytes, _ := ioutil.ReadAll(r)
+	block, _ := pem.Decode(pemBytes)
+	return block.Bytes
 }
 
 func createNewUsers() {
 	alcoContent, _ := ioutil.ReadFile("Alcohol.pem")
 	alcoText := string(alcoContent)
 	alcoSplitted := strings.Split(alcoText, "|")
-
-	nicoContent, _ := ioutil.ReadFile("Nicotin.pem")
-
-}
-
-func setStartBalance() {
-	// dont forget that this section works only in case user with requered
-	// adress is already created
-	content, _ := ioutil.ReadFile("Alcohol.pem")
-	text := string(content)
-	splitted := strings.Split(text, "|")
-	key := splitted[1]
-	r := strings.NewReader(key)
-	pemBytes, _ := ioutil.ReadAll(r)
-	block, _ := pem.Decode(pemBytes)
-	adress := calc.Hash(block.Bytes)
-	firstOne := user.Get(adress)
-	if firstOne.Balance == 0 {
-		fmt.Println("yes, first user balance was 0, changing that to 100.000")
-		firstOne.Balance = 100000
+	alcoAdress := calc.Hash(stringToKeyBytes(alcoSplitted[1]))
+	alcoMesKey := stringToKeyBytes(alcoSplitted[3])
+	user.Create(alcoAdress, alcoMesKey, "Alcohol")
+	alco := user.Get(alcoAdress)
+	defer alco.Save()
+	if alco.Balance == 0 {
+		alco.Balance = 50000
 	}
-	firstOne.Save()
+	fmt.Println("alco wallet created with", alco.Balance, "balance")
+	nicoContent, _ := ioutil.ReadFile("Nicotin.pem")
+	nicoText := string(nicoContent)
+	nicoSplitted := strings.Split(nicoText, "|")
+	nicoAdress := calc.Hash(stringToKeyBytes(nicoSplitted[1]))
+	nicoMesKey := stringToKeyBytes(nicoSplitted[3])
+	user.Create(nicoAdress, nicoMesKey, "Nicotin")
+	nico := user.Get(nicoAdress)
+	defer nico.Save()
+	if nico.Balance == 0 {
+		nico.Balance = 50000
+	}
+	fmt.Println("nico wallet created with", nico.Balance, "balance")
 }
 
 func createStartMarket() {
+	if _, err := os.Stat("data/search"); os.IsNotExist(err) {
+		mapping := bleve.NewIndexMapping()
+		bleve.New("data/search", mapping)
+	}
 	market.Create(
-		[]byte{0, 1, 2, 3, 4},
-		"bitcoin",
-		[]byte{0, 1, 2, 3, 4},
+		[]byte{0, 1, 2, 3, 4, 4, 6},
+		"bitcoin and other shit twice",
+		[]byte{0, 1, 2, 3, 4, 2, 8},
 		"First market to be created on a platform",
 		"https://image.flaticon.com/icons/png/512/1490/1490849.png",
 	)
-	fmt.Println(data.Search("bitcoin"))
 }

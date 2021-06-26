@@ -22,7 +22,7 @@ service SyncTree{
     rpc UserCancelTrade(UserCancelTradeRequest) returns (Response) {}
     rpc UserDeposit(UserDepositRequest) returns (Response) {}
     rpc UserWithdrawal(UserWithDrawalRequest) returns (Response) {}
-    rpc UserFindMarkets(UserFindMarketsRequest) returns (Markets) {}
+    rpc UserSearch(UserSearchRequest) returns (Markets) {}
 
 
     rpc MarketCraete(MarketCreateRequest) returns (Response) {}
@@ -101,11 +101,10 @@ message UserWithDrawalRequest{
     bytes Sign = 4;
 }
 
-message UserFindMarketsRequest{
+message UserSearchRequest{
     string Name = 1;
 }
 
-// each 64 bytes in this array refer to another market
 message Markets{
     bytes Adresses = 1;
 }
