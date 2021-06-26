@@ -18,10 +18,13 @@ func SearchAdd(name string, adress []byte) {
 	searcher.Index(adressAsString, name)
 }
 
-func Search(info string) []byte {
-	query := bleve.NewMatchQuery("text")
+func Search(info string) [][]byte {
+	query := bleve.NewMatchQuery(info)
 	search := bleve.NewSearchRequest(query)
-	searchResults, _ := searcher.Search(search)
-	rez := []byte(searchResults.String())
-	return rez
+	searchRez, _ := searcher.Search(search)
+	rezArr := [][]byte{}
+	for _, hit := range searchRez.Hits {
+		rezArr = append(rezArr, []byte(hit.ID))
+	}
+	return rezArr
 }
