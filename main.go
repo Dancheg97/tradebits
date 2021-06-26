@@ -17,6 +17,7 @@ type server struct {
 func main() {
 	fmt.Println("the game goes on")
 	setStartBalance()
+	createStartMarket()
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

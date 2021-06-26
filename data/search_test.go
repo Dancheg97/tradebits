@@ -88,3 +88,9 @@ func TestIsolatedAddMultipleValuesToSameIndexAndGetThem(t *testing.T) {
 	}
 	removeAfterTest()
 }
+
+func TestCreateSearcher(t *testing.T) {
+	mapping := bleve.NewIndexMapping()
+	bleve.New("search", mapping)
+	removeAfterTest()
+}
