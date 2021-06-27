@@ -8,7 +8,7 @@ def countlines(start, lines=0, header=True, begin_start=None):
     for thing in os.listdir(start):
         thing = os.path.join(start, thing)
         if os.path.isfile(thing):
-            if thing.endswith('.go'):
+            if thing.endswith('.go') and not thing.endswith('.pb.go'):
                 with open(thing, 'r') as f:
                     newlines = f.readlines()
                     newlines = len(newlines)

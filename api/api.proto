@@ -73,6 +73,7 @@ message UserInfoRequest{
 message UserInfoResponse{
     string PublicName = 1;
     uint64 Balance = 2;
+    bytes mesKey = 3;
 }
 
 message UserTradeRequest{

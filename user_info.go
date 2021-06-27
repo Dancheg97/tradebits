@@ -23,5 +23,6 @@ func (s *server) UserInfo(
 	return &pb.UserInfoResponse{
 		PublicName: user.PublicName,
 		Balance:    user.Balance,
+		MesKey:     user.MesKey,
 	}, nil
 }
