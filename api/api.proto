@@ -112,7 +112,6 @@ message Markets{
 
 
 
-
 message MarketCreateRequest{
     bytes PublicKey = 1;
     bytes MesssageKey = 2;
