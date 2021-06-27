@@ -8,7 +8,6 @@ import (
 	"testing"
 )
 
-
 func TestHash(t *testing.T) {
 	hash := Hash([]byte{0})
 	fmt.Println(hash)

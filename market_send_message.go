@@ -4,12 +4,12 @@ import (
 	"context"
 	pb "sync_tree/api"
 	"sync_tree/calc"
-	"sync_tree/market"
+	"sync_tree/user"
 )
 
-func (s *server) UserSendMessage(
+func (s *server) MarketSendMessage(
 	ctx context.Context,
-	in *pb.UserSendMessageRequest,
+	in *pb.MarketSendMessageRequest,
 ) (*pb.Response, error) {
 	concMes := [][]byte{
 		in.PublicKey,
@@ -19,9 +19,9 @@ func (s *server) UserSendMessage(
 	signCheckErr := calc.Verify(concMes, in.PublicKey, in.Sign)
 	if signCheckErr == nil {
 		senderAdress := calc.Hash(in.PublicKey)
-		m := market.Get(in.Adress)
-		if m != nil {
-			m.PutMessage(senderAdress, in.Message)
+		u := user.Get(in.Adress)
+		if u != nil {
+			u.PutMessage(senderAdress, in.Message)
 			return &pb.Response{Passed: true}, nil
 		}
 	}
