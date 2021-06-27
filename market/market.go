@@ -18,6 +18,7 @@ type market struct {
 	Buys    []Trade
 	Sells   []Trade
 	Mes     map[string]string
+	Arch    map[string]string
 	outputs []output
 }
 
@@ -160,10 +161,14 @@ func (m *market) PutMessage(userAdress []byte, mes string) {
 }
 
 /*
-This function is made to get all new messages and to put delete all old messages
+This function is made to get all new messages and to put all current messages
+to archieve
 */
 func (m *market) GetAllMessages() map[string]string {
 	messages := m.Mes
+	for sender, message := range m.Mes {
+		m.Arch[sender] = m.Arch[sender] + "|" + message
+	}
 	m.Mes = make(map[string]string)
 	return messages
 }
