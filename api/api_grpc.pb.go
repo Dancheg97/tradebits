@@ -28,9 +28,9 @@ type SyncTreeClient interface {
 	UserDeposit(ctx context.Context, in *UserDepositRequest, opts ...grpc.CallOption) (*Response, error)
 	UserWithdrawal(ctx context.Context, in *UserWithDrawalRequest, opts ...grpc.CallOption) (*Response, error)
 	UserSearch(ctx context.Context, in *UserSearchRequest, opts ...grpc.CallOption) (*Markets, error)
+	MarketInfo(ctx context.Context, in *MarketInfoRequest, opts ...grpc.CallOption) (*MarketInfoResponse, error)
 	MarketCraete(ctx context.Context, in *MarketCreateRequest, opts ...grpc.CallOption) (*Response, error)
 	MarketUpdate(ctx context.Context, in *MarketUpdateRequest, opts ...grpc.CallOption) (*Response, error)
-	MarketInfo(ctx context.Context, in *MarketInfoRequest, opts ...grpc.CallOption) (*MarketInfoResponse, error)
 	MarketDeposit(ctx context.Context, in *MarketDepositRequest, opts ...grpc.CallOption) (*Response, error)
 	MarketWithDrawal(ctx context.Context, in *MarketWithDrawalRequest, opts ...grpc.CallOption) (*Response, error)
 }
@@ -133,6 +133,15 @@ func (c *syncTreeClient) UserSearch(ctx context.Context, in *UserSearchRequest, 
 	return out, nil
 }
 
+func (c *syncTreeClient) MarketInfo(ctx context.Context, in *MarketInfoRequest, opts ...grpc.CallOption) (*MarketInfoResponse, error) {
+	out := new(MarketInfoResponse)
+	err := c.cc.Invoke(ctx, "/api.SyncTree/MarketInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *syncTreeClient) MarketCraete(ctx context.Context, in *MarketCreateRequest, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
 	err := c.cc.Invoke(ctx, "/api.SyncTree/MarketCraete", in, out, opts...)
@@ -145,15 +154,6 @@ func (c *syncTreeClient) MarketCraete(ctx context.Context, in *MarketCreateReque
 func (c *syncTreeClient) MarketUpdate(ctx context.Context, in *MarketUpdateRequest, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
 	err := c.cc.Invoke(ctx, "/api.SyncTree/MarketUpdate", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *syncTreeClient) MarketInfo(ctx context.Context, in *MarketInfoRequest, opts ...grpc.CallOption) (*MarketInfoResponse, error) {
-	out := new(MarketInfoResponse)
-	err := c.cc.Invoke(ctx, "/api.SyncTree/MarketInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -192,9 +192,9 @@ type SyncTreeServer interface {
 	UserDeposit(context.Context, *UserDepositRequest) (*Response, error)
 	UserWithdrawal(context.Context, *UserWithDrawalRequest) (*Response, error)
 	UserSearch(context.Context, *UserSearchRequest) (*Markets, error)
+	MarketInfo(context.Context, *MarketInfoRequest) (*MarketInfoResponse, error)
 	MarketCraete(context.Context, *MarketCreateRequest) (*Response, error)
 	MarketUpdate(context.Context, *MarketUpdateRequest) (*Response, error)
-	MarketInfo(context.Context, *MarketInfoRequest) (*MarketInfoResponse, error)
 	MarketDeposit(context.Context, *MarketDepositRequest) (*Response, error)
 	MarketWithDrawal(context.Context, *MarketWithDrawalRequest) (*Response, error)
 	mustEmbedUnimplementedSyncTreeServer()
@@ -234,14 +234,14 @@ func (UnimplementedSyncTreeServer) UserWithdrawal(context.Context, *UserWithDraw
 func (UnimplementedSyncTreeServer) UserSearch(context.Context, *UserSearchRequest) (*Markets, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserSearch not implemented")
 }
+func (UnimplementedSyncTreeServer) MarketInfo(context.Context, *MarketInfoRequest) (*MarketInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MarketInfo not implemented")
+}
 func (UnimplementedSyncTreeServer) MarketCraete(context.Context, *MarketCreateRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MarketCraete not implemented")
 }
 func (UnimplementedSyncTreeServer) MarketUpdate(context.Context, *MarketUpdateRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MarketUpdate not implemented")
-}
-func (UnimplementedSyncTreeServer) MarketInfo(context.Context, *MarketInfoRequest) (*MarketInfoResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MarketInfo not implemented")
 }
 func (UnimplementedSyncTreeServer) MarketDeposit(context.Context, *MarketDepositRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MarketDeposit not implemented")
@@ -442,6 +442,24 @@ func _SyncTree_UserSearch_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SyncTree_MarketInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MarketInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SyncTreeServer).MarketInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.SyncTree/MarketInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SyncTreeServer).MarketInfo(ctx, req.(*MarketInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _SyncTree_MarketCraete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MarketCreateRequest)
 	if err := dec(in); err != nil {
@@ -474,24 +492,6 @@ func _SyncTree_MarketUpdate_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SyncTreeServer).MarketUpdate(ctx, req.(*MarketUpdateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _SyncTree_MarketInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MarketInfoRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SyncTreeServer).MarketInfo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.SyncTree/MarketInfo",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SyncTreeServer).MarketInfo(ctx, req.(*MarketInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -580,16 +580,16 @@ var SyncTree_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SyncTree_UserSearch_Handler,
 		},
 		{
+			MethodName: "MarketInfo",
+			Handler:    _SyncTree_MarketInfo_Handler,
+		},
+		{
 			MethodName: "MarketCraete",
 			Handler:    _SyncTree_MarketCraete_Handler,
 		},
 		{
 			MethodName: "MarketUpdate",
 			Handler:    _SyncTree_MarketUpdate_Handler,
-		},
-		{
-			MethodName: "MarketInfo",
-			Handler:    _SyncTree_MarketInfo_Handler,
 		},
 		{
 			MethodName: "MarketDeposit",

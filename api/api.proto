@@ -25,9 +25,9 @@ service SyncTree{
     rpc UserSearch(UserSearchRequest) returns (Markets) {}
 
 
+    rpc MarketInfo(MarketInfoRequest) returns (MarketInfoResponse) {}
     rpc MarketCraete(MarketCreateRequest) returns (Response) {}
     rpc MarketUpdate(MarketUpdateRequest) returns (Response) {}
-    rpc MarketInfo(MarketInfoRequest) returns (MarketInfoResponse) {}
     rpc MarketDeposit(MarketDepositRequest) returns (Response) {}
     rpc MarketWithDrawal(MarketWithDrawalRequest) returns (Response) {}
 }
@@ -136,11 +136,11 @@ message MarketInfoRequest{
 }
 
 message MarketInfoResponse{
-    bytes MesssageKey = 2;
-    string Name = 3;
-    string Img = 4;
-    string Descr = 5;
-    bytes Sign = 6;
+    bytes MesssageKey = 1;
+    string Name = 2;
+    string Img = 3;
+    string Descr = 4;
+    uint64 OpCount = 5;
 }
 
 message MarketDepositRequest{
