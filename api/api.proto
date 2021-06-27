@@ -24,6 +24,7 @@ service SyncTree{
     rpc UserWithdrawal(UserWithDrawalRequest) returns (Response) {}
     rpc UserSearch(UserSearchRequest) returns (Markets) {}
     rpc UserSendMessage(UserSendMessageRequest) returns (Response) {}
+    rpc UserGetMessages(UserGetMessagesRequest) returns (UserGetMessagesResponse) {}
 
     rpc MarketInfo(MarketInfoRequest) returns (MarketInfoResponse) {}
     rpc MarketCraete(MarketCreateRequest) returns (Response) {}
@@ -31,6 +32,7 @@ service SyncTree{
     rpc MarketDeposit(MarketDepositRequest) returns (Response) {}
     rpc MarketWithDrawal(MarketWithDrawalRequest) returns (Response) {}
     rpc MarketSendMessage(MarketSendMessageRequest) returns (Response) {}
+    rpc MarketGetMessages(MarketGetMessagesRequest) returns (MarketGetMessagesResponse) {}
 }
 
 message MessageRequest{
@@ -117,6 +119,14 @@ message UserSendMessageRequest{
     bytes Sign = 4;
 }
 
+message UserGetMessagesRequest{
+    bytes Adress = 1;
+}
+
+message UserGetMessagesResponse{
+    bytes Adresses = 1;
+    string Messages = 2;
+}
 
 
 
@@ -169,4 +179,13 @@ message MarketSendMessageRequest{
     bytes Adress = 2;
     string Message = 3;
     bytes Sign = 4;
+}
+
+message MarketGetMessagesRequest{
+    bytes Adress = 1;
+}
+
+message MarketGetMessagesResponse{
+    bytes Adresses = 1;
+    string Messages = 2;
 }
