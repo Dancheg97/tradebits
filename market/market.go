@@ -2,7 +2,6 @@ package market
 
 import (
 	"bytes"
-	"encoding/base64"
 	"encoding/gob"
 	"errors"
 	"sync_tree/data"
@@ -10,16 +9,16 @@ import (
 )
 
 type market struct {
-	adress   []byte
-	Name     string
-	MesKey   []byte
-	Descr    string
-	Img      string
-	OpCount  uint64
-	Buys     []Trade
-	Sells    []Trade
-	Messages []string
-	outputs  []output
+	adress  []byte
+	Name    string
+	MesKey  []byte
+	Descr   string
+	Img     string
+	OpCount uint64
+	Buys    []Trade
+	Sells   []Trade
+	Mes     map[string]string
+	outputs []output
 }
 
 type output struct {
@@ -51,6 +50,7 @@ func Create(
 		OpCount: 0,
 		Buys:    []Trade{},
 		Sells:   []Trade{},
+		Mes:     make(map[string]string),
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newMarket)
@@ -154,19 +154,16 @@ func (m *market) OperateTrade(newTrade Trade) {
 /*
 Function to add message from some adress to concrete market
 */
-func (m *market) putMessage(userAdress []byte, mes string) {
-	adrBase64 := base64.RawStdEncoding.EncodeToString(userAdress)
-	convergedMessage := adrBase64 + "|" + mes
-	m.Messages = append(m.Messages, convergedMessage)
+func (m *market) PutMessage(userAdress []byte, mes string) {
+	strAdr := string(userAdress)
+	m.Mes[strAdr] = m.Mes[strAdr] + "|" + mes
 }
 
 /*
-Function to get all messages represented in a list of string
+This function is made to get all new messages and to put delete all old messages
 */
-func (m *market) getMessages() []string {
-	finalSlice := []string{}
-	for _, message := range m.Messages {
-		finalSlice = append(finalSlice, message)
-	}
-	return finalSlice
+func (m *market) GetAllMessages() map[string]string {
+	messages := m.Mes
+	m.Mes = make(map[string]string)
+	return messages
 }
