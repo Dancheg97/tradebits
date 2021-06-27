@@ -14,6 +14,8 @@ type user struct {
 	MesKey     []byte
 	PublicName string
 	Markets    map[string]uint64
+	Mes        map[string]string
+	Arch       map[string]string
 }
 
 /*
@@ -29,6 +31,8 @@ func Create(adress []byte, MesKey []byte, PublicName string) error {
 		MesKey:     MesKey,
 		PublicName: PublicName,
 		Markets:    make(map[string]uint64),
+		Mes:        make(map[string]string),
+		Arch:       map[string]string{},
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(u)
@@ -86,4 +90,25 @@ func (u *user) MarketBalance(market []byte) uint64 {
 // Change user balance for some specific market
 func (u *user) ChangeMarketBalance(market []byte, balance uint64) {
 	u.Markets[string(market)] = balance
+}
+
+/*
+Function to add message from some adress to concrete user
+*/
+func (u *user) PutMessage(userAdress []byte, mes string) {
+	strAdr := string(userAdress)
+	u.Mes[strAdr] = u.Mes[strAdr] + "|" + mes
+}
+
+/*
+This function is made to get all new messages and to put all current messages
+to archieve
+*/
+func (u *user) GetAllMessages() map[string]string {
+	messages := u.Mes
+	for sender, message := range u.Mes {
+		u.Arch[sender] = u.Arch[sender] + "|" + message
+	}
+	u.Mes = make(map[string]string)
+	return messages
 }
