@@ -2,6 +2,7 @@ package market
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/gob"
 	"errors"
 	"sync_tree/data"
@@ -9,15 +10,16 @@ import (
 )
 
 type market struct {
-	adress  []byte
-	Name    string
-	MesKey  []byte
-	Descr   string
-	Img     string
-	OpCount uint64
-	Buys    []Trade
-	Sells   []Trade
-	outputs []output
+	adress   []byte
+	Name     string
+	MesKey   []byte
+	Descr    string
+	Img      string
+	OpCount  uint64
+	Buys     []Trade
+	Sells    []Trade
+	Messages []string
+	outputs  []output
 }
 
 type output struct {
@@ -147,4 +149,24 @@ func (m *market) OperateTrade(newTrade Trade) {
 		}
 		return
 	}
+}
+
+/*
+Function to add message from some adress to concrete market
+*/
+func (m *market) putMessage(userAdress []byte, mes string) {
+	adrBase64 := base64.RawStdEncoding.EncodeToString(userAdress)
+	convergedMessage := adrBase64 + "|" + mes
+	m.Messages = append(m.Messages, convergedMessage)
+}
+
+/*
+Function to get all messages represented in a list of string
+*/
+func (m *market) getMessages() []string {
+	finalSlice := []string{}
+	for _, message := range m.Messages {
+		finalSlice = append(finalSlice, message)
+	}
+	return finalSlice
 }
