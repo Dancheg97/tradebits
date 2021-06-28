@@ -11,7 +11,7 @@ import (
 
 func (s *server) MarketWithdrawal(
 	ctx context.Context,
-	in *pb.MarketWithDrawalRequest,
+	in *pb.MarketWithdrawalRequest,
 ) (*pb.Response, error) {
 	fmt.Println("Operation market withdrawal for user: ", in.UserAdress)
 	amBytes := make([]byte, 8)

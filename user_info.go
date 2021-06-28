@@ -11,16 +11,16 @@ import (
 func (s *server) UserInfo(
 	ctx context.Context,
 	in *pb.UserInfoRequest,
-) (*pb.UserInfoResponse, error) {
+) (*pb.InfoUserResponse, error) {
 	fmt.Println("giving information about", in.Adress)
 	user := user.Look(in.Adress)
 	if user == nil {
-		return &pb.UserInfoResponse{
+		return &pb.InfoUserResponse{
 			PublicName: "====",
 			Balance:    0,
 		}, nil
 	}
-	return &pb.UserInfoResponse{
+	return &pb.InfoUserResponse{
 		PublicName: user.PublicName,
 		Balance:    user.Balance,
 		MesKey:     user.MesKey,
