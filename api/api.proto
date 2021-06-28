@@ -141,8 +141,6 @@ message UserGetMessagesRequest{
     bytes Adress = 1;
 }
 
-
-
 message MarketCreateRequest{
     bytes PublicKey = 1;
     bytes MesssageKey = 2;
