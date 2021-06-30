@@ -16,11 +16,11 @@ func (s *server) InfoMarket(
 	m := market.Look(in.Adress)
 	if m != nil {
 		return &pb.InfoMarketResponse{
-			MesssageKey: m.MesKey,
-			Name:        m.Name,
-			Img:         m.Img,
-			Descr:       m.Descr,
-			OpCount:     m.OpCount,
+			Name:    m.Name,
+			MesKey:  m.MesKey,
+			Img:     m.Img,
+			Descr:   m.Descr,
+			OpCount: m.OpCount,
 		}, nil
 	}
 	return &pb.InfoMarketResponse{}, errors.New("market not found")

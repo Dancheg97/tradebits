@@ -61,11 +61,13 @@ message InfoUserResponse{
 }
 
 message InfoMarketResponse{
-    bytes MesssageKey = 1;
-    string Name = 2;
+    string Name = 1;
+    bytes MesKey = 2;
     string Img = 3;
     string Descr = 4;
     uint64 OpCount = 5;
+    repeated uint64 buys = 6; //each pair - single deal
+    repeated uint64 sells = 7; //each pair - single deal
 }
 
 message InfoSearchResponse{
