@@ -14,7 +14,7 @@ protoc lib/api/api.proto --dart_out=grpc:.
 service SyncTree{
     rpc InfoUser(InfoUserRequest) returns (InfoUserResponse) {}
     rpc InfoMarket(InfoMarketRequest) returns (InfoMarketResponse) {}
-    rpc InfoFind(InfoFindRequest) returns (InfoFindResponse) {}
+    rpc InfoSearch(InfoSearchRequest) returns (InfoSearchResponse) {}
 
     rpc UserCreate(UserCreateRequest) returns (Response) {}
     rpc UserUpdate(UserUpdateRequest) returns (Response) {}
@@ -50,7 +50,7 @@ message InfoMarketRequest{
     bytes Adress = 1;
 }
 
-message InfoFindRequest{
+message InfoSearchRequest{
     string info = 1;
 }
 
@@ -68,8 +68,8 @@ message InfoMarketResponse{
     uint64 OpCount = 5;
 }
 
-message InfoFindResponse{
-    bytes ConcMarkets = 1;
+message InfoSearchResponse{
+    repeated bytes ConcMarkets = 1;
 }
 
 message UserCreateRequest{

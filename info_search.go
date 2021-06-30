@@ -7,11 +7,11 @@ import (
 	"sync_tree/data"
 )
 
-func (s *server) InfoFind(
+func (s *server) InfoSearch(
 	ctx context.Context,
-	in *pb.InfoFindRequest,
-) (*pb.InfoFindResponse, error) {
+	in *pb.InfoSearchRequest,
+) (*pb.InfoSearchResponse, error) {
 	fmt.Println("user made a search request on: ", in.Info)
 	results := data.Search(in.Info)
-	return &pb.InfoFindResponse{ConcMarkets: results}, nil
+	return &pb.InfoSearchResponse{ConcMarkets: results}, nil
 }

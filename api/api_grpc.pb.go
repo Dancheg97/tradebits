@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type SyncTreeClient interface {
 	InfoUser(ctx context.Context, in *InfoUserRequest, opts ...grpc.CallOption) (*InfoUserResponse, error)
 	InfoMarket(ctx context.Context, in *InfoMarketRequest, opts ...grpc.CallOption) (*InfoMarketResponse, error)
-	InfoFind(ctx context.Context, in *InfoFindRequest, opts ...grpc.CallOption) (*InfoFindResponse, error)
+	InfoSearch(ctx context.Context, in *InfoSearchRequest, opts ...grpc.CallOption) (*InfoSearchResponse, error)
 	UserCreate(ctx context.Context, in *UserCreateRequest, opts ...grpc.CallOption) (*Response, error)
 	UserUpdate(ctx context.Context, in *UserUpdateRequest, opts ...grpc.CallOption) (*Response, error)
 	UserSend(ctx context.Context, in *UserSendRequest, opts ...grpc.CallOption) (*Response, error)
@@ -64,9 +64,9 @@ func (c *syncTreeClient) InfoMarket(ctx context.Context, in *InfoMarketRequest, 
 	return out, nil
 }
 
-func (c *syncTreeClient) InfoFind(ctx context.Context, in *InfoFindRequest, opts ...grpc.CallOption) (*InfoFindResponse, error) {
-	out := new(InfoFindResponse)
-	err := c.cc.Invoke(ctx, "/api.SyncTree/InfoFind", in, out, opts...)
+func (c *syncTreeClient) InfoSearch(ctx context.Context, in *InfoSearchRequest, opts ...grpc.CallOption) (*InfoSearchResponse, error) {
+	out := new(InfoSearchResponse)
+	err := c.cc.Invoke(ctx, "/api.SyncTree/InfoSearch", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -214,7 +214,7 @@ func (c *syncTreeClient) MarketGetMessages(ctx context.Context, in *MarketGetMes
 type SyncTreeServer interface {
 	InfoUser(context.Context, *InfoUserRequest) (*InfoUserResponse, error)
 	InfoMarket(context.Context, *InfoMarketRequest) (*InfoMarketResponse, error)
-	InfoFind(context.Context, *InfoFindRequest) (*InfoFindResponse, error)
+	InfoSearch(context.Context, *InfoSearchRequest) (*InfoSearchResponse, error)
 	UserCreate(context.Context, *UserCreateRequest) (*Response, error)
 	UserUpdate(context.Context, *UserUpdateRequest) (*Response, error)
 	UserSend(context.Context, *UserSendRequest) (*Response, error)
@@ -243,8 +243,8 @@ func (UnimplementedSyncTreeServer) InfoUser(context.Context, *InfoUserRequest) (
 func (UnimplementedSyncTreeServer) InfoMarket(context.Context, *InfoMarketRequest) (*InfoMarketResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InfoMarket not implemented")
 }
-func (UnimplementedSyncTreeServer) InfoFind(context.Context, *InfoFindRequest) (*InfoFindResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method InfoFind not implemented")
+func (UnimplementedSyncTreeServer) InfoSearch(context.Context, *InfoSearchRequest) (*InfoSearchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method InfoSearch not implemented")
 }
 func (UnimplementedSyncTreeServer) UserCreate(context.Context, *UserCreateRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserCreate not implemented")
@@ -340,20 +340,20 @@ func _SyncTree_InfoMarket_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SyncTree_InfoFind_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InfoFindRequest)
+func _SyncTree_InfoSearch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InfoSearchRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SyncTreeServer).InfoFind(ctx, in)
+		return srv.(SyncTreeServer).InfoSearch(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.SyncTree/InfoFind",
+		FullMethod: "/api.SyncTree/InfoSearch",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SyncTreeServer).InfoFind(ctx, req.(*InfoFindRequest))
+		return srv.(SyncTreeServer).InfoSearch(ctx, req.(*InfoSearchRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -644,8 +644,8 @@ var SyncTree_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SyncTree_InfoMarket_Handler,
 		},
 		{
-			MethodName: "InfoFind",
-			Handler:    _SyncTree_InfoFind_Handler,
+			MethodName: "InfoSearch",
+			Handler:    _SyncTree_InfoSearch_Handler,
 		},
 		{
 			MethodName: "UserCreate",
