@@ -28,6 +28,8 @@ func (s *server) UserBuy(
 			if signErr == nil {
 				curMarket := market.Get(in.Adress)
 				if curMarket != nil {
+					buyer.Balance = buyer.Balance - in.Offer
+					buyer.Save()
 					trade := market.Trade{
 						Adress:  buyerAdress,
 						IsSell:  false,
@@ -35,6 +37,7 @@ func (s *server) UserBuy(
 						Recieve: in.Recieve,
 					}
 					curMarket.OperateTrade(trade)
+					curMarket.Save()
 					return &pb.Response{Passed: true}, nil
 				}
 			}
