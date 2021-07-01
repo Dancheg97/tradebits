@@ -60,6 +60,8 @@ message InfoUserResponse{
     string PublicName = 1;
     uint64 Balance = 2;
     bytes mesKey = 3;
+    repeated bytes marketAdresses = 4;
+    repeated uint64 marketBalances = 5;
 }
 
 message InfoMarketResponse{

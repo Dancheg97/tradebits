@@ -20,9 +20,17 @@ func (s *server) InfoUser(
 			Balance:    0,
 		}, nil
 	}
+	adressesSlice := [][]byte{}
+	balancesSlice := []uint64{}
+	for strAdr, bal := range user.Markets {
+		adressesSlice = append(adressesSlice, []byte(strAdr))
+		balancesSlice = append(balancesSlice, bal)
+	}
 	return &pb.InfoUserResponse{
-		PublicName: user.PublicName,
-		Balance:    user.Balance,
-		MesKey:     user.MesKey,
+		PublicName:     user.PublicName,
+		Balance:        user.Balance,
+		MesKey:         user.MesKey,
+		MarketAdresses: adressesSlice,
+		MarketBalances: balancesSlice,
 	}, nil
 }
