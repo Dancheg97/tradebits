@@ -22,16 +22,18 @@ func (s *server) MarketCreate(
 	}
 	checkErr := calc.Verify(concatedMessage, in.PublicKey, in.Sign)
 	if checkErr == nil {
-		adress := calc.Hash(in.PublicKey)
-		craeteErr := market.Create(
-			adress,
-			in.Name,
-			in.MesssageKey,
-			in.Descr,
-			in.Img,
-		)
-		if craeteErr == nil {
-			return &pb.Response{Passed: true}, nil
+		if len(in.Name) < 15 {
+			adress := calc.Hash(in.PublicKey)
+			craeteErr := market.Create(
+				adress,
+				in.Name,
+				in.MesssageKey,
+				in.Descr,
+				in.Img,
+			)
+			if craeteErr == nil {
+				return &pb.Response{Passed: true}, nil
+			}
 		}
 	}
 	return &pb.Response{Passed: false}, nil

@@ -16,8 +16,8 @@ func (s *server) InfoMarket(
 	m := market.Look(in.Adress)
 	if m != nil {
 		return &pb.InfoMarketResponse{
-			Name:    m.Name,
 			MesKey:  m.MesKey,
+			Name:    m.Name,
 			Img:     m.Img,
 			Descr:   m.Descr,
 			OpCount: m.OpCount,
