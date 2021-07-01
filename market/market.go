@@ -6,6 +6,8 @@ import (
 	"errors"
 	"sync_tree/data"
 	"sync_tree/lock"
+	"sync_tree/user"
+	"time"
 )
 
 type market struct {
@@ -123,6 +125,7 @@ func (m *market) OperateTrade(newTrade Trade) {
 		trades, outputs := newTrade.operate(m.Buys[0])
 		m.Buys = m.Buys[1:]
 		m.outputs = append(m.outputs, outputs...)
+		m.output()
 		if len(trades) == 2 {
 			m.addTrade(trades[0])
 			m.addTrade(trades[1])
@@ -140,6 +143,7 @@ func (m *market) OperateTrade(newTrade Trade) {
 		trades, outputs := newTrade.operate(m.Sells[0])
 		m.Sells = m.Sells[1:]
 		m.outputs = append(m.outputs, outputs...)
+		m.output()
 		if len(trades) == 2 {
 			m.addTrade(trades[0])
 			m.addTrade(trades[1])
@@ -149,6 +153,22 @@ func (m *market) OperateTrade(newTrade Trade) {
 			m.OperateTrade(newTrade)
 		}
 		return
+	}
+}
+
+func (m *market) output() {
+	for _, output := range m.outputs {
+		for {
+			u := user.Get(output.Adress)
+			if u != nil {
+				u.Balance = u.Balance + output.MainOut
+				marketAdr := string(m.adress)
+				u.Markets[marketAdr] = u.Markets[marketAdr] + output.MarketOut
+				u.Save()
+				break
+			}
+			time.Sleep(time.Second)
+		}
 	}
 }
 

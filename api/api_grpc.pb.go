@@ -30,6 +30,8 @@ type SyncTreeClient interface {
 	UserWithdrawal(ctx context.Context, in *UserWithdrawalRequest, opts ...grpc.CallOption) (*Response, error)
 	UserSendMessage(ctx context.Context, in *UserSendMessageRequest, opts ...grpc.CallOption) (*Response, error)
 	UserGetMessages(ctx context.Context, in *UserGetMessagesRequest, opts ...grpc.CallOption) (*Messages, error)
+	UserBuy(ctx context.Context, in *UserBuyRequest, opts ...grpc.CallOption) (*Response, error)
+	UserSell(ctx context.Context, in *UserSellRequest, opts ...grpc.CallOption) (*Response, error)
 	MarketCraete(ctx context.Context, in *MarketCreateRequest, opts ...grpc.CallOption) (*Response, error)
 	MarketUpdate(ctx context.Context, in *MarketUpdateRequest, opts ...grpc.CallOption) (*Response, error)
 	MarketDeposit(ctx context.Context, in *MarketDepositRequest, opts ...grpc.CallOption) (*Response, error)
@@ -154,6 +156,24 @@ func (c *syncTreeClient) UserGetMessages(ctx context.Context, in *UserGetMessage
 	return out, nil
 }
 
+func (c *syncTreeClient) UserBuy(ctx context.Context, in *UserBuyRequest, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
+	err := c.cc.Invoke(ctx, "/api.SyncTree/UserBuy", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *syncTreeClient) UserSell(ctx context.Context, in *UserSellRequest, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
+	err := c.cc.Invoke(ctx, "/api.SyncTree/UserSell", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *syncTreeClient) MarketCraete(ctx context.Context, in *MarketCreateRequest, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
 	err := c.cc.Invoke(ctx, "/api.SyncTree/MarketCraete", in, out, opts...)
@@ -224,6 +244,8 @@ type SyncTreeServer interface {
 	UserWithdrawal(context.Context, *UserWithdrawalRequest) (*Response, error)
 	UserSendMessage(context.Context, *UserSendMessageRequest) (*Response, error)
 	UserGetMessages(context.Context, *UserGetMessagesRequest) (*Messages, error)
+	UserBuy(context.Context, *UserBuyRequest) (*Response, error)
+	UserSell(context.Context, *UserSellRequest) (*Response, error)
 	MarketCraete(context.Context, *MarketCreateRequest) (*Response, error)
 	MarketUpdate(context.Context, *MarketUpdateRequest) (*Response, error)
 	MarketDeposit(context.Context, *MarketDepositRequest) (*Response, error)
@@ -272,6 +294,12 @@ func (UnimplementedSyncTreeServer) UserSendMessage(context.Context, *UserSendMes
 }
 func (UnimplementedSyncTreeServer) UserGetMessages(context.Context, *UserGetMessagesRequest) (*Messages, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserGetMessages not implemented")
+}
+func (UnimplementedSyncTreeServer) UserBuy(context.Context, *UserBuyRequest) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserBuy not implemented")
+}
+func (UnimplementedSyncTreeServer) UserSell(context.Context, *UserSellRequest) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserSell not implemented")
 }
 func (UnimplementedSyncTreeServer) MarketCraete(context.Context, *MarketCreateRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MarketCraete not implemented")
@@ -520,6 +548,42 @@ func _SyncTree_UserGetMessages_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SyncTree_UserBuy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserBuyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SyncTreeServer).UserBuy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.SyncTree/UserBuy",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SyncTreeServer).UserBuy(ctx, req.(*UserBuyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SyncTree_UserSell_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserSellRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SyncTreeServer).UserSell(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.SyncTree/UserSell",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SyncTreeServer).UserSell(ctx, req.(*UserSellRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _SyncTree_MarketCraete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MarketCreateRequest)
 	if err := dec(in); err != nil {
@@ -682,6 +746,14 @@ var SyncTree_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UserGetMessages",
 			Handler:    _SyncTree_UserGetMessages_Handler,
+		},
+		{
+			MethodName: "UserBuy",
+			Handler:    _SyncTree_UserBuy_Handler,
+		},
+		{
+			MethodName: "UserSell",
+			Handler:    _SyncTree_UserSell_Handler,
 		},
 		{
 			MethodName: "MarketCraete",

@@ -25,6 +25,8 @@ service SyncTree{
     rpc UserWithdrawal(UserWithdrawalRequest) returns (Response) {}
     rpc UserSendMessage(UserSendMessageRequest) returns (Response) {}
     rpc UserGetMessages(UserGetMessagesRequest) returns (Messages) {}
+    rpc UserBuy(UserBuyRequest) returns (Response) {}
+    rpc UserSell(UserSellRequest) returns (Response) {}
 
     rpc MarketCraete(MarketCreateRequest) returns (Response) {}
     rpc MarketUpdate(MarketUpdateRequest) returns (Response) {}
@@ -137,6 +139,22 @@ message UserSendMessageRequest{
     bytes Adress = 2;
     string Message = 3;
     bytes Sign = 4;
+}
+
+message UserBuyRequest{
+    bytes PublicKey = 1;
+    bytes Adress = 2;
+    uint64 Recieve = 3;
+    uint64 Offer = 4;
+    bytes Sign = 5;
+}
+
+message UserSellRequest{
+    bytes PublicKey = 1;
+    bytes Adress = 2;
+    uint64 Recieve = 3;
+    uint64 Offer = 4;
+    bytes Sign = 5;
 }
 
 message UserGetMessagesRequest{

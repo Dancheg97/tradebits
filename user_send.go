@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/binary"
 	"fmt"
 	pb "sync_tree/api"
 	"sync_tree/calc"
@@ -15,8 +14,7 @@ func (s *server) UserSend(
 ) (*pb.Response, error) {
 	fmt.Println("sending money, of amount: ", in.SendAmount)
 	senderAdress := calc.Hash(in.PublicKey)
-	amountBytes := make([]byte, 8)
-	binary.LittleEndian.PutUint64(amountBytes, in.SendAmount)
+	amountBytes := calc.NumberToBytes(in.SendAmount)
 	signError := calc.Verify(
 		[][]byte{
 			in.PublicKey,
