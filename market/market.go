@@ -115,12 +115,15 @@ func Look(adress []byte) *market {
 /*
 Recursive function to add trades to existing market. Each new iteration
 */
-func (m *market) OperateTrade(newTrade Trade) {
+func (m *market) OperateTrade(newTrade Trade) bool {
 	m.OpCount = m.OpCount + 1
+	if newTrade.Offer == 0 || newTrade.Recieve == 0 {
+		return false
+	}
 	if newTrade.IsSell {
 		if len(m.Buys) == 0 {
 			m.Sells = append(m.Sells, newTrade)
-			return
+			return true
 		}
 		trades, outputs := newTrade.operate(m.Buys[0])
 		m.Buys = m.Buys[1:]
@@ -129,16 +132,16 @@ func (m *market) OperateTrade(newTrade Trade) {
 		if len(trades) == 2 {
 			m.addTrade(trades[0])
 			m.addTrade(trades[1])
-			return
+			return true
 		}
 		if len(trades) == 1 {
 			m.OperateTrade(newTrade)
 		}
-		return
+		return true
 	} else {
 		if len(m.Sells) == 0 {
 			m.Buys = append(m.Buys, newTrade)
-			return
+			return true
 		}
 		trades, outputs := newTrade.operate(m.Sells[0])
 		m.Sells = m.Sells[1:]
@@ -147,15 +150,16 @@ func (m *market) OperateTrade(newTrade Trade) {
 		if len(trades) == 2 {
 			m.addTrade(trades[0])
 			m.addTrade(trades[1])
-			return
+			return true
 		}
 		if len(trades) == 1 {
 			m.OperateTrade(newTrade)
 		}
-		return
+		return true
 	}
 }
 
+// function to send all outputs back to users
 func (m *market) output() {
 	for _, output := range m.outputs {
 		for {
