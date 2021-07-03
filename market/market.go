@@ -159,6 +159,11 @@ func (m *market) OperateTrade(newTrade Trade) bool {
 	}
 }
 
+// function that returns offers from some adress to trade creator
+func (m *market) CancelTrades(adress []byte) {
+	
+}
+
 // function to send all outputs back to users
 func (m *market) output() {
 	for _, output := range m.outputs {
