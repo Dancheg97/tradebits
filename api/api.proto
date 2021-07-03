@@ -15,6 +15,7 @@ service SyncTree{
     rpc InfoUser(InfoUserRequest) returns (InfoUserResponse) {}
     rpc InfoMarket(InfoMarketRequest) returns (InfoMarketResponse) {}
     rpc InfoSearch(InfoSearchRequest) returns (InfoSearchResponse) {}
+    rpc InfoHasTrades(InfoHasTradesRequest) returns (Response) {}
 
     rpc UserCreate(UserCreateRequest) returns (Response) {}
     rpc UserUpdate(UserUpdateRequest) returns (Response) {}
@@ -72,6 +73,11 @@ message InfoMarketResponse{
     uint64 OpCount = 5;
     repeated uint64 buys = 6; //each pair - single deal
     repeated uint64 sells = 7; //each pair - single deal
+}
+
+message InfoHasTradesRequest{
+    bytes marketAdress = 1;
+    bytes userAdress = 2;
 }
 
 message InfoSearchResponse{

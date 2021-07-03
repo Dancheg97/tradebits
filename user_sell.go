@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	pb "sync_tree/api"
 	"sync_tree/calc"
 	"sync_tree/market"
@@ -12,6 +13,7 @@ func (s *server) UserSell(
 	ctx context.Context,
 	in *pb.UserSellRequest,
 ) (*pb.Response, error) {
+	fmt.Println("sell offer / recieve: ", in.Offer, "/", in.Recieve)
 	buyerAdress := calc.Hash(in.PublicKey)
 	buyer := user.Get(buyerAdress)
 	if buyer != nil {
@@ -30,6 +32,7 @@ func (s *server) UserSell(
 				curMarket := market.Get(in.Adress)
 				if curMarket != nil {
 					buyer.Markets[mktAdr] = buyer.Markets[mktAdr] - in.Offer
+					fmt.Println(buyer)
 					buyer.Save()
 					trade := market.Trade{
 						Adress:  buyerAdress,
