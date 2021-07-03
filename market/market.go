@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"errors"
+	"reflect"
 	"sync_tree/data"
 	"sync_tree/lock"
 	"sync_tree/user"
@@ -160,8 +161,30 @@ func (m *market) OperateTrade(newTrade Trade) bool {
 }
 
 // function that returns offers from some adress to trade creator
-func (m *market) CancelTrades(adress []byte) {
-	
+func (m *market) CancelTrades(adress []byte) bool {
+	for index, buyTrade := range m.Buys {
+		if reflect.DeepEqual(adress, buyTrade.Adress) {
+			m.Buys = append(m.Buys[:index], m.Buys[index+1:]...)
+			u := user.Get(adress)
+			if u == nil {
+				return false
+			}
+			u.Balance = u.Balance + buyTrade.Offer
+			u.Save()
+		}
+	}
+	for index, sellTrade := range m.Sells {
+		if reflect.DeepEqual(adress, sellTrade.Adress) {
+			m.Sells = append(m.Sells[:index], m.Sells[index+1:]...)
+			u := user.Get(adress)
+			if u == nil {
+				return false
+			}
+			u.Markets[string(m.adress)] = u.Markets[string(m.adress)] + sellTrade.Offer
+			u.Save()
+		}
+	}
+	return true
 }
 
 // function to send all outputs back to users
