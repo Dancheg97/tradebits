@@ -3,7 +3,8 @@ package market
 import (
 	"math/rand"
 	"reflect"
-	"runtime/trace"
+	"sync_tree/calc"
+	"sync_tree/user"
 	"testing"
 	"time"
 )
@@ -95,10 +96,14 @@ func TestMultipleTradesOperatingWithCheckSum(t *testing.T) {
 	mkt := Get(adress)
 	checkSumMain := 0
 	checkSumMarket := 0
+	randomUserAdresses := [][]byte{}
 	for i := 0; i < 10000; i++ {
+		randAdress := calc.Rand()
+		randomUserAdresses = append(randomUserAdresses, randAdress)
+		user.Create(randAdress, calc.Rand(), "randtester")
 		randTrade := Trade{
-			IsSell: rand.Intn(2) != 0,
-			Offer: uint64(genRandNumber()),
+			IsSell:  rand.Intn(2) != 0,
+			Offer:   uint64(genRandNumber()),
 			Recieve: uint64(genRandNumber()),
 		}
 		if randTrade.IsSell {
@@ -107,5 +112,23 @@ func TestMultipleTradesOperatingWithCheckSum(t *testing.T) {
 			checkSumMain = checkSumMain + int(randTrade.Offer)
 		}
 		mkt.OperateTrade(randTrade)
+		localCheckSumMain := 0
+		localCheckSumMarket := 0
+		for _, adr := range randomUserAdresses {
+			u := user.Get(adr)
+			localCheckSumMain = localCheckSumMain + int(u.Balance)
+			localCheckSumMarket = localCheckSumMarket + int(u.MarketBalance(adress))
+		}
+		for _, trade := range mkt.Buys {
+			localCheckSumMain = localCheckSumMain + int(trade.Offer)
+		}
+		for _, trade := range mkt.Sells {
+			localCheckSumMarket = localCheckSumMarket + int(trade.Offer)
+		}
+		firstCondition := localCheckSumMain == checkSumMain
+		secondCondition := localCheckSumMarket == checkSumMarket
+		if !(firstCondition && secondCondition) {
+			t.Error("error occured")
+		}
 	}
 }
