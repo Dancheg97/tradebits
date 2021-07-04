@@ -10,10 +10,9 @@ func TestPutValue(t *testing.T) {
 	val := []byte{1, 2, 3, 4, 5}
 	Put(key, val)
 	val2 := Get(key)
-	if reflect.DeepEqual(val, val2) {
-		return
+	if !reflect.DeepEqual(val, val2) {
+		t.Error("values are not equal")
 	}
-	t.Error("values are not equal")
 	base.Delete(key, nil)
 }
 
@@ -35,10 +34,9 @@ func TestGetValue(t *testing.T) {
 	val := []byte{1, 1, 1}
 	Put(key, val)
 	val2 := Get(key)
-	if reflect.DeepEqual(val, val2) {
-		return
+	if !reflect.DeepEqual(val, val2) {
+		t.Error("values should be the same")
 	}
-	t.Error("values should be the same")
 	base.Delete(key, nil)
 }
 
@@ -69,10 +67,10 @@ func TestCheckExisting(t *testing.T) {
 	Put(key, val)
 	exists := Check(key)
 	base.Delete(key, nil)
-	if exists {
-		return
+	if !exists {
+		t.Error("value should exist")
 	}
-	t.Error("value should exist")
+	base.Delete(key, nil)
 }
 
 func TestCheckNotExisting(t *testing.T) {

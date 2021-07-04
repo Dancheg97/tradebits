@@ -17,20 +17,21 @@ func TestSearchSearch(t *testing.T) {
 	adr := []byte{1, 2, 3}
 	SearchAdd(name, adr)
 	rez := Search(name)
-	if reflect.DeepEqual(rez[0], adr) {
-		return
+	if !reflect.DeepEqual(rez[0], adr) {
+		t.Error("adresses should not match")
 	}
-	t.Error("adresses should not match")
+	searcher.Delete(name)
 }
 
 func TestSearchChange(t *testing.T) {
-	name := "name2"
-	fistAdress := []byte{1, 1, 1}
-	secondAdress := []byte{1, 1, 2}
-	SearchAdd(name, fistAdress)
-	SearchChange(name, secondAdress)
-	rez := Search(name)
-	if reflect.DeepEqual(rez[0], name) {
-		
+	adr := []byte{1, 1, 1}
+	name1 := "Xname"
+	name2 := "Fname"
+	SearchAdd(name1, adr)
+	SearchChange(name2, adr)
+	rez := Search(name2)
+	if reflect.DeepEqual(rez[0], name2) {
+		return
 	}
+	t.Error("found name should be equal to second")
 }
