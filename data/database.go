@@ -44,9 +44,6 @@ func Change(key []byte, value []byte) {
 
 // check if value exists in database
 func Check(key []byte) bool {
-	valueExists, unexpected := base.Has(key, nil)
-	if unexpected != nil {
-		return false
-	}
+	valueExists, _ := base.Has(key, nil)
 	return valueExists
 }
