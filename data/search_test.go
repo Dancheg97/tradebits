@@ -9,7 +9,7 @@ func TestSearchAdd(t *testing.T) {
 	name := "name22"
 	adr := []byte{1, 2, 3}
 	SearchAdd(name, adr)
-	searcher.Delete(name)
+	searcher.Delete(string(adr))
 }
 
 func TestSearchSearch(t *testing.T) {
@@ -20,7 +20,7 @@ func TestSearchSearch(t *testing.T) {
 	if !reflect.DeepEqual(rez[0], adr) {
 		t.Error("adresses should not match")
 	}
-	searcher.Delete(name)
+	searcher.Delete(string(adr))
 }
 
 func TestSearchChange(t *testing.T) {
@@ -33,9 +33,19 @@ func TestSearchChange(t *testing.T) {
 	if !reflect.DeepEqual(rez[0], adr) {
 		t.Error("found name should be equal to second")
 	}
-	searcher.Delete("name2")
+	searcher.Delete(string(adr))
 }
 
 func TestSearchAddMultipleAdressesOnSameName(t *testing.T) {
-
+	adr1 := []byte{0, 1, 2, 3}
+	adr2 := []byte{0, 1, 2, 4}
+	sameName := "snm"
+	SearchAdd(sameName, adr1)
+	SearchAdd(sameName, adr2)
+	rez := Search(sameName)
+	if len(rez) != 2 {
+		t.Error()
+	}
+	searcher.Delete(string(adr1))
+	searcher.Delete(string(adr2))
 }
