@@ -77,3 +77,8 @@ func TestMarketAddTrade(t *testing.T) {
 		market.OperateTrade(randTrade)
 	}
 }
+
+func TestMultipleTradesOperatingWithCheckSum(t *testing.T) {
+	
+}
+

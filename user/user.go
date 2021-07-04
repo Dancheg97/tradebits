@@ -6,6 +6,7 @@ import (
 	"errors"
 	"sync_tree/data"
 	"sync_tree/lock"
+	"time"
 )
 
 type user struct {
@@ -47,7 +48,8 @@ locked, so another of that user are not gonna appear
 func Get(adress []byte) *user {
 	lockErr := lock.Lock(adress)
 	if lockErr != nil {
-		return nil
+		time.Sleep(time.Millisecond * 144)
+		return Get(adress)
 	}
 	u := user{adress: adress}
 	userBytes := data.Get(adress)
