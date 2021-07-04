@@ -48,7 +48,7 @@ locked, so another of that user are not gonna appear
 func Get(adress []byte) *user {
 	lockErr := lock.Lock(adress)
 	if lockErr != nil {
-		time.Sleep(time.Millisecond * 144)
+		time.Sleep(time.Millisecond * 89)
 		return Get(adress)
 	}
 	u := user{adress: adress}

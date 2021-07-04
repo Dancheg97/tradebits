@@ -79,6 +79,5 @@ func TestMarketAddTrade(t *testing.T) {
 }
 
 func TestMultipleTradesOperatingWithCheckSum(t *testing.T) {
-	
-}
 
+}

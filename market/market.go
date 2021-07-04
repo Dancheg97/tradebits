@@ -79,7 +79,8 @@ This function should be used only in case those values are modified:
 func Get(adress []byte) *market {
 	lockErr := lock.Lock(adress)
 	if lockErr != nil {
-		return nil
+		time.Sleep(time.Millisecond * 89)
+		return Get(adress)
 	}
 	a := market{adress: adress}
 	marketBytes := data.Get(adress)
