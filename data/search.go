@@ -37,6 +37,12 @@ func SearchAdd(name string, adress []byte) {
 	searcher.Index(adressAsString, name)
 }
 
+func SearchChange(newName string, adress []byte) {
+	adressAsString := string(adress)
+	searcher.Delete(adressAsString)
+	searcher.Index(adressAsString, newName)
+}
+
 func Search(info string) [][]byte {
 	query := bleve.NewMatchQuery(info)
 	search := bleve.NewSearchRequest(query)
