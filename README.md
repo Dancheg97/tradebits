@@ -64,6 +64,12 @@ This package is automatically generated, by `api.proto` file, which is in `net` 
 
 protoc api/api.proto --go-grpc_out=. --go_out=.
 
+# vscode extensions folder:
+
+Windows 
+%USERPROFILE%\.vscode\extensions
+macOS & Linux
+~/.vscode/extensions
 
 ## TODO
 

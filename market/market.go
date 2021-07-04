@@ -4,10 +4,8 @@ import (
 	"bytes"
 	"encoding/gob"
 	"errors"
-	"reflect"
 	"sync_tree/data"
 	"sync_tree/lock"
-	"sync_tree/user"
 	"time"
 )
 
@@ -112,97 +110,6 @@ func Look(adress []byte) *market {
 	marketCache := bytes.NewBuffer(marketBytes)
 	gob.NewDecoder(marketCache).Decode(&currMarket)
 	return &currMarket
-}
-
-/*
-Recursive function to add trades to existing market. Each new iteration
-*/
-func (m *market) OperateTrade(newTrade Trade) bool {
-	m.OpCount = m.OpCount + 1
-	if newTrade.Offer == 0 || newTrade.Recieve == 0 {
-		return false
-	}
-	if newTrade.IsSell {
-		if len(m.Buys) == 0 {
-			m.Sells = append(m.Sells, newTrade)
-			return true
-		}
-		trades, outputs := newTrade.operate(m.Buys[0])
-		m.Buys = m.Buys[1:]
-		m.outputs = append(m.outputs, outputs...)
-		m.output()
-		if len(trades) == 2 {
-			m.addTrade(trades[0])
-			m.addTrade(trades[1])
-			return true
-		}
-		if len(trades) == 1 {
-			m.OperateTrade(newTrade)
-		}
-		return true
-	} else {
-		if len(m.Sells) == 0 {
-			m.Buys = append(m.Buys, newTrade)
-			return true
-		}
-		trades, outputs := newTrade.operate(m.Sells[0])
-		m.Sells = m.Sells[1:]
-		m.outputs = append(m.outputs, outputs...)
-		m.output()
-		if len(trades) == 2 {
-			m.addTrade(trades[0])
-			m.addTrade(trades[1])
-			return true
-		}
-		if len(trades) == 1 {
-			m.OperateTrade(newTrade)
-		}
-		return true
-	}
-}
-
-// function that returns offers from some adress to trade creator
-func (m *market) CancelTrades(adress []byte) bool {
-	for index, buyTrade := range m.Buys {
-		if reflect.DeepEqual(adress, buyTrade.Adress) {
-			m.Buys = append(m.Buys[:index], m.Buys[index+1:]...)
-			u := user.Get(adress)
-			if u == nil {
-				return false
-			}
-			u.Balance = u.Balance + buyTrade.Offer
-			u.Save()
-		}
-	}
-	for index, sellTrade := range m.Sells {
-		if reflect.DeepEqual(adress, sellTrade.Adress) {
-			m.Sells = append(m.Sells[:index], m.Sells[index+1:]...)
-			u := user.Get(adress)
-			if u == nil {
-				return false
-			}
-			u.Markets[string(m.adress)] = u.Markets[string(m.adress)] + sellTrade.Offer
-			u.Save()
-		}
-	}
-	return true
-}
-
-// function to send all outputs back to users
-func (m *market) output() {
-	for _, output := range m.outputs {
-		for {
-			u := user.Get(output.Adress)
-			if u != nil {
-				u.Balance = u.Balance + output.MainOut
-				marketAdr := string(m.adress)
-				u.Markets[marketAdr] = u.Markets[marketAdr] + output.MarketOut
-				u.Save()
-				break
-			}
-			time.Sleep(time.Second)
-		}
-	}
 }
 
 /*

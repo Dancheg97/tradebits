@@ -115,7 +115,7 @@ func TestMultipleTradesOperatingWithCheckSum(t *testing.T) {
 		localCheckSumMain := 0
 		localCheckSumMarket := 0
 		for _, adr := range randomUserAdresses {
-			u := user.Get(adr)
+			u := user.Look(adr)
 			localCheckSumMain = localCheckSumMain + int(u.Balance)
 			localCheckSumMarket = localCheckSumMarket + int(u.MarketBalance(adress))
 		}
