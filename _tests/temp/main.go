@@ -1,10 +1,13 @@
 package main
 
-import "fmt"
-
+import (
+	"fmt"
+	"path"
+	"runtime"
+)
 
 func main() {
-	m := make(map[string]string)
-	m["123"] = m["123"] + "some stuff"
-	fmt.Println(m["123"])
+	_, filename, _, _ := runtime.Caller(0)
+	dirName := path.Dir(filename)
+	fmt.Println(dirName)
 }

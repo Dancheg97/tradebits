@@ -2,6 +2,8 @@ package data
 
 import (
 	"os"
+	"path"
+	"runtime"
 
 	"github.com/blevesearch/bleve/v2"
 )
@@ -15,10 +17,11 @@ created, it's adress will be saved to maping according to new market name.
 gonna be saved to same.
 */
 
-var searchPath = "/Users/danilafominyh/Documents/sync_tree_server/data/search"
 var searcher = openSearch()
 
 func openSearch() bleve.Index {
+	_, filename, _, _ := runtime.Caller(0)
+	searchPath := path.Dir(filename) + "/search"
 	_, existErr := os.Stat(searchPath)
 	if existErr != nil {
 		mapping := bleve.NewIndexMapping()
