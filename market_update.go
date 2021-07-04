@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	pb "sync_tree/api"
 	"sync_tree/calc"
 	"sync_tree/market"
@@ -12,7 +11,7 @@ func (s *server) MarketUpdate(
 	ctx context.Context,
 	in *pb.MarketUpdateRequest,
 ) (*pb.Response, error) {
-	fmt.Println("got request to update market, with name: ", in.Name)
+	//fmt.Println("got request to update market, with name: ", in.Name)
 	concatedMessage := [][]byte{
 		in.PublicKey,
 		in.MesssageKey,

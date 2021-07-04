@@ -29,5 +29,4 @@ func TestDataBase(t *testing.T) {
 	} else {
 		t.Error("failed to change item contents in database")
 	}
-	removeAfterTest()
 }

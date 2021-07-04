@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	pb "sync_tree/api"
 	"sync_tree/calc"
 	"sync_tree/market"
@@ -12,7 +11,7 @@ func (s *server) MarketCreate(
 	ctx context.Context,
 	in *pb.MarketCreateRequest,
 ) (*pb.Response, error) {
-	fmt.Println("got request to craete new market, name", in.Name)
+	//fmt.Println("got request to craete new market, name", in.Name)
 	concatedMessage := [][]byte{
 		in.PublicKey,
 		in.MesssageKey,

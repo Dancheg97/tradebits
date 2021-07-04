@@ -12,7 +12,6 @@ func (s *server) UserCancelTrade(
 	ctx context.Context,
 	in *pb.UserCancelTradeRequest,
 ) (*pb.Response, error) {
-	fmt.Println("cancel:", in.MarketAdress)
 	concMes := [][]byte{
 		in.PublicKey,
 		in.MarketAdress,
@@ -22,7 +21,9 @@ func (s *server) UserCancelTrade(
 		userAdress := calc.Hash(in.PublicKey)
 		m := market.Get(in.MarketAdress)
 		if m != nil {
+			defer m.Save()
 			canceled := m.CancelTrades(userAdress)
+			fmt.Println(canceled)
 			return &pb.Response{Passed: canceled}, nil
 		}
 	}

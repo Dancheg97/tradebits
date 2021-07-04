@@ -2,7 +2,6 @@ package calc
 
 import (
 	"crypto/x509"
-	"fmt"
 	"io/ioutil"
 	"reflect"
 	"testing"
@@ -10,8 +9,7 @@ import (
 
 func TestHash(t *testing.T) {
 	hash := Hash([]byte{0})
-	fmt.Println(hash)
-	expected := []byte{82, 183, 9, 232, 198, 142, 69, 166, 187, 232, 192, 96, 68, 75, 73, 151, 112, 183, 61, 164, 253, 193, 184, 5, 181, 233, 156, 208, 175, 166, 26, 164, 209, 27, 80, 16, 145, 0, 78, 104, 11, 151, 150, 131, 100, 121, 160, 43, 34, 196, 98, 251, 92, 80, 223, 142, 20, 163, 21, 232, 171, 85, 72, 39}
+	expected := []byte{184, 36, 77, 2, 137, 129, 214, 147, 175, 123, 69, 106, 248, 239, 164, 202, 214, 61, 40, 46, 25, 255, 20, 148, 44, 36, 110, 80, 217, 53, 29, 34, 112, 74, 128, 42, 113, 195, 88, 11, 99, 112, 222, 76, 235, 41, 60, 50, 74, 132, 35, 52, 37, 87, 212, 229, 195, 132, 56, 240, 227, 105, 16, 238}
 	if reflect.DeepEqual(hash, expected) {
 		return
 	}
@@ -19,17 +17,17 @@ func TestHash(t *testing.T) {
 }
 
 func TestSign(t *testing.T) {
-	keyBytes, _ := ioutil.ReadFile("calc/priv.pem")
+	keyBytes, _ := ioutil.ReadFile("_testPriv.pem")
 	mes := []byte{1, 2, 3}
 	sign, _ := Sign([][]byte{mes, mes}, keyBytes)
-	if len(sign) == 512 {
+	if len(sign) == 256 {
 		return
 	}
-	t.Error("taking blake2b hash")
+	t.Error("signature error")
 }
 
 func TestVerify(t *testing.T) {
-	keyBytes, _ := ioutil.ReadFile("calc/priv.pem")
+	keyBytes, _ := ioutil.ReadFile("_testPriv.pem")
 	mes := []byte{1, 2, 3}
 	sign, _ := Sign([][]byte{mes, mes}, keyBytes)
 	priv, _ := x509.ParsePKCS1PrivateKey(keyBytes)
@@ -55,16 +53,35 @@ func TestGenerateRandomBytes(t *testing.T) {
 
 func TestGetKeys(t *testing.T) {
 	keys := Gen()
-	if len(keys.MesPriv) != 1190 || len(keys.MesPriv) != 1192 {
-		t.Error("Wrong mes priv key length", len(keys.MesPriv))
+	lenSum := len(keys.PersPriv) + len(keys.PersPub) + len(keys.MesPriv) + len(keys.MesPub)
+	if lenSum < 4330 || lenSum > 4340 {
+		t.Error("failed to generate correct keys")
 	}
-	if len(keys.MesPub) != 270 {
-		t.Error("Wrong mes pub key ltngth")
+}
+
+func TestNumToBytes(t *testing.T) {
+	number := uint64(1823879123)
+	bytes := NumberToBytes(number)
+	if len(bytes) != 8 {
+		t.Error("byte length of the number should be 8")
 	}
-	if len(keys.PersPriv) != 2348 {
-		t.Error("Wrong pers priv key length")
+}
+
+func TestBadKeySign(t* testing.T) {
+	badKey := []byte{1, 2, 3, 4}
+	mes := [][]byte{badKey, badKey}
+	_, err := Sign(mes, badKey)
+	if err == nil {
+		t.Error("should get an error cuz key is invalid")
 	}
-	if len(keys.PersPub) != 526 {
-		t.Error("Wrong pers pub key length")
+}
+
+func TestBadKeyVerification(t *testing.T) {
+	badKey := []byte{1, 2, 3, 4}
+	sign := []byte{1, 2, 3, 4}
+	mes := [][]byte{badKey, badKey}
+	err := Verify(mes, badKey, sign)
+	if err == nil {
+		t.Error("should be an error here, cuz key bytes are invalid")
 	}
 }

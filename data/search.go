@@ -1,6 +1,10 @@
 package data
 
-import "github.com/blevesearch/bleve/v2"
+import (
+	"os"
+
+	"github.com/blevesearch/bleve/v2"
+)
 
 /*
 	Purpose of search engine is to give user an ability to find relevant to
@@ -11,7 +15,19 @@ created, it's adress will be saved to maping according to new market name.
 gonna be saved to same.
 */
 
-var searcher, _ = bleve.Open("data/search")
+var searchPath = "/Users/danilafominyh/Documents/sync_tree_server/data/search"
+var searcher = openSearch()
+
+func openSearch() bleve.Index {
+	_, existErr := os.Stat(searchPath)
+	if existErr != nil {
+		mapping := bleve.NewIndexMapping()
+		searcher, _ := bleve.New(searchPath, mapping)
+		return searcher
+	}
+	searcher, _ := bleve.Open(searchPath)
+	return searcher
+}
 
 func SearchAdd(name string, adress []byte) {
 	adressAsString := string(adress)

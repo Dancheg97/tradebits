@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"reflect"
 	"sync_tree/market"
 	"sync_tree/user"
@@ -14,7 +13,7 @@ func (s *server) InfoHasTrades(
 	ctx context.Context,
 	in *pb.InfoHasTradesRequest,
 ) (*pb.Response, error) {
-	fmt.Println("checking trades")
+	//fmt.Println("checking trades")
 	user := user.Look(in.UserAdress)
 	if user != nil {
 		market := market.Look(in.MarketAdress)

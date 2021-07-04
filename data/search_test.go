@@ -1,23 +1,19 @@
 package data
 
 import (
-	"os"
 	"reflect"
 	"testing"
 
 	"github.com/blevesearch/bleve/v2"
 )
 
-func removeAfterTest() {
-	os.RemoveAll("data")
-}
 func TestIsolatedCreateBleeve(t *testing.T) {
 	mapping := bleve.NewIndexMapping()
 	_, err := bleve.New("data/search", mapping)
 	if err != nil {
 		t.Error("search engine have not been created", err)
 	}
-	removeAfterTest()
+
 }
 
 func TestIsolatedAddStuff(t *testing.T) {
@@ -27,7 +23,7 @@ func TestIsolatedAddStuff(t *testing.T) {
 	if addErr != nil {
 		t.Error("problem adding some stuff to directory")
 	}
-	removeAfterTest()
+
 }
 
 func TestIsolatedAddStuffAbdSearchForThatStuff(t *testing.T) {
@@ -45,7 +41,7 @@ func TestIsolatedAddStuffAbdSearchForThatStuff(t *testing.T) {
 		t.Error("it should find 1 result")
 		t.Error("search found amount of results: ", searchResult.Total)
 	}
-	removeAfterTest()
+
 }
 
 func TestIsolatedAddAndSearch(t *testing.T) {
@@ -61,7 +57,7 @@ func TestIsolatedAddAndSearch(t *testing.T) {
 	if !reflect.DeepEqual([]byte(hit.ID), []byte{0, 1, 2, 3}) {
 		t.Error("search result didn't match")
 	}
-	removeAfterTest()
+
 }
 
 func TestIsolatedAddMultipleValuesToSameString(t *testing.T) {
@@ -72,7 +68,7 @@ func TestIsolatedAddMultipleValuesToSameString(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	removeAfterTest()
+
 }
 
 func TestIsolatedAddMultipleValuesToSameIndexAndGetThem(t *testing.T) {
@@ -83,8 +79,8 @@ func TestIsolatedAddMultipleValuesToSameIndexAndGetThem(t *testing.T) {
 	query := bleve.NewMatchQuery("hola")
 	search := bleve.NewSearchRequest(query)
 	searchResults, _ := searcher.Search(search)
-	for _, hit := range(searchResults.Hits) {
+	for _, hit := range searchResults.Hits {
 		t.Error([]byte(hit.ID))
 	}
-	removeAfterTest()
+
 }

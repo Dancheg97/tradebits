@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"errors"
-	"fmt"
 	pb "sync_tree/api"
 	"sync_tree/market"
 )
@@ -12,7 +11,7 @@ func (s *server) InfoMarket(
 	ctx context.Context,
 	in *pb.InfoMarketRequest,
 ) (*pb.InfoMarketResponse, error) {
-	fmt.Println("getting info about market: ", in.Adress)
+	//fmt.Println("getting info about market: ", in.Adress)
 	m := market.Look(in.Adress)
 	if m != nil {
 		return &pb.InfoMarketResponse{
