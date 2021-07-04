@@ -3,6 +3,7 @@ package market
 import (
 	"math/rand"
 	"reflect"
+	"runtime/trace"
 	"testing"
 	"time"
 )
@@ -56,16 +57,21 @@ func TestAssetLook(t *testing.T) {
 	t.Error("keys are not the same, look asset error")
 }
 
+func genRandNumber() int {
+	rand.Seed(time.Now().UnixNano())
+	min := 500
+	max := 1000
+	randNum := rand.Intn(max-min) + min
+	return randNum
+}
+
 func TestMarketAddTrade(t *testing.T) {
 	Create(adress, name, mesKey, descr, img)
 	market := Get(adress)
 	for i := 0; i < 15; i++ {
 		randNumbers := []uint64{}
 		for i := 0; i < 2; i++ {
-			rand.Seed(time.Now().UnixNano())
-			min := 1
-			max := 100
-			randNum := rand.Intn(max-min) + min
+			randNum := genRandNumber()
 			randNumbers = append(randNumbers, uint64(randNum))
 		}
 		randTrade := Trade{
@@ -78,6 +84,28 @@ func TestMarketAddTrade(t *testing.T) {
 	}
 }
 
+/*
+This test is creating a sequence of market trade requests, each of which are
+then operating on a market, then after each new market request is operated,
+this test is checking 'check sum', so that no trade is causing unstable
+behaviour. call as main
+*/
 func TestMultipleTradesOperatingWithCheckSum(t *testing.T) {
-
+	Create(adress, name, mesKey, descr, img)
+	mkt := Get(adress)
+	checkSumMain := 0
+	checkSumMarket := 0
+	for i := 0; i < 10000; i++ {
+		randTrade := Trade{
+			IsSell: rand.Intn(2) != 0,
+			Offer: uint64(genRandNumber()),
+			Recieve: uint64(genRandNumber()),
+		}
+		if randTrade.IsSell {
+			checkSumMarket = checkSumMarket + int(randTrade.Offer)
+		} else {
+			checkSumMain = checkSumMain + int(randTrade.Offer)
+		}
+		mkt.OperateTrade(randTrade)
+	}
 }
