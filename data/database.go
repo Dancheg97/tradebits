@@ -47,3 +47,9 @@ func Check(key []byte) bool {
 	valueExists, _ := base.Has(key, nil)
 	return valueExists
 }
+
+// function is made only to remove values after testing, dont call it in
+// any other case
+func TestRM(key []byte) {
+	base.Delete(key, nil)
+}
