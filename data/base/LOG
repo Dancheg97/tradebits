@@ -250,3 +250,15 @@
 19:22:19.522273 table@compaction committed F-2 S-808B Ke·0 D·6 T·23.256378ms
 19:22:19.542509 table@remove removed @56
 19:22:19.542870 table@remove removed @53
+=============== Jul 11, 2021 (MSK) ===============
+19:25:39.353731 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+19:25:39.355100 version@stat F·[3] S·1KiB[1KiB] Sc·[0.75]
+19:25:39.355139 db@open opening
+19:25:39.355272 journal@recovery F·1
+19:25:39.356762 journal@recovery recovering @57
+19:25:39.376207 memdb@flush created L0@59 N·3 S·404B "\x01\x02\x03..>?\xe5,d34":"\x01\x02\x03..>?\xe5,v32"
+19:25:39.376681 version@stat F·[4] S·1KiB[1KiB] Sc·[1.00]
+19:25:39.420420 db@janitor F·6 G·0
+19:25:39.420483 db@open done T·65.32077ms
+19:25:39.420753 table@move L0@59 -> L1
+19:25:39.421128 version@stat F·[3 1] S·1KiB[1KiB 404B] Sc·[0.75 0.00]
