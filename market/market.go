@@ -18,15 +18,9 @@ type market struct {
 	OpCount uint64
 	// Buys    []Trade
 	// Sells   []Trade
-	Mes     map[string]string
-	Arch    map[string]string
-	outputs []output
-}
-
-type output struct {
-	Adress    []byte
-	MainOut   uint64
-	MarketOut uint64
+	Mes  map[string]string
+	Arch map[string]string
+	// outputs []output
 }
 
 /*
@@ -52,7 +46,7 @@ func Create(
 		OpCount: 0,
 		// Buys:    []Trade{},
 		// Sells:   []Trade{},
-		Mes:     make(map[string]string),
+		Mes: make(map[string]string),
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newMarket)
@@ -117,7 +111,7 @@ Function to add message from some adress to concrete market
 */
 func (m *market) PutMessage(userAdress []byte, mes string) {
 	strAdr := string(userAdress)
-	m.Mes[strAdr] = m.Mes[strAdr] + "|" + mes
+	m.Mes[strAdr] = mes
 }
 
 /*
