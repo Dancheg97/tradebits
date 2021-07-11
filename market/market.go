@@ -16,11 +16,8 @@ type market struct {
 	Descr   string
 	Img     string
 	OpCount uint64
-	// Buys    []Trade
-	// Sells   []Trade
-	Mes  map[string]string
-	Arch map[string]string
-	// outputs []output
+	Msg     map[string]string
+	Arch    map[string]string
 }
 
 /*
@@ -44,9 +41,8 @@ func Create(
 		Img:     Img,
 		MesKey:  MesKey,
 		OpCount: 0,
-		// Buys:    []Trade{},
-		// Sells:   []Trade{},
-		Mes: make(map[string]string),
+		Msg:     make(map[string]string),
+		Arch:    make(map[string]string),
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newMarket)
@@ -111,7 +107,7 @@ Function to add message from some adress to concrete market
 */
 func (m *market) PutMessage(userAdress []byte, mes string) {
 	strAdr := string(userAdress)
-	m.Mes[strAdr] = mes
+	m.Msg[strAdr] = mes
 }
 
 /*
@@ -119,10 +115,10 @@ This function is made to get all new messages and to put all current messages
 to archieve
 */
 func (m *market) GetAllMessages() map[string]string {
-	messages := m.Mes
-	for sender, message := range m.Mes {
+	messages := m.Msg
+	for sender, message := range m.Msg {
 		m.Arch[sender] = m.Arch[sender] + "|" + message
 	}
-	m.Mes = make(map[string]string)
+	m.Msg = make(map[string]string)
 	return messages
 }
