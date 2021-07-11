@@ -16,8 +16,8 @@ type market struct {
 	Descr   string
 	Img     string
 	OpCount uint64
-	Buys    []Trade
-	Sells   []Trade
+	// Buys    []Trade
+	// Sells   []Trade
 	Mes     map[string]string
 	Arch    map[string]string
 	outputs []output
@@ -50,8 +50,8 @@ func Create(
 		Img:     Img,
 		MesKey:  MesKey,
 		OpCount: 0,
-		Buys:    []Trade{},
-		Sells:   []Trade{},
+		// Buys:    []Trade{},
+		// Sells:   []Trade{},
 		Mes:     make(map[string]string),
 	}
 	cache := new(bytes.Buffer)
