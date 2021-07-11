@@ -1,8 +1,10 @@
 package user
 
 import (
+	"reflect"
 	"sync_tree/data"
 	"testing"
+	"time"
 )
 
 func TestCreateUser(t *testing.T) {
@@ -29,27 +31,38 @@ func TestCreateExisting(t *testing.T) {
 }
 
 func TestGetFreeUser(t *testing.T) {
-	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 91, 91, 91, 91}
+	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 22, 91, 91, 91, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
 	var img = "user image link"
-	Create()
+	Create(adress, mesKey, img)
 	freeUser := Get(adress)
-	defer freeUser.Save()
-	if freeUser.PublicName == "user image link" {
-		return
+	freeUser.Save()
+	if freeUser.PublicName != "user image link" {
+		t.Error("get free user error")
 	}
-	t.Error("get free user error")
+	data.TestRM(adress)
 }
 
-// func TestGetBusyUser(t *testing.T) {
-// 	freeUser := Get(adress)
-// 	defer freeUser.Save()
-// 	busyUser := Get(adress)
-// 	if busyUser != nil {
-// 		t.Error("attem to get free busy user succeded, test failed")
-// 		return
-// 	}
-// }
+var usr2 *user
+
+func getBusyUser(adress []byte) {
+	usr2 = Get(adress)
+}
+
+func TestGetBusyUser(t *testing.T) {
+	var adress = []byte{1, 22, 3, 44, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 22, 91, 91, 91, 91}
+	var mesKey = []byte{1, 2, 3, 4, 5}
+	var img = "user image link"
+	Create(adress, mesKey, img)
+	usr1 := Get(adress)
+	go getBusyUser(adress)
+	time.Sleep(time.Second)
+	usr1.Save()
+	time.Sleep(time.Second)
+	if !reflect.DeepEqual(usr2.adress, adress) {
+		t.Error("adress of second user should be the same")
+	}
+}
 
 // func TestChangeParameters(t *testing.T) {
 // 	someUser := Get(adress)
