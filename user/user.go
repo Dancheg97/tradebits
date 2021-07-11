@@ -84,16 +84,6 @@ func (u *user) Save() {
 	lock.Unlock(saveAdress)
 }
 
-// Get user balance for some specific market
-func (u *user) MarketBalance(market []byte) uint64 {
-	return u.Markets[string(market)]
-}
-
-// Change user balance for some specific market
-func (u *user) ChangeMarketBalance(market []byte, balance uint64) {
-	u.Markets[string(market)] = balance
-}
-
 /*
 Function to add message from some adress to concrete user
 */

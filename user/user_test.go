@@ -62,14 +62,24 @@ func TestGetBusyUser(t *testing.T) {
 	if !reflect.DeepEqual(usr2.adress, adress) {
 		t.Error("adress of second user should be the same")
 	}
+	data.TestRM(adress)
 }
 
-// func TestChangeParameters(t *testing.T) {
-// 	someUser := Get(adress)
-// 	someUser.Balance = 1234
-// 	someUser.Save()
-// 	sameUser := Look(adress)
-// 	if sameUser.Balance != 1234 {
-// 		t.Error("same user balance should be 1000")
-// 	}
-// }
+func TestUserLook(t *testing.T) {
+	var adress = []byte{1, 22, 3, 44, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 121, 59, 22, 91, 91, 91, 91}
+	var mesKey = []byte{1, 2, 3, 4, 5}
+	var img = "user image link"
+	Create(adress, mesKey, img)
+	usr := Look(adress)
+	if len(usr.adress) != 0 {
+		t.Error("user adress should be empty")
+	}
+	if usr.PublicName != img {
+		t.Error("user info is incorrect")
+	}
+	data.TestRM(adress)
+}
+
+func TestUserMessages(t *testing.T) {
+
+}
