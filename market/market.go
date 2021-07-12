@@ -18,6 +18,8 @@ type market struct {
 	OpCount uint64
 	Msg     map[string]string
 	Arch    map[string]string
+	Buys    [][]byte
+	Sells   [][]byte
 }
 
 /*
