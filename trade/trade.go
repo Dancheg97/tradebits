@@ -1,4 +1,4 @@
-package market
+package trade
 
 type TradePool struct {
 	Buys    []Buy
