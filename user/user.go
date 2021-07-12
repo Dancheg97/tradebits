@@ -106,9 +106,17 @@ func (u *user) GetAllMessages() map[string]string {
 	return messages
 }
 
-// this funciton is generating buy trade, lowering the user main balance
-func (u *user) AttachTradeToUser(trade trade.Buy, adress []byte) *trade.Buy {
-	if trade.Offer == 0 || trade.Recieve == 0 {
-
+// this funciton checks wether it is possible to generate some trade for user
+func (u *user) AttachBuyTrade(trade trade.Buy, adress []byte) error {
+	if u.adress == nil {
+		return errors.New("this user could never be saved, get user with get function instead of look")
 	}
+	if trade.Offer == 0 || trade.Recieve == 0 {
+		return errors.New("offer/recieve should not be equal to zero")
+	}
+	if trade.Offer > u.Balance {
+		return errors.New("trade offer is bigger than users balance, this trade could not be created")
+	}
+	u.Balance = u.Balance - trade.Offer
+	return nil
 }
