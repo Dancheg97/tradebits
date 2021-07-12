@@ -28,30 +28,6 @@ type Output struct {
 	Amount uint64
 }
 
-func NewBuy(adress []byte, offer uint64, recieve uint64) *Buy {
-	if offer == 0 || recieve == 0 {
-		return nil
-	}
-	buy := Buy{
-		Adress:  adress,
-		Offer:   offer,
-		Recieve: recieve,
-	}
-	return &buy
-}
-
-func NewSell(adress []byte, offer uint64, recieve uint64) *Sell {
-	if offer == 0 || recieve == 0 {
-		return nil
-	}
-	sell := Sell{
-		Adress:  adress,
-		Offer:   offer,
-		Recieve: recieve,
-	}
-	return &sell
-}
-
 func (b *Buy) match(s *Sell) []Output {
 	if b.Offer == s.Recieve && b.Recieve == s.Offer {
 		buyOut := Output{
