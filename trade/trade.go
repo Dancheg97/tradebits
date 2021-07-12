@@ -6,12 +6,16 @@ type TradePool struct {
 	Outputs []Output
 }
 
+// after creation this trade should be attached to some user, then to trade
+// pool of some market
 type Buy struct {
 	Adress  []byte
 	Offer   uint64
 	Recieve uint64
 }
 
+// after creation this trade should be attached to some user, then to trade
+// pool of some market
 type Sell struct {
 	Adress  []byte
 	Offer   uint64
