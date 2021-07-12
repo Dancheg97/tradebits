@@ -6,6 +6,7 @@ import (
 	"errors"
 	"sync_tree/data"
 	"sync_tree/lock"
+	"sync_tree/trade"
 	"time"
 )
 
@@ -103,4 +104,11 @@ func (u *user) GetAllMessages() map[string]string {
 	}
 	u.Mes = make(map[string]string)
 	return messages
+}
+
+// this funciton is generating buy trade, lowering the user main balance
+func (u *user) AttachTradeToUser(trade trade.Buy, adress []byte) *trade.Buy {
+	if trade.Offer == 0 || trade.Recieve == 0 {
+
+	}
 }

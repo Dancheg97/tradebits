@@ -48,21 +48,19 @@ func NewSell(adress []byte, offer uint64, recieve uint64) *Sell {
 	return &sell
 }
 
-// func (b *Buy) match(s *Sell) []Output {
-// 	if b.Offer == s.Recieve && b.Recieve == s.Offer {
-// 		buyOut := Output{
-// 			Adress: b.Adress,
-// 			IsMain: false,
-// 			Amount: s.Offer,
-// 		}
-// 		sellOut := Output{
-// 			Adress: s.Adress,
-// 			IsMain: true,
-// 			Amount: b.Offer,
-// 		}
-// 		return []Output{buyOut, sellOut}
-// 	}
-// 	if b.Offer < s.Recieve {
-
-// 	}
-// }
+func (b *Buy) match(s *Sell) []Output {
+	if b.Offer == s.Recieve && b.Recieve == s.Offer {
+		buyOut := Output{
+			Adress: b.Adress,
+			IsMain: false,
+			Amount: s.Offer,
+		}
+		sellOut := Output{
+			Adress: s.Adress,
+			IsMain: true,
+			Amount: b.Offer,
+		}
+		return []Output{buyOut, sellOut}
+	}
+	return nil
+}
