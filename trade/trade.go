@@ -3,7 +3,7 @@ package trade
 type TradePool struct {
 	Buys    []Buy
 	Sells   []Sell
-	Outputs []Output
+	Outputs []output
 }
 
 // after creation this trade should be attached to some user, then to trade
@@ -22,25 +22,26 @@ type Sell struct {
 	Recieve uint64
 }
 
-type Output struct {
+// this struct is used only to transfer data about market outputs for some user
+type output struct {
 	Adress []byte
 	IsMain bool
 	Amount uint64
 }
 
-func (b *Buy) match(s *Sell) []Output {
+func (b *Buy) match(s *Sell) []output {
 	if b.Offer == s.Recieve && b.Recieve == s.Offer {
-		buyOut := Output{
+		buyOut := output{
 			Adress: b.Adress,
 			IsMain: false,
 			Amount: s.Offer,
 		}
-		sellOut := Output{
+		sellOut := output{
 			Adress: s.Adress,
 			IsMain: true,
 			Amount: b.Offer,
 		}
-		return []Output{buyOut, sellOut}
+		return []output{buyOut, sellOut}
 	}
 	return nil
 }
