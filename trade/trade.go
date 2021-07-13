@@ -29,6 +29,7 @@ type output struct {
 	Amount uint64
 }
 
+// all trades are alwayts closing to the side better side
 func (b *Buy) match(s *Sell) []output {
 	if b.Offer == s.Recieve && b.Recieve == s.Offer {
 		buyOut := output{
