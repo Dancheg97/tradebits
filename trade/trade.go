@@ -44,5 +44,6 @@ func (b *Buy) match(s *Sell) []output {
 		}
 		return []output{buyOut, sellOut}
 	}
+	
 	return nil
 }
