@@ -95,8 +95,8 @@ func TestMatchBuyClosing(t *testing.T) {
 func TestMatchSellClosing(t *testing.T) {
 	buy := Buy{
 		Adress:  []byte{0},
-		Offer:   100,
-		Recieve: 50,
+		Offer:   100, // 51
+		Recieve: 50, // 5
 	}
 	sell := Sell{
 		Adress:  []byte{1},

@@ -45,7 +45,6 @@ func (b *Buy) match(s *Sell) []output {
 		return []output{buyOut, sellOut}
 	}
 	if b.Offer < s.Recieve {
-		// that is potential buy closing
 		curSellRatio := float64(s.Offer) / float64(s.Recieve)
 		potenSellOffer := s.Offer - b.Recieve
 		if potenSellOffer > s.Offer {
@@ -54,7 +53,7 @@ func (b *Buy) match(s *Sell) []output {
 		potenSellRecieve := s.Recieve - b.Offer
 		newSellRatio := float64(potenSellOffer) / float64(potenSellRecieve)
 		if newSellRatio <= curSellRatio {
-			buyOutut := output{
+			buyOutput := output{
 				Adress: b.Adress,
 				IsMain: false,
 				Amount: b.Recieve,
@@ -68,11 +67,34 @@ func (b *Buy) match(s *Sell) []output {
 			b.Recieve = 0
 			s.Offer = potenSellOffer
 			s.Recieve = potenSellRecieve
-			return []output{buyOutut, sellOutput}
+			return []output{buyOutput, sellOutput}
 		}
+		return nil
 	}
-	// that is potential sell closing
 	curBuyRatio := float64(b.Offer) / float64(b.Recieve)
-	
+	potentialBuyOffer := b.Offer - s.Recieve
+	potentialBuyRecieve := b.Recieve - s.Offer
+	if potentialBuyRecieve > b.Recieve {
+		return nil
+	}
+	newBuyRatio := float64(potentialBuyOffer) / float64(potentialBuyRecieve)
+	if newBuyRatio >= curBuyRatio {
+		buyOutput := output{
+			Adress: b.Adress,
+			IsMain: false,
+			Amount: s.Offer,
+		}
+		sellOutput := output{
+			Adress: s.Adress,
+			IsMain: true,
+			Amount: s.Recieve,
+		}
+		s.Offer = 0
+		s.Recieve = 0
+		b.Offer = potentialBuyOffer
+		b.Recieve = potentialBuyRecieve
+		return []output{buyOutput, sellOutput}
+	}
 	return nil
 }
+
