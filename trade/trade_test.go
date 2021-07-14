@@ -131,3 +131,37 @@ func TestMatchSellClosing(t *testing.T) {
 		t.Error("new buyer recieve should be equal to 5")
 	}
 }
+
+func TestMatchSellOpen(t *testing.T) {
+	buy := Buy{
+		Adress:  []byte{0},
+		Offer:   100, // 51
+		Recieve: 50, // 5
+	}
+	sell := Sell{
+		Adress:  []byte{1},
+		Offer:   10,
+		Recieve: 49,
+	}
+	outputs := buy.match(&sell)
+	if outputs != nil {
+		t.Error("this trades should not match")
+	}
+}
+
+func TestMatchBuyOpen(t *testing.T) {
+	buy := Buy{
+		Adress:  []byte{0},
+		Offer:   100, // 51
+		Recieve: 50, // 5
+	}
+	sell := Sell{
+		Adress:  []byte{1},
+		Offer:   1000,
+		Recieve: 4900,
+	}
+	outputs := buy.match(&sell)
+	if outputs != nil {
+		t.Error("this trades should not match")
+	}
+}

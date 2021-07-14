@@ -21,7 +21,7 @@ var searcher = openSearch()
 
 func openSearch() bleve.Index {
 	_, filename, _, _ := runtime.Caller(0)
-	searchPath := path.Dir(filename) + "/search"
+	searchPath := path.Dir(filename) + "/bleeve"
 	_, existErr := os.Stat(searchPath)
 	if existErr != nil {
 		mapping := bleve.NewIndexMapping()
