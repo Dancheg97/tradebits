@@ -98,3 +98,10 @@ func (b *Buy) match(s *Sell) []output {
 	return nil
 }
 
+func (t *TradePool) AddBuy(b Buy) []output {
+
+}
+
+func (t *TradePool) AddSell(s Sell) []output {
+
+}

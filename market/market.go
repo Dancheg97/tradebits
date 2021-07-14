@@ -6,6 +6,7 @@ import (
 	"errors"
 	"sync_tree/data"
 	"sync_tree/lock"
+	"sync_tree/search"
 	"time"
 )
 
@@ -49,7 +50,8 @@ func Create(
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newMarket)
 	data.Put(adress, cache.Bytes())
-	data.SearchAdd(Name, adress)
+
+	search.SearchAdd(Name, adress)
 	return nil
 }
 

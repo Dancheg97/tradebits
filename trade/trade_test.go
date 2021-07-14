@@ -1,6 +1,7 @@
 package trade
 
 import (
+	"reflect"
 	"testing"
 )
 
@@ -96,7 +97,7 @@ func TestMatchSellClosing(t *testing.T) {
 	buy := Buy{
 		Adress:  []byte{0},
 		Offer:   100, // 51
-		Recieve: 50, // 5
+		Recieve: 50,  // 5
 	}
 	sell := Sell{
 		Adress:  []byte{1},
@@ -132,11 +133,11 @@ func TestMatchSellClosing(t *testing.T) {
 	}
 }
 
-func TestMatchSellOpen(t *testing.T) {
+func TestMatchCancelByNilSellRatio(t *testing.T) {
 	buy := Buy{
 		Adress:  []byte{0},
 		Offer:   100, // 51
-		Recieve: 50, // 5
+		Recieve: 50,  // 5
 	}
 	sell := Sell{
 		Adress:  []byte{1},
@@ -149,19 +150,69 @@ func TestMatchSellOpen(t *testing.T) {
 	}
 }
 
-func TestMatchBuyOpen(t *testing.T) {
+func TestMatchBuyOpenNilPotentialRecieve(t *testing.T) {
 	buy := Buy{
 		Adress:  []byte{0},
 		Offer:   100, // 51
-		Recieve: 50, // 5
+		Recieve: 50,  // 5
 	}
 	sell := Sell{
 		Adress:  []byte{1},
 		Offer:   1000,
-		Recieve: 4900,
+		Recieve: 100,
 	}
 	outputs := buy.match(&sell)
 	if outputs != nil {
 		t.Error("this trades should not match")
+	}
+}
+
+func TestMatchBuyOpen(t *testing.T) {
+	buy := Buy{
+		Adress:  []byte{0},
+		Offer:   100,
+		Recieve: 100,
+	}
+	sell := Sell{
+		Adress:  []byte{1},
+		Offer:   1000,
+		Recieve: 101,
+	}
+	outputs := buy.match(&sell)
+	if outputs != nil {
+		t.Error("this trades should not match")
+	}
+}
+
+func TestAddSingleBuy(t *testing.T) {
+	buy := Buy{
+		Adress:  []byte{0},
+		Offer:   100,
+		Recieve: 100,
+	}
+	tp := TradePool{
+		Buys:    []Buy{},
+		Sells:   []Sell{},
+		Outputs: []output{},
+	}
+	outputs := tp.AddBuy(buy)
+	if len(outputs) != 0 {
+		t.Error("there should be zero outputs, when adding frirst buy")
+	}
+	if len(tp.Buys) != 1 {
+		t.Error("there should be a single output in trade pool")
+	}
+	if !reflect.DeepEqual(tp.Buys[0].Adress, []byte{0}) {
+		t.Error("adress of added trade is not matching")
+	}
+	if !(tp.Buys[0].Offer == 100 && tp.Buys[0].Recieve == 100) {
+		t.Error("some amount is not matching on adding")
+	}
+}
+
+func TestAddSingleSell(t *testing.T) {
+	sell := Sell{
+		Adress: []byte{0},
+		
 	}
 }
