@@ -197,22 +197,42 @@ func TestAddSingleBuy(t *testing.T) {
 	}
 	outputs := tp.AddBuy(buy)
 	if len(outputs) != 0 {
-		t.Error("there should be zero outputs, when adding frirst buy")
+		t.Error("there should be zero outputs, when adding first buy")
 	}
 	if len(tp.Buys) != 1 {
 		t.Error("there should be a single output in trade pool")
 	}
-	if !reflect.DeepEqual(tp.Buys[0].Adress, []byte{0}) {
-		t.Error("adress of added trade is not matching")
-	}
-	if !(tp.Buys[0].Offer == 100 && tp.Buys[0].Recieve == 100) {
-		t.Error("some amount is not matching on adding")
+	dataMatch1 := reflect.DeepEqual(tp.Buys[0].Adress, []byte{0})
+	dataMatch2 := tp.Buys[0].Offer == 100
+	dataMatch3 := tp.Buys[0].Recieve == 100
+	if !(dataMatch1 && dataMatch2 && dataMatch3) {
+		t.Error("some data is not matching on current trade")
 	}
 }
 
 func TestAddSingleSell(t *testing.T) {
 	sell := Sell{
-		Adress: []byte{0},
-		
+		Adress:  []byte{0},
+		Offer:   100,
+		Recieve: 100,
+	}
+	tp := TradePool{
+		Buys:    []Buy{},
+		Sells:   []Sell{},
+		Outputs: []output{},
+	}
+	outputs := tp.AddSell(sell)
+	if len(outputs) != 0 {
+		t.Error("there should be zero outputs, when adding first sell trade")
+	}
+	if len(tp.Sells) != 1 {
+		t.Error("threre should be a single sell, in current active trades")
+	}
+	dataMatch1 := !reflect.DeepEqual(tp.Sells[0].Adress, []byte{0})
+	dataMatch2 := tp.Sells[0].Offer == 100
+	dataMatch3 := tp.Sells[0].Recieve == 100
+	if !(dataMatch1 && dataMatch2 && dataMatch3) {
+		t.Error("some error with data while adding sell")
 	}
 }
+
