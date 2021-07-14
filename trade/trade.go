@@ -98,10 +98,16 @@ func (b *Buy) match(s *Sell) []output {
 	return nil
 }
 
-func (t *TradePool) AddBuy(b Buy) []output {
-
+func (t *TradePool) AddBuy(b Buy) {
+	if len(t.Sells) == 0 {
+		t.Buys = []Buy{b}
+		return
+	}
 }
 
-func (t *TradePool) AddSell(s Sell) []output {
-
+func (t *TradePool) AddSell(s Sell) {
+	if len(t.Buys) == 0 {
+		t.Sells = []Sell{s}
+		return
+	}
 }

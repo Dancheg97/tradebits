@@ -184,7 +184,7 @@ func TestMatchBuyOpen(t *testing.T) {
 	}
 }
 
-func TestAddSingleBuy(t *testing.T) {
+func TestAddSingleBuyToEmptyMarket(t *testing.T) {
 	buy := Buy{
 		Adress:  []byte{0},
 		Offer:   100,
@@ -195,8 +195,8 @@ func TestAddSingleBuy(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []output{},
 	}
-	outputs := tp.AddBuy(buy)
-	if len(outputs) != 0 {
+	tp.AddBuy(buy)
+	if len(tp.Outputs) != 0 {
 		t.Error("there should be zero outputs, when adding first buy")
 	}
 	if len(tp.Buys) != 1 {
@@ -210,9 +210,9 @@ func TestAddSingleBuy(t *testing.T) {
 	}
 }
 
-func TestAddSingleSell(t *testing.T) {
+func TestAddSingleSellToEmptyMarket(t *testing.T) {
 	sell := Sell{
-		Adress:  []byte{0},
+		Adress:  []byte{1},
 		Offer:   100,
 		Recieve: 100,
 	}
@@ -221,14 +221,14 @@ func TestAddSingleSell(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []output{},
 	}
-	outputs := tp.AddSell(sell)
-	if len(outputs) != 0 {
+	tp.AddSell(sell)
+	if len(tp.Outputs) != 0 {
 		t.Error("there should be zero outputs, when adding first sell trade")
 	}
 	if len(tp.Sells) != 1 {
 		t.Error("threre should be a single sell, in current active trades")
 	}
-	dataMatch1 := !reflect.DeepEqual(tp.Sells[0].Adress, []byte{0})
+	dataMatch1 := reflect.DeepEqual(tp.Sells[0].Adress, []byte{1})
 	dataMatch2 := tp.Sells[0].Offer == 100
 	dataMatch3 := tp.Sells[0].Recieve == 100
 	if !(dataMatch1 && dataMatch2 && dataMatch3) {
@@ -236,3 +236,31 @@ func TestAddSingleSell(t *testing.T) {
 	}
 }
 
+func TestAddingSellAndBuyThatDontMatch(t *testing.T) {
+	sell := Sell{
+		Adress:  []byte{0},
+		Offer:   50,
+		Recieve: 100,
+	}
+	buy := Buy{
+		Adress:  []byte{1},
+		Offer:   50,
+		Recieve: 100,
+	}
+	tp := TradePool{
+		Buys:    []Buy{},
+		Sells:   []Sell{},
+		Outputs: []output{},
+	}
+	tp.AddBuy(buy)
+	tp.AddSell(sell)
+	if len(tp.Buys) != 1 || len(tp.Sells) != 1 {
+		t.Error("some order have not been added, or being wrongly operated")
+	}
+	if !reflect.DeepEqual(tp.Buys[0], buy) {
+		t.Error("problem with added buy")
+	}
+	if !reflect.DeepEqual(tp.Sells[0], sell) {
+		t.Error("problem with added sell")
+	}
+}
