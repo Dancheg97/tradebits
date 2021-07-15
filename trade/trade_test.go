@@ -361,5 +361,19 @@ func TestAddingSellAndBuySellClose(t *testing.T) {
 	if !(firstFound || secondFound) {
 		t.Error("some of the trades have not been found")
 	}
-	
+	if len(tp.Buys) != 1 {
+		t.Error("there should be 1 current active buy in pool")
+	}
+	if len(tp.Sells) != 0 {
+		t.Error("there should not be any active sells in pool")
+	}
+	if !reflect.DeepEqual(tp.Buys[0].Adress, []byte{1}) {
+		t.Error("adress is not matching on current trade")
+	}
+	if tp.Buys[0].Offer != 900 {
+		t.Error("current trade offer amount is not matching")
+	}
+	if tp.Buys[0].Recieve != 900 {
+		t.Error("current trade recieve amount is not mathcing")
+	}
 }
