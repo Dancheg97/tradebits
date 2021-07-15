@@ -9,17 +9,19 @@ type TradePool struct {
 // after creation this trade should be attached to some user, then to trade
 // pool of some market
 type Buy struct {
-	Adress  []byte
-	Offer   uint64
-	Recieve uint64
+	Adress   []byte
+	Offer    uint64
+	Recieve  uint64
+	Attached bool
 }
 
 // after creation this trade should be attached to some user, then to trade
 // pool of some market
 type Sell struct {
-	Adress  []byte
-	Offer   uint64
-	Recieve uint64
+	Adress   []byte
+	Offer    uint64
+	Recieve  uint64
+	Attached bool
 }
 
 // this struct is used only to transfer data about market outputs for some user

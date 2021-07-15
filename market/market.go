@@ -8,6 +8,7 @@ import (
 	"sync_tree/lock"
 	"sync_tree/search"
 	"sync_tree/trade"
+	"sync_tree/user"
 	"time"
 )
 
@@ -120,4 +121,25 @@ func (m *market) GetAllMessages() map[string]string {
 	}
 	m.Msg = make(map[string]string)
 	return messages
+}
+
+func (m *market) operateOutput(t trade.Output) {
+	u := user.Get(t.Adress)
+	if t.IsMain {
+		u.Balance = u.Balance + t.Amount
+	} else {
+		u.Markets[string(m.adress)] = u.Markets[string(m.adress)] + t.Amount
+	}
+	u.Save()
+}
+
+func (m *market) AttachBuy(b trade.Buy) error {
+	if m.adress != nil {
+		return errors.New("market adress is nil, operation can never be saved")
+	}
+	m.Pool.OperateBuy(b)
+	for _, output := range m.Pool.Outputs {
+		go m.operateOutput(output)
+	}
+	return nil
 }
