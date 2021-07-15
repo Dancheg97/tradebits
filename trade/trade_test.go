@@ -377,3 +377,61 @@ func TestAddingSellAndBuySellClose(t *testing.T) {
 		t.Error("current trade recieve amount is not mathcing")
 	}
 }
+
+func TestAddingSellAndBuyBuyClose(t *testing.T) {
+	sell := Sell{
+		Adress:  []byte{0},
+		Offer:   1000,
+		Recieve: 1000,
+	}
+	buy := Buy{
+		Adress:  []byte{1},
+		Offer:   100,
+		Recieve: 100,
+	}
+	tp := TradePool{
+		Buys:    []Buy{},
+		Sells:   []Sell{},
+		Outputs: []output{},
+	}
+	tp.AddBuy(buy)
+	tp.AddSell(sell)
+	firstOutput := output{
+		Adress: []byte{0},
+		IsMain: true,
+		Amount: 100,
+	}
+	secondOutput := output{
+		Adress: []byte{1},
+		IsMain: false,
+		Amount: 100,
+	}
+	firstFound := false
+	secondFound := false
+	for _, elem := range tp.Outputs {
+		if reflect.DeepEqual(firstOutput, elem) {
+			firstFound = true
+		}
+		if reflect.DeepEqual(secondOutput, elem) {
+			secondFound = true
+		}
+	}
+	if !(firstFound || secondFound) {
+		t.Error("some of the trades have not been found")
+	}
+	if len(tp.Buys) != 0 {
+		t.Error("there should be 1 current active buy in pool")
+	}
+	if len(tp.Sells) != 1 {
+		t.Error("there should not be any active sells in pool")
+	}
+	if !reflect.DeepEqual(tp.Sells[0].Adress, []byte{0}) {
+		t.Error("adress is not matching on current trade")
+	}
+	if tp.Sells[0].Offer != 900 {
+		t.Error("current trade offer amount is not matching")
+	}
+	if tp.Sells[0].Recieve != 900 {
+		t.Error("current trade recieve amount is not mathcing")
+	}
+}
