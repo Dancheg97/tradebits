@@ -1,13 +1,9 @@
 package main
 
-import (
-	"fmt"
-	"path"
-	"runtime"
-)
+import "fmt"
 
 func main() {
-	_, filename, _, _ := runtime.Caller(0)
-	dirName := path.Dir(filename)
-	fmt.Println(dirName)
+	s := []int{0, 1, 2, 3}
+	s = s[1:]
+	fmt.Println(s)
 }

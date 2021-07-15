@@ -103,6 +103,28 @@ func (t *TradePool) AddBuy(b Buy) {
 		t.Buys = []Buy{b}
 		return
 	}
+	outputs := b.match(&t.Sells[0])
+	if outputs == nil {
+		currentRatio := float64(b.Offer) / float64(b.Recieve)
+		for addIndex, checkBuy := range t.Buys {
+			checkRatio := float64(checkBuy.Offer) / float64(checkBuy.Recieve)
+			if currentRatio > checkRatio {
+				t.Buys = append(t.Buys[:addIndex], t.Buys[addIndex-1:]...)
+				t.Buys[addIndex] = b
+				return
+			}
+			t.Buys = append(t.Buys, b)
+		}
+		return
+	}
+	t.Outputs = append(t.Outputs, outputs...)
+	if t.Sells[0].Offer == 0 {
+		t.Sells = t.Sells[1:]
+	}
+	if b.Offer == 0 {
+		return
+	}
+	t.AddBuy(b)
 }
 
 func (t *TradePool) AddSell(s Sell) {
