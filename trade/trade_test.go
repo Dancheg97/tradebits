@@ -236,7 +236,7 @@ func TestAddSingleSellToEmptyMarket(t *testing.T) {
 	}
 }
 
-func TestAddingSellAndBuyThatDontMatch(t *testing.T) {
+func TestOperateBuyAndSellThatDontMatch(t *testing.T) {
 	sell := Sell{
 		Adress:  []byte{0},
 		Offer:   50,
@@ -254,6 +254,35 @@ func TestAddingSellAndBuyThatDontMatch(t *testing.T) {
 	}
 	tp.OperateBuy(buy)
 	tp.OperateSell(sell)
+	if len(tp.Buys) != 1 || len(tp.Sells) != 1 {
+		t.Error("some order have not been added, or being wrongly operated")
+	}
+	if !reflect.DeepEqual(tp.Buys[0], buy) {
+		t.Error("problem with added buy")
+	}
+	if !reflect.DeepEqual(tp.Sells[0], sell) {
+		t.Error("problem with added sell")
+	}
+}
+
+func TestOperateBuyAndSellThatDontMatchDifferentOrder(t *testing.T) {
+	sell := Sell{
+		Adress:  []byte{0},
+		Offer:   50,
+		Recieve: 100,
+	}
+	buy := Buy{
+		Adress:  []byte{1},
+		Offer:   50,
+		Recieve: 100,
+	}
+	tp := TradePool{
+		Buys:    []Buy{},
+		Sells:   []Sell{},
+		Outputs: []output{},
+	}
+	tp.OperateSell(sell)
+	tp.OperateBuy(buy)
 	if len(tp.Buys) != 1 || len(tp.Sells) != 1 {
 		t.Error("some order have not been added, or being wrongly operated")
 	}
