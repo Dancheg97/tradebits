@@ -123,6 +123,7 @@ func (m *market) GetAllMessages() map[string]string {
 	return messages
 }
 
+// function to give output for user from market
 func (m *market) operateOutput(t trade.Output) {
 	u := user.Get(t.Adress)
 	if t.IsMain {
@@ -133,6 +134,7 @@ func (m *market) operateOutput(t trade.Output) {
 	u.Save()
 }
 
+// function to attach trade to some market
 func (m *market) AttachBuy(b trade.Buy) error {
 	if m.adress != nil {
 		return errors.New("market adress is nil, operation can never be saved")
