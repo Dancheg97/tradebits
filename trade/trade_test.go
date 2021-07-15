@@ -264,3 +264,24 @@ func TestAddingSellAndBuyThatDontMatch(t *testing.T) {
 		t.Error("problem with added sell")
 	}
 }
+
+func TestAddingSellAndBuyThatOperateBothClose(t *testing.T) {
+	sell := Sell{
+		Adress:  []byte{0},
+		Offer:   100,
+		Recieve: 100,
+	}
+	buy := Buy{
+		Adress:  []byte{1},
+		Offer:   100,
+		Recieve: 100,
+	}
+	tp := TradePool{
+		Buys:    []Buy{},
+		Sells:   []Sell{},
+		Outputs: []output{},
+	}
+	tp.AddBuy(buy)
+	tp.AddSell(sell)
+	
+}
