@@ -289,5 +289,77 @@ func TestAddingSellAndBuyThatOperateBothClose(t *testing.T) {
 	if len(tp.Buys) != 0 || len(tp.Sells) != 0 {
 		t.Error("there sould be 0 active trades in current pool")
 	}
-	t.Error(tp.Outputs)
+	firstOutput := output{
+		Adress: []byte{0},
+		IsMain: true,
+		Amount: 100,
+	}
+	secondOutput := output{
+		Adress: []byte{1},
+		IsMain: false,
+		Amount: 100,
+	}
+	firstFound := false
+	secondFound := false
+	for _, elem := range tp.Outputs {
+		if reflect.DeepEqual(firstOutput, elem) {
+			firstFound = true
+		}
+		if reflect.DeepEqual(secondOutput, elem) {
+			secondFound = true
+		}
+	}
+	if !(firstFound || secondFound) {
+		t.Error("some of the trades have not been found")
+	}
+	if len(tp.Buys) != 0 {
+		t.Error("there sould not be any buys in current pool")
+	}
+	if len(tp.Sells) != 0 {
+		t.Error("there should not be any sells in current pool")
+	}
+}
+
+func TestAddingSellAndBuySellClose(t *testing.T) {
+	sell := Sell{
+		Adress:  []byte{0},
+		Offer:   100,
+		Recieve: 100,
+	}
+	buy := Buy{
+		Adress:  []byte{1},
+		Offer:   1000,
+		Recieve: 1000,
+	}
+	tp := TradePool{
+		Buys:    []Buy{},
+		Sells:   []Sell{},
+		Outputs: []output{},
+	}
+	tp.AddBuy(buy)
+	tp.AddSell(sell)
+	firstOutput := output{
+		Adress: []byte{0},
+		IsMain: true,
+		Amount: 100,
+	}
+	secondOutput := output{
+		Adress: []byte{1},
+		IsMain: false,
+		Amount: 100,
+	}
+	firstFound := false
+	secondFound := false
+	for _, elem := range tp.Outputs {
+		if reflect.DeepEqual(firstOutput, elem) {
+			firstFound = true
+		}
+		if reflect.DeepEqual(secondOutput, elem) {
+			secondFound = true
+		}
+	}
+	if !(firstFound || secondFound) {
+		t.Error("some of the trades have not been found")
+	}
+	
 }
