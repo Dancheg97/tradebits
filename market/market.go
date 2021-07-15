@@ -121,5 +121,3 @@ func (m *market) GetAllMessages() map[string]string {
 	m.Msg = make(map[string]string)
 	return messages
 }
-
-func (m *market) 
