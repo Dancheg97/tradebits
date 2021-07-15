@@ -129,25 +129,19 @@ func (t *TradePool) OperateBuy(b Buy) {
 	t.OperateBuy(b)
 }
 
+// this function is made to insert buy to a place, where it should be
+// depending on the ratio
+
 // this function is gonna add single sell offer and operate it for all currently
 // matching buy operations
 func (t *TradePool) OperateSell(s Sell) {
 	if len(t.Buys) == 0 {
-		t.Sells = []Sell{s}
+		t.insertSell(s)
 		return
 	}
 	outputs := t.Buys[0].match(&s)
 	if outputs == nil {
-		currentRatio := float64(s.Offer) / float64(s.Recieve)
-		for addIndex, checkSell := range t.Sells {
-			checkRatio := float64(checkSell.Offer) / float64(checkSell.Recieve)
-			if currentRatio > checkRatio {
-				t.Sells = append(t.Sells[:addIndex], t.Sells[addIndex-1:]...)
-				t.Sells[addIndex] = s
-				return
-			}
-		}
-		t.Sells = append(t.Sells, s)
+		t.insertSell(s)
 		return
 	}
 	t.Outputs = append(t.Outputs, outputs...)
@@ -158,4 +152,19 @@ func (t *TradePool) OperateSell(s Sell) {
 		return
 	}
 	t.OperateSell(s)
+}
+
+// this function is made to insert sell to a place, where it should be
+// depending on the ratio
+func (t *TradePool) insertSell(s Sell) {
+	currentRatio := float64(s.Offer) / float64(s.Recieve)
+	for addIndex, checkSell := range t.Sells {
+		checkRatio := float64(checkSell.Offer) / float64(checkSell.Recieve)
+		if currentRatio > checkRatio {
+			t.Sells = append(t.Sells[:addIndex], t.Sells[addIndex-1:]...)
+			t.Sells[addIndex] = s
+			return
+		}
+	}
+	t.Sells = append(t.Sells, s)
 }
