@@ -42,6 +42,8 @@ func (b *Buy) match(s *Sell) []output {
 			IsMain: true,
 			Amount: b.Offer,
 		}
+		b.Offer = 0
+		s.Offer = 0
 		return []output{buyOut, sellOut}
 	}
 	if b.Offer < s.Recieve {
@@ -64,7 +66,6 @@ func (b *Buy) match(s *Sell) []output {
 				Amount: b.Offer,
 			}
 			b.Offer = 0
-			b.Recieve = 0
 			s.Offer = potenSellOffer
 			s.Recieve = potenSellRecieve
 			return []output{buyOutput, sellOutput}
@@ -90,7 +91,6 @@ func (b *Buy) match(s *Sell) []output {
 			Amount: s.Recieve,
 		}
 		s.Offer = 0
-		s.Recieve = 0
 		b.Offer = potentialBuyOffer
 		b.Recieve = potentialBuyRecieve
 		return []output{buyOutput, sellOutput}

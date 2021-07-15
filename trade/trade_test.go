@@ -283,5 +283,11 @@ func TestAddingSellAndBuyThatOperateBothClose(t *testing.T) {
 	}
 	tp.AddBuy(buy)
 	tp.AddSell(sell)
-	
+	if len(tp.Outputs) != 2 {
+		t.Error("there should be 2 outputs in current pool")
+	}
+	if len(tp.Buys) != 0 || len(tp.Sells) != 0 {
+		t.Error("there sould be 0 active trades in current pool")
+	}
+	t.Error(tp.Outputs)
 }
