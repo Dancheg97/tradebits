@@ -108,7 +108,7 @@ func (u *user) GetAllMessages() map[string]string {
 
 // this funciton checks wether it is possible to generate some trade for user,
 // if it is possible, this lowers users balance, and returns nil
-func (u *user) AttachBuyTrade(trade trade.Buy) error {
+func (u *user) AttachBuy(trade trade.Buy) error {
 	if u.adress == nil {
 		return errors.New("this user could never be saved, get user with get function instead of look")
 	}
@@ -122,6 +122,19 @@ func (u *user) AttachBuyTrade(trade trade.Buy) error {
 	return nil
 }
 
-func (u *user) AttachSellTrade(trade trade.Sell) {
-	
+func (u *user) AttachSell(trade trade.Sell) error {
+	if u.adress == nil {
+		return errors.New("this user could never be saved, get user with get function instead of look")
+	}
+	if trade.Offer == 0 || trade.Recieve == 0 {
+		return errors.New("offer/recieve should not be equal to zero")
+	}
+	if val, ok := u.Markets[string(trade.Adress)]; ok {
+		if trade.Offer > val {
+			return errors.New("trade offer is bigger than users balance, this trade could not be created")
+		}
+		u.Markets[string(trade.Adress)] = val - trade.Offer
+		return nil
+	}
+	return errors.New("this market does not exist for specific user")
 }
