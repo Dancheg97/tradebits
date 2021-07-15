@@ -127,7 +127,7 @@ func (t *TradePool) insertBuy(b Buy) {
 	for addIndex, checkBuy := range t.Buys {
 		checkRatio := float64(checkBuy.Offer) / float64(checkBuy.Recieve)
 		if currentRatio > checkRatio {
-			t.Buys = append(t.Buys[:addIndex], t.Buys[addIndex-1:]...)
+			t.Buys = append(t.Buys[:addIndex+1], t.Buys[addIndex:]...)
 			t.Buys[addIndex] = b
 			return
 		}
@@ -164,7 +164,7 @@ func (t *TradePool) insertSell(s Sell) {
 	for addIndex, checkSell := range t.Sells {
 		checkRatio := float64(checkSell.Offer) / float64(checkSell.Recieve)
 		if currentRatio > checkRatio {
-			t.Sells = append(t.Sells[:addIndex], t.Sells[addIndex-1:]...)
+			t.Sells = append(t.Sells[:addIndex+1], t.Sells[addIndex:]...)
 			t.Sells[addIndex] = s
 			return
 		}

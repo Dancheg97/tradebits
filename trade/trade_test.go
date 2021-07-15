@@ -436,7 +436,7 @@ func TestAddingSellAndBuyBuyClose(t *testing.T) {
 	}
 }
 
-func TestAddingMultipleSells(t *testing.T) {
+func TestInsertSellOperation(t *testing.T) {
 	firstSell := Sell{
 		Adress:  []byte{0},
 		Offer:   300,
@@ -457,9 +457,9 @@ func TestAddingMultipleSells(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []output{},
 	}
-	tp.OperateSell(secondSell)
-	tp.OperateSell(firstSell)
-	tp.OperateSell(thirdSell)
+	tp.insertSell(secondSell)
+	tp.insertSell(firstSell)
+	tp.insertSell(thirdSell)
 	if len(tp.Buys) != 0 {
 		t.Error("length of buys in pool should be zero")
 	}
@@ -477,5 +477,49 @@ func TestAddingMultipleSells(t *testing.T) {
 	}
 	if !reflect.DeepEqual(tp.Sells[2], thirdSell) {
 		t.Error("third sell should be equal to thirdSell")
+	}
+}
+
+func TestInsertBuyOperation(t *testing.T) {
+	firstBuy := Buy{
+		Adress:  []byte{0},
+		Offer:   300,
+		Recieve: 1000,
+	}
+	secondBuy := Buy{
+		Adress:  []byte{1},
+		Offer:   200,
+		Recieve: 1000,
+	}
+	thirdBuy := Buy{
+		Adress:  []byte{2},
+		Offer:   100,
+		Recieve: 1000,
+	}
+	tp := TradePool{
+		Buys:    []Buy{},
+		Sells:   []Sell{},
+		Outputs: []output{},
+	}
+	tp.insertBuy(secondBuy)
+	tp.insertBuy(firstBuy)
+	tp.insertBuy(thirdBuy)
+	if len(tp.Sells) != 0 {
+		t.Error("length of buys in pool should be zero")
+	}
+	if len(tp.Outputs) != 0 {
+		t.Error("there should no be outputs in current trade pool")
+	}
+	if len(tp.Buys) != 3 {
+		t.Error("there should be 3 buys in trade pool")
+	}
+	if !reflect.DeepEqual(tp.Buys[0], firstBuy) {
+		t.Error("first buy should be equal to firstBuy")
+	}
+	if !reflect.DeepEqual(tp.Buys[1], secondBuy) {
+		t.Error("second buy should be equal to secondBuy")
+	}
+	if !reflect.DeepEqual(tp.Buys[2], thirdBuy) {
+		t.Error("third buy should be equal to thirdBuy")
 	}
 }
