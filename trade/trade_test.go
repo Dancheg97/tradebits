@@ -195,7 +195,7 @@ func TestAddSingleBuyToEmptyMarket(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []output{},
 	}
-	tp.AddBuy(buy)
+	tp.OperateBuy(buy)
 	if len(tp.Outputs) != 0 {
 		t.Error("there should be zero outputs, when adding first buy")
 	}
@@ -221,7 +221,7 @@ func TestAddSingleSellToEmptyMarket(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []output{},
 	}
-	tp.AddSell(sell)
+	tp.OperateSell(sell)
 	if len(tp.Outputs) != 0 {
 		t.Error("there should be zero outputs, when adding first sell trade")
 	}
@@ -252,8 +252,8 @@ func TestAddingSellAndBuyThatDontMatch(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []output{},
 	}
-	tp.AddBuy(buy)
-	tp.AddSell(sell)
+	tp.OperateBuy(buy)
+	tp.OperateSell(sell)
 	if len(tp.Buys) != 1 || len(tp.Sells) != 1 {
 		t.Error("some order have not been added, or being wrongly operated")
 	}
@@ -281,8 +281,8 @@ func TestAddingSellAndBuyThatOperateBothClose(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []output{},
 	}
-	tp.AddBuy(buy)
-	tp.AddSell(sell)
+	tp.OperateBuy(buy)
+	tp.OperateSell(sell)
 	if len(tp.Outputs) != 2 {
 		t.Error("there should be 2 outputs in current pool")
 	}
@@ -336,8 +336,8 @@ func TestAddingSellAndBuySellClose(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []output{},
 	}
-	tp.AddBuy(buy)
-	tp.AddSell(sell)
+	tp.OperateBuy(buy)
+	tp.OperateSell(sell)
 	firstOutput := output{
 		Adress: []byte{0},
 		IsMain: true,
@@ -394,8 +394,8 @@ func TestAddingSellAndBuyBuyClose(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []output{},
 	}
-	tp.AddBuy(buy)
-	tp.AddSell(sell)
+	tp.OperateBuy(buy)
+	tp.OperateSell(sell)
 	firstOutput := output{
 		Adress: []byte{0},
 		IsMain: true,
@@ -433,5 +433,49 @@ func TestAddingSellAndBuyBuyClose(t *testing.T) {
 	}
 	if tp.Sells[0].Recieve != 900 {
 		t.Error("current trade recieve amount is not mathcing")
+	}
+}
+
+func TestAddingMultipleSells(t *testing.T) {
+	firstSell := Sell{
+		Adress:  []byte{0},
+		Offer:   300,
+		Recieve: 1000,
+	}
+	secondSell := Sell{
+		Adress:  []byte{1},
+		Offer:   200,
+		Recieve: 1000,
+	}
+	thirdSell := Sell{
+		Adress:  []byte{2},
+		Offer:   100,
+		Recieve: 1000,
+	}
+	tp := TradePool{
+		Buys:    []Buy{},
+		Sells:   []Sell{},
+		Outputs: []output{},
+	}
+	tp.OperateSell(secondSell)
+	tp.OperateSell(firstSell)
+	tp.OperateSell(thirdSell)
+	if len(tp.Buys) != 0 {
+		t.Error("length of buys in pool should be zero")
+	}
+	if len(tp.Outputs) != 0 {
+		t.Error("there should no be outputs in current trade pool")
+	}
+	if len(tp.Sells) != 3 {
+		t.Error("there should be 3 sells in trade pool")
+	}
+	if !reflect.DeepEqual(tp.Sells[0], firstSell) {
+		t.Error("first sell should be equal to firstSell")
+	}
+	if !reflect.DeepEqual(tp.Sells[1], secondSell) {
+		t.Error("second sell should be equal to secondSell")
+	}
+	if !reflect.DeepEqual(tp.Sells[2], thirdSell) {
+		t.Error("third sell should be equal to thirdSell")
 	}
 }

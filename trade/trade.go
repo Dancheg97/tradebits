@@ -100,7 +100,7 @@ func (b *Buy) match(s *Sell) []output {
 
 // this function is gonna add single buy offer and operate it for all currently
 // matching sell operations
-func (t *TradePool) AddBuy(b Buy) {
+func (t *TradePool) OperateBuy(b Buy) {
 	if len(t.Sells) == 0 {
 		t.Buys = []Buy{b}
 		return
@@ -126,12 +126,12 @@ func (t *TradePool) AddBuy(b Buy) {
 	if b.Offer == 0 {
 		return
 	}
-	t.AddBuy(b)
+	t.OperateBuy(b)
 }
 
 // this function is gonna add single sell offer and operate it for all currently
 // matching buy operations
-func (t *TradePool) AddSell(s Sell) {
+func (t *TradePool) OperateSell(s Sell) {
 	if len(t.Buys) == 0 {
 		t.Sells = []Sell{s}
 		return
@@ -157,5 +157,5 @@ func (t *TradePool) AddSell(s Sell) {
 	if s.Offer == 0 {
 		return
 	}
-	t.AddSell(s)
+	t.OperateSell(s)
 }
