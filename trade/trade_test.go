@@ -265,7 +265,7 @@ func TestAddingSellAndBuyThatDontMatch(t *testing.T) {
 	}
 }
 
-func TestAddingSellAndBuyThatOperateBothClose(t *testing.T) {
+func TestOperateBuyAndSellWithSameValues(t *testing.T) {
 	sell := Sell{
 		Adress:  []byte{0},
 		Offer:   100,
@@ -283,6 +283,61 @@ func TestAddingSellAndBuyThatOperateBothClose(t *testing.T) {
 	}
 	tp.OperateBuy(buy)
 	tp.OperateSell(sell)
+	if len(tp.Outputs) != 2 {
+		t.Error("there should be 2 outputs in current pool")
+	}
+	if len(tp.Buys) != 0 || len(tp.Sells) != 0 {
+		t.Error("there sould be 0 active trades in current pool")
+	}
+	firstOutput := output{
+		Adress: []byte{0},
+		IsMain: true,
+		Amount: 100,
+	}
+	secondOutput := output{
+		Adress: []byte{1},
+		IsMain: false,
+		Amount: 100,
+	}
+	firstFound := false
+	secondFound := false
+	for _, elem := range tp.Outputs {
+		if reflect.DeepEqual(firstOutput, elem) {
+			firstFound = true
+		}
+		if reflect.DeepEqual(secondOutput, elem) {
+			secondFound = true
+		}
+	}
+	if !(firstFound || secondFound) {
+		t.Error("some of the trades have not been found")
+	}
+	if len(tp.Buys) != 0 {
+		t.Error("there sould not be any buys in current pool")
+	}
+	if len(tp.Sells) != 0 {
+		t.Error("there should not be any sells in current pool")
+	}
+}
+
+func TestOperateBuyAndSellWithSameValuesDifferentAddOrder(t *testing.T) {
+	sell := Sell{
+		Adress:  []byte{0},
+		Offer:   100,
+		Recieve: 100,
+	}
+	buy := Buy{
+		Adress:  []byte{1},
+		Offer:   100,
+		Recieve: 100,
+	}
+	tp := TradePool{
+		Buys:    []Buy{},
+		Sells:   []Sell{},
+		Outputs: []output{},
+	}
+	tp.OperateSell(sell)
+	tp.OperateBuy(buy)
 	if len(tp.Outputs) != 2 {
 		t.Error("there should be 2 outputs in current pool")
 	}
