@@ -7,6 +7,7 @@ import (
 	"sync_tree/data"
 	"sync_tree/lock"
 	"sync_tree/search"
+	"sync_tree/trade"
 	"time"
 )
 
@@ -19,14 +20,11 @@ type market struct {
 	OpCount uint64
 	Msg     map[string]string
 	Arch    map[string]string
-	Buys    [][]byte
-	Sells   [][]byte
+	Pool    trade.TradePool
 }
 
-/*
-Create new market by passed values. Checks wether market with passed adress
-exists and creates new one.
-*/
+// Create new market by passed values. Checks wether market with passed adress
+// exists and creates new one.
 func Create(
 	adress []byte,
 	Name string,
@@ -37,6 +35,11 @@ func Create(
 	if data.Check(adress) {
 		return errors.New("possibly market already exists")
 	}
+	pool := trade.TradePool{
+		Buys:    []trade.Buy{},
+		Sells:   []trade.Sell{},
+		Outputs: []trade.Output{},
+	}
 	newMarket := market{
 		adress:  adress,
 		Name:    Name,
@@ -46,11 +49,11 @@ func Create(
 		OpCount: 0,
 		Msg:     make(map[string]string),
 		Arch:    make(map[string]string),
+		Pool:    pool,
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newMarket)
 	data.Put(adress, cache.Bytes())
-
 	search.SearchAdd(Name, adress)
 	return nil
 }
@@ -81,10 +84,8 @@ func Get(adress []byte) *market {
 	return &a
 }
 
-/*
-This function is saving changes to the market in database and removes ability
-to make a double save by removing adress from class struct.
-*/
+// This function is saving changes to the market in database and removes ability
+// to make a double save by removing adress from class struct.
 func (a *market) Save() {
 	saveAdress := a.adress
 	a.adress = nil
@@ -94,10 +95,8 @@ func (a *market) Save() {
 	lock.Unlock(saveAdress)
 }
 
-/*
-Non blocking function to look for market contents, it's impossible to save
-instance of that market to database.
-*/
+// Non blocking function to look for market contents, it's impossible to save
+// instance of that market to database.
 func Look(adress []byte) *market {
 	currMarket := market{}
 	marketBytes := data.Get(adress)
@@ -106,18 +105,14 @@ func Look(adress []byte) *market {
 	return &currMarket
 }
 
-/*
-Function to add message from some adress to concrete market
-*/
+// Function to add message from some adress to concrete market
 func (m *market) PutMessage(userAdress []byte, mes string) {
 	strAdr := string(userAdress)
 	m.Msg[strAdr] = mes
 }
 
-/*
-This function is made to get all new messages and to put all current messages
-to archieve
-*/
+// This function is made to get all new messages and to put all current messages
+// to archieve
 func (m *market) GetAllMessages() map[string]string {
 	messages := m.Msg
 	for sender, message := range m.Msg {
@@ -126,3 +121,5 @@ func (m *market) GetAllMessages() map[string]string {
 	m.Msg = make(map[string]string)
 	return messages
 }
+
+func (m *market) 

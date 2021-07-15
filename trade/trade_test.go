@@ -193,7 +193,7 @@ func TestAddSingleBuyToEmptyMarket(t *testing.T) {
 	tp := TradePool{
 		Buys:    []Buy{},
 		Sells:   []Sell{},
-		Outputs: []output{},
+		Outputs: []Output{},
 	}
 	tp.OperateBuy(buy)
 	if len(tp.Outputs) != 0 {
@@ -219,7 +219,7 @@ func TestAddSingleSellToEmptyMarket(t *testing.T) {
 	tp := TradePool{
 		Buys:    []Buy{},
 		Sells:   []Sell{},
-		Outputs: []output{},
+		Outputs: []Output{},
 	}
 	tp.OperateSell(sell)
 	if len(tp.Outputs) != 0 {
@@ -250,7 +250,7 @@ func TestOperateBuyAndSellThatDontMatch(t *testing.T) {
 	tp := TradePool{
 		Buys:    []Buy{},
 		Sells:   []Sell{},
-		Outputs: []output{},
+		Outputs: []Output{},
 	}
 	tp.OperateBuy(buy)
 	tp.OperateSell(sell)
@@ -279,7 +279,7 @@ func TestOperateBuyAndSellThatDontMatchDifferentOrder(t *testing.T) {
 	tp := TradePool{
 		Buys:    []Buy{},
 		Sells:   []Sell{},
-		Outputs: []output{},
+		Outputs: []Output{},
 	}
 	tp.OperateSell(sell)
 	tp.OperateBuy(buy)
@@ -308,7 +308,7 @@ func TestOperateBuyAndSellWithSameValues(t *testing.T) {
 	tp := TradePool{
 		Buys:    []Buy{},
 		Sells:   []Sell{},
-		Outputs: []output{},
+		Outputs: []Output{},
 	}
 	tp.OperateBuy(buy)
 	tp.OperateSell(sell)
@@ -318,12 +318,12 @@ func TestOperateBuyAndSellWithSameValues(t *testing.T) {
 	if len(tp.Buys) != 0 || len(tp.Sells) != 0 {
 		t.Error("there sould be 0 active trades in current pool")
 	}
-	firstOutput := output{
+	firstOutput := Output{
 		Adress: []byte{0},
 		IsMain: true,
 		Amount: 100,
 	}
-	secondOutput := output{
+	secondOutput := Output{
 		Adress: []byte{1},
 		IsMain: false,
 		Amount: 100,
@@ -363,7 +363,7 @@ func TestOperateBuyAndSellWithSameValuesDifferentAddOrder(t *testing.T) {
 	tp := TradePool{
 		Buys:    []Buy{},
 		Sells:   []Sell{},
-		Outputs: []output{},
+		Outputs: []Output{},
 	}
 	tp.OperateSell(sell)
 	tp.OperateBuy(buy)
@@ -373,12 +373,12 @@ func TestOperateBuyAndSellWithSameValuesDifferentAddOrder(t *testing.T) {
 	if len(tp.Buys) != 0 || len(tp.Sells) != 0 {
 		t.Error("there sould be 0 active trades in current pool")
 	}
-	firstOutput := output{
+	firstOutput := Output{
 		Adress: []byte{0},
 		IsMain: true,
 		Amount: 100,
 	}
-	secondOutput := output{
+	secondOutput := Output{
 		Adress: []byte{1},
 		IsMain: false,
 		Amount: 100,
@@ -418,16 +418,16 @@ func TestOperateSellAndBuyToCloseBuy(t *testing.T) {
 	tp := TradePool{
 		Buys:    []Buy{},
 		Sells:   []Sell{},
-		Outputs: []output{},
+		Outputs: []Output{},
 	}
 	tp.OperateBuy(buy)
 	tp.OperateSell(sell)
-	firstOutput := output{
+	firstOutput := Output{
 		Adress: []byte{0},
 		IsMain: true,
 		Amount: 100,
 	}
-	secondOutput := output{
+	secondOutput := Output{
 		Adress: []byte{1},
 		IsMain: false,
 		Amount: 100,
@@ -476,16 +476,16 @@ func TestOperateBuyAndSellToCloseSell(t *testing.T) {
 	tp := TradePool{
 		Buys:    []Buy{},
 		Sells:   []Sell{},
-		Outputs: []output{},
+		Outputs: []Output{},
 	}
 	tp.OperateSell(sell)
 	tp.OperateBuy(buy)
-	firstOutput := output{
+	firstOutput := Output{
 		Adress: []byte{0},
 		IsMain: true,
 		Amount: 100,
 	}
-	secondOutput := output{
+	secondOutput := Output{
 		Adress: []byte{1},
 		IsMain: false,
 		Amount: 100,
@@ -538,7 +538,7 @@ func TestInsertSellOperation(t *testing.T) {
 	tp := TradePool{
 		Buys:    []Buy{},
 		Sells:   []Sell{},
-		Outputs: []output{},
+		Outputs: []Output{},
 	}
 	tp.insertSell(secondSell)
 	tp.insertSell(firstSell)
@@ -582,7 +582,7 @@ func TestInsertBuyOperation(t *testing.T) {
 	tp := TradePool{
 		Buys:    []Buy{},
 		Sells:   []Sell{},
-		Outputs: []output{},
+		Outputs: []Output{},
 	}
 	tp.insertBuy(secondBuy)
 	tp.insertBuy(firstBuy)

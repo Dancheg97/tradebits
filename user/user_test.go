@@ -107,7 +107,7 @@ func TestAttachBuyToLookedUser(t *testing.T) {
 	Create(adress, mesKey, img)
 	usr := Look(adress)
 	buy := trade.Buy{}
-	err := usr.AttachBuyTrade(buy, []byte{})
+	err := usr.AttachBuyTrade(buy)
 	if err == nil {
 		t.Error("this test should throw an error, because it should be impossible to attach trade to unsavable user")
 	}
@@ -124,7 +124,7 @@ func TestAttachBuyWithZeroOffer(t *testing.T) {
 		Offer:   0,
 		Recieve: 1000,
 	}
-	err := usr.AttachBuyTrade(buy, []byte{})
+	err := usr.AttachBuyTrade(buy)
 	if err == nil {
 		t.Error("this test should throw an error, cuz trade is 0 offer")
 	}
@@ -141,7 +141,7 @@ func TestAttachToBigBuyTrade(t *testing.T) {
 		Offer:   1000,
 		Recieve: 1000,
 	}
-	err := usr.AttachBuyTrade(buy, []byte{})
+	err := usr.AttachBuyTrade(buy)
 	if err == nil {
 		t.Error("this test should throw an error, cuz user has no money")
 	}
@@ -159,7 +159,7 @@ func TestAttachNormalBuy(t *testing.T) {
 		Offer:   1000,
 		Recieve: 1000,
 	}
-	err := usr.AttachBuyTrade(buy, []byte{})
+	err := usr.AttachBuyTrade(buy)
 	if err != nil {
 		t.Error("this test should not throw any errors cuz its fine with user")
 	}

@@ -106,8 +106,9 @@ func (u *user) GetAllMessages() map[string]string {
 	return messages
 }
 
-// this funciton checks wether it is possible to generate some trade for user
-func (u *user) AttachBuyTrade(trade trade.Buy, adress []byte) error {
+// this funciton checks wether it is possible to generate some trade for user,
+// if it is possible, this lowers users balance, and returns nil
+func (u *user) AttachBuyTrade(trade trade.Buy) error {
 	if u.adress == nil {
 		return errors.New("this user could never be saved, get user with get function instead of look")
 	}
@@ -119,4 +120,8 @@ func (u *user) AttachBuyTrade(trade trade.Buy, adress []byte) error {
 	}
 	u.Balance = u.Balance - trade.Offer
 	return nil
+}
+
+func (u *user) AttachSellTrade(trade trade.Sell) {
+	
 }

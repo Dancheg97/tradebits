@@ -3,7 +3,7 @@ package trade
 type TradePool struct {
 	Buys    []Buy
 	Sells   []Sell
-	Outputs []output
+	Outputs []Output
 }
 
 // after creation this trade should be attached to some user, then to trade
@@ -23,28 +23,28 @@ type Sell struct {
 }
 
 // this struct is used only to transfer data about market outputs for some user
-type output struct {
+type Output struct {
 	Adress []byte
 	IsMain bool
 	Amount uint64
 }
 
 // all trades are alwayts closing to the side better side
-func (b *Buy) match(s *Sell) []output {
+func (b *Buy) match(s *Sell) []Output {
 	if b.Offer == s.Recieve && b.Recieve == s.Offer {
-		buyOut := output{
+		buyOut := Output{
 			Adress: b.Adress,
 			IsMain: false,
 			Amount: s.Offer,
 		}
-		sellOut := output{
+		sellOut := Output{
 			Adress: s.Adress,
 			IsMain: true,
 			Amount: b.Offer,
 		}
 		b.Offer = 0
 		s.Offer = 0
-		return []output{buyOut, sellOut}
+		return []Output{buyOut, sellOut}
 	}
 	if b.Offer < s.Recieve {
 		curSellRatio := float64(s.Offer) / float64(s.Recieve)
@@ -55,12 +55,12 @@ func (b *Buy) match(s *Sell) []output {
 		potenSellRecieve := s.Recieve - b.Offer
 		newSellRatio := float64(potenSellOffer) / float64(potenSellRecieve)
 		if newSellRatio <= curSellRatio {
-			buyOutput := output{
+			buyOutput := Output{
 				Adress: b.Adress,
 				IsMain: false,
 				Amount: b.Recieve,
 			}
-			sellOutput := output{
+			sellOutput := Output{
 				Adress: s.Adress,
 				IsMain: true,
 				Amount: b.Offer,
@@ -68,7 +68,7 @@ func (b *Buy) match(s *Sell) []output {
 			b.Offer = 0
 			s.Offer = potenSellOffer
 			s.Recieve = potenSellRecieve
-			return []output{buyOutput, sellOutput}
+			return []Output{buyOutput, sellOutput}
 		}
 		return nil
 	}
@@ -80,12 +80,12 @@ func (b *Buy) match(s *Sell) []output {
 	}
 	newBuyRatio := float64(potentialBuyOffer) / float64(potentialBuyRecieve)
 	if newBuyRatio >= curBuyRatio {
-		buyOutput := output{
+		buyOutput := Output{
 			Adress: b.Adress,
 			IsMain: false,
 			Amount: s.Offer,
 		}
-		sellOutput := output{
+		sellOutput := Output{
 			Adress: s.Adress,
 			IsMain: true,
 			Amount: s.Recieve,
@@ -93,7 +93,7 @@ func (b *Buy) match(s *Sell) []output {
 		s.Offer = 0
 		b.Offer = potentialBuyOffer
 		b.Recieve = potentialBuyRecieve
-		return []output{buyOutput, sellOutput}
+		return []Output{buyOutput, sellOutput}
 	}
 	return nil
 }
