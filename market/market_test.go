@@ -129,3 +129,27 @@ func TestAttachUnboundedTrades(t *testing.T) {
 	}
 	data.TestRM(adress)
 }
+
+func TestAttachToLookedMarket(t *testing.T) {
+	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 119, 120, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 229}
+	var mesKey = []byte{1, 2, 3, 4, 5}
+	var img = "asset image link . example"
+	var name = "newAsset"
+	var descr = "descrx"
+	Create(adress, name, mesKey, descr, img)
+	mkt := Look(adress)
+	sell := trade.Sell{
+		Offer:   100,
+		Recieve: 100,
+	}
+	buy := trade.Buy{
+		Offer:   100,
+		Recieve: 100,
+	}
+	buyAttached := mkt.AttachBuy(buy)
+	sellAttached := mkt.AttachSell(sell)
+	if buyAttached || sellAttached {
+		t.Error("those trades should not be attached cuz they are unbounded")
+	}
+	data.TestRM(adress)
+}
