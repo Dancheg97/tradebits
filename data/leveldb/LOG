@@ -1546,3 +1546,42 @@
 16:23:12.770227 version@stat F·[2 2] S·4KiB[3KiB 951B] Sc·[0.50 0.00]
 16:23:12.813954 db@janitor F·6 G·0
 16:23:12.814069 db@open done T·64.603524ms
+=============== Jul 16, 2021 (MSK) ===============
+16:24:31.879775 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+16:24:31.880387 version@stat F·[2 2] S·4KiB[3KiB 951B] Sc·[0.50 0.00]
+16:24:31.880415 db@open opening
+16:24:31.880524 journal@recovery F·1
+16:24:31.881163 journal@recovery recovering @388
+16:24:31.897846 memdb@flush created L0@390 N·37 S·2KiB "\x01\x02\x03..>?\f,d1024":"\x81\x16\r..[[[,v1046"
+16:24:31.898737 version@stat F·[3 2] S·6KiB[5KiB 951B] Sc·[0.75 0.00]
+16:24:31.943135 db@janitor F·7 G·0
+16:24:31.943219 db@open done T·62.777103ms
+=============== Jul 16, 2021 (MSK) ===============
+16:24:54.929267 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+16:24:54.930310 version@stat F·[3 2] S·6KiB[5KiB 951B] Sc·[0.75 0.00]
+16:24:54.930357 db@open opening
+16:24:54.930563 journal@recovery F·1
+16:24:54.931513 journal@recovery recovering @391
+16:24:54.962551 memdb@flush created L0@393 N·10 S·946B "\x01\x02!..>?\xe5,d1064":"\x81\x16\r..[[[,v1057"
+16:24:54.963698 version@stat F·[4 2] S·7KiB[6KiB 951B] Sc·[1.00 0.00]
+16:24:55.011300 db@janitor F·8 G·0
+16:24:55.011408 db@open done T·81.009625ms
+16:24:55.011576 table@compaction L0·4 -> L1·1 S·7KiB Q·1065
+16:24:55.024469 table@build created L1@396 N·5 S·719B "\x01\x02\x03..>?n,v1":"\x81\x16\r..[[[,v911"
+16:24:55.024795 version@stat F·[0 2] S·951B[0B 951B] Sc·[0.00 0.00]
+16:24:55.057547 table@compaction committed F-4 S-6KiB Ke·0 D·94 T·45.810193ms
+16:24:55.057978 table@remove removed @393
+16:24:55.058274 table@remove removed @390
+16:24:55.058508 table@remove removed @387
+16:24:55.058753 table@remove removed @384
+16:24:55.065178 table@remove removed @383
+=============== Jul 16, 2021 (MSK) ===============
+16:25:22.294159 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+16:25:22.295521 version@stat F·[0 2] S·951B[0B 951B] Sc·[0.00 0.00]
+16:25:22.295572 db@open opening
+16:25:22.295799 journal@recovery F·1
+16:25:22.297250 journal@recovery recovering @394
+16:25:22.316425 memdb@flush created L0@397 N·8 S·900B "\x01\x02!..>?\xe5,d1073":"\x81\x16\r..[[[,v1068"
+16:25:22.317588 version@stat F·[1 2] S·1KiB[900B 951B] Sc·[0.25 0.00]
+16:25:22.368002 db@janitor F·5 G·0
+16:25:22.368099 db@open done T·72.494893ms

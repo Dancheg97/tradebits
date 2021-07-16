@@ -234,24 +234,38 @@ func TestComlpexCheckoutForMultipleDifferentTrades(t *testing.T) {
 	var img2 = "user image link"
 	user.Create(adress2, mesKey2, img2)
 	usr2 := user.Get(adress2)
-	usr2.Markets[string(marketAdress)] = 100
+	usr2.Markets[string(marketAdress)] = 200
+	var adress3 = []byte{129, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 139, 183, 193, 20, 21, 122, 123, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 124, 35, 11, 37, 38, 39, 140, 21, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 59, 22, 91, 91, 91, 91}
+	var mesKey3 = []byte{1, 2, 3, 4, 5}
+	var img3 = "user image link"
+	user.Create(adress3, mesKey3, img3)
+	usr3 := user.Get(adress3)
+	usr3.Balance = 100
 	buy := trade.Buy{
 		Offer:   100,
 		Recieve: 100,
 	}
 	usr1.AttachBuy(&buy)
 	sell := trade.Sell{
+		Offer:   200,
+		Recieve: 200,
+	}
+	usr2.AttachSell(&sell, marketAdress)
+	buy2 := trade.Buy{
 		Offer:   100,
 		Recieve: 100,
 	}
-	usr2.AttachSell(&sell, marketAdress)
+	usr3.AttachBuy(&buy2)
 	mkt.AttachBuy(buy)
 	mkt.AttachSell(sell)
+	mkt.AttachBuy(buy)
 	usr1.Save()
 	usr2.Save()
-	time.Sleep(time.Second * 4)
+	usr3.Save()
+	time.Sleep(time.Second)
 	usr1check := user.Get(adress1)
 	usr2check := user.Get(adress2)
+	usr3check := user.Get(adress3)
 	if usr1check.Balance != 0 {
 		t.Error("main balance of first user should be equal to zero")
 	}
@@ -261,10 +275,17 @@ func TestComlpexCheckoutForMultipleDifferentTrades(t *testing.T) {
 	if usr1check.Markets[string(marketAdress)] != 100 {
 		t.Error("first user market balance should be equal to 100")
 	}
-	if usr2check.Balance != 100 {
-		t.Error("second user main balance should be equal to 100")
+	if usr2check.Balance != 200 {
+		t.Error("second user main balance should be equal to 200")
+	}
+	if usr3check.Markets[string(marketAdress)] != 100 {
+		t.Error("third user market balance should be equal to 100")
+	}
+	if usr3check.Balance != 0 {
+		t.Error("third user main balance should be equal to zero")
 	}
 	data.TestRM(adress1)
 	data.TestRM(adress2)
+	data.TestRM(adress3)
 	data.TestRM(marketAdress)
 }
