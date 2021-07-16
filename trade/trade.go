@@ -6,6 +6,11 @@ type TradePool struct {
 	Outputs []Output
 }
 
+type Trade interface {
+	Operate(*TradePool)
+	insert(*TradePool)
+}
+
 // after creation this trade should be attached to some user, then to trade
 // pool of some market
 type Buy struct {
@@ -100,14 +105,14 @@ func (b *Buy) match(s *Sell) []Output {
 
 // this function is gonna add single buy offer and operate it for all currently
 // matching sell operations
-func (t *TradePool) OperateBuy(b Buy) {
+func (b Buy) Operate(t *TradePool) {
 	if len(t.Sells) == 0 {
-		t.insertBuy(b)
+		b.insert(t)
 		return
 	}
 	outputs := b.match(&t.Sells[0])
 	if outputs == nil {
-		t.insertBuy(b)
+		b.insert(t)
 		return
 	}
 	t.Outputs = append(t.Outputs, outputs...)
@@ -117,12 +122,12 @@ func (t *TradePool) OperateBuy(b Buy) {
 	if b.Offer == 0 {
 		return
 	}
-	t.OperateBuy(b)
+	b.Operate(t)
 }
 
 // this function is made to insert buy to a place, where it should be
 // depending on the ratio
-func (t *TradePool) insertBuy(b Buy) {
+func (b Buy) insert(t *TradePool) {
 	currentRatio := float64(b.Offer) / float64(b.Recieve)
 	for addIndex, checkBuy := range t.Buys {
 		checkRatio := float64(checkBuy.Offer) / float64(checkBuy.Recieve)
@@ -137,14 +142,14 @@ func (t *TradePool) insertBuy(b Buy) {
 
 // this function is gonna add single sell offer and operate it for all currently
 // matching buy operations
-func (t *TradePool) OperateSell(s Sell) {
+func (s Sell) Operate(t *TradePool) {
 	if len(t.Buys) == 0 {
-		t.insertSell(s)
+		s.insert(t)
 		return
 	}
 	outputs := t.Buys[0].match(&s)
 	if outputs == nil {
-		t.insertSell(s)
+		s.insert(t)
 		return
 	}
 	t.Outputs = append(t.Outputs, outputs...)
@@ -154,12 +159,12 @@ func (t *TradePool) OperateSell(s Sell) {
 	if s.Offer == 0 {
 		return
 	}
-	t.OperateSell(s)
+	s.Operate(t)
 }
 
 // this function is made to insert sell to a place, where it should be
 // depending on the ratio
-func (t *TradePool) insertSell(s Sell) {
+func (s Sell) insert(t *TradePool) {
 	currentRatio := float64(s.Offer) / float64(s.Recieve)
 	for addIndex, checkSell := range t.Sells {
 		checkRatio := float64(checkSell.Offer) / float64(checkSell.Recieve)

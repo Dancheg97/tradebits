@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"errors"
+	"reflect"
 	"sync_tree/data"
 	"sync_tree/lock"
 	"sync_tree/trade"
@@ -146,4 +147,19 @@ func (u *user) AttachBuy(buy *trade.Buy) bool {
 	u.Balance = u.Balance - buy.Offer
 	buy.Adress = u.adress
 	return true
+}
+
+func (u *user) UnboundBuy(trade *trade.Buy) error {
+	if !reflect.DeepEqual(trade.Adress, u.adress) {
+		return errors.New("adress of user and trade are not matching")
+	}
+	u.Balance = u.Balance + trade.Offer
+	return nil
+}
+
+func (u *user) UnboundSell(trade *trade.Sell) error {
+	if !reflect.DeepEqual(trade.Adress, u.adress) {
+		return errors.New("adress of trade and user are not matching")
+	}
+	u.[market] = 
 }
