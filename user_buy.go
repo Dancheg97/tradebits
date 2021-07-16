@@ -6,6 +6,7 @@ import (
 	pb "sync_tree/api"
 	"sync_tree/calc"
 	"sync_tree/market"
+	"sync_tree/trade"
 	"sync_tree/user"
 )
 
@@ -30,17 +31,18 @@ func (s *server) UserBuy(
 			if signErr == nil {
 				curMarket := market.Get(in.Adress)
 				if curMarket != nil {
-					buyer.Balance = buyer.Balance - in.Offer
-					buyer.Save()
-					trade := market.Trade{
-						Adress:  buyerAdress,
-						IsSell:  false,
+					trade := trade.Buy{
 						Offer:   in.Offer,
 						Recieve: in.Recieve,
+						Adress:  in.Adress,
 					}
-					curMarket.OperateTrade(trade)
-					curMarket.Save()
-					return &pb.Response{Passed: true}, nil
+					usrAttachErr := buyer.AttachBuy(&trade)
+					if usrAttachErr == nil {
+						marketAttachErr := curMarket.AttachBuy(&trade)
+						if marketAttachErr == nil {
+							return &pb.Response{Passed: true}, nil
+						}
+					}
 				}
 			}
 		}
