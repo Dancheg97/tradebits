@@ -1,9 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
+
+type KKK struct {
+	c []byte
+}
 
 func main() {
-	s := []int{0, 1, 2, 3}
-	s = s[1:]
-	fmt.Println(s)
+	o := KKK{}
+	fmt.Println(o.c)
 }

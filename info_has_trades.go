@@ -19,12 +19,12 @@ func (s *server) InfoHasTrades(
 		market := market.Look(in.MarketAdress)
 		if market != nil {
 			has := false
-			for _, trade := range market.Buys {
+			for _, trade := range market.Pool.Buys {
 				if reflect.DeepEqual(trade.Adress, in.UserAdress) {
 					has = true
 				}
 			}
-			for _, trade := range market.Sells {
+			for _, trade := range market.Pool.Sells {
 				if reflect.DeepEqual(trade.Adress, in.UserAdress) {
 					has = true
 				}

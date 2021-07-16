@@ -100,21 +100,26 @@ func TestUserMessages(t *testing.T) {
 	data.TestRM(adress)
 }
 
-func TestAttachBuyToLookedUser(t *testing.T) {
-	var adress = []byte{1, 22, 3, 44, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 59, 56, 99, 121, 59, 22, 91, 91, 91, 91}
+func TestAttachToLookedUser(t *testing.T) {
+	var adress = []byte{1, 22, 3, 44, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 59, 56, 99, 121, 59, 22, 91, 191, 191, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
 	var img = "user image link"
 	Create(adress, mesKey, img)
 	usr := Look(adress)
 	buy := trade.Buy{}
-	err := usr.AttachBuy(&buy)
-	if err == nil {
-		t.Error("this test should throw an error, because it should be impossible to attach trade to unsavable user")
+	buyAttached := usr.AttachBuy(&buy)
+	if buyAttached {
+		t.Error("buy should not be attached to user, that can never be saved")
+	}
+	sell := trade.Sell{}
+	sellAttached := usr.AttachSell(&sell, []byte{})
+	if sellAttached {
+		t.Error("sell trade should not be attached, cuz user can never be saved")
 	}
 	data.TestRM(adress)
 }
 
-func TestAttachBuyWithZeroOffer(t *testing.T) {
+func TestAttachTradesWithZeroOffer(t *testing.T) {
 	var adress = []byte{1, 22, 3, 44, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 19, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 121, 59, 22, 91, 91, 91, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
 	var img = "user image link"
@@ -124,15 +129,23 @@ func TestAttachBuyWithZeroOffer(t *testing.T) {
 		Offer:   0,
 		Recieve: 1000,
 	}
-	err := usr.AttachBuy(&buy)
-	if err == nil {
-		t.Error("this test should throw an error, cuz trade is 0 offer")
+	buyAttached := usr.AttachBuy(&buy)
+	if buyAttached {
+		t.Error("this buy should not be attached cuz hase zero offer")
+	}
+	sell := trade.Sell{
+		Offer:   0,
+		Recieve: 100,
+	}
+	sellAttached := usr.AttachSell(&sell, []byte{})
+	if sellAttached {
+		t.Error("this sell should never be attached cuz 0 offer")
 	}
 	data.TestRM(adress)
 }
 
-func TestAttachToBigBuyTrade(t *testing.T) {
-	var adress = []byte{1, 22, 3, 44, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 19, 18, 19, 20, 21, 22, 23, 24, 25, 232, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 121, 59, 22, 91, 91, 232, 91}
+func TestAttachTradeWithBigBalance(t *testing.T) {
+	var adress = []byte{1, 22, 3, 44, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 116, 19, 18, 19, 20, 21, 22, 23, 224, 25, 232, 27, 28, 29, 30, 31, 32, 33, 134, 35, 11, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 156, 57, 121, 59, 22, 91, 91, 232, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
 	var img = "user image link"
 	Create(adress, mesKey, img)
@@ -141,14 +154,23 @@ func TestAttachToBigBuyTrade(t *testing.T) {
 		Offer:   1000,
 		Recieve: 1000,
 	}
-	err := usr.AttachBuy(&buy)
-	if err == nil {
-		t.Error("this test should throw an error, cuz user has no money")
+	buyAttached := usr.AttachBuy(&buy)
+	if buyAttached {
+		t.Error("this buy should not be attached cuz its over users balance")
+	}
+	sell := trade.Sell{
+		Offer:   1000,
+		Recieve: 1000,
+	}
+	usr.Markets["x"] = 0
+	sellAttached := usr.AttachSell(&sell, []byte("x"))
+	if sellAttached {
+		t.Error("this sell should not be attached cuz its over users balance")
 	}
 	data.TestRM(adress)
 }
 
-func TestAttachNormalBuy(t *testing.T) {
+func TestAttachNormalTrades(t *testing.T) {
 	var adress = []byte{1, 22, 3, 44, 15, 6, 7, 8, 9, 110, 11, 12, 13, 14, 15, 16, 19, 18, 19, 20, 21, 22, 23, 24, 25, 232, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 87, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 121, 59, 22, 91, 91, 232, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
 	var img = "user image link"
@@ -159,96 +181,66 @@ func TestAttachNormalBuy(t *testing.T) {
 		Offer:   1000,
 		Recieve: 1000,
 	}
-	err := usr.AttachBuy(&buy)
-	if err != nil {
-		t.Error("this test should not throw any errors cuz its fine with user")
+	buyAttached := usr.AttachBuy(&buy)
+	if !buyAttached {
+		t.Error("this buy should be attached normally")
 	}
-	data.TestRM(adress)
-}
-
-func TestAttachSellToLookedUser(t *testing.T) {
-	var adress = []byte{1, 22, 32, 244, 5, 6, 7, 18, 9, 110, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 136, 37, 38, 139, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 59, 56, 99, 121, 59, 22, 91, 91, 91, 91}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	Create(adress, mesKey, img)
-	usr := Look(adress)
-	sell := trade.Sell{}
-	err := usr.AttachSell(&sell)
-	if err == nil {
-		t.Error("this test should throw an error, because it should be impossible to attach trade to unsavable user")
+	if !reflect.DeepEqual(buy.Adress, usr.adress) {
+		t.Error("buy adress after bounding should be equal to users")
 	}
-	data.TestRM(adress)
-}
-
-func TestAttachSellWithZeroOffer(t *testing.T) {
-	var adress = []byte{1, 22, 13, 44, 15, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 19, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 111, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 155, 156, 157, 121, 59, 22, 91, 91, 91, 91}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	Create(adress, mesKey, img)
-	usr := Get(adress)
-	sell := trade.Sell{
-		Offer:   0,
-		Recieve: 1000,
-	}
-	err := usr.AttachSell(&sell)
-	if err == nil {
-		t.Error("this test should throw an error, cuz trade is 0 offer")
-	}
-	data.TestRM(adress)
-}
-
-func TestAttachToBigSellTrade(t *testing.T) {
-	var adress = []byte{1, 22, 3, 44, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 19, 18, 19, 20, 21, 22, 23, 24, 25, 232, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 40, 141, 142, 143, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 121, 59, 22, 91, 91, 232, 91}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	Create(adress, mesKey, img)
-	usr := Get(adress)
-	usr.Markets["0"] = 0
+	usr.Markets["x"] = 1000
 	sell := trade.Sell{
 		Offer:   1000,
 		Recieve: 1000,
-		Adress:  []byte("0"),
 	}
-	err := usr.AttachSell(&sell)
-	if err == nil {
-		t.Error("this test should throw an error, cuz user has no money")
+	sellAttached := usr.AttachSell(&sell, []byte("x"))
+	if !sellAttached {
+		t.Error("this sell should be attached normally")
+	}
+	if !reflect.DeepEqual(sell.Adress, usr.adress) {
+		t.Error("sell adress after bounding should be equal to users")
 	}
 	data.TestRM(adress)
 }
 
-func TestAttachSellWithNonExistingMarket(t *testing.T) {
-	var adress = []byte{11, 122, 3, 44, 5, 16, 7, 8, 9, 110, 11, 12, 13, 14, 15, 16, 19, 18, 19, 20, 21, 22, 23, 24, 25, 232, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 138, 187, 40, 41, 42, 143, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 121, 59, 22, 91, 191, 232, 91}
+func TestAttachSellNonExistingMarket(t *testing.T) {
+	var adress = []byte{1, 22, 3, 44, 15, 6, 7, 8, 9, 110, 11, 12, 13, 14, 15, 16, 19, 18, 19, 121, 21, 22, 23, 24, 25, 232, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 138, 87, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 59, 22, 91, 91, 232, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
 	var img = "user image link"
 	Create(adress, mesKey, img)
 	usr := Get(adress)
 	sell := trade.Sell{
-		Adress:  []byte("0"),
 		Offer:   1000,
 		Recieve: 1000,
 	}
-	err := usr.AttachSell(&sell)
-	if err == nil {
-		t.Error("this test should not throw error, cuz market should not exist")
+	sellAttached := usr.AttachSell(&sell, []byte("x"))
+	if sellAttached {
+		t.Error("this sell should not be attached, cuz user dont have such market")
 	}
 	data.TestRM(adress)
 }
 
-func TestAttachNormalSell(t *testing.T) {
-	var adress = []byte{1, 22, 3, 44, 5, 16, 7, 8, 9, 110, 11, 12, 13, 14, 15, 16, 19, 18, 19, 20, 21, 22, 23, 24, 25, 232, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 87, 40, 41, 42, 143, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 121, 59, 22, 91, 191, 232, 91}
+func TestAttchBoundedTrades(t *testing.T) {
+	var adress = []byte{1, 22, 3, 44, 22, 32, 7, 8, 9, 110, 11, 12, 13, 14, 15, 16, 19, 18, 19, 121, 21, 22, 23, 124, 25, 232, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 138, 87, 40, 41, 142, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 59, 122, 91, 91, 232, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
 	var img = "user image link"
 	Create(adress, mesKey, img)
 	usr := Get(adress)
-	usr.Markets["0"] = 1000
+	usr.Balance = 100
+	usr.Markets["x"] = 100
+	buy := trade.Buy{
+		Offer:   10,
+		Recieve: 10,
+		Adress:  []byte{0},
+	}
 	sell := trade.Sell{
-		Adress:  []byte("0"),
-		Offer:   1000,
-		Recieve: 1000,
+		Offer:   10,
+		Recieve: 10,
+		Adress:  []byte{0},
 	}
-	err := usr.AttachSell(&sell)
-	if err != nil {
-		t.Error("this test should not throw any errors cuz its fine with user")
+	buyAttached := usr.AttachBuy(&buy)
+	sellAttached := usr.AttachSell(&sell, []byte("x"))
+	if buyAttached || sellAttached {
+		t.Error("those trades are already bounded and should not be attached")
 	}
-	data.TestRM(adress)
 }

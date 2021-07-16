@@ -106,37 +106,44 @@ func (u *user) GetAllMessages() map[string]string {
 	return messages
 }
 
-// this funciton checks wether it is possible to generate some trade for user,
-// if it is possible, this lowers users balance, and returns nil
-func (u *user) AttachBuy(trade *trade.Buy) error {
+// This function is bounding specific sell function to user, if its not
+// possible, returns false, if operated successully, returns true
+func (u *user) AttachSell(sell *trade.Sell, adress []byte) bool {
 	if u.adress == nil {
-		return errors.New("this user could never be saved, get user with get function instead of look")
+		return false
 	}
-	if trade.Offer == 0 || trade.Recieve == 0 {
-		return errors.New("offer/recieve should not be equal to zero")
+	if sell.Adress != nil {
+		return false
 	}
-	if trade.Offer > u.Balance {
-		return errors.New("trade offer is bigger than users balance, this trade could not be created")
+	if sell.Offer == 0 || sell.Recieve == 0 {
+		return false
 	}
-	trade.Attached = true
-	u.Balance = u.Balance - trade.Offer
-	return nil
+	if val, ok := u.Markets[string(adress)]; ok {
+		if val >= sell.Offer {
+			u.Markets[string(adress)] = val - sell.Offer
+			sell.Adress = u.adress
+			return true
+		}
+	}
+	return false
 }
 
-func (u *user) AttachSell(trade *trade.Sell) error {
+// this function is bounding specific buy to user, if its not possible returns
+// false, if operated successfully returns true
+func (u *user) AttachBuy(buy *trade.Buy) bool {
 	if u.adress == nil {
-		return errors.New("this user could never be saved, get user with get function instead of look")
+		return false
 	}
-	if trade.Offer == 0 || trade.Recieve == 0 {
-		return errors.New("offer/recieve should not be equal to zero")
+	if buy.Adress != nil {
+		return false
 	}
-	if val, ok := u.Markets[string(trade.Adress)]; ok {
-		if trade.Offer > val {
-			return errors.New("trade offer is bigger than users balance, this trade could not be created")
-		}
-		trade.Attached = true
-		u.Markets[string(trade.Adress)] = val - trade.Offer
-		return nil
+	if buy.Offer == 0 || buy.Recieve == 0 {
+		return false
 	}
-	return errors.New("this market does not exist for specific user")
+	if u.Balance < buy.Offer {
+		return false
+	}
+	u.Balance = u.Balance - buy.Offer
+	buy.Adress = u.adress
+	return true
 }
