@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"errors"
+	"fmt"
 	"sync_tree/data"
 	"sync_tree/lock"
 	"sync_tree/search"
@@ -131,6 +132,7 @@ func (m *market) operateOutput(t trade.Output) {
 		u.Markets[string(m.adress)] = u.Markets[string(m.adress)] + t.Amount
 	}
 	u.Save()
+	fmt.Println("operation succeded")
 }
 
 func (m *market) AttachBuy(b trade.Buy) bool {
