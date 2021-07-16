@@ -133,13 +133,30 @@ func (m *market) operateOutput(t trade.Output) {
 	u.Save()
 }
 
-func (m *market) AttachBuy(b trade.Buy) error {
-	if m.adress != nil {
-		return errors.New("market adress is nil, operation can never be saved")
+func (m *market) AttachBuy(b trade.Buy) bool {
+	if m.adress == nil {
+		return false
+	}
+	if b.Adress == nil {
+		return false
 	}
 	m.Pool.OperateBuy(b)
 	for _, output := range m.Pool.Outputs {
 		go m.operateOutput(output)
 	}
-	return nil
+	return true
+}
+
+func (m *market) AttachSell(s trade.Sell) bool {
+	if m.adress == nil {
+		return false
+	}
+	if s.Adress == nil {
+		return false
+	}
+	m.Pool.OperateSell(s)
+	for _, output := range m.Pool.Outputs {
+		go m.operateOutput(output)
+	}
+	return true
 }
