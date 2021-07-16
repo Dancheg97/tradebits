@@ -149,3 +149,10 @@ func (u *user) UnboundBuy(trade *trade.Buy) error {
 	u.Balance = u.Balance + trade.Offer
 	return nil
 }
+
+func (u *user) UnboundSell(trade *trade.Sell) error {
+	if !reflect.DeepEqual(trade.Adress, u.adress) {
+		return errors.New("adress of trade and user are not matching")
+	}
+	u.[market] = 
+}
