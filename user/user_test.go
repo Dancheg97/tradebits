@@ -243,4 +243,5 @@ func TestAttchBoundedTrades(t *testing.T) {
 	if buyAttached || sellAttached {
 		t.Error("those trades are already bounded and should not be attached")
 	}
+	data.TestRM(adress)
 }
