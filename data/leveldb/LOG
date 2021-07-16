@@ -1146,3 +1146,33 @@
 14:59:10.641307 table@remove removed @278
 14:59:10.649308 table@remove removed @275
 14:59:10.653965 table@remove removed @274
+=============== Jul 16, 2021 (MSK) ===============
+15:07:49.398326 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+15:07:49.398908 version@stat F·[0 3] S·947B[0B 947B] Sc·[0.00 0.00]
+15:07:49.398932 db@open opening
+15:07:49.399027 journal@recovery F·1
+15:07:49.399517 journal@recovery recovering @285
+15:07:49.419435 memdb@flush created L0@288 N·2 S·754B "\x01\x02!..>?\xe5,v816":"\x01\x16\x03..[[[,v817"
+15:07:49.420699 version@stat F·[1 3] S·1KiB[754B 947B] Sc·[0.25 0.00]
+15:07:49.476738 db@janitor F·6 G·0
+15:07:49.476815 db@open done T·77.860862ms
+=============== Jul 16, 2021 (MSK) ===============
+15:09:36.693189 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+15:09:36.693800 version@stat F·[1 3] S·1KiB[754B 947B] Sc·[0.25 0.00]
+15:09:36.693825 db@open opening
+15:09:36.693932 journal@recovery F·1
+15:09:36.694436 journal@recovery recovering @289
+15:09:36.718099 memdb@flush created L0@291 N·19 S·1KiB "\x01\x02\x03..>?\f,d826":"\x01\x02\x03..>?\xe5,v836"
+15:09:36.719259 version@stat F·[2 3] S·3KiB[2KiB 947B] Sc·[0.50 0.00]
+15:09:36.769296 db@janitor F·7 G·0
+15:09:36.769388 db@open done T·75.540141ms
+=============== Jul 16, 2021 (MSK) ===============
+15:09:41.794056 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+15:09:41.794643 version@stat F·[2 3] S·3KiB[2KiB 947B] Sc·[0.50 0.00]
+15:09:41.794668 db@open opening
+15:09:41.794776 journal@recovery F·1
+15:09:41.795274 journal@recovery recovering @292
+15:09:41.817196 memdb@flush created L0@294 N·2 S·751B "\x01\x16\r..[[[,v840":"\v\x02!..>?\xe5,v839"
+15:09:41.818261 version@stat F·[3 3] S·3KiB[3KiB 947B] Sc·[0.75 0.00]
+15:09:41.863209 db@janitor F·8 G·0
+15:09:41.863296 db@open done T·68.600987ms
