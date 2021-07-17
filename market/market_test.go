@@ -307,15 +307,34 @@ func TestFourUserTradesWithRandomOffers(t *testing.T) {
 
 	time.Sleep(time.Second * 1)
 	firstUserCheck := user.Look(firstUserAdress)
-	t.Error(firstUserCheck.Balance)
-	t.Error(firstUserCheck.Markets[string(marketAdress)])
+	if firstUserCheck.Balance != 30 {
+		t.Error("first user balance should be equal to 30")
+	}
+	if firstUserCheck.Markets[string(marketAdress)] != 80 {
+		t.Error("first user market balance should be equal to 80")
+	}
 	secondUserCheck := user.Look(secondUserAdress)
-	t.Error(secondUserCheck.Balance)
-	t.Error(secondUserCheck.Markets[string(marketAdress)])
-	t.Error(mkt.Pool.Buys)
-	t.Error(mkt.Pool.Sells)
-	t.Error(mkt.Pool.Outputs)
-
+	if secondUserCheck.Balance != 130 {
+		t.Error("second user balance should be equal to 130")
+	}
+	if secondUserCheck.Markets[string(marketAdress)] != 70 {
+		t.Error("second user market balance should be equal to 70")
+	}
+	if len(mkt.Pool.Buys) != 1 {
+		t.Error("market pool length should be equal to one")
+	}
+	if mkt.Pool.Buys[0].Offer != 140 {
+		t.Error("current offer of market buy should be equal to 140")
+	}
+	if mkt.Pool.Buys[0].Recieve != 50 {
+		t.Error("current offer of market buy should be equal to 140")
+	}
+	if len(mkt.Pool.Sells) != 0 {
+		t.Error("there should not be any active market sell")
+	}
+	if len(mkt.Pool.Outputs) != 0 {
+		t.Error("there should not be any market outputs")
+	}
 	data.TestRM(marketAdress)
 	data.TestRM(firstUserAdress)
 	data.TestRM(secondUserAdress)
