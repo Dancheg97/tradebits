@@ -123,8 +123,8 @@ func TestAttachUnboundedTrades(t *testing.T) {
 		Offer:   100,
 		Recieve: 100,
 	}
-	buyAttached := mkt.AttachBuy(buy)
-	sellAttached := mkt.AttachSell(sell)
+	buyAttached := mkt.AttachBuy(&buy)
+	sellAttached := mkt.AttachSell(&sell)
 	if buyAttached || sellAttached {
 		t.Error("those trades should not be attached cuz they are unbounded")
 	}
@@ -147,8 +147,8 @@ func TestAttachToLookedMarket(t *testing.T) {
 		Offer:   100,
 		Recieve: 100,
 	}
-	buyAttached := mkt.AttachBuy(buy)
-	sellAttached := mkt.AttachSell(sell)
+	buyAttached := mkt.AttachBuy(&buy)
+	sellAttached := mkt.AttachSell(&sell)
 	if buyAttached || sellAttached {
 		t.Error("those trades should not be attached cuz they are unbounded")
 	}
@@ -177,7 +177,7 @@ func TestAttachSingleNormalBuy(t *testing.T) {
 	if !attachedToUser {
 		t.Error("trade should be attached to user")
 	}
-	attachedToMarket := mkt.AttachBuy(buy)
+	attachedToMarket := mkt.AttachBuy(&buy)
 	if !attachedToMarket {
 		t.Error("trade should be attached to market")
 	}
@@ -207,7 +207,7 @@ func TestAttachSingleNormalSell(t *testing.T) {
 	if !attachedToUser {
 		t.Error("trade should be attached to user")
 	}
-	attachedToMarket := mkt.AttachSell(buy)
+	attachedToMarket := mkt.AttachSell(&buy)
 	if !attachedToMarket {
 		t.Error("trade should be attached to market")
 	}
@@ -215,7 +215,7 @@ func TestAttachSingleNormalSell(t *testing.T) {
 	data.TestRM(adress)
 }
 
-func TestComlpexCheckoutForMultipleDifferentTrades(t *testing.T) {
+func TestTwoUserTradesWithSameOffers(t *testing.T) {
 	var marketAdress = []byte{1, 2, 33, 42, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 119, 1, 121, 22, 23, 124, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 111, 38, 1, 40, 41, 122, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 161, 62, 63, 229}
 	var marketMesKey = []byte{1, 2, 3, 4, 5}
 	var marketImg = "asset image link . example"
@@ -223,69 +223,100 @@ func TestComlpexCheckoutForMultipleDifferentTrades(t *testing.T) {
 	var descr = "descrx"
 	Create(marketAdress, name, marketMesKey, descr, marketImg)
 	mkt := Get(marketAdress)
+
 	var adress1 = []byte{121, 22, 13, 44, 5, 16, 7, 8, 9, 10, 11, 112, 13, 14, 15, 16, 19, 18, 19, 20, 121, 122, 123, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 40, 21, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 121, 59, 22, 91, 91, 91, 91}
 	var mesKey1 = []byte{1, 2, 3, 4, 5}
 	var img1 = "user image link"
 	user.Create(adress1, mesKey1, img1)
 	usr1 := user.Get(adress1)
 	usr1.Balance = 100
-	var adress2 = []byte{129, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 20, 21, 122, 123, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 140, 21, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 59, 22, 91, 91, 91, 91}
-	var mesKey2 = []byte{1, 2, 3, 4, 5}
-	var img2 = "user image link"
-	user.Create(adress2, mesKey2, img2)
-	usr2 := user.Get(adress2)
-	usr2.Markets[string(marketAdress)] = 200
-	var adress3 = []byte{129, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 139, 183, 193, 20, 21, 122, 123, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 124, 35, 11, 37, 38, 39, 140, 21, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 59, 22, 91, 91, 91, 91}
-	var mesKey3 = []byte{1, 2, 3, 4, 5}
-	var img3 = "user image link"
-	user.Create(adress3, mesKey3, img3)
-	usr3 := user.Get(adress3)
-	usr3.Balance = 100
 	buy := trade.Buy{
 		Offer:   100,
 		Recieve: 100,
 	}
 	usr1.AttachBuy(&buy)
+	mkt.AttachBuy(&buy)
+	usr1.Save()
+
+	var adress2 = []byte{129, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 20, 21, 122, 123, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 140, 21, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 59, 22, 91, 91, 91, 91}
+	var mesKey2 = []byte{1, 2, 3, 4, 5}
+	var img2 = "user image link"
+	user.Create(adress2, mesKey2, img2)
+	usr2 := user.Get(adress2)
+	usr2.Markets[string(marketAdress)] = 100
 	sell := trade.Sell{
-		Offer:   200,
-		Recieve: 200,
-	}
-	usr2.AttachSell(&sell, marketAdress)
-	buy2 := trade.Buy{
 		Offer:   100,
 		Recieve: 100,
 	}
-	usr3.AttachBuy(&buy2)
-	mkt.AttachBuy(buy)
-	mkt.AttachSell(sell)
-	mkt.AttachBuy(buy)
-	usr1.Save()
+	usr2.AttachSell(&sell, marketAdress)
+	mkt.AttachSell(&sell)
 	usr2.Save()
-	usr3.Save()
-	time.Sleep(time.Second)
-	usr1check := user.Get(adress1)
-	usr2check := user.Get(adress2)
-	usr3check := user.Get(adress3)
+
+	time.Sleep(time.Second * 1)
+
+	usr1check := user.Look(adress1)
 	if usr1check.Balance != 0 {
-		t.Error("main balance of first user should be equal to zero")
-	}
-	if usr2check.Markets[string(marketAdress)] != 0 {
-		t.Error("market balance of second user should be equal to zero")
+		t.Error("first user main balance fshould be equal to zero")
 	}
 	if usr1check.Markets[string(marketAdress)] != 100 {
 		t.Error("first user market balance should be equal to 100")
 	}
-	if usr2check.Balance != 200 {
-		t.Error("second user main balance should be equal to 200")
+	usr2check := user.Look(adress2)
+	if usr2check.Markets[string(marketAdress)] != 0 {
+		t.Error("market balance of second user should be equal to zero")
 	}
-	if usr3check.Markets[string(marketAdress)] != 100 {
-		t.Error("third user market balance should be equal to 100")
+	if usr2check.Balance != 100 {
+		t.Error("second user main balance should be equal to 100")
 	}
-	if usr3check.Balance != 0 {
-		t.Error("third user main balance should be equal to zero")
-	}
+
 	data.TestRM(adress1)
 	data.TestRM(adress2)
-	data.TestRM(adress3)
 	data.TestRM(marketAdress)
+}
+
+func TestFourUserTradesWithRandomOffers(t *testing.T) {
+	var marketAdress = []byte{129, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 20, 21, 122, 123, 1, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 140, 21, 1, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 59, 1, 91, 91, 91, 91}
+	var mesKey = []byte{1, 2, 3, 4, 5}
+	var img = "asset image link . example"
+	Create(marketAdress, img, mesKey, img, img)
+	mkt := Get(marketAdress)
+
+	var firstUserAdress = []byte{129, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 20, 21, 122, 123, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 140, 21, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 59, 22, 1, 1, 91, 91}
+	user.Create(firstUserAdress, mesKey, img)
+	firstUser := user.Get(firstUserAdress)
+	firstUser.Balance = 300
+	firstUserTrade := trade.Buy{
+		Offer:   270,
+		Recieve: 130,
+	}
+	firstUser.AttachBuy(&firstUserTrade)
+	mkt.AttachBuy(&firstUserTrade)
+	firstUser.Save()
+
+	var secondUserAdress = []byte{129, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 20, 21, 1, 123, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 1, 21, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 1, 22, 91, 91, 91, 91}
+	user.Create(secondUserAdress, mesKey, img)
+	secondUser := user.Get(secondUserAdress)
+	secondUser.Markets[string(marketAdress)] = 150
+	secondUserTrade := trade.Sell{
+		Offer:   80,
+		Recieve: 130,
+	}
+	secondUser.AttachSell(&secondUserTrade, marketAdress)
+	mkt.AttachSell(&secondUserTrade)
+	secondUser.Save()
+
+	time.Sleep(time.Second * 1)
+	firstUserCheck := user.Look(firstUserAdress)
+	t.Error(firstUserCheck.Balance)
+	t.Error(firstUserCheck.Markets[string(marketAdress)])
+	secondUserCheck := user.Look(secondUserAdress)
+	t.Error(secondUserCheck.Balance)
+	t.Error(secondUserCheck.Markets[string(marketAdress)])
+	t.Error(mkt.Pool.Buys)
+	t.Error(mkt.Pool.Sells)
+	t.Error(mkt.Pool.Outputs)
+
+	data.TestRM(marketAdress)
+	data.TestRM(firstUserAdress)
+	data.TestRM(secondUserAdress)
 }

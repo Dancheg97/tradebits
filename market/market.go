@@ -135,30 +135,36 @@ func (m *market) operateOutput(t trade.Output) {
 	fmt.Println("operation succeded")
 }
 
-func (m *market) AttachBuy(b trade.Buy) bool {
+func (m *market) AttachBuy(b *trade.Buy) bool {
 	if m.adress == nil {
 		return false
 	}
 	if b.Adress == nil {
 		return false
 	}
-	m.Pool.OperateBuy(b)
+	m.Pool.OperateBuy(*b)
 	for _, output := range m.Pool.Outputs {
 		go m.operateOutput(output)
 	}
+	m.Pool.Outputs = []trade.Output{}
+	b.Adress = nil
+	b.Offer = 0
 	return true
 }
 
-func (m *market) AttachSell(s trade.Sell) bool {
+func (m *market) AttachSell(s *trade.Sell) bool {
 	if m.adress == nil {
 		return false
 	}
 	if s.Adress == nil {
 		return false
 	}
-	m.Pool.OperateSell(s)
+	m.Pool.OperateSell(*s)
 	for _, output := range m.Pool.Outputs {
 		go m.operateOutput(output)
 	}
+	m.Pool.Outputs = []trade.Output{}
+	s.Adress = nil
+	s.Offer = 0
 	return true
 }
