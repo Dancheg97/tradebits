@@ -18,7 +18,10 @@ func (s *server) UserBuy(
 	buyerAdress := calc.Hash(in.PublicKey)
 	buyer := user.Get(buyerAdress)
 	if buyer != nil {
-		if buyer.Balance >= in.Offer {
+		defer buyer.Save()
+		curMarket := market.Get(in.Adress)
+		if curMarket != nil {
+			defer curMarket.Save()
 			offerBytes := calc.NumberToBytes(in.Offer)
 			recieveBytes := calc.NumberToBytes(in.Recieve)
 			concMessage := [][]byte{
@@ -28,20 +31,16 @@ func (s *server) UserBuy(
 				offerBytes,
 			}
 			signErr := calc.Verify(concMessage, in.PublicKey, in.Sign)
-			if signErr == nil {
-				curMarket := market.Get(in.Adress)
-				if curMarket != nil {
-					trade := trade.Buy{
-						Offer:   in.Offer,
-						Recieve: in.Recieve,
-						Adress:  in.Adress,
-					}
-					usrAttachErr := buyer.AttachBuy(&trade)
-					if usrAttachErr == nil {
-						marketAttachErr := curMarket.AttachBuy(&trade)
-						if marketAttachErr == nil {
-							return &pb.Response{Passed: true}, nil
-						}
+			if signErr != nil {
+				trade := trade.Buy{
+					Offer:   in.Offer,
+					Recieve: in.Offer,
+				}
+				attachedUsr := buyer.AttachBuy(&trade)
+				if attachedUsr {
+					attachedMkt := curMarket.AttachBuy(&trade)
+					if attachedMkt {
+						return &pb.Response{Passed: true}, nil
 					}
 				}
 			}

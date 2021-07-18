@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"errors"
+	"reflect"
 	"sync_tree/data"
 	"sync_tree/lock"
 	"sync_tree/search"
@@ -123,7 +124,6 @@ func (m *market) GetAllMessages() map[string]string {
 	return messages
 }
 
-// function to give output for user from market
 func (m *market) operateOutput(t trade.Output) {
 	u := user.Get(t.Adress)
 	if t.IsMain {
@@ -134,14 +134,74 @@ func (m *market) operateOutput(t trade.Output) {
 	u.Save()
 }
 
-// function to attach trade to some market
-func (m *market) AttachBuy(b *trade.Buy) error {
-	if m.adress != nil {
-		return errors.New("market adress is nil, operation can never be saved")
+// attaches buy trade to market, you can't attach trade twice
+func (m *market) AttachBuy(b *trade.Buy) bool {
+	if m.adress == nil {
+		return false
+	}
+	if b.Adress == nil {
+		return false
 	}
 	m.Pool.OperateBuy(*b)
 	for _, output := range m.Pool.Outputs {
 		go m.operateOutput(output)
 	}
-	return nil
+	m.Pool.Outputs = []trade.Output{}
+	b.Adress = nil
+	b.Offer = 0
+	return true
+}
+
+// attaches sell trade to market, you can't attach trade twice
+func (m *market) AttachSell(s *trade.Sell) bool {
+	if m.adress == nil {
+		return false
+	}
+	if s.Adress == nil {
+		return false
+	}
+	m.Pool.OperateSell(*s)
+	for _, output := range m.Pool.Outputs {
+		go m.operateOutput(output)
+	}
+	m.Pool.Outputs = []trade.Output{}
+	s.Adress = nil
+	s.Offer = 0
+	return true
+}
+
+// making change, wether some user has trades on that market
+func (m *market) HasTrades(adress []byte) bool {
+	for _, trade := range m.Pool.Buys {
+		if reflect.DeepEqual(trade.Adress, adress) {
+			return true
+		}
+	}
+	for _, trade := range m.Pool.Sells {
+		if reflect.DeepEqual(trade.Adress, adress) {
+			return true
+		}
+	}
+	return false
+}
+
+// this function cancelles trades
+func (m *market) CancelTrades(adress []byte) {
+	for idx, trade := range m.Pool.Buys {
+		if reflect.DeepEqual(trade.Adress, adress) {
+			usr := user.Get(adress)
+			usr.Balance = usr.Balance + trade.Offer
+			usr.Save()
+			m.Pool.Buys = append(m.Pool.Buys[:idx], m.Pool.Buys[idx+1:]...)
+		}
+	}
+	for idx, trade := range m.Pool.Sells {
+		if reflect.DeepEqual(trade.Adress, adress) {
+			usr := user.Get(adress)
+			mktAdress := string(m.adress)
+			usr.Markets[mktAdress] = usr.Markets[mktAdress] + trade.Offer
+			usr.Save()
+			m.Pool.Sells = append(m.Pool.Sells[:idx], m.Pool.Sells[idx+1:]...)
+		}
+	}
 }

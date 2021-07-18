@@ -4,11 +4,9 @@ import (
 	"fmt"
 )
 
-type KKK struct {
-	c []byte
-}
-
 func main() {
-	o := KKK{}
-	fmt.Println(o.c)
+	firstArr := []byte{0, 1, 2, 3, 4}
+	for i, _ := range firstArr {
+		fmt.Println(i)
+	}
 }

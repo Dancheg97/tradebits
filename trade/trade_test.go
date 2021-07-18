@@ -195,7 +195,7 @@ func TestAddSingleBuyToEmptyMarket(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []Output{},
 	}
-	buy.Operate(&tp)
+	tp.OperateBuy(buy)
 	if len(tp.Outputs) != 0 {
 		t.Error("there should be zero outputs, when adding first buy")
 	}
@@ -221,7 +221,7 @@ func TestAddSingleSellToEmptyMarket(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []Output{},
 	}
-	sell.Operate(&tp)
+	tp.OperateSell(sell)
 	if len(tp.Outputs) != 0 {
 		t.Error("there should be zero outputs, when adding first sell trade")
 	}
@@ -252,8 +252,8 @@ func TestOperateBuyAndSellThatDontMatch(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []Output{},
 	}
-	buy.Operate(&tp)
-	sell.Operate(&tp)
+	tp.OperateBuy(buy)
+	tp.OperateSell(sell)
 	if len(tp.Buys) != 1 || len(tp.Sells) != 1 {
 		t.Error("some order have not been added, or being wrongly operated")
 	}
@@ -281,8 +281,8 @@ func TestOperateBuyAndSellThatDontMatchDifferentOrder(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []Output{},
 	}
-	sell.Operate(&tp)
-	buy.Operate(&tp)
+	tp.OperateSell(sell)
+	tp.OperateBuy(buy)
 	if len(tp.Buys) != 1 || len(tp.Sells) != 1 {
 		t.Error("some order have not been added, or being wrongly operated")
 	}
@@ -310,8 +310,8 @@ func TestOperateBuyAndSellWithSameValues(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []Output{},
 	}
-	buy.Operate(&tp)
-	sell.Operate(&tp)
+	tp.OperateBuy(buy)
+	tp.OperateSell(sell)
 	if len(tp.Outputs) != 2 {
 		t.Error("there should be 2 outputs in current pool")
 	}
@@ -365,8 +365,8 @@ func TestOperateBuyAndSellWithSameValuesDifferentAddOrder(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []Output{},
 	}
-	sell.Operate(&tp)
-	buy.Operate(&tp)
+	tp.OperateSell(sell)
+	tp.OperateBuy(buy)
 	if len(tp.Outputs) != 2 {
 		t.Error("there should be 2 outputs in current pool")
 	}
@@ -420,8 +420,8 @@ func TestOperateSellAndBuyToCloseBuy(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []Output{},
 	}
-	buy.Operate(&tp)
-	sell.Operate(&tp)
+	tp.OperateBuy(buy)
+	tp.OperateSell(sell)
 	firstOutput := Output{
 		Adress: []byte{0},
 		IsMain: true,
@@ -478,8 +478,8 @@ func TestOperateBuyAndSellToCloseSell(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []Output{},
 	}
-	sell.Operate(&tp)
-	buy.Operate(&tp)
+	tp.OperateSell(sell)
+	tp.OperateBuy(buy)
 	firstOutput := Output{
 		Adress: []byte{0},
 		IsMain: true,
@@ -540,9 +540,9 @@ func TestInsertSellOperation(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []Output{},
 	}
-	secondSell.insert(&tp)
-	firstSell.insert(&tp)
-	thirdSell.insert(&tp)
+	tp.insertSell(secondSell)
+	tp.insertSell(firstSell)
+	tp.insertSell(thirdSell)
 	if len(tp.Buys) != 0 {
 		t.Error("length of buys in pool should be zero")
 	}
@@ -584,9 +584,9 @@ func TestInsertBuyOperation(t *testing.T) {
 		Sells:   []Sell{},
 		Outputs: []Output{},
 	}
-	secondBuy.insert(&tp)
-	firstBuy.insert(&tp)
-	thirdBuy.insert(&tp)
+	tp.insertBuy(secondBuy)
+	tp.insertBuy(firstBuy)
+	tp.insertBuy(thirdBuy)
 	if len(tp.Sells) != 0 {
 		t.Error("length of buys in pool should be zero")
 	}
