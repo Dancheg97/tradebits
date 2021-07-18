@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"errors"
+	"reflect"
 	"sync_tree/data"
 	"sync_tree/lock"
 	"sync_tree/search"
@@ -133,6 +134,7 @@ func (m *market) operateOutput(t trade.Output) {
 	u.Save()
 }
 
+// attaches buy trade to market, you can't attach trade twice
 func (m *market) AttachBuy(b *trade.Buy) bool {
 	if m.adress == nil {
 		return false
@@ -150,6 +152,7 @@ func (m *market) AttachBuy(b *trade.Buy) bool {
 	return true
 }
 
+// attaches sell trade to market, you can't attach trade twice
 func (m *market) AttachSell(s *trade.Sell) bool {
 	if m.adress == nil {
 		return false
@@ -165,4 +168,19 @@ func (m *market) AttachSell(s *trade.Sell) bool {
 	s.Adress = nil
 	s.Offer = 0
 	return true
+}
+
+// making change, wether some user has trades on that market
+func (m *market) HasTrades(adress []byte) bool {
+	for _, trade := range m.Pool.Buys {
+		if reflect.DeepEqual(trade.Adress, adress) {
+			return true
+		}
+	}
+	for _, trade := range m.Pool.Sells {
+		if reflect.DeepEqual(trade.Adress, adress) {
+			return true
+		}
+	}
+	return false
 }

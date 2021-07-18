@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"reflect"
 	"sync_tree/market"
 	"sync_tree/user"
 
@@ -17,17 +16,7 @@ func (s *server) InfoHasTrades(
 	if user != nil {
 		market := market.Look(in.MarketAdress)
 		if market != nil {
-			has := false
-			for _, trade := range market.Pool.Buys {
-				if reflect.DeepEqual(trade.Adress, in.UserAdress) {
-					has = true
-				}
-			}
-			for _, trade := range market.Pool.Sells {
-				if reflect.DeepEqual(trade.Adress, in.UserAdress) {
-					has = true
-				}
-			}
+			has := market.HasTrades(in.UserAdress)
 			return &pb.Response{Passed: has}, nil
 		}
 	}
