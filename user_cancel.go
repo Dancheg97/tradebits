@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	pb "sync_tree/api"
 	"sync_tree/calc"
 	"sync_tree/market"
@@ -22,9 +21,8 @@ func (s *server) UserCancelTrade(
 		m := market.Get(in.MarketAdress)
 		if m != nil {
 			defer m.Save()
-			canceled := m.CancelTrades(userAdress)
-			fmt.Println(canceled)
-			return &pb.Response{Passed: canceled}, nil
+			m.CancelTrades(userAdress)
+			return &pb.Response{Passed: true}, nil
 		}
 	}
 	return &pb.Response{Passed: false}, nil
