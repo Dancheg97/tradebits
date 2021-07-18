@@ -13,7 +13,6 @@ func (s *server) InfoHasTrades(
 	ctx context.Context,
 	in *pb.InfoHasTradesRequest,
 ) (*pb.Response, error) {
-	//fmt.Println("checking trades")
 	user := user.Look(in.UserAdress)
 	if user != nil {
 		market := market.Look(in.MarketAdress)
