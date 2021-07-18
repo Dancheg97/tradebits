@@ -184,3 +184,24 @@ func (m *market) HasTrades(adress []byte) bool {
 	}
 	return false
 }
+
+// this function cancelles trades
+func (m *market) CancelTrades(adress []byte) {
+	for idx, trade := range m.Pool.Buys {
+		if reflect.DeepEqual(trade.Adress, adress) {
+			usr := user.Get(adress)
+			usr.Balance = usr.Balance + trade.Offer
+			usr.Save()
+			m.Pool.Buys = append(m.Pool.Buys[:idx], m.Pool.Buys[idx+1:]...)
+		}
+	}
+	for idx, trade := range m.Pool.Sells {
+		if reflect.DeepEqual(trade.Adress, adress) {
+			usr := user.Get(adress)
+			mktAdress := string(m.adress)
+			usr.Markets[mktAdress] = usr.Markets[mktAdress] + trade.Offer
+			usr.Save()
+			m.Pool.Sells = append(m.Pool.Sells[:idx], m.Pool.Sells[idx+1:]...)
+		}
+	}
+}
