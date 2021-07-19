@@ -10,7 +10,7 @@ import (
 )
 
 func TestCreateNewMarket(t *testing.T) {
-	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 63}
+	var adress = []byte{1, 2, 5, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 3, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 2, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 1, 60, 61, 62, 63, 63}
 	var mesKey = []byte{1, 2, 3, 4, 5}
 	var img = "asset image link . example"
 	var name = "newAsset"
@@ -412,4 +412,64 @@ func TestAttachFirstlySellThanBuy(t *testing.T) {
 	data.TestRM(marketAdress)
 	data.TestRM(firstUserAdress)
 	data.TestRM(secondUserAdress)
+}
+
+func TestIfUserHasTrdadesWhenHeHaveSome(t *testing.T) {
+	var marketAdress = []byte{1, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 20, 1, 3, 4, 1, 5, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 1, 39, 2, 21, 1, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 1, 1, 1, 1, 1, 91, 91, 91, 91}
+	var mesKey = []byte{1, 2, 3, 4, 5}
+	var img = "asset image link . example"
+	Create(marketAdress, img, mesKey, img, img)
+	mkt := Get(marketAdress)
+
+	sell := trade.Sell{
+		Adress:  []byte{0},
+		Offer:   1,
+		Recieve: 5,
+	}
+	mkt.AttachSell(&sell)
+
+	userHaveSell := mkt.HasTrades([]byte{0})
+	if !userHaveSell {
+		t.Error("error, this user should have some sell trade")
+	}
+
+	buy := trade.Buy{
+		Adress:  []byte{0},
+		Offer:   1,
+		Recieve: 5,
+	}
+	mkt.AttachBuy(&buy)
+	userHaveBuy := mkt.HasTrades([]byte{0})
+	if !userHaveBuy {
+		t.Error("error, this user should have some buy trade")
+	}
+
+	data.TestRM(marketAdress)
+}
+
+func TestIfUserHasTradesWhenHeDont(t *testing.T) {
+	var marketAdress = []byte{1, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 1, 1, 3, 4, 1, 5, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 1, 1, 2, 21, 1, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 1, 1, 1, 1, 1, 91, 91, 91, 91}
+	var mesKey = []byte{1, 2, 3, 4, 5}
+	var img = "asset image link . example"
+	Create(marketAdress, img, mesKey, img, img)
+	mkt := Get(marketAdress)
+
+	userHaveSomeTrades := mkt.HasTrades([]byte{1})
+	if userHaveSomeTrades {
+		t.Error("there should not be any active trades for that adress")
+	}
+
+	data.TestRM(marketAdress)
+}
+
+func TestTradeCancellationListStart(t *testing.T) {
+
+}
+
+func TestTradeCancellationListMid(t *testing.T) {
+
+}
+
+func TestTradeCancellationListEnd(t *testing.T) {
+
 }
