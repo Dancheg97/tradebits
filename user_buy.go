@@ -22,16 +22,15 @@ func (s *server) UserBuy(
 		curMarket := market.Get(in.Adress)
 		if curMarket != nil {
 			defer curMarket.Save()
-			offerBytes := calc.NumberToBytes(in.Offer)
-			recieveBytes := calc.NumberToBytes(in.Recieve)
+			fmt.Println("passed")
 			concMessage := [][]byte{
 				in.PublicKey,
 				in.Adress,
-				recieveBytes,
-				offerBytes,
+				calc.NumberToBytes(in.Recieve),
+				calc.NumberToBytes(in.Offer),
 			}
 			signErr := calc.Verify(concMessage, in.PublicKey, in.Sign)
-			if signErr != nil {
+			if signErr == nil {
 				trade := trade.Buy{
 					Offer:   in.Offer,
 					Recieve: in.Offer,
