@@ -129,7 +129,7 @@ func (m *market) operateOutput(t trade.Output) {
 	if t.IsMain {
 		u.Balance = u.Balance + t.Amount
 	} else {
-		u.Markets[string(m.adress)] = u.Markets[string(m.adress)] + t.Amount
+		u.Balances[string(m.adress)] = u.Balances[string(m.adress)] + t.Amount
 	}
 	u.Save()
 }
@@ -194,7 +194,7 @@ func (m *market) CancelBuy(adress []byte, trd *trade.Buy) {
 func (m *market) CancelSell(adress []byte, trd *trade.Sell) {
 	usr := user.Get(adress)
 	mktAdress := string(m.adress)
-	usr.Markets[mktAdress] = usr.Markets[mktAdress] + trd.Offer
+	usr.Balances[mktAdress] = usr.Balances[mktAdress] + trd.Offer
 	usr.Save()
 }
 

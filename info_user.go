@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"sync_tree/user"
 
 	pb "sync_tree/api"
@@ -13,6 +14,7 @@ func (s *server) InfoUser(
 ) (*pb.InfoUserResponse, error) {
 	//fmt.Println("giving information about", in.Adress)
 	user := user.Look(in.Adress)
+	fmt.Println(user)
 	if user == nil {
 		return &pb.InfoUserResponse{
 			PublicName: "====",
@@ -21,7 +23,7 @@ func (s *server) InfoUser(
 	}
 	adressesSlice := [][]byte{}
 	balancesSlice := []uint64{}
-	for strAdr, bal := range user.Markets {
+	for strAdr, bal := range user.Balances {
 		adressesSlice = append(adressesSlice, []byte(strAdr))
 		balancesSlice = append(balancesSlice, bal)
 	}

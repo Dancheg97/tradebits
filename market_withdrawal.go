@@ -26,8 +26,8 @@ func (s *server) MarketWithdrawal(
 		u := user.Get(in.UserAdress)
 		if u != nil {
 			strAdr := string(adress)
-			if in.Amount < u.Markets[strAdr] {
-				u.Markets[strAdr] = u.Markets[strAdr] - in.Amount
+			if in.Amount < u.Balances[strAdr] {
+				u.Balances[strAdr] = u.Balances[strAdr] - in.Amount
 				return &pb.Response{Passed: true}, nil
 
 			}

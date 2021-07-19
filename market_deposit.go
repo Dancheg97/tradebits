@@ -26,7 +26,7 @@ func (s *server) MarketDeposit(
 		u := user.Get(in.UserAdress)
 		if u != nil {
 			strAdr := string(adress)
-			u.Markets[strAdr] = u.Markets[strAdr] + in.Amount
+			u.Balances[strAdr] = u.Balances[strAdr] + in.Amount
 			return &pb.Response{Passed: true}, nil
 		}
 	}

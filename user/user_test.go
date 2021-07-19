@@ -162,7 +162,7 @@ func TestAttachTradeWithBigBalance(t *testing.T) {
 		Offer:   1000,
 		Recieve: 1000,
 	}
-	usr.Markets["x"] = 0
+	usr.Balances["x"] = 0
 	sellAttached := usr.AttachSell(&sell, []byte("x"))
 	if sellAttached {
 		t.Error("this sell should not be attached cuz its over users balance")
@@ -188,7 +188,7 @@ func TestAttachNormalTrades(t *testing.T) {
 	if !reflect.DeepEqual(buy.Adress, usr.adress) {
 		t.Error("buy adress after bounding should be equal to users")
 	}
-	usr.Markets["x"] = 1000
+	usr.Balances["x"] = 1000
 	sell := trade.Sell{
 		Offer:   1000,
 		Recieve: 1000,
@@ -227,7 +227,7 @@ func TestAttchBoundedTrades(t *testing.T) {
 	Create(adress, mesKey, img)
 	usr := Get(adress)
 	usr.Balance = 100
-	usr.Markets["x"] = 100
+	usr.Balances["x"] = 100
 	buy := trade.Buy{
 		Offer:   10,
 		Recieve: 10,

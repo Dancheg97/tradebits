@@ -15,7 +15,7 @@ type user struct {
 	Balance    uint64
 	MesKey     []byte
 	PublicName string
-	Markets    map[string]uint64
+	Balances   map[string]uint64
 	Mes        map[string]string
 	Arch       map[string]string
 }
@@ -32,7 +32,7 @@ func Create(adress []byte, MesKey []byte, PublicName string) error {
 		Balance:    0,
 		MesKey:     MesKey,
 		PublicName: PublicName,
-		Markets:    make(map[string]uint64),
+		Balances:   make(map[string]uint64),
 		Mes:        make(map[string]string),
 		Arch:       map[string]string{},
 	}
@@ -118,9 +118,9 @@ func (u *user) AttachSell(sell *trade.Sell, adress []byte) bool {
 	if sell.Offer == 0 || sell.Recieve == 0 {
 		return false
 	}
-	if val, ok := u.Markets[string(adress)]; ok {
+	if val, ok := u.Balances[string(adress)]; ok {
 		if val >= sell.Offer {
-			u.Markets[string(adress)] = val - sell.Offer
+			u.Balances[string(adress)] = val - sell.Offer
 			sell.Adress = u.adress
 			return true
 		}
