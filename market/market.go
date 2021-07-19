@@ -185,22 +185,30 @@ func (m *market) HasTrades(adress []byte) bool {
 	return false
 }
 
+func (m *market) CancelBuy(adress []byte, trd *trade.Buy) {
+	usr := user.Get(adress)
+	usr.Balance = usr.Balance + trd.Offer
+	usr.Save()
+}
+
+func (m *market) CancelSell(adress []byte, trd *trade.Sell) {
+	usr := user.Get(adress)
+	mktAdress := string(m.adress)
+	usr.Markets[mktAdress] = usr.Markets[mktAdress] + trd.Offer
+	usr.Save()
+}
+
 // this function cancelles trades
 func (m *market) CancelTrades(adress []byte) {
 	for idx, trade := range m.Pool.Buys {
 		if reflect.DeepEqual(trade.Adress, adress) {
-			usr := user.Get(adress)
-			usr.Balance = usr.Balance + trade.Offer
-			usr.Save()
+			go m.CancelBuy(adress, &trade)
 			m.Pool.Buys = append(m.Pool.Buys[:idx], m.Pool.Buys[idx+1:]...)
 		}
 	}
 	for idx, trade := range m.Pool.Sells {
 		if reflect.DeepEqual(trade.Adress, adress) {
-			usr := user.Get(adress)
-			mktAdress := string(m.adress)
-			usr.Markets[mktAdress] = usr.Markets[mktAdress] + trade.Offer
-			usr.Save()
+			go m.CancelSell(adress, &trade)
 			m.Pool.Sells = append(m.Pool.Sells[:idx], m.Pool.Sells[idx+1:]...)
 		}
 	}
