@@ -448,7 +448,7 @@ func TestIfUserHasTrdadesWhenHeHaveSome(t *testing.T) {
 }
 
 func TestIfUserHasTradesWhenHeDont(t *testing.T) {
-	var marketAdress = []byte{1, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 1, 1, 3, 4, 1, 5, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 1, 1, 2, 21, 1, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 1, 1, 1, 1, 1, 91, 91, 91, 91}
+	var marketAdress = []byte{1, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 1, 1, 1, 3, 4, 1, 5, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 1, 1, 2, 1, 1, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 1, 1, 1, 1, 1, 91, 91, 91, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
 	var img = "asset image link . example"
 	Create(marketAdress, img, mesKey, img, img)
@@ -463,7 +463,22 @@ func TestIfUserHasTradesWhenHeDont(t *testing.T) {
 }
 
 func TestTradeCancellationListStart(t *testing.T) {
+	var marketAdress = []byte{1, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 1, 1, 1, 3, 4, 1, 5, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 1, 1, 2, 1, 1, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 1, 1, 1, 1, 1, 1, 91, 91, 91}
+	var mesKey = []byte{1, 2, 3, 4, 5}
+	var img = "asset image link . example"
+	Create(marketAdress, img, mesKey, img, img)
+	mkt := Get(marketAdress)
 
+	buy := trade.Buy{
+		Adress:  []byte{0},
+		Offer:   1,
+		Recieve: 5,
+	}
+	mkt.AttachBuy(&buy)
+
+	mkt.CancelTrades([]byte{0})
+
+	data.TestRM(marketAdress)
 }
 
 func TestTradeCancellationListMid(t *testing.T) {
