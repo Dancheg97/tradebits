@@ -18,7 +18,7 @@ func stringToKeyBytes(key string) []byte {
 }
 
 func createNewUsers() {
-	alcoContent, _ := ioutil.ReadFile("Alcohol.pem")
+	alcoContent, _ := ioutil.ReadFile("_Alcohol.pem")
 	alcoText := string(alcoContent)
 	alcoSplitted := strings.Split(alcoText, "|")
 	alcoAdress := calc.Hash(stringToKeyBytes(alcoSplitted[1]))
@@ -29,9 +29,12 @@ func createNewUsers() {
 	if alco.Balance == 0 {
 		alco.Balance = 50000
 	}
-	alco.Balances[string([]byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 63})] = 10000
+	marketAdress := string([]byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 63})
+	if alco.Balances[marketAdress] == 0 {
+		alco.Balances[marketAdress] = 10000
+	}
 	fmt.Println("alco wallet created with", alco.Balance, "balance")
-	nicoContent, _ := ioutil.ReadFile("Nicotin.pem")
+	nicoContent, _ := ioutil.ReadFile("_Nicotin.pem")
 	nicoText := string(nicoContent)
 	nicoSplitted := strings.Split(nicoText, "|")
 	nicoAdress := calc.Hash(stringToKeyBytes(nicoSplitted[1]))

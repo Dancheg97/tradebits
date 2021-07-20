@@ -606,3 +606,20 @@ func TestInsertBuyOperation(t *testing.T) {
 		t.Error("third buy should be equal to thirdBuy")
 	}
 }
+
+func TestFirstBadBuySecondGoodSell(t *testing.T) {
+	badBuy := Buy{
+		Adress:  []byte{0},
+		Offer:   20,
+		Recieve: 20,
+	}
+	goodSell := Sell{
+		Adress:  []byte{1},
+		Offer:   30,
+		Recieve: 20,
+	}
+	out := badBuy.match(&goodSell)
+	t.Error(badBuy)
+	t.Error(goodSell)
+	t.Error(out)
+}
