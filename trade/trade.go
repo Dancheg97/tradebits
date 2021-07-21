@@ -24,76 +24,50 @@ type Sell struct {
 
 // this struct is used only to transfer data about market outputs for some user
 type Output struct {
-	Adress []byte
-	IsMain bool
-	Amount uint64
+	Adress       []byte
+	MainAmount   uint64
+	MarketAmount uint64
 }
 
 // all trades are alwayts closing to the side better side
 func (b *Buy) match(s *Sell) []Output {
-	if b.Offer == s.Recieve && b.Recieve == s.Offer {
-		buyOut := Output{
-			Adress: b.Adress,
-			IsMain: false,
-			Amount: s.Offer,
-		}
-		sellOut := Output{
-			Adress: s.Adress,
-			IsMain: true,
-			Amount: b.Offer,
-		}
-		b.Offer = 0
-		s.Offer = 0
-		return []Output{buyOut, sellOut}
-	}
-	if b.Offer < s.Recieve {
-		curSellRatio := float64(s.Offer) / float64(s.Recieve)
-		potenSellOffer := s.Offer - b.Recieve
-		if potenSellOffer > s.Offer {
-			return nil
-		}
-		potenSellRecieve := s.Recieve - b.Offer
-		newSellRatio := float64(potenSellOffer) / float64(potenSellRecieve)
-		if newSellRatio <= curSellRatio {
-			buyOutput := Output{
-				Adress: b.Adress,
-				IsMain: false,
-				Amount: b.Recieve,
+	if float64(b.Offer)/float64(s.Recieve) >= float64(b.Recieve/s.Offer) {
+		if s.Offer >= b.Recieve {
+			buyerOutput := Output{
+				Adress:       b.Adress,
+				MarketAmount: b.Recieve,
 			}
-			sellOutput := Output{
-				Adress: s.Adress,
-				IsMain: true,
-				Amount: b.Offer,
+			sellerOutput := Output{
+				Adress:     s.Adress,
+				MainAmount: b.Offer,
 			}
-			b.Offer = 0
-			s.Offer = potenSellOffer
-			s.Recieve = potenSellRecieve
-			return []Output{buyOutput, sellOutput}
+			s.Offer = s.Offer - b.Recieve
+			s.Recieve = s.Recieve - b.Offer
+			b.Recieve = 0
+			b.Recieve = 0
+			return []Output{
+				buyerOutput,
+				sellerOutput,
+			}
 		}
-		return nil
-	}
-	curBuyRatio := float64(b.Offer) / float64(b.Recieve)
-	potentialBuyOffer := b.Offer - s.Recieve
-	potentialBuyRecieve := b.Recieve - s.Offer
-	if potentialBuyRecieve > b.Recieve {
-		return nil
-	}
-	newBuyRatio := float64(potentialBuyOffer) / float64(potentialBuyRecieve)
-	if newBuyRatio >= curBuyRatio {
-		buyOutput := Output{
-			Adress: b.Adress,
-			IsMain: false,
-			Amount: s.Offer,
+		if b.Offer >= s.Recieve {
+			buyerOutput := Output{
+				Adress:       b.Adress,
+				MarketAmount: s.Offer,
+			}
+			sellerOutput := Output{
+				Adress:     s.Adress,
+				MainAmount: s.Recieve,
+			}
+			b.Offer = b.Offer - s.Recieve
+			b.Recieve = b.Recieve - s.Offer
+			s.Offer = 0
+			s.Recieve = 0
+			return []Output{
+				buyerOutput,
+				sellerOutput,
+			}
 		}
-		sellOutput := Output{
-			Adress: s.Adress,
-			IsMain: true,
-			Amount: s.Recieve,
-		}
-		s.Offer = 0
-		b.Offer = potentialBuyOffer
-		b.Recieve = potentialBuyRecieve
-		return []Output{buyOutput, sellOutput}
 	}
 	return nil
 }
