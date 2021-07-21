@@ -24,49 +24,51 @@ type Sell struct {
 
 // this struct is used only to transfer data about market outputs for some user
 type Output struct {
-	Adress       []byte
-	MainAmount   uint64
-	MarketAmount uint64
+	Adress []byte
+	Main   uint64
+	Market uint64
 }
 
 // all trades are alwayts closing to the side better side
 func (b *Buy) match(s *Sell) []Output {
 	if float64(b.Offer)/float64(s.Recieve) >= float64(b.Recieve/s.Offer) {
-		if s.Offer >= b.Recieve {
+		if s.Offer >= b.Recieve && b.Offer >= s.Recieve {
 			buyerOutput := Output{
-				Adress:       b.Adress,
-				MarketAmount: b.Recieve,
+				Adress: b.Adress,
+				Market: b.Recieve,
 			}
 			sellerOutput := Output{
-				Adress:     s.Adress,
-				MainAmount: b.Offer,
+				Adress: s.Adress,
+				Main:   b.Offer,
 			}
 			s.Offer = s.Offer - b.Recieve
 			s.Recieve = s.Recieve - b.Offer
-			b.Recieve = 0
+			if s.Recieve == 0 && s.Offer != 0 {
+				sellerOutput.Market = s.Offer
+				s.Offer = 0
+			}
+			b.Offer = 0
 			b.Recieve = 0
 			return []Output{
 				buyerOutput,
 				sellerOutput,
 			}
 		}
-		if b.Offer >= s.Recieve {
-			buyerOutput := Output{
-				Adress:       b.Adress,
-				MarketAmount: s.Offer,
-			}
-			sellerOutput := Output{
-				Adress:     s.Adress,
-				MainAmount: s.Recieve,
-			}
-			b.Offer = b.Offer - s.Recieve
-			b.Recieve = b.Recieve - s.Offer
-			s.Offer = 0
-			s.Recieve = 0
-			return []Output{
-				buyerOutput,
-				sellerOutput,
-			}
+		buyerOutput := Output{
+			Adress: b.Adress,
+			Market: s.Offer,
+		}
+		sellerOutput := Output{
+			Adress: s.Adress,
+			Main:   s.Recieve,
+		}
+		b.Offer = b.Offer - s.Recieve
+		b.Recieve = b.Recieve - s.Offer
+		s.Offer = 0
+		s.Recieve = 0
+		return []Output{
+			buyerOutput,
+			sellerOutput,
 		}
 	}
 	return nil
