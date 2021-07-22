@@ -32,7 +32,7 @@ type Output struct {
 // all trades are alwayts closing to the side better side
 func (b *Buy) match(s *Sell) []Output {
 	if float64(b.Offer)/float64(s.Recieve) >= float64(b.Recieve/s.Offer) {
-		if s.Offer >= b.Recieve && b.Offer >= s.Recieve {
+		if s.Offer >= b.Recieve { // close buy
 			buyerOutput := Output{
 				Adress: b.Adress,
 				Market: b.Recieve,
@@ -53,10 +53,10 @@ func (b *Buy) match(s *Sell) []Output {
 				buyerOutput,
 				sellerOutput,
 			}
-		}
+		} //close sell
 		buyerOutput := Output{
 			Adress: b.Adress,
-			Market: s.Offer,
+			Market: b.Recieve,
 		}
 		sellerOutput := Output{
 			Adress: s.Adress,

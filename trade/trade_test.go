@@ -99,8 +99,37 @@ func TestMatchCloseBuy(t *testing.T) {
 	}
 
 	outputs := buy.match(&sell)
-	t.Error(outputs)
 
+	expectedBuyerOutput := Output{
+		Adress: []byte{0},
+		Market: 40,
+	}
+	expectedSellerOutput := Output{
+		Adress: []byte{1},
+		Main:   60,
+	}
+	expectedBuy := Buy{
+		Adress:  []byte{0},
+		Offer:   0,
+		Recieve: 0,
+	}
+	expectedSell := Sell{
+		Adress:  []byte{1},
+		Offer:   60,
+		Recieve: 40,
+	}
+	if !reflect.DeepEqual(outputs[0], expectedBuyerOutput) {
+		t.Error("buyer output not matching")
+	}
+	if !reflect.DeepEqual(outputs[1], expectedSellerOutput) {
+		t.Error("seller output not matching")
+	}
+	if !reflect.DeepEqual(buy, expectedBuy) {
+		t.Error("buy is not matching")
+	}
+	if !reflect.DeepEqual(sell, expectedSell) {
+		t.Error("sell is not matching")
+	}
 }
 
 func TestMatchCloseSell(t *testing.T) {
@@ -115,8 +144,37 @@ func TestMatchCloseSell(t *testing.T) {
 		Recieve: 40,
 	}
 	outputs := buy.match(&sell)
-	t.Error(outputs)
 
+	expectedBuyerOutput := Output{
+		Adress: []byte{0},
+		Market: 60,
+	}
+	expectedSellerOutput := Output{
+		Adress: []byte{1},
+		Main:   40,
+	}
+	expectedBuy := Buy{
+		Adress:  []byte{0},
+		Offer:   60,
+		Recieve: 40,
+	}
+	expectedSell := Sell{
+		Adress:  []byte{1},
+		Offer:   0,
+		Recieve: 0,
+	}
+	if !reflect.DeepEqual(outputs[0], expectedBuyerOutput) {
+		t.Error("buyer output not matching")
+	}
+	if !reflect.DeepEqual(outputs[1], expectedSellerOutput) {
+		t.Error("seller output not matching")
+	}
+	if !reflect.DeepEqual(buy, expectedBuy) {
+		t.Error("buy is not matching")
+	}
+	if !reflect.DeepEqual(sell, expectedSell) {
+		t.Error("sell is not matching")
+	}
 }
 
 func TestMatchBuyOffersMuchOnSameAmountOfSellRecieve(t *testing.T) {
