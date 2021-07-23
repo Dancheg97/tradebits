@@ -38,16 +38,16 @@ func TestMatchCloseBoth(t *testing.T) {
 		Recieve: 0,
 	}
 	if !reflect.DeepEqual(outputs[0], expectedBuyerOutput) {
-		t.Error("buyer output not matching")
+		t.Error("buyer output not matching", outputs[0], expectedBuyerOutput)
 	}
 	if !reflect.DeepEqual(outputs[1], expectedSellerOutput) {
-		t.Error("seller output not matching")
+		t.Error("seller output not matching", outputs[1], expectedSellerOutput)
 	}
 	if !reflect.DeepEqual(buy, expectedBuy) {
-		t.Error("buy is not matching")
+		t.Error("buy is not matching", buy, expectedBuy)
 	}
 	if !reflect.DeepEqual(sell, expectedSell) {
-		t.Error("sell is not matching")
+		t.Error("sell is not matching", sell, expectedSell)
 	}
 }
 
@@ -79,10 +79,10 @@ func TestNotMatch(t *testing.T) {
 		t.Error("there should not be any outputs in non matching trades")
 	}
 	if !reflect.DeepEqual(buy, expectedBuy) {
-		t.Error("buy is not matching")
+		t.Error("buy is not matching", buy, expectedBuy)
 	}
 	if !reflect.DeepEqual(sell, expectedSell) {
-		t.Error("sell is not matching")
+		t.Error("sell is not matching", sell, expectedSell)
 	}
 }
 
@@ -119,16 +119,16 @@ func TestMatchCloseBuy(t *testing.T) {
 		Recieve: 40,
 	}
 	if !reflect.DeepEqual(outputs[0], expectedBuyerOutput) {
-		t.Error("buyer output not matching")
+		t.Error("buyer output not matching", outputs[0], expectedBuyerOutput)
 	}
 	if !reflect.DeepEqual(outputs[1], expectedSellerOutput) {
-		t.Error("seller output not matching")
+		t.Error("seller output not matching", outputs[1], expectedSellerOutput)
 	}
 	if !reflect.DeepEqual(buy, expectedBuy) {
-		t.Error("buy is not matching")
+		t.Error("buy is not matching", buy, expectedBuy)
 	}
 	if !reflect.DeepEqual(sell, expectedSell) {
-		t.Error("sell is not matching")
+		t.Error("sell is not matching", sell, expectedSell)
 	}
 }
 
@@ -164,39 +164,80 @@ func TestMatchCloseSell(t *testing.T) {
 		Recieve: 0,
 	}
 	if !reflect.DeepEqual(outputs[0], expectedBuyerOutput) {
-		t.Error("buyer output not matching")
+		t.Error("buyer output not matching", outputs[0], expectedBuyerOutput)
 	}
 	if !reflect.DeepEqual(outputs[1], expectedSellerOutput) {
-		t.Error("seller output not matching")
+		t.Error("seller output not matching", outputs[1], expectedSellerOutput)
 	}
 	if !reflect.DeepEqual(buy, expectedBuy) {
-		t.Error("buy is not matching")
+		t.Error("buy is not matching", buy, expectedBuy)
 	}
 	if !reflect.DeepEqual(sell, expectedSell) {
-		t.Error("sell is not matching")
+		t.Error("sell is not matching", sell, expectedSell)
 	}
 }
 
 func TestMatchBuyOffersMuchOnSameAmountOfSellRecieve(t *testing.T) {
-
-}
-
-func TestMatchSellOffersMuchOnSameAmountOfBuyRecieve(t *testing.T) {
-
-}
-
-func TestMatchBothOfferTooMuch(t *testing.T) {
 	buy := Buy{
 		Adress:  []byte{0},
-		Offer:   120,
+		Offer:   200,
 		Recieve: 100,
 	}
 	sell := Sell{
 		Adress:  []byte{1},
-		Offer:   120,
+		Offer:   100,
 		Recieve: 100,
 	}
-
 	outputs := buy.match(&sell)
-	t.Error(outputs)
+
+	expectedBuyerOutput := Output{
+		Adress: []byte{0},
+		Market: 100,
+	}
+	expectedSellerOutput := Output{
+		Adress: []byte{1},
+		Main:   200,
+	}
+	expectedBuy := Buy{
+		Adress:  []byte{0},
+		Offer:   0,
+		Recieve: 0,
+	}
+	expectedSell := Sell{
+		Adress:  []byte{1},
+		Offer:   0,
+		Recieve: 0,
+	}
+	if !reflect.DeepEqual(outputs[0], expectedBuyerOutput) {
+		t.Error("buyer output not matching", outputs[0], expectedBuyerOutput)
+	}
+	if !reflect.DeepEqual(outputs[1], expectedSellerOutput) {
+		t.Error("seller output not matching", outputs[1], expectedSellerOutput)
+	}
+	if !reflect.DeepEqual(buy, expectedBuy) {
+		t.Error("buy is not matching", buy, expectedBuy)
+	}
+	if !reflect.DeepEqual(sell, expectedSell) {
+		t.Error("sell is not matching", sell, expectedSell)
+	}
 }
+
+// func TestMatchSellOffersMuchOnSameAmountOfBuyRecieve(t *testing.T) {
+
+// }
+
+// func TestMatchBothOfferTooMuch(t *testing.T) {
+// 	buy := Buy{
+// 		Adress:  []byte{0},
+// 		Offer:   120,
+// 		Recieve: 100,
+// 	}
+// 	sell := Sell{
+// 		Adress:  []byte{1},
+// 		Offer:   120,
+// 		Recieve: 100,
+// 	}
+
+// 	outputs := buy.match(&sell)
+// 	t.Error(outputs)
+// }

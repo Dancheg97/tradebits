@@ -43,10 +43,6 @@ func (b *Buy) match(s *Sell) []Output {
 			}
 			s.Offer = s.Offer - b.Recieve
 			s.Recieve = s.Recieve - b.Offer
-			if s.Recieve == 0 && s.Offer != 0 {
-				sellerOutput.Market = s.Offer
-				s.Offer = 0
-			}
 			b.Offer = 0
 			b.Recieve = 0
 			return []Output{
@@ -56,7 +52,7 @@ func (b *Buy) match(s *Sell) []Output {
 		} //close sell
 		buyerOutput := Output{
 			Adress: b.Adress,
-			Market: b.Recieve,
+			Market: s.Offer,
 		}
 		sellerOutput := Output{
 			Adress: s.Adress,
