@@ -42,7 +42,11 @@ func (b *Buy) match(s *Sell) []Output {
 				Main:   b.Offer,
 			}
 			s.Offer = s.Offer - b.Recieve
-			s.Recieve = s.Recieve - b.Offer
+			if s.Recieve > b.Offer {
+				s.Recieve = s.Recieve - b.Offer
+			} else {
+				s.Recieve = 0
+			}
 			b.Offer = 0
 			b.Recieve = 0
 			return []Output{
