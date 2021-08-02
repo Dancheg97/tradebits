@@ -1,5 +1,7 @@
 package trade
 
+
+
 type TradePool struct {
 	Buys    []Buy
 	Sells   []Sell
@@ -32,7 +34,7 @@ type Output struct {
 // all trades are alwayts closing to the side better side
 func (b *Buy) match(s *Sell) []Output {
 	if float64(b.Offer)/float64(s.Recieve) >= float64(b.Recieve/s.Offer) {
-		if s.Offer >= b.Recieve { // close buy
+		if s.Offer > b.Recieve { // close buy
 			buyerOutput := Output{
 				Adress: b.Adress,
 				Market: b.Recieve,
@@ -54,6 +56,20 @@ func (b *Buy) match(s *Sell) []Output {
 				sellerOutput,
 			}
 		} //close sell
+		if b.Offer == s.Recieve {
+			buyerOutput := Output{
+				Adress: b.Adress,
+				Market: b.Offer,
+			}
+			sellerOutput := Output{
+				Adress: s.Adress,
+				Market: b.Recieve,
+			}
+			return []Output{
+				buyerOutput,
+				sellerOutput,
+			}
+		}
 		buyerOutput := Output{
 			Adress: b.Adress,
 			Market: s.Offer,
