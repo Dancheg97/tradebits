@@ -32,56 +32,30 @@ type Output struct {
 }
 
 // all trades are alwayts closing to the side better side
-func (b *Buy) match(s *Sell) []Output {
-	if float64(b.Offer)/float64(s.Recieve) >= float64(b.Recieve/s.Offer) {
-		if s.Offer > b.Recieve { // close buy
-			buyerOutput := Output{
-				Adress: b.Adress,
-				Market: b.Recieve,
-			}
-			sellerOutput := Output{
-				Adress: s.Adress,
-				Main:   b.Offer,
-			}
-			s.Offer = s.Offer - b.Recieve
-			if s.Recieve > b.Offer {
-				s.Recieve = s.Recieve - b.Offer
-			} else {
-				s.Recieve = 0
-			}
-			b.Offer = 0
-			b.Recieve = 0
-			return []Output{
-				buyerOutput,
-				sellerOutput,
-			}
-		} //close sell
-		if b.Offer == s.Recieve {
-			buyerOutput := Output{
-				Adress: b.Adress,
-				Market: b.Offer,
-			}
-			sellerOutput := Output{
-				Adress: s.Adress,
-				Market: b.Recieve,
-			}
-			return []Output{
-				buyerOutput,
-				sellerOutput,
-			}
-		}
+func (buy *Buy) match(sell *Sell) []Output {
+	if float64(buy.Offer)/float64(sell.Recieve) >= float64(buy.Recieve/sell.Offer) {
 		buyerOutput := Output{
-			Adress: b.Adress,
-			Market: s.Offer,
+			Adress: buy.Adress,
 		}
 		sellerOutput := Output{
-			Adress: s.Adress,
-			Main:   s.Recieve,
+			Adress: sell.Adress,
 		}
-		b.Offer = b.Offer - s.Recieve
-		b.Recieve = b.Recieve - s.Offer
-		s.Offer = 0
-		s.Recieve = 0
+		if buy.Recieve > sell.Offer {
+			// buy is not gonna be closed, sell will be closed
+			buy.Recieve = buy.Recieve - sell.Offer
+			buyerOutput.Market = sell.Offer
+		} else {
+			buyerOutput.Market = buy.Recieve
+			buy.Recieve = 0
+		}
+		if sell.Recieve > buy.Offer {
+			// sell is not gonna be closed
+			sell.Recieve = sell.Recieve - buy.Offer
+			sellerOutput.Main = buy.Offer
+		} else {
+			sellerOutput.Main = sell.Recieve
+			sell.Recieve = 0
+		}
 		return []Output{
 			buyerOutput,
 			sellerOutput,

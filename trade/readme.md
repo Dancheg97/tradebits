@@ -21,4 +21,4 @@ Each added trade can be cancelled, if trade is cancelled all current trade's `of
 # Trades matching
 
     When trade is added to some TradePool, firstly it's being matched with
-other trades. It is working in such a way, that if buy matched to sell/ sell matched to buy are both profitable for buyer and seller, then trades are being operated. If matching is having overage on buy trade offer, it goes to seller. If matching is having overage on sell trade offer, it goes to buyer.
+other trades. It is working in such a way, that if buy matched to sell/ sell matched to buy are both profitable for buyer and seller, then trades are being operated. If matching is having overage on buy trade offer, it goes to seller. If matching is having overage on sell trade offer, it goes to buyer. If there is overage on both buyer and seller sides, then buyers overage goes to seller, while sellers overage goes to buyer.
