@@ -5,87 +5,6 @@ import (
 	"testing"
 )
 
-func TestMatchCloseBoth(t *testing.T) {
-	buy := Buy{
-		Adress:  []byte{0},
-		Offer:   100,
-		Recieve: 50,
-	}
-	sell := Sell{
-		Adress:  []byte{1},
-		Offer:   50,
-		Recieve: 100,
-	}
-
-	outputs := buy.match(&sell)
-
-	expectedBuyerOutput := Output{
-		Adress: []byte{0},
-		Market: 50,
-	}
-	expectedSellerOutput := Output{
-		Adress: []byte{1},
-		Main:   100,
-	}
-	expectedBuy := Buy{
-		Adress:  []byte{0},
-		Offer:   0,
-		Recieve: 0,
-	}
-	expectedSell := Sell{
-		Adress:  []byte{1},
-		Offer:   0,
-		Recieve: 0,
-	}
-	if !reflect.DeepEqual(outputs[0], expectedBuyerOutput) {
-		t.Error("buyer output not matching", outputs[0], expectedBuyerOutput)
-	}
-	if !reflect.DeepEqual(outputs[1], expectedSellerOutput) {
-		t.Error("seller output not matching", outputs[1], expectedSellerOutput)
-	}
-	if !reflect.DeepEqual(buy, expectedBuy) {
-		t.Error("buy is not matching", buy, expectedBuy)
-	}
-	if !reflect.DeepEqual(sell, expectedSell) {
-		t.Error("sell is not matching", sell, expectedSell)
-	}
-}
-
-func TestNotMatch(t *testing.T) {
-	buy := Buy{
-		Adress:  []byte{0},
-		Offer:   50,
-		Recieve: 100,
-	}
-	sell := Sell{
-		Adress:  []byte{1},
-		Offer:   50,
-		Recieve: 100,
-	}
-
-	outputs := buy.match(&sell)
-
-	expectedBuy := Buy{
-		Adress:  []byte{0},
-		Offer:   50,
-		Recieve: 100,
-	}
-	expectedSell := Sell{
-		Adress:  []byte{1},
-		Offer:   50,
-		Recieve: 100,
-	}
-	if len(outputs) != 0 {
-		t.Error("there should not be any outputs in non matching trades")
-	}
-	if !reflect.DeepEqual(buy, expectedBuy) {
-		t.Error("buy is not matching", buy, expectedBuy)
-	}
-	if !reflect.DeepEqual(sell, expectedSell) {
-		t.Error("sell is not matching", sell, expectedSell)
-	}
-}
-
 func TestMatchCloseBuy(t *testing.T) {
 	buy := Buy{
 		Adress:  []byte{0},
@@ -280,7 +199,7 @@ func TestMatchBothOfferTooMuch(t *testing.T) {
 	}
 
 	outputs := buy.match(&sell)
-	
+
 	expectedBuyerOutput := Output{
 		Adress: []byte{0},
 		Market: 120,
@@ -304,6 +223,87 @@ func TestMatchBothOfferTooMuch(t *testing.T) {
 	}
 	if !reflect.DeepEqual(outputs[1], expectedSellerOutput) {
 		t.Error("seller output not matching", outputs[1], expectedSellerOutput)
+	}
+	if !reflect.DeepEqual(buy, expectedBuy) {
+		t.Error("buy is not matching", buy, expectedBuy)
+	}
+	if !reflect.DeepEqual(sell, expectedSell) {
+		t.Error("sell is not matching", sell, expectedSell)
+	}
+}
+
+func TestMatchCloseBoth(t *testing.T) {
+	buy := Buy{
+		Adress:  []byte{0},
+		Offer:   100,
+		Recieve: 50,
+	}
+	sell := Sell{
+		Adress:  []byte{1},
+		Offer:   50,
+		Recieve: 100,
+	}
+
+	outputs := buy.match(&sell)
+
+	expectedBuyerOutput := Output{
+		Adress: []byte{0},
+		Market: 50,
+	}
+	expectedSellerOutput := Output{
+		Adress: []byte{1},
+		Main:   100,
+	}
+	expectedBuy := Buy{
+		Adress:  []byte{0},
+		Offer:   0,
+		Recieve: 0,
+	}
+	expectedSell := Sell{
+		Adress:  []byte{1},
+		Offer:   0,
+		Recieve: 0,
+	}
+	if !reflect.DeepEqual(outputs[0], expectedBuyerOutput) {
+		t.Error("buyer output not matching", outputs[0], expectedBuyerOutput)
+	}
+	if !reflect.DeepEqual(outputs[1], expectedSellerOutput) {
+		t.Error("seller output not matching", outputs[1], expectedSellerOutput)
+	}
+	if !reflect.DeepEqual(buy, expectedBuy) {
+		t.Error("buy is not matching", buy, expectedBuy)
+	}
+	if !reflect.DeepEqual(sell, expectedSell) {
+		t.Error("sell is not matching", sell, expectedSell)
+	}
+}
+
+func TestNotMatch(t *testing.T) {
+	buy := Buy{
+		Adress:  []byte{0},
+		Offer:   50,
+		Recieve: 100,
+	}
+	sell := Sell{
+		Adress:  []byte{1},
+		Offer:   50,
+		Recieve: 100,
+	}
+
+	outputs := buy.match(&sell)
+
+	expectedBuy := Buy{
+		Adress:  []byte{0},
+		Offer:   50,
+		Recieve: 100,
+	}
+	expectedSell := Sell{
+		Adress:  []byte{1},
+		Offer:   50,
+		Recieve: 100,
+	}
+	if len(outputs) != 0 {
+		t.Error("there should not be any outputs in non matching trades")
 	}
 	if !reflect.DeepEqual(buy, expectedBuy) {
 		t.Error("buy is not matching", buy, expectedBuy)

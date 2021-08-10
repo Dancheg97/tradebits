@@ -1,7 +1,5 @@
 package trade
 
-
-
 type TradePool struct {
 	Buys    []Buy
 	Sells   []Sell
@@ -40,21 +38,19 @@ func (buy *Buy) match(sell *Sell) []Output {
 		sellerOutput := Output{
 			Adress: sell.Adress,
 		}
-		if buy.Recieve > sell.Offer {
-			// buy is not gonna be closed, sell will be closed
-			buy.Recieve = buy.Recieve - sell.Offer
-			buyerOutput.Market = sell.Offer
-		} else {
+		if buy.Offer < sell.Recieve {
+			defer buy.close()
+			defer sell.reduceOffer(buy.Recieve)
+			defer sell.reduceRecieve(buy.Offer)
 			buyerOutput.Market = buy.Recieve
-			buy.Recieve = 0
-		}
-		if sell.Recieve > buy.Offer {
-			// sell is not gonna be closed
-			sell.Recieve = sell.Recieve - buy.Offer
 			sellerOutput.Main = buy.Offer
-		} else {
+		}
+		if sell.Offer < buy.Recieve {
+			defer sell.close()
+			defer buy.reduceOffer(sell.Recieve)
+			defer buy.reduceRecieve(sell.Offer)
+			buyerOutput.Market = sell.Offer
 			sellerOutput.Main = sell.Recieve
-			sell.Recieve = 0
 		}
 		return []Output{
 			buyerOutput,
@@ -62,6 +58,40 @@ func (buy *Buy) match(sell *Sell) []Output {
 		}
 	}
 	return nil
+}
+
+func (b *Buy) close() {
+	b.Offer = 0
+	b.Recieve = 0
+}
+
+func (s *Sell) close() {
+	s.Offer = 0
+	s.Recieve = 0
+}
+
+func (b *Buy) reduceOffer(amount uint64) {
+	if b.Offer != 0 {
+		b.Offer = b.Offer - amount
+	}
+}
+
+func (b *Buy) reduceRecieve(amount uint64) {
+	if b.Recieve != 0 {
+		b.Recieve = b.Recieve - amount
+	}
+}
+
+func (s *Sell) reduceOffer(amount uint64) {
+	if s.Offer != 0 {
+		s.Offer = s.Offer - amount
+	}
+}
+
+func (s *Sell) reduceRecieve(amount uint64) {
+	if s.Recieve != 0 {
+		s.Recieve = s.Recieve - amount
+	}
 }
 
 // this function is gonna add single buy offer and operate it for all currently
