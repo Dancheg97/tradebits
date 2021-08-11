@@ -310,3 +310,129 @@ func TestNotMatch(t *testing.T) {
 		t.Error("sell is not matching", sell, expectedSell)
 	}
 }
+
+func TestAddSingleBuyToPool(t *testing.T) {
+	tp := TradePool{
+		Buys:    []Buy{},
+		Sells:   []Sell{},
+		Outputs: []Output{},
+	}
+	buy := Buy{
+		Adress:  []byte{0},
+		Offer:   50,
+		Recieve: 100,
+	}
+
+	tp.OperateBuy(buy)
+
+	if len(tp.Buys) != 1 {
+		t.Error("There should be one active buy order on the market")
+	}
+	if len(tp.Sells) != 0 {
+		t.Error("There should not be any active sells on the market")
+	}
+	if len(tp.Outputs) != 0 {
+		t.Error("There should not be any active outputs on the market")
+	}
+	if !reflect.DeepEqual(buy, tp.Buys[0]) {
+		t.Error("Trade in pool is not equal to the added")
+	}
+}
+
+func TestSortingOnAddingMultipleBuys(t *testing.T) {
+	tp := TradePool{
+		Buys:    []Buy{},
+		Sells:   []Sell{},
+		Outputs: []Output{},
+	}
+	bestBuy := Buy{
+		Adress:  []byte{0},
+		Offer:   100,
+		Recieve: 50,
+	}
+	midBuy := Buy{
+		Adress:  []byte{0},
+		Offer:   75,
+		Recieve: 75,
+	}
+	worstBuy := Buy{
+		Adress:  []byte{0},
+		Offer:   50,
+		Recieve: 100,
+	}
+	tp.OperateBuy(midBuy)
+	tp.OperateBuy(bestBuy)
+	tp.OperateBuy(worstBuy)
+
+	if len(tp.Buys) != 3 {
+		t.Error("there should be 3 active buys in trade pool")
+	}
+	if len(tp.Sells) != 0 {
+		t.Error("there should not be any active sells in trade pool")
+	}
+	if len(tp.Outputs) != 0 {
+		t.Error("outputs should not appear in pool after adding only buys")
+	}
+	if !reflect.DeepEqual(tp.Buys[0], bestBuy) {
+		t.Error("the first buy in pool should be the best one")
+	}
+	if !reflect.DeepEqual(tp.Buys[1], midBuy) {
+		t.Error("the average trade should be mid one")
+	}
+	if !reflect.DeepEqual(tp.Buys[2], worstBuy) {
+		t.Error("the last trade should be the worst one")
+	}
+}
+
+func TestAddSingleSellToPool(t *testing.T) {
+	tp := TradePool{
+		Sells:   []Sell{},
+		Buys:    []Buy{},
+		Outputs: []Output{},
+	}
+	sell := Sell{
+		Adress:  []byte{1},
+		Offer:   50,
+		Recieve: 100,
+	}
+
+	tp.OperateSell(sell)
+
+	if len(tp.Buys) != 0 {
+		t.Error("there should not be any active buys in pool")
+	}
+	if len(tp.Sells) != 1 {
+		t.Error("there should be a single sell order in pool")
+	}
+	if len(tp.Outputs) != 0 {
+		t.Error("there should not be any outputs in current")
+	}
+	if !reflect.DeepEqual(tp.Sells[0], sell) {
+		t.Error("the current order is not matching with added one")
+	}
+}
+
+func TestAddMultipleSells(t *testing.T) {
+	tp := TradePool{
+		Sells:   []Sell{},
+		Buys:    []Buy{},
+		Outputs: []Output{},
+	}
+	bestSell := Sell{
+		Adress:  []byte{0},
+		Offer:   100,
+		Recieve: 50,
+	}
+	midSell := Sell{
+		Adress:  []byte{0},
+		Offer:   75,
+		Recieve: 75,
+	}
+	worstSell := Sell{
+		Adress:  []byte{0},
+		Offer:   50,
+		Recieve: 100,
+	}
+
+	
+}
