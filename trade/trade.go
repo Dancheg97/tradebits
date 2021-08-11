@@ -66,7 +66,7 @@ func (buy *Buy) match(sell *Sell) []Output {
 				sellerOutput,
 			}
 		}
-		if sell.Offer > buy.Recieve && buy.Offer > sell.Recieve {
+		if sell.Offer >= buy.Recieve && buy.Offer >= sell.Recieve {
 			defer sell.close()
 			defer buy.close()
 			buyerOutput := Output{
@@ -82,7 +82,7 @@ func (buy *Buy) match(sell *Sell) []Output {
 				sellerOutput,
 			}
 		}
-		
+
 	}
 	return nil
 }

@@ -153,7 +153,6 @@ func TestMatchBuyOffersMuchOnSameAmountOfSellRecieve(t *testing.T) {
 		Recieve: 100,
 	}
 	outputs := buy.match(&sell)
-
 	expectedBuyerOutput := Output{
 		Adress: []byte{0},
 		Market: 100,
