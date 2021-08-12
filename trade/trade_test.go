@@ -434,5 +434,127 @@ func TestAddMultipleSells(t *testing.T) {
 		Recieve: 100,
 	}
 
+	tp.OperateSell(midSell)
+	tp.OperateSell(bestSell)
+	tp.OperateSell(worstSell)
+
+	if len(tp.Sells) != 3 {
+		t.Error("there should be 3 active sells in trade pool")
+	}
+	if len(tp.Buys) != 0 {
+		t.Error("there should not be any active buys in trade pool")
+	}
+	if len(tp.Outputs) != 0 {
+		t.Error("outputs should not appear in pool after adding only buys")
+	}
+	if !reflect.DeepEqual(tp.Sells[0], bestSell) {
+		t.Error("the first sell in pool should be the best one")
+	}
+	if !reflect.DeepEqual(tp.Sells[1], midSell) {
+		t.Error("the average trade should be mid one")
+	}
+	if !reflect.DeepEqual(tp.Sells[2], worstSell) {
+		t.Error("the last trade in pool should be the worst one")
+	}
+}
+
+func checkIfElementIsMissing(slice []Output, elem Output) bool {
+	for _, v := range slice {
+		if reflect.DeepEqual(elem, v) {
+			return false
+		}
+	}
+	return true
+}
+
+func TestOperateMultipleBuysAndSells(t *testing.T) {
+	tp := TradePool{
+		Sells:   []Sell{},
+		Buys:    []Buy{},
+		Outputs: []Output{},
+	}
+	bestSell := Sell{
+		Adress:  []byte{0},
+		Offer:   100,
+		Recieve: 50,
+	}
+	midSell := Sell{
+		Adress:  []byte{1},
+		Offer:   75,
+		Recieve: 75,
+	}
+	worstSell := Sell{
+		Adress:  []byte{2},
+		Offer:   50,
+		Recieve: 100,
+	}
+	bestBuy := Buy{
+		Adress:  []byte{3},
+		Offer:   100,
+		Recieve: 50,
+	}
+	midBuy := Buy{
+		Adress:  []byte{4},
+		Offer:   75,
+		Recieve: 75,
+	}
+	worstBuy := Buy{
+		Adress:  []byte{5},
+		Offer:   50,
+		Recieve: 100,
+	}
+
+	tp.OperateBuy(bestBuy)
+	tp.OperateSell(worstSell)
+	tp.OperateBuy(midBuy)
+	tp.OperateSell(midSell)
+	tp.OperateSell(bestSell)
+	tp.OperateBuy(worstBuy)
+
+	firstOutput := Output{
+		Adress: []byte{0},
+		Main:   50,
+	}
+	secondOutput := Output{
+		Adress: []byte{1},
+		Main:   75,
+	}
+	thirdOutput := Output{
+		Adress: []byte{2},
+		Main:   100,
+	}
+	fourthOutput := Output{
+		Adress: []byte{3},
+		Market: 50,
+	}
+	fifthOutput := Output{
+		Adress: []byte{4},
+		Market: 75,
+	}
+	sixthOutput := Output{
+		Adress: []byte{5},
+		Market: 100,
+	}
+
+	allOutputs := []Output{
+		firstOutput,
+		secondOutput,
+		thirdOutput,
+		fourthOutput,
+		fifthOutput,
+		sixthOutput,
+	}
+
+	if len(tp.Outputs) != 6 {
+		t.Error("output should exist for every user")
+	}
+	for idx, output := range allOutputs {
+		if checkIfElementIsMissing(tp.Outputs, output) {
+			t.Error("element by index ", idx, " is missing")
+		}
+	}
+}
+
+func TestAddingNonMatchingTrades(t *testing.T) {
 	
 }
