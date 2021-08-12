@@ -556,5 +556,81 @@ func TestOperateMultipleBuysAndSells(t *testing.T) {
 }
 
 func TestAddingNonMatchingTrades(t *testing.T) {
-	
+	tp := TradePool{
+		Sells:   []Sell{},
+		Buys:    []Buy{},
+		Outputs: []Output{},
+	}
+	firstSell := Sell{
+		Adress:  []byte{0},
+		Offer:   50,
+		Recieve: 100,
+	}
+	secondSell := Sell{
+		Adress:  []byte{0},
+		Offer:   75,
+		Recieve: 100,
+	}
+	firstBuy := Buy{
+		Adress:  []byte{3},
+		Offer:   50,
+		Recieve: 100,
+	}
+	secondBuy := Buy{
+		Adress:  []byte{3},
+		Offer:   75,
+		Recieve: 100,
+	}
+
+	tp.OperateBuy(firstBuy)
+	tp.OperateSell(firstSell)
+	tp.OperateBuy(secondBuy)
+	tp.OperateSell(secondSell)
+
+	if len(tp.Sells) != 2 {
+		t.Error("there should be 2 active sells on current market")
+	}
+	if len(tp.Buys) != 2 {
+		t.Error("there should be 2 active buys on current market")
+	}
+	if !reflect.DeepEqual(tp.Buys[0], secondBuy) {
+		t.Error("first pool buy is better, should be equal to secondBuy")
+	}
+	if !reflect.DeepEqual(tp.Buys[1], firstBuy) {
+		t.Error("second pool buy is worse, should be equal to firstBuy")
+	}
+	if !reflect.DeepEqual(tp.Sells[0], secondSell) {
+		t.Error("first pool buy is better, should be equal to secondBuy")
+	}
+	if !reflect.DeepEqual(tp.Sells[1], firstSell) {
+		t.Error("second pool sell is worse, should be  equal to firstSell")
+	}
+}
+
+func TestSellClosedMultipleBuysInPool(t *testing.T) {
+	tp := TradePool{
+		Sells:   []Sell{},
+		Buys:    []Buy{},
+		Outputs: []Output{},
+	}
+	bigSell := Sell{
+		Adress:  []byte{0},
+		Offer:   200,
+		Recieve: 200,
+	}
+	firstSmallBuy := Buy{
+		Adress:  []byte{1},
+		Offer:   100,
+		Recieve: 100,
+	}
+	secondSmallBuy := Buy{
+		Adress:  []byte{2},
+		Offer:   100,
+		Recieve: 100,
+	}
+
+	tp.OperateBuy(firstSmallBuy)
+	tp.OperateBuy(secondSmallBuy)
+	tp.OperateSell(bigSell)
+
 }
