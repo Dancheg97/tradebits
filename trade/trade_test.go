@@ -665,3 +665,63 @@ func TestSellClosedMultipleBuysInPool(t *testing.T) {
 		t.Error("cant find fourth expected output")
 	}
 }
+
+func TestBuyClosedMutipleSellsInPool(t *testing.T) {
+	tp := TradePool{
+		Sells:   []Sell{},
+		Buys:    []Buy{},
+		Outputs: []Output{},
+	}
+	bigBuy := Buy{
+		Adress:  []byte{0},
+		Offer:   200,
+		Recieve: 200,
+	}
+	firstSmallSell := Sell{
+		Adress:  []byte{1},
+		Offer:   90,
+		Recieve: 90,
+	}
+	secondSmallSell := Sell{
+		Adress:  []byte{2},
+		Offer:   110,
+		Recieve: 110,
+	}
+
+	tp.OperateSell(firstSmallSell)
+	tp.OperateSell(secondSmallSell)
+	tp.OperateBuy(bigBuy)
+
+	firstOutput := Output{
+		Adress: []byte{0},
+		Market: 90,
+	}
+	secondOutput := Output{
+		Adress: []byte{0},
+		Market: 110,
+	}
+	thirdOutput := Output{
+		Adress: []byte{1},
+		Main:   90,
+	}
+	fourthOutput := Output{
+		Adress: []byte{2},
+		Main:   110,
+	}
+
+	if len(tp.Outputs) != 4 {
+		t.Error("there should be 4 outputs in pool")
+	}
+	if checkIfElementIsMissing(tp.Outputs, firstOutput) {
+		t.Error("cant find first expected output")
+	}
+	if checkIfElementIsMissing(tp.Outputs, secondOutput) {
+		t.Error("cant find second expected output")
+	}
+	if checkIfElementIsMissing(tp.Outputs, thirdOutput) {
+		t.Error("cant find third expected output")
+	}
+	if checkIfElementIsMissing(tp.Outputs, fourthOutput) {
+		t.Error("cant find fourth expected output")
+	}
+}
