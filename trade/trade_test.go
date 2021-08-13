@@ -620,17 +620,48 @@ func TestSellClosedMultipleBuysInPool(t *testing.T) {
 	}
 	firstSmallBuy := Buy{
 		Adress:  []byte{1},
-		Offer:   100,
-		Recieve: 100,
+		Offer:   90,
+		Recieve: 90,
 	}
 	secondSmallBuy := Buy{
 		Adress:  []byte{2},
-		Offer:   100,
-		Recieve: 100,
+		Offer:   110,
+		Recieve: 110,
 	}
 
 	tp.OperateBuy(firstSmallBuy)
 	tp.OperateBuy(secondSmallBuy)
 	tp.OperateSell(bigSell)
 
+	firstOutput := Output{
+		Adress: []byte{0},
+		Main:   90,
+	}
+	secondOutput := Output{
+		Adress: []byte{0},
+		Main:   110,
+	}
+	thirdOutput := Output{
+		Adress: []byte{1},
+		Market: 90,
+	}
+	fourthOutput := Output{
+		Adress: []byte{2},
+		Market: 110,
+	}
+	if len(tp.Outputs) != 4 {
+		t.Error("there should be 4 outputs in pool")
+	}
+	if checkIfElementIsMissing(tp.Outputs, firstOutput) {
+		t.Error("cant find first expected output")
+	}
+	if checkIfElementIsMissing(tp.Outputs, secondOutput) {
+		t.Error("cant find second expected output")
+	}
+	if checkIfElementIsMissing(tp.Outputs, thirdOutput) {
+		t.Error("cant find third expected output")
+	}
+	if checkIfElementIsMissing(tp.Outputs, fourthOutput) {
+		t.Error("cant find fourth expected output")
+	}
 }
