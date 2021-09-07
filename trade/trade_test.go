@@ -581,12 +581,10 @@ func TestAddingNonMatchingTrades(t *testing.T) {
 		Offer:   75,
 		Recieve: 100,
 	}
-
 	tp.OperateBuy(firstBuy)
 	tp.OperateSell(firstSell)
 	tp.OperateBuy(secondBuy)
 	tp.OperateSell(secondSell)
-
 	if len(tp.Sells) != 2 {
 		t.Error("there should be 2 active sells on current market")
 	}
@@ -691,7 +689,6 @@ func TestBuyClosedMutipleSellsInPool(t *testing.T) {
 	tp.OperateSell(firstSmallSell)
 	tp.OperateSell(secondSmallSell)
 	tp.OperateBuy(bigBuy)
-
 	firstOutput := Output{
 		Adress: []byte{0},
 		Market: 90,
