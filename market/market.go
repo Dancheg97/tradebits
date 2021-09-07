@@ -126,11 +126,8 @@ func (m *market) GetAllMessages() map[string]string {
 
 func (m *market) operateOutput(t trade.Output) {
 	u := user.Get(t.Adress)
-	if t.IsMain {
-		u.Balance = u.Balance + t.Amount
-	} else {
-		u.Balances[string(m.adress)] = u.Balances[string(m.adress)] + t.Amount
-	}
+	u.Balance = u.Balance + t.Main
+	u.Balances[string(m.adress)] = u.Balances[string(m.adress)] + t.Market
 	u.Save()
 }
 
