@@ -73,5 +73,4 @@ macOS & Linux
 
 ## TODO
 
-- make it impossible for user to craete more than one operation on single market
-- 
+- api, logic and tests for user and market messanging
