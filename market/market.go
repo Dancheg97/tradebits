@@ -107,23 +107,6 @@ func Look(adress []byte) *market {
 	return &currMarket
 }
 
-// Function to add message from some adress to concrete market
-func (m *market) PutMessage(userAdress []byte, mes string) {
-	strAdr := string(userAdress)
-	m.Msg[strAdr] = mes
-}
-
-// This function is made to get all new messages and to put all current messages
-// to archieve
-func (m *market) GetAllMessages() map[string]string {
-	messages := m.Msg
-	for sender, message := range m.Msg {
-		m.Arch[sender] = m.Arch[sender] + "|" + message
-	}
-	m.Msg = make(map[string]string)
-	return messages
-}
-
 func (m *market) operateOutput(t trade.Output) {
 	u := user.Get(t.Adress)
 	u.Balance = u.Balance + t.Main

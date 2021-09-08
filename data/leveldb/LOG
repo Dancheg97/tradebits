@@ -499,3 +499,22 @@
 13:49:14.912090 version@stat F·[3 1] S·9KiB[6KiB 3KiB] Sc·[0.75 0.00]
 13:49:14.971301 db@janitor F·6 G·0
 13:49:14.971360 db@open done T·89.338507ms
+=============== Sep 7, 2021 (MSK) ===============
+13:50:56.218722 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+13:50:56.219268 version@stat F·[3 1] S·9KiB[6KiB 3KiB] Sc·[0.75 0.00]
+13:50:56.219298 db@open opening
+13:50:56.219404 journal@recovery F·1
+13:50:56.219882 journal@recovery recovering @128
+13:50:56.235207 memdb@flush created L0@130 N·68 S·4KiB "\x01\x01\x01..[[[,v529":"\x81\x16\r..[[[,v516"
+13:50:56.236181 version@stat F·[4 1] S·14KiB[11KiB 3KiB] Sc·[1.00 0.00]
+13:50:56.283335 db@janitor F·7 G·0
+13:50:56.283421 db@open done T·64.099593ms
+13:50:56.283569 table@compaction L0·4 -> L1·1 S·14KiB Q·554
+13:50:56.293715 table@build created L1@133 N·9 S·3KiB "\x01\x01\x01..[[[,v529":"\x96\x9a\xe8..\x99\x06\xc0,v20"
+13:50:56.293918 version@stat F·[0 1] S·3KiB[0B 3KiB] Sc·[0.00 0.00]
+13:50:56.321996 table@compaction committed F-4 S-11KiB Ke·0 D·190 T·38.298007ms
+13:50:56.322351 table@remove removed @130
+13:50:56.322741 table@remove removed @127
+13:50:56.325247 table@remove removed @124
+13:50:56.325538 table@remove removed @121
+13:50:56.325683 table@remove removed @120

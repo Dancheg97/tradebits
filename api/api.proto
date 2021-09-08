@@ -8,7 +8,7 @@ package api;
 Go gen:
 protoc api/api.proto --go-grpc_out=. --go_out=.
 Dart gen:
-protoc lib/api/api.proto --dart_out=grpc:.
+protoc lib/_net/api.proto --dart_out=grpc:.
 */
 
 service SyncTree{
@@ -16,25 +16,23 @@ service SyncTree{
     rpc InfoMarket(InfoMarketRequest) returns (InfoMarketResponse) {}
     rpc InfoSearch(InfoSearchRequest) returns (InfoSearchResponse) {}
     rpc InfoHasTrades(InfoHasTradesRequest) returns (Response) {}
+    rpc InfoMessages(InfoMessagesRequest) returns (Messages) {}
 
     rpc UserCreate(UserCreateRequest) returns (Response) {}
     rpc UserUpdate(UserUpdateRequest) returns (Response) {}
     rpc UserSend(UserSendRequest) returns (Response) {}
-    rpc UserCreateTrade(UserTradeRequest) returns (Response) {}
-    rpc UserCancelTrade(UserCancelTradeRequest) returns (Response) {}
     rpc UserDeposit(UserDepositRequest) returns (Response) {}
     rpc UserWithdrawal(UserWithdrawalRequest) returns (Response) {}
     rpc UserSendMessage(UserSendMessageRequest) returns (Response) {}
-    rpc UserGetMessages(UserGetMessagesRequest) returns (Messages) {}
     rpc UserBuy(UserBuyRequest) returns (Response) {}
     rpc UserSell(UserSellRequest) returns (Response) {}
+    rpc UserCancelTrade(UserCancelTradeRequest) returns (Response) {}
 
     rpc MarketCraete(MarketCreateRequest) returns (Response) {}
     rpc MarketUpdate(MarketUpdateRequest) returns (Response) {}
     rpc MarketDeposit(MarketDepositRequest) returns (Response) {}
     rpc MarketWithdrawal(MarketWithdrawalRequest) returns (Response) {}
     rpc MarketSendMessage(MarketSendMessageRequest) returns (Response) {}
-    rpc MarketGetMessages(MarketGetMessagesRequest) returns (Messages) {}
 }
 
 message Response{
@@ -42,7 +40,7 @@ message Response{
 }
 
 message Messages{
-    bytes sender = 1;
+    repeated string messages = 1;
 }
 
 message InfoUserRequest{
@@ -82,6 +80,11 @@ message InfoHasTradesRequest{
 
 message InfoSearchResponse{
     repeated bytes ConcMarkets = 1;
+}
+
+message InfoMessagesRequest{
+    bytes marketAdress = 1;
+    bytes userAdress = 2;
 }
 
 message UserCreateRequest{
@@ -165,10 +168,6 @@ message UserSellRequest{
     bytes Sign = 5;
 }
 
-message UserGetMessagesRequest{
-    bytes Adress = 1;
-}
-
 message MarketCreateRequest{
     bytes PublicKey = 1;
     bytes MesssageKey = 2;
@@ -210,8 +209,4 @@ message MarketSendMessageRequest{
     bytes Adress = 2;
     string Message = 3;
     bytes Sign = 4;
-}
-
-message MarketGetMessagesRequest{
-    bytes Adress = 1;
 }
