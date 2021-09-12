@@ -10,6 +10,10 @@ import (
 	"sync_tree/user"
 )
 
+var nicotinAdr = `lproB8nRtPn4kjmRQtdpongRukRgFjmNe2PXOD7mZw9JxO/by1fdGDbV1vYUX/Hzce8oF9z7rTPYa1No5ZkGwA==`
+
+var alcoholAdr = `EMQqIoItMrkILx5YBJqvHRr3loDQtBIy3AURtlKE9+OLmWGvITE9wFEoMZAH/+3QyMj1iZ8qWJChuomFTSw/wg==`
+
 var alcoKeyString = `-----BEGIN RSA PRIVATE KEY-----
 MIIJKgIBAAKCAgEAjdgFBLDvmGQvl3o87UZAxUCuGwKqym92Iv4FGujlcr95oPxk
 IoXtLYnZUNXBAPdDRqeag8dhTbftCuywd99xJybV4uoqlOSghd2lu5nrtixrcIF/
