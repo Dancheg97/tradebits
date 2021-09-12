@@ -4,9 +4,8 @@
 *.dll
 *.so
 *.dylib
-*.ldb
-*.log
-data/leveldb
+data/leveldb/*
+search/bleeve/*
 
 # Test binary, built with `go test -c`
 *.test
