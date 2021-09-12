@@ -18,7 +18,7 @@ func main() {
 	fmt.Println("the game goes on")
 	createNewUsers()
 	createStartMarket()
-	lis, err := net.Listen("tcp", ":80")
+	lis, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}

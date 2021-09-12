@@ -4,6 +4,9 @@
 *.dll
 *.so
 *.dylib
+*.ldb
+*.log
+data/leveldb
 
 # Test binary, built with `go test -c`
 *.test
