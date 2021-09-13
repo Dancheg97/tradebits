@@ -9,7 +9,7 @@ import (
 )
 
 func TestCreateUser(t *testing.T) {
-	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 91, 91}
+	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 6, 5, 4, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 1, 3, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 2, 60, 61, 62, 91, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
 	var img = "user image link"
 	err := Create(adress, mesKey, img)
@@ -94,6 +94,7 @@ func TestPutUserMessage(t *testing.T) {
 		t.Error("the message should be 'message' - " + mes)
 	}
 }
+
 func TestPutMarketMessage(t *testing.T) {
 	var adress = []byte{1, 22, 3, 1, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 1, 23, 23, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 32, 32, 41, 42, 19, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 59, 56, 32, 121, 59, 22, 91, 191, 191, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
@@ -107,6 +108,18 @@ func TestPutMarketMessage(t *testing.T) {
 		t.Error("the message should be 'message' - " + mes)
 	}
 }
+
+func TestNewUserNonNullableMessageMap(t *testing.T) {
+	var adress = []byte{1, 22, 3, 1, 5, 6, 7, 8, 9, 123, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 1, 23, 23, 25, 26, 123, 123, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 32, 32, 41, 42, 19, 44, 45, 16, 47, 48, 49, 50, 51, 52, 53, 54, 59, 56, 32, 121, 59, 22, 91, 191, 191, 12}
+	var mesKey = []byte{1, 2, 3, 4, 5}
+	var img = "user image link"
+	Create(adress, mesKey, img)
+	usr := Get(adress)
+	if usr.Messages == nil {
+		t.Error("user messages should never be null")
+	}
+}
+
 func TestAttachToLookedUser(t *testing.T) {
 	var adress = []byte{1, 22, 3, 44, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 59, 56, 99, 121, 59, 22, 91, 191, 191, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
