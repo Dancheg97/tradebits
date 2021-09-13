@@ -53,8 +53,8 @@ func Get(adress []byte) *user {
 		return Get(adress)
 	}
 	u := user{adress: adress}
-	checkUserExists := data.Check(adress)
-	if checkUserExists == false {
+	userExists := data.Check(adress)
+	if userExists == false {
 		return nil
 	}
 	userBytes := data.Get(adress)
