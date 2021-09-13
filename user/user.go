@@ -53,6 +53,10 @@ func Get(adress []byte) *user {
 		return Get(adress)
 	}
 	u := user{adress: adress}
+	checkUserExists := data.Check(adress)
+	if checkUserExists == false {
+		return nil
+	}
 	userBytes := data.Get(adress)
 	cache := bytes.NewBuffer(userBytes)
 	gob.NewDecoder(cache).Decode(&u)

@@ -93,6 +93,7 @@ func TestPutUserMessage(t *testing.T) {
 	if mes != "umessage" {
 		t.Error("the message should be 'message' - " + mes)
 	}
+	data.TestRM(adress)
 }
 
 func TestPutMarketMessage(t *testing.T) {
@@ -107,6 +108,7 @@ func TestPutMarketMessage(t *testing.T) {
 	if mes != "mmessage" {
 		t.Error("the message should be 'message' - " + mes)
 	}
+	data.TestRM(adress)
 }
 
 func TestNewUserNonNullableMessageMap(t *testing.T) {
@@ -118,6 +120,8 @@ func TestNewUserNonNullableMessageMap(t *testing.T) {
 	if usr.Messages == nil {
 		t.Error("user messages should never be null")
 	}
+	usr.Save()
+	data.TestRM(adress)
 }
 
 func TestAttachToLookedUser(t *testing.T) {
