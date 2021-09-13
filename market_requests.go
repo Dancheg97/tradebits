@@ -79,7 +79,7 @@ func (s *server) MarketSendMessage(
 		senderAdress := calc.Hash(in.PublicKey)
 		u := user.Get(in.Adress)
 		if u != nil {
-			u.PutUserMessage(senderAdress, in.Message)
+			u.PutMarketMessage(senderAdress, in.Message)
 			u.Save()
 			return &pb.Response{Passed: true}, nil
 		}
