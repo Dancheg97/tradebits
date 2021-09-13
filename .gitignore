@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+*.ldb
 data/leveldb/*
 search/bleeve/*
 
