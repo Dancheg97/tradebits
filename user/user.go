@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"errors"
+	"fmt"
 	"sync_tree/data"
 	"sync_tree/lock"
 	"sync_tree/trade"
@@ -88,8 +89,23 @@ func (u *user) Save() {
 /*
 Function to add message from some adress to concrete user
 */
-func (u *user) PutMessage(adress []byte, mes string) {
+func (u *user) PutUserMessage(adress []byte, mes string) {
+	fmt.Println(u.Messages)
 	strAdress := string(adress)
+	if u.Messages[strAdress] == nil {
+		u.Messages[strAdress] = []string{"u" + mes}
+		return
+	}
+	u.Messages[strAdress] = append(u.Messages[strAdress], mes)
+}
+
+func (u *user) PutMarketMessage(adress []byte, mes string) {
+	fmt.Println(u.Messages)
+	strAdress := string(adress)
+	if u.Messages[strAdress] == nil {
+		u.Messages[strAdress] = []string{"m" + mes}
+		return
+	}
 	u.Messages[strAdress] = append(u.Messages[strAdress], mes)
 }
 

@@ -216,9 +216,7 @@ func stringToKeyBytes(key string) []byte {
 }
 
 func createNewUsers() {
-	alcoContent, _ := ioutil.ReadFile("_Alcohol.pem")
-	alcoText := string(alcoContent)
-	alcoSplitted := strings.Split(alcoText, "|")
+	alcoSplitted := strings.Split(alcoKeyString, "|")
 	alcoAdress := calc.Hash(stringToKeyBytes(alcoSplitted[1]))
 	alcoMesKey := stringToKeyBytes(alcoSplitted[3])
 	user.Create(alcoAdress, alcoMesKey, "Alcohol")
@@ -232,9 +230,7 @@ func createNewUsers() {
 		alco.Balances[marketAdress] = 10000
 	}
 	fmt.Println("alco wallet created with", alco.Balance, "balance")
-	nicoContent, _ := ioutil.ReadFile("_Nicotin.pem")
-	nicoText := string(nicoContent)
-	nicoSplitted := strings.Split(nicoText, "|")
+	nicoSplitted := strings.Split(nicoKeyString, "|")
 	nicoAdress := calc.Hash(stringToKeyBytes(nicoSplitted[1]))
 	nicoMesKey := stringToKeyBytes(nicoSplitted[3])
 	user.Create(nicoAdress, nicoMesKey, "Nicotin")
