@@ -52,6 +52,7 @@ func Get(adress []byte) *user {
 	if lockErr != nil {
 		time.Sleep(time.Millisecond * 89)
 		return Get(adress)
+		//TODO implement check wether its to many reties
 	}
 	u := user{adress: adress}
 	userBytes := data.Get(adress)

@@ -56,3 +56,5 @@ func Unlock(ID []byte) {
 	defer blocker.mutex.Unlock()
 	delete(blocker.userId, lockID)
 }
+
+//TODO implement recursive function lock when possible
