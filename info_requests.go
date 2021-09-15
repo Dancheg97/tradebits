@@ -58,6 +58,9 @@ func (s *server) InfoSearch(
 ) (*pb.InfoSearchResponse, error) {
 	fmt.Println("user made a search request on: ", in.Info)
 	results := search.Search(in.Info)
+	if len(results) > 30 {
+		results = results[0:30]
+	}
 	return &pb.InfoSearchResponse{ConcMarkets: results}, nil
 }
 
