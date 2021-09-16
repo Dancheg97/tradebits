@@ -1,7 +1,6 @@
 package lock
 
 import (
-	"errors"
 	"sync"
 	"time"
 )
@@ -22,10 +21,7 @@ func generateBlockers() map[byte]*blockedMap {
 
 var blockers = generateBlockers()
 
-func Lock(ID []byte) error {
-	if len(ID) != 64 {
-		return errors.New("error on checking length of bytes")
-	}
+func Lock(ID []byte) {
 	var lockID [64]byte
 	copy(lockID[:], ID[:64])
 	keyByte := ID[0]
@@ -35,11 +31,11 @@ func Lock(ID []byte) error {
 	if found {
 		blocker.mutex.Unlock()
 		time.Sleep(time.Millisecond * 144)
-		return Lock(ID)
+		Lock(ID)
+		return
 	}
 	blocker.userId[lockID] = true
 	blocker.mutex.Unlock()
-	return nil
 }
 
 func Unlock(ID []byte) {
@@ -51,5 +47,3 @@ func Unlock(ID []byte) {
 	defer blocker.mutex.Unlock()
 	delete(blocker.userId, lockID)
 }
-
-//TODO implement recursive function lock when possible

@@ -74,11 +74,10 @@ This function should be used only in case those values are modified:
  - DisLikes
 */
 func Get(adress []byte) *market {
-	lockErr := lock.Lock(adress)
-	if lockErr != nil {
-		time.Sleep(time.Millisecond * 89)
-		return Get(adress)
+	if len(adress) != 64 {
+		return nil
 	}
+	lock.Lock(adress)
 	a := market{adress: adress}
 	marketExists := data.Check(adress)
 	if marketExists == false {

@@ -47,12 +47,10 @@ Get existing user from database, by getting user his ID is gonna be
 locked, so another of that user are not gonna appear
 */
 func Get(adress []byte) *user {
-	lockErr := lock.Lock(adress)
-	if lockErr != nil {
-		time.Sleep(time.Millisecond * 89)
-		return Get(adress)
-		//TODO implement check wether its to many reties
+	if len(adress) != 64 {
+		return nil
 	}
+	lock.Lock(adress)
 	u := user{adress: adress}
 	userExists := data.Check(adress)
 	if userExists == false {

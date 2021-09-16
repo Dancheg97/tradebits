@@ -5,15 +5,17 @@ import (
 	"time"
 )
 
+func TimeOutError(t *testing.T) {
+	time.Sleep(time.Second * 5)
+	t.Error("timeout error for locking function")
+}
+
 func TestLockID(t *testing.T) {
+	go TimeOutError(t)
 	lockBytes := make([]byte, 64)
 	lockBytes[0] = 65
 	lockBytes[1] = 69
-	err := Lock(lockBytes)
-	if err != nil {
-		t.Error("failed to lock and unlock id")
-		return
-	}
+	Lock(lockBytes)
 	Unlock(lockBytes)
 }
 
@@ -23,25 +25,12 @@ func HelperDefferedUnlock(IDtoUnlock []byte) {
 }
 
 func TestTryToLockLocked(t *testing.T) {
+	go TimeOutError(t)
 	lockBytes := make([]byte, 64)
 	lockBytes[0] = 65
 	lockBytes[1] = 66
 	Lock(lockBytes)
 	go HelperDefferedUnlock(lockBytes)
-	err := Lock(lockBytes)
-	if err == nil {
-		return
-	}
-	t.Error("attemt to lock locked id succeded, test failed")
-}
-
-func TestWrongIDlength(t *testing.T) {
-	lockBytes := make([]byte, 68)
-	lockBytes[0] = 65
-	lockBytes[1] = 68
-	err := Lock(lockBytes)
-	if err == nil {
-		t.Error("attemt to lock bad id")
-		return
-	}
+	Lock(lockBytes)
+	defer Unlock(lockBytes)
 }
