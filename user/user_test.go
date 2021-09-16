@@ -111,8 +111,6 @@ func TestPutMarketMessage(t *testing.T) {
 	data.TestRM(adress)
 }
 
-<<<<<<< HEAD
-=======
 func TestNewUserNonNullableMessageMap(t *testing.T) {
 	var adress = []byte{1, 22, 3, 1, 5, 6, 7, 8, 9, 123, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 1, 23, 23, 25, 26, 123, 123, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 32, 32, 41, 42, 19, 44, 45, 16, 47, 48, 49, 50, 51, 52, 53, 54, 59, 56, 32, 121, 59, 22, 91, 191, 191, 12}
 	var mesKey = []byte{1, 2, 3, 4, 5}
@@ -126,7 +124,6 @@ func TestNewUserNonNullableMessageMap(t *testing.T) {
 	data.TestRM(adress)
 }
 
->>>>>>> 4f25085bf170be3297aff057cd0611982d923edd
 func TestAttachToLookedUser(t *testing.T) {
 	var adress = []byte{1, 22, 3, 44, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 59, 56, 99, 121, 59, 22, 91, 191, 191, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
