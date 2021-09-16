@@ -71,6 +71,11 @@ message InfoMarketResponse{
     uint64 OpCount = 5;
     repeated uint64 buys = 6; //each pair - single deal
     repeated uint64 sells = 7; //each pair - single deal
+    uint64 activeBuys = 8;
+    uint64 activeSells = 9;
+    uint64 inputFee = 10;
+    uint64 outputFee = 11;
+    string workTime = 12;
 }
 
 message InfoHasTradesRequest{

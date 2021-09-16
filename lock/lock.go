@@ -3,6 +3,7 @@ package lock
 import (
 	"errors"
 	"sync"
+	"time"
 )
 
 type blockedMap struct {
@@ -21,29 +22,23 @@ func generateBlockers() map[byte]*blockedMap {
 
 var blockers = generateBlockers()
 
-func checkLen(bytes []byte) error {
-	if len(bytes) != 64 {
-		return errors.New("error on checking length of bytes")
-	}
-	return nil
-}
-
 func Lock(ID []byte) error {
-	lengthErr := checkLen(ID)
-	if lengthErr != nil {
-		return lengthErr
+	if len(ID) != 64 {
+		return errors.New("error on checking length of bytes")
 	}
 	var lockID [64]byte
 	copy(lockID[:], ID[:64])
 	keyByte := ID[0]
 	blocker := blockers[keyByte]
 	blocker.mutex.Lock()
-	defer blocker.mutex.Unlock()
 	_, found := blocker.userId[lockID]
 	if found {
-		return errors.New("this key is already locked")
+		blocker.mutex.Unlock()
+		time.Sleep(time.Millisecond * 144)
+		return Lock(ID)
 	}
 	blocker.userId[lockID] = true
+	blocker.mutex.Unlock()
 	return nil
 }
 
