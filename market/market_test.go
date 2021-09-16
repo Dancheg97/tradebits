@@ -9,13 +9,18 @@ import (
 	"time"
 )
 
+var img = "asset image link . example"
+var name = "newAsset"
+var descr = "descrx"
+var inpFee = uint64(100)
+var outFee = uint64(100)
+var workTime = "+3GMT 9:00 - 21:00"
+
 func TestCreateNewMarket(t *testing.T) {
 	var adress = []byte{1, 2, 5, 4, 5, 9, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 3, 1, 4, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 6, 5, 4, 3, 2, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 1, 60, 2, 2, 1, 63}
 	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "asset image link . example"
-	var name = "newAsset"
-	var descr = "descrx"
-	err := Create(adress, name, mesKey, descr, img)
+	
+	err := Create(adress, name, mesKey, descr, img, inpFee, outFee, workTime)
 	if err != nil {
 		t.Error("failed to craete new market")
 	}
@@ -25,11 +30,8 @@ func TestCreateNewMarket(t *testing.T) {
 func TestCreateExistingMarket(t *testing.T) {
 	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 61}
 	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "asset image link . example"
-	var name = "newAsset"
-	var descr = "descrx"
-	Create(adress, name, mesKey, descr, img)
-	err := Create(adress, name, mesKey, descr, img)
+	Create(adress, name, mesKey, descr, img, inpFee, outFee, workTime)
+	err := Create(adress, name, mesKey, descr, img, inpFee, outFee, workTime)
 	if err == nil {
 		t.Error("new market should not be craeted")
 	}
@@ -39,10 +41,7 @@ func TestCreateExistingMarket(t *testing.T) {
 func TestGetFreeMarket(t *testing.T) {
 	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 89}
 	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "asset image link . example"
-	var name = "newAsset"
-	var descr = "descrx"
-	Create(adress, name, mesKey, descr, img)
+	Create(adress, name, mesKey, descr, img, inpFee, outFee, workTime)
 	market := Get(adress)
 	defer market.Save()
 	if !reflect.DeepEqual(market.MesKey, mesKey) {
@@ -54,10 +53,7 @@ func TestGetFreeMarket(t *testing.T) {
 func TestMarketLook(t *testing.T) {
 	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 12}
 	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "asset image link . example"
-	var name = "newAsset"
-	var descr = "descrx"
-	Create(adress, name, mesKey, descr, img)
+	Create(adress, name, mesKey, descr, img, inpFee, outFee, workTime)
 	mkt := Look(adress)
 	if !reflect.DeepEqual(mkt.MesKey, mesKey) {
 		t.Error("keys are not the same, look asset error")
@@ -74,10 +70,7 @@ func getBusyMarket(adress []byte) {
 func TestMarketGetAfterBusy(t *testing.T) {
 	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 129}
 	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "asset image link . example"
-	var name = "newAsset"
-	var descr = "descrx"
-	Create(adress, name, mesKey, descr, img)
+	Create(adress, name, mesKey, descr, img, inpFee, outFee, workTime)
 	mkt1 := Get(adress)
 	go getBusyMarket(adress)
 	time.Sleep(time.Second)
@@ -93,10 +86,7 @@ func TestMarketGetAfterBusy(t *testing.T) {
 func TestAttachUnboundedTrades(t *testing.T) {
 	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 229}
 	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "asset image link . example"
-	var name = "newAsset"
-	var descr = "descrx"
-	Create(adress, name, mesKey, descr, img)
+	Create(adress, name, mesKey, descr, img, inpFee, outFee, workTime)
 	mkt := Get(adress)
 	sell := trade.Sell{
 		Offer:   100,
@@ -117,10 +107,7 @@ func TestAttachUnboundedTrades(t *testing.T) {
 func TestAttachToLookedMarket(t *testing.T) {
 	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 119, 120, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 229}
 	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "asset image link . example"
-	var name = "newAsset"
-	var descr = "descrx"
-	Create(adress, name, mesKey, descr, img)
+	Create(adress, name, mesKey, descr, img, inpFee, outFee, workTime)
 	mkt := Look(adress)
 	sell := trade.Sell{
 		Offer:   100,
@@ -144,7 +131,7 @@ func TestAttachSingleNormalBuy(t *testing.T) {
 	var marketImg = "asset image link . example"
 	var name = "newAsset"
 	var descr = "descrx"
-	Create(marketAdress, name, marketMesKey, descr, marketImg)
+	Create(marketAdress, name, marketMesKey, descr, marketImg, inpFee, outFee, workTime)
 	mkt := Get(marketAdress)
 	var adress = []byte{1, 22, 3, 44, 5, 16, 7, 8, 9, 10, 11, 112, 13, 14, 15, 16, 19, 18, 19, 20, 21, 122, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 121, 59, 22, 91, 91, 91, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
@@ -174,7 +161,7 @@ func TestAttachSingleNormalSell(t *testing.T) {
 	var marketImg = "asset image link . example"
 	var name = "newAsset"
 	var descr = "descrx"
-	Create(marketAdress, name, marketMesKey, descr, marketImg)
+	Create(marketAdress, name, marketMesKey, descr, marketImg, inpFee, outFee, workTime)
 	mkt := Get(marketAdress)
 	var adress = []byte{1, 22, 13, 44, 5, 16, 7, 8, 9, 10, 11, 112, 13, 14, 15, 16, 19, 18, 19, 20, 21, 122, 123, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 40, 21, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 121, 59, 22, 91, 91, 91, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
@@ -204,7 +191,7 @@ func TestTwoUserTradesWithSameOffers(t *testing.T) {
 	var marketImg = "asset image link . example"
 	var name = "newAsset"
 	var descr = "descrx"
-	Create(marketAdress, name, marketMesKey, descr, marketImg)
+	Create(marketAdress, name, marketMesKey, descr, marketImg, inpFee, outFee, workTime)
 	mkt := Get(marketAdress)
 
 	var adress1 = []byte{121, 22, 13, 44, 5, 16, 7, 8, 9, 10, 11, 112, 13, 14, 15, 16, 19, 18, 19, 20, 121, 122, 123, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 40, 21, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 121, 59, 22, 91, 91, 91, 91}
@@ -261,7 +248,7 @@ func TestFourUserTradesWithRandomOffers(t *testing.T) {
 	var marketAdress = []byte{129, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 20, 21, 122, 123, 1, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 140, 21, 1, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 59, 1, 91, 91, 91, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
 	var img = "asset image link . example"
-	Create(marketAdress, img, mesKey, img, img)
+	Create(marketAdress, img, mesKey, img, img, inpFee, outFee, workTime)
 	mkt := Get(marketAdress)
 
 	var firstUserAdress = []byte{129, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 20, 21, 122, 123, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 140, 21, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 59, 22, 1, 1, 91, 91}
@@ -341,7 +328,7 @@ func TestAttachFirstlySellThanBuy(t *testing.T) {
 	var marketAdress = []byte{1, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 20, 1, 122, 123, 1, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 1, 39, 140, 21, 1, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 1, 1, 1, 59, 1, 91, 91, 91, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
 	var img = "asset image link . example"
-	Create(marketAdress, img, mesKey, img, img)
+	Create(marketAdress, img, mesKey, img, img, inpFee, outFee, workTime)
 	mkt := Get(marketAdress)
 
 	var firstUserAdress = []byte{1, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 1, 21, 122, 123, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 1, 39, 140, 21, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 2, 2, 121, 59, 22, 1, 1, 91, 91}
@@ -401,7 +388,7 @@ func TestIfUserHasTrdadesWhenHeHaveSome(t *testing.T) {
 	var marketAdress = []byte{1, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 20, 1, 3, 4, 1, 5, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 1, 39, 2, 21, 1, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 1, 1, 1, 1, 1, 91, 91, 91, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
 	var img = "asset image link . example"
-	Create(marketAdress, img, mesKey, img, img)
+	Create(marketAdress, img, mesKey, img, img, inpFee, outFee, workTime)
 	mkt := Get(marketAdress)
 
 	sell := trade.Sell{
@@ -434,7 +421,7 @@ func TestIfUserHasTradesWhenHeDont(t *testing.T) {
 	var marketAdress = []byte{1, 22, 13, 44, 5, 16, 7, 8, 9, 10, 2, 112, 13, 14, 15, 16, 19, 18, 1, 1, 1, 3, 4, 1, 5, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 1, 1, 2, 1, 1, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 1, 1, 1, 1, 1, 91, 91, 2, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
 	var img = "asset image link . example"
-	Create(marketAdress, img, mesKey, img, img)
+	Create(marketAdress, img, mesKey, img, img, inpFee, outFee, workTime)
 	mkt := Get(marketAdress)
 
 	userHaveSomeTrades := mkt.HasTrades([]byte{1})
@@ -449,7 +436,7 @@ func TestUserCancelBuy(t *testing.T) {
 	var marketAdress = []byte{129, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 1, 21, 122, 123, 1, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 1, 2, 21, 1, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 59, 1, 91, 91, 91, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
 	var img = "asset image link . example"
-	Create(marketAdress, img, mesKey, img, img)
+	Create(marketAdress, img, mesKey, img, img, inpFee, outFee, workTime)
 	mkt := Get(marketAdress)
 
 	var userAdress = []byte{1, 22, 13, 44, 5, 16, 7, 8, 9, 10, 7, 112, 13, 14, 15, 16, 19, 18, 7, 20, 21, 1, 123, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 7, 39, 140, 21, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 7, 121, 59, 22, 1, 1, 91, 91}
@@ -480,7 +467,7 @@ func TestUserCancelSell(t *testing.T) {
 	var marketAdress = []byte{1, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 20, 1, 5, 2, 1, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 1, 39, 140, 2, 1, 43, 5, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 1, 1, 1, 59, 1, 5, 91, 91, 91}
 	var mesKey = []byte{1, 2, 3, 4, 5}
 	var img = "asset image link . example"
-	Create(marketAdress, img, mesKey, img, img)
+	Create(marketAdress, img, mesKey, img, img, inpFee, outFee, workTime)
 	mkt := Get(marketAdress)
 
 	var userAdress = []byte{1, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 2, 13, 14, 15, 16, 19, 18, 19, 20, 2, 1, 1, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 1, 1, 21, 42, 43, 4, 5, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 1, 2, 1, 22, 91, 2, 91, 91}
