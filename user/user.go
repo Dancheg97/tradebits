@@ -7,7 +7,6 @@ import (
 	"sync_tree/data"
 	"sync_tree/lock"
 	"sync_tree/trade"
-	"time"
 )
 
 type user struct {
@@ -53,7 +52,7 @@ func Get(adress []byte) *user {
 	lock.Lock(adress)
 	u := user{adress: adress}
 	userExists := data.Check(adress)
-	if userExists == false {
+	if !userExists {
 		return nil
 	}
 	userBytes := data.Get(adress)
