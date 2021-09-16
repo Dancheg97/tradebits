@@ -10,19 +10,21 @@ import (
 	"sync_tree/search"
 	"sync_tree/trade"
 	"sync_tree/user"
-	"time"
 )
 
 type market struct {
-	adress  []byte
-	Name    string
-	MesKey  []byte
-	Descr   string
-	Img     string
-	OpCount uint64
-	Msg     map[string]string
-	Arch    map[string]string
-	Pool    trade.TradePool
+	adress    []byte
+	Name      string
+	MesKey    []byte
+	Descr     string
+	Img       string
+	OpCount   uint64
+	Msg       map[string]string
+	Arch      map[string]string
+	Pool      trade.TradePool
+	inputFee  uint64
+	outputFee uint64
+	workTime  string
 }
 
 // Create new market by passed values. Checks wether market with passed adress
@@ -33,6 +35,9 @@ func Create(
 	MesKey []byte,
 	Descr string,
 	Img string,
+	inputFee uint64,
+	outputFee uint64,
+	workTime string,
 ) error {
 	if data.Check(adress) {
 		return errors.New("possibly market already exists")
@@ -43,15 +48,18 @@ func Create(
 		Outputs: []trade.Output{},
 	}
 	newMarket := market{
-		adress:  adress,
-		Name:    Name,
-		Descr:   Descr,
-		Img:     Img,
-		MesKey:  MesKey,
-		OpCount: 0,
-		Msg:     make(map[string]string),
-		Arch:    make(map[string]string),
-		Pool:    pool,
+		adress:    adress,
+		Name:      Name,
+		Descr:     Descr,
+		Img:       Img,
+		MesKey:    MesKey,
+		OpCount:   0,
+		Msg:       make(map[string]string),
+		Arch:      make(map[string]string),
+		Pool:      pool,
+		inputFee:  inputFee,
+		outputFee: outputFee,
+		workTime:  workTime,
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newMarket)
