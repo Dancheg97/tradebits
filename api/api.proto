@@ -180,6 +180,9 @@ message MarketCreateRequest{
     string Img = 4;
     string Descr = 5;
     bytes Sign = 6;
+    uint64 inputFee = 7;
+    uint64 outputFee = 8;
+    string workTime = 9;
 }
 
 message MarketUpdateRequest{
@@ -189,6 +192,9 @@ message MarketUpdateRequest{
     string Img = 4;
     string Descr = 5;
     bytes Sign = 6;
+    uint64 inputFee = 7;
+    uint64 outputFee = 8;
+    string workTime = 9;
 }
 
 message MarketInfoRequest{

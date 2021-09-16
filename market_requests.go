@@ -31,6 +31,9 @@ func (s *server) MarketCreate(
 				in.MesssageKey,
 				in.Descr,
 				in.Img,
+				in.InputFee,
+				in.OutputFee,
+				in.WorkTime,
 			)
 			if craeteErr == nil {
 				return &pb.Response{Passed: true}, nil
@@ -108,6 +111,9 @@ func (s *server) MarketUpdate(
 			m.MesKey = in.MesssageKey
 			m.Descr = in.Descr
 			m.Img = in.Img
+			m.InputFee = in.InputFee
+			m.OutputFee = in.OutputFee
+			m.WorkTime = in.WorkTime
 			return &pb.Response{Passed: true}, nil
 		}
 	}

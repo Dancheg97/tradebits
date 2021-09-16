@@ -13,7 +13,7 @@ func TestPutValue(t *testing.T) {
 	if !reflect.DeepEqual(val, val2) {
 		t.Error("values are not equal")
 	}
-	base.Delete(key, nil)
+	TestRM(key)
 }
 
 func TestPutExisting(t *testing.T) {

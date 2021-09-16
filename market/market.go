@@ -22,9 +22,9 @@ type market struct {
 	Msg       map[string]string
 	Arch      map[string]string
 	Pool      trade.TradePool
-	inputFee  uint64
-	outputFee uint64
-	workTime  string
+	InputFee  uint64
+	OutputFee uint64
+	WorkTime  string
 }
 
 // Create new market by passed values. Checks wether market with passed adress
@@ -35,9 +35,9 @@ func Create(
 	MesKey []byte,
 	Descr string,
 	Img string,
-	inputFee uint64,
-	outputFee uint64,
-	workTime string,
+	InputFee uint64,
+	OutputFee uint64,
+	WorkTime string,
 ) error {
 	if len(adress) != 64 {
 		return errors.New("bad adress length")
@@ -60,9 +60,9 @@ func Create(
 		Msg:       make(map[string]string),
 		Arch:      make(map[string]string),
 		Pool:      pool,
-		inputFee:  inputFee,
-		outputFee: outputFee,
-		workTime:  workTime,
+		InputFee:  InputFee,
+		OutputFee: OutputFee,
+		WorkTime:  WorkTime,
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newMarket)

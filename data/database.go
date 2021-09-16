@@ -12,7 +12,10 @@ var base = openDB()
 func openDB() *leveldb.DB {
 	_, filename, _, _ := runtime.Caller(0)
 	dbPath := path.Dir(filename) + "/leveldb"
-	db, _ := leveldb.OpenFile(dbPath, nil)
+	db, openErr := leveldb.OpenFile(dbPath, nil)
+	if openErr != nil {
+		return openDB()
+	}
 	return db
 }
 
