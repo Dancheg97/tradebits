@@ -34,19 +34,29 @@ func (s *server) InfoMarket(
 	fmt.Println("info market call")
 	m := market.Look(in.Adress)
 	if m != nil {
-		fmt.Println(m.Name)
-		for idx, buy := range m.Pool.Buys {
-			fmt.Println("buy", idx, "offer", buy.Offer, "recieve", buy.Recieve)
+		buys := []uint64{}
+		for _, buy := range m.Pool.Buys {
+			buys = append(buys, buy.Offer)
+			buys = append(buys, buy.Recieve)
 		}
-		for idx, sell := range m.Pool.Sells {
-			fmt.Println("sell", idx, "offer", sell.Offer, "recieve", sell.Recieve)
+		sells := []uint64{}
+		for _, sell := range m.Pool.Sells {
+			sells = append(sells, sell.Offer)
+			sells = append(sells, sell.Recieve)
 		}
 		return &pb.InfoMarketResponse{
-			MesKey:  m.MesKey,
-			Name:    m.Name,
-			Img:     m.Img,
-			Descr:   m.Descr,
-			OpCount: m.OpCount,
+			MesKey:      m.MesKey,
+			Name:        m.Name,
+			Img:         m.Img,
+			Descr:       m.Descr,
+			OpCount:     m.OpCount,
+			Buys:        buys,
+			Sells:       sells,
+			ActiveBuys:  uint64(len(buys) / 2),
+			ActiveSells: uint64(len(sells) / 2),
+			InputFee:    m.InputFee,
+			OutputFee:   m.OutputFee,
+			WorkTime:    m.WorkTime,
 		}, nil
 	}
 	return &pb.InfoMarketResponse{}, errors.New("market not found")
