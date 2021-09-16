@@ -6,18 +6,22 @@ import (
 	"time"
 )
 
-func TimeOutError(t *testing.T) {
-	time.Sleep(time.Second * 5)
-	t.Error("timeout error for locking function")
-}
-
 func TestLockID(t *testing.T) {
-	go TimeOutError(t)
-	lockBytes := make([]byte, 64)
-	lockBytes[0] = 65
-	lockBytes[1] = 69
-	Lock(lockBytes)
-	Unlock(lockBytes)
+	timeout := time.After(3 * time.Second)
+	done := make(chan bool)
+	go func() {
+		lockBytes := make([]byte, 64)
+		lockBytes[0] = 65
+		lockBytes[1] = 69
+		Lock(lockBytes)
+		Unlock(lockBytes)
+		done <- true
+	}()
+	select {
+	case <-timeout:
+		t.Fatal("Test didn't finish in time")
+	case <-done:
+	}
 }
 
 func HelperDefferedUnlock(IDtoUnlock []byte) {
@@ -26,28 +30,35 @@ func HelperDefferedUnlock(IDtoUnlock []byte) {
 }
 
 func TestTryToLockLocked(t *testing.T) {
-	go TimeOutError(t)
-	lockBytes := make([]byte, 64)
-	lockBytes[0] = 65
-	lockBytes[1] = 66
-	Lock(lockBytes)
-	go HelperDefferedUnlock(lockBytes)
-	Lock(lockBytes)
-	defer Unlock(lockBytes)
+	timeout := time.After(4 * time.Second)
+	done := make(chan bool)
+	go func() {
+		lockBytes := make([]byte, 64)
+		lockBytes[0] = 65
+		lockBytes[1] = 66
+		Lock(lockBytes)
+		go HelperDefferedUnlock(lockBytes)
+		Lock(lockBytes)
+		Unlock(lockBytes)
+		done <- true
+	}()
+	select {
+	case <-timeout:
+		t.Fatal("Test didn't finish in time")
+	case <-done:
+	}
 }
 
 type loka struct {
-	mu   sync.Mutex
-	cola bool
+	mu    sync.Mutex
+	count int
 }
-
-var operatedFine = 0
 
 func LockAndUnlockWithTimer(lk *loka, t *testing.T) {
 	lk.mu.Lock()
+	lk.count += 1
 	time.Sleep(time.Second)
 	lk.mu.Unlock()
-	operatedFine += 1
 }
 
 func TestLockMultipleRequests(t *testing.T) {
@@ -56,7 +67,7 @@ func TestLockMultipleRequests(t *testing.T) {
 	go LockAndUnlockWithTimer(&lk, t)
 	go LockAndUnlockWithTimer(&lk, t)
 	time.Sleep(time.Second * 5)
-	if operatedFine != 3 {
+	if lk.count != 3 {
 		t.Error("some locking stuff")
 	}
 }
