@@ -58,6 +58,9 @@ func (s *server) InfoSearch(
 ) (*pb.InfoSearchResponse, error) {
 	fmt.Println("user made a search request on: ", in.Info)
 	results := search.Search(in.Info)
+	if len(results) > 30 {
+		results = results[0:30]
+	}
 	return &pb.InfoSearchResponse{ConcMarkets: results}, nil
 }
 
@@ -79,6 +82,8 @@ func (s *server) InfoUser(
 	for strAdr, bal := range user.Balances {
 		adressesSlice = append(adressesSlice, []byte(strAdr))
 		balancesSlice = append(balancesSlice, bal)
+		fmt.Println(adressesSlice)
+		fmt.Println(balancesSlice)
 	}
 	return &pb.InfoUserResponse{
 		PublicName:     user.PublicName,
