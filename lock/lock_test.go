@@ -1,6 +1,7 @@
 package lock
 
 import (
+	"sync"
 	"testing"
 	"time"
 )
@@ -33,4 +34,29 @@ func TestTryToLockLocked(t *testing.T) {
 	go HelperDefferedUnlock(lockBytes)
 	Lock(lockBytes)
 	defer Unlock(lockBytes)
+}
+
+type loka struct {
+	mu   sync.Mutex
+	cola bool
+}
+
+var operatedFine = 0
+
+func LockAndUnlockWithTimer(lk *loka, t *testing.T) {
+	lk.mu.Lock()
+	time.Sleep(time.Second)
+	lk.mu.Unlock()
+	operatedFine += 1
+}
+
+func TestLockMultipleRequests(t *testing.T) {
+	lk := loka{}
+	go LockAndUnlockWithTimer(&lk, t)
+	go LockAndUnlockWithTimer(&lk, t)
+	go LockAndUnlockWithTimer(&lk, t)
+	time.Sleep(time.Second * 5)
+	if operatedFine != 3 {
+		t.Error("some locking stuff")
+	}
 }
