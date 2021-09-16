@@ -80,6 +80,10 @@ func Get(adress []byte) *market {
 		return Get(adress)
 	}
 	a := market{adress: adress}
+	marketExists := data.Check(adress)
+	if marketExists == false {
+		return nil
+	}
 	marketBytes := data.Get(adress)
 	cache := bytes.NewBuffer(marketBytes)
 	gob.NewDecoder(cache).Decode(&a)

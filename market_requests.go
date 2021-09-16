@@ -77,9 +77,9 @@ func (s *server) MarketSendMessage(
 	signCheckErr := calc.Verify(concMes, in.PublicKey, in.Sign)
 	if signCheckErr == nil {
 		senderAdress := calc.Hash(in.PublicKey)
-		u := user.Get(in.Adress)
+		u := user.Get(senderAdress)
 		if u != nil {
-			u.PutMarketMessage(senderAdress, in.Message)
+			u.PutMarketMessage(in.Adress, in.Message)
 			u.Save()
 			return &pb.Response{Passed: true}, nil
 		}

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/gob"
 	"errors"
-	"fmt"
 	"sync_tree/data"
 	"sync_tree/lock"
 	"sync_tree/trade"
@@ -55,6 +54,10 @@ func Get(adress []byte) *user {
 		//TODO implement check wether its to many reties
 	}
 	u := user{adress: adress}
+	userExists := data.Check(adress)
+	if userExists == false {
+		return nil
+	}
 	userBytes := data.Get(adress)
 	cache := bytes.NewBuffer(userBytes)
 	gob.NewDecoder(cache).Decode(&u)
@@ -91,7 +94,6 @@ func (u *user) Save() {
 Function to add message from some adress to concrete user
 */
 func (u *user) PutUserMessage(adress []byte, mes string) {
-	fmt.Println(u.Messages)
 	strAdress := string(adress)
 	if u.Messages[strAdress] == nil {
 		u.Messages[strAdress] = []string{"u" + mes}
@@ -101,7 +103,6 @@ func (u *user) PutUserMessage(adress []byte, mes string) {
 }
 
 func (u *user) PutMarketMessage(adress []byte, mes string) {
-	fmt.Println(u.Messages)
 	strAdress := string(adress)
 	if u.Messages[strAdress] == nil {
 		u.Messages[strAdress] = []string{"m" + mes}

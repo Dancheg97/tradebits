@@ -88,9 +88,9 @@ func (s *server) UserSendMessage(
 	signCheckErr := calc.Verify(concMes, in.PublicKey, in.Sign)
 	if signCheckErr == nil {
 		senderAdress := calc.Hash(in.PublicKey)
-		u := user.Get(in.Adress)
+		u := user.Get(senderAdress)
 		if u != nil {
-			u.PutUserMessage(senderAdress, in.Message)
+			u.PutUserMessage(in.Adress, in.Message)
 			u.Save()
 			return &pb.Response{Passed: true}, nil
 		}
