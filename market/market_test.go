@@ -19,7 +19,6 @@ var workTime = "+3GMT 9:00 - 21:00"
 func TestCreateNewMarket(t *testing.T) {
 	var adress = []byte{1, 2, 5, 4, 5, 9, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 3, 1, 4, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 6, 5, 4, 3, 2, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 1, 60, 2, 2, 1, 63}
 	var mesKey = []byte{1, 2, 3, 4, 5}
-	
 	err := Create(adress, name, mesKey, descr, img, inpFee, outFee, workTime)
 	if err != nil {
 		t.Error("failed to craete new market")

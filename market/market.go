@@ -39,6 +39,9 @@ func Create(
 	outputFee uint64,
 	workTime string,
 ) error {
+	if len(adress) != 64 {
+		return errors.New("bad adress length")
+	}
 	if data.Check(adress) {
 		return errors.New("possibly market already exists")
 	}
@@ -85,12 +88,11 @@ func Get(adress []byte) *market {
 	if len(adress) != 64 {
 		return nil
 	}
-	lock.Lock(adress)
-	a := market{adress: adress}
-	marketExists := data.Check(adress)
-	if marketExists == false {
+	if !data.Check(adress) {
 		return nil
 	}
+	lock.Lock(adress)
+	a := market{adress: adress}
 	marketBytes := data.Get(adress)
 	cache := bytes.NewBuffer(marketBytes)
 	gob.NewDecoder(cache).Decode(&a)
