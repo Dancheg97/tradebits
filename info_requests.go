@@ -82,6 +82,8 @@ func (s *server) InfoUser(
 	for strAdr, bal := range user.Balances {
 		adressesSlice = append(adressesSlice, []byte(strAdr))
 		balancesSlice = append(balancesSlice, bal)
+		fmt.Println(adressesSlice)
+		fmt.Println(balancesSlice)
 	}
 	return &pb.InfoUserResponse{
 		PublicName:     user.PublicName,
