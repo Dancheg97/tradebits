@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"reflect"
 	pb "sync_tree/api"
 	"sync_tree/calc"
 	"sync_tree/market"
@@ -114,17 +115,19 @@ func (s *server) UserSend(
 		in.PublicKey,
 		in.Sign,
 	)
-	if signError == nil {
-		sender := user.Get(senderAdress)
-		if sender != nil {
-			defer sender.Save()
-			if sender.Balance >= in.SendAmount {
-				reciever := user.Get(in.RecieverAdress)
-				if reciever != nil {
-					defer reciever.Save()
-					sender.Balance = sender.Balance - in.SendAmount
-					reciever.Balance = reciever.Balance + in.SendAmount
-					return &pb.Response{Passed: true}, nil
+	if !reflect.DeepEqual(senderAdress, in.RecieverAdress) {
+		if signError == nil {
+			sender := user.Get(senderAdress)
+			if sender != nil {
+				defer sender.Save()
+				if sender.Balance >= in.SendAmount {
+					reciever := user.Get(in.RecieverAdress)
+					if reciever != nil {
+						defer reciever.Save()
+						sender.Balance = sender.Balance - in.SendAmount
+						reciever.Balance = reciever.Balance + in.SendAmount
+						return &pb.Response{Passed: true}, nil
+					}
 				}
 			}
 		}
