@@ -121,7 +121,8 @@ func Look(adress []byte) *market {
 	return &currMarket
 }
 
-func (m *market) operateOutput(t trade.Output, adress []byte) {
+// This function is operating output for some trade and market adress
+func operateOutput(t trade.Output, adress []byte) {
 	u := user.Get(t.Adress)
 	u.Balance = u.Balance + t.Main
 	u.Balances[string(adress)] = u.Balances[string(adress)] + t.Market
@@ -139,7 +140,7 @@ func (m *market) AttachBuy(b *trade.Buy) bool {
 	m.Pool.OperateBuy(*b)
 	for _, output := range m.Pool.Outputs {
 		fmt.Sprintln("outputing ", output.Adress, "   ", output.Main, "   ", output.Market)
-		go m.operateOutput(output, m.adress)
+		go operateOutput(output, m.adress)
 	}
 	m.Pool.Outputs = []trade.Output{}
 	b.Adress = nil
@@ -158,7 +159,7 @@ func (m *market) AttachSell(s *trade.Sell) bool {
 	m.Pool.OperateSell(*s)
 	for _, output := range m.Pool.Outputs {
 		fmt.Sprintln("outputing ", output.Adress, "   ", output.Main, "   ", output.Market)
-		go m.operateOutput(output, m.adress)
+		go operateOutput(output, m.adress)
 	}
 	m.Pool.Outputs = []trade.Output{}
 	s.Adress = nil
