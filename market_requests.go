@@ -36,6 +36,7 @@ func (s *server) MarketCreate(
 			in.WorkTime,
 		)
 		if craeteErr == nil {
+			fmt.Sprintln("[MarketCreate] - Market created, name: ", in.Name)
 			return &pb.Response{Passed: true}, nil
 		}
 		fmt.Sprintln("[MarketCreate] - Error create error: ", craeteErr)
@@ -49,7 +50,6 @@ func (s *server) MarketDeposit(
 	ctx context.Context,
 	in *pb.MarketDepositRequest,
 ) (*pb.Response, error) {
-	//// fmt.Println("Operation market deposit for user: ", in.UserAdress)
 	amBytes := make([]byte, 8)
 	binary.LittleEndian.PutUint64(amBytes, uint64(in.Amount))
 	concatedMessage := [][]byte{
@@ -64,10 +64,14 @@ func (s *server) MarketDeposit(
 		if u != nil {
 			strAdr := string(adress)
 			u.Balances[strAdr] = u.Balances[strAdr] + in.Amount
+			fmt.Sprintln("[MarketDeposit] - Deposit verified: ", u.PublicName)
 			return &pb.Response{Passed: true}, nil
 		}
+		fmt.Sprintln("[MarketDeposit] - User not found error")
+		return &pb.Response{Passed: false}, errors.New("user not found error")
 	}
-	return &pb.Response{Passed: false}, nil
+	fmt.Sprintln("[MarketDeposit] - Sign error")
+	return &pb.Response{Passed: false}, errors.New("sign error")
 }
 
 func (s *server) MarketSendMessage(
@@ -86,17 +90,20 @@ func (s *server) MarketSendMessage(
 		if u != nil {
 			u.PutMarketMessage(in.Adress, in.Message)
 			u.Save()
+			fmt.Sprintln("[MarketSendMessage] - Message sent", u.PublicName)
 			return &pb.Response{Passed: true}, nil
 		}
+		fmt.Sprintln("[MarketSendMessage] - User not found error")
+		return &pb.Response{Passed: false}, errors.New("sign error")
 	}
-	return &pb.Response{Passed: false}, nil
+	fmt.Sprintln("[MarketSendMessage] - Sign error")
+	return &pb.Response{Passed: false}, errors.New("sign error")
 }
 
 func (s *server) MarketUpdate(
 	ctx context.Context,
 	in *pb.MarketUpdateRequest,
 ) (*pb.Response, error) {
-	//// fmt.Println("got request to update market, with name: ", in.Name)
 	concatedMessage := [][]byte{
 		in.PublicKey,
 		in.MesssageKey,
@@ -116,17 +123,21 @@ func (s *server) MarketUpdate(
 			m.InputFee = in.InputFee
 			m.OutputFee = in.OutputFee
 			m.WorkTime = in.WorkTime
+			m.Save()
+			fmt.Sprintln("[MarketUpdate] - Market info updated")
 			return &pb.Response{Passed: true}, nil
 		}
+		fmt.Sprintln("[MarketUpdate] - Market not found error")
+		return &pb.Response{Passed: false}, errors.New("sign error")
 	}
-	return &pb.Response{Passed: false}, nil
+	fmt.Sprintln("[MarketUpdate] - Sign error")
+	return &pb.Response{Passed: false}, errors.New("sign error")
 }
 
 func (s *server) MarketWithdrawal(
 	ctx context.Context,
 	in *pb.MarketWithdrawalRequest,
 ) (*pb.Response, error) {
-	//// fmt.Println("Operation market withdrawal for user: ", in.UserAdress)
 	amBytes := make([]byte, 8)
 	binary.LittleEndian.PutUint64(amBytes, uint64(in.Amount))
 	concatedMessage := [][]byte{
@@ -142,10 +153,15 @@ func (s *server) MarketWithdrawal(
 			strAdr := string(adress)
 			if in.Amount < u.Balances[strAdr] {
 				u.Balances[strAdr] = u.Balances[strAdr] - in.Amount
+				fmt.Sprintln("[MarketWithdrawal] - Withdrawal accepted")
 				return &pb.Response{Passed: true}, nil
-
 			}
+			fmt.Sprintln("[MarketWithdrawal] - Withdrawal balance error")
+			return &pb.Response{Passed: false}, errors.New("bakance error")
 		}
+		fmt.Sprintln("[MarketWithdrawal] - User not found error")
+		return &pb.Response{Passed: false}, errors.New("user not found")
 	}
-	return &pb.Response{Passed: false}, nil
+	fmt.Sprintln("[MarketWithdrawal] - Sign error")
+	return &pb.Response{Passed: false}, errors.New("sign error")
 }
