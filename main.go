@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net"
 
@@ -15,7 +14,7 @@ type server struct {
 }
 
 func main() {
-	fmt.Println("the game goes on")
+	// fmt.Println("the game goes on")
 	createNewUsers()
 	createStartMarket()
 	lis, err := net.Listen("tcp", ":8080")

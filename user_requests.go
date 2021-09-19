@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"reflect"
 	pb "sync_tree/api"
 	"sync_tree/calc"
@@ -16,7 +15,7 @@ func (s *server) UserCreate(
 	in *pb.UserCreateRequest,
 ) (*pb.Response, error) {
 	senderAdress := calc.Hash(in.PublicKey)
-	fmt.Println("craeting new user with name", in.PublicName)
+	// fmt.Println("craeting new user with name", in.PublicName)
 	signError := calc.Verify(
 		[][]byte{
 			in.PublicKey,
@@ -44,7 +43,7 @@ func (s *server) UserUpdate(
 	in *pb.UserUpdateRequest,
 ) (*pb.Response, error) {
 	senderAdress := calc.Hash(in.PublicKey)
-	fmt.Println("updating user name", in.PublicName)
+	// fmt.Println("updating user name", in.PublicName)
 	signError := calc.Verify(
 		[][]byte{
 			in.PublicKey,
@@ -91,7 +90,7 @@ func (s *server) UserSend(
 	ctx context.Context,
 	in *pb.UserSendRequest,
 ) (*pb.Response, error) {
-	fmt.Println("sending money, of amount: ", in.SendAmount)
+	// fmt.Println("sending money, of amount: ", in.SendAmount)
 	senderAdress := calc.Hash(in.PublicKey)
 	amountBytes := calc.NumberToBytes(in.SendAmount)
 	signError := calc.Verify(
@@ -127,7 +126,7 @@ func (s *server) UserSell(
 	ctx context.Context,
 	in *pb.UserSellRequest,
 ) (*pb.Response, error) {
-	fmt.Println("sell offer / recieve: ", in.Offer, "/", in.Recieve)
+	// fmt.Println("sell offer / recieve: ", in.Offer, "/", in.Recieve)
 	sellerAdress := calc.Hash(in.PublicKey)
 	seller := user.Get(sellerAdress)
 	if seller != nil {
@@ -166,7 +165,7 @@ func (s *server) UserBuy(
 	ctx context.Context,
 	in *pb.UserBuyRequest,
 ) (*pb.Response, error) {
-	fmt.Println("buy: [offer / recieve] [", in.Offer, "/", in.Recieve, "]")
+	// fmt.Println("buy: [offer / recieve] [", in.Offer, "/", in.Recieve, "]")
 	buyerAdress := calc.Hash(in.PublicKey)
 	buyer := user.Get(buyerAdress)
 	if buyer != nil {
@@ -174,7 +173,7 @@ func (s *server) UserBuy(
 		curMarket := market.Get(in.Adress)
 		if curMarket != nil {
 			defer curMarket.Save()
-			fmt.Println("passed")
+			// fmt.Println("passed")
 			concMessage := [][]byte{
 				in.PublicKey,
 				in.Adress,

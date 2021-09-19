@@ -13,7 +13,7 @@ func (s *server) MarketCreate(
 	ctx context.Context,
 	in *pb.MarketCreateRequest,
 ) (*pb.Response, error) {
-	//fmt.Println("got request to craete new market, name", in.Name)
+	//// fmt.Println("got request to craete new market, name", in.Name)
 	concatedMessage := [][]byte{
 		in.PublicKey,
 		in.MesssageKey,
@@ -47,7 +47,7 @@ func (s *server) MarketDeposit(
 	ctx context.Context,
 	in *pb.MarketDepositRequest,
 ) (*pb.Response, error) {
-	//fmt.Println("Operation market deposit for user: ", in.UserAdress)
+	//// fmt.Println("Operation market deposit for user: ", in.UserAdress)
 	amBytes := make([]byte, 8)
 	binary.LittleEndian.PutUint64(amBytes, uint64(in.Amount))
 	concatedMessage := [][]byte{
@@ -94,7 +94,7 @@ func (s *server) MarketUpdate(
 	ctx context.Context,
 	in *pb.MarketUpdateRequest,
 ) (*pb.Response, error) {
-	//fmt.Println("got request to update market, with name: ", in.Name)
+	//// fmt.Println("got request to update market, with name: ", in.Name)
 	concatedMessage := [][]byte{
 		in.PublicKey,
 		in.MesssageKey,
@@ -124,7 +124,7 @@ func (s *server) MarketWithdrawal(
 	ctx context.Context,
 	in *pb.MarketWithdrawalRequest,
 ) (*pb.Response, error) {
-	//fmt.Println("Operation market withdrawal for user: ", in.UserAdress)
+	//// fmt.Println("Operation market withdrawal for user: ", in.UserAdress)
 	amBytes := make([]byte, 8)
 	binary.LittleEndian.PutUint64(amBytes, uint64(in.Amount))
 	concatedMessage := [][]byte{

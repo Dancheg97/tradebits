@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/pem"
-	"fmt"
 	"io/ioutil"
 	"strings"
 	"sync_tree/calc"
@@ -229,7 +228,7 @@ func createNewUsers() {
 	if alco.Balances[marketAdress] == 0 {
 		alco.Balances[marketAdress] = 10000
 	}
-	fmt.Println("alco wallet created with", alco.Balance, "balance")
+	// fmt.Println("alco wallet created with", alco.Balance, "balance")
 	nicoSplitted := strings.Split(nicoKeyString, "|")
 	nicoAdress := calc.Hash(stringToKeyBytes(nicoSplitted[1]))
 	nicoMesKey := stringToKeyBytes(nicoSplitted[3])
@@ -239,7 +238,7 @@ func createNewUsers() {
 	if nico.Balance == 0 {
 		nico.Balance = 50000
 	}
-	fmt.Println("nico wallet created with", nico.Balance, "balance")
+	// fmt.Println("nico wallet created with", nico.Balance, "balance")
 }
 
 func createStartMarket() {
