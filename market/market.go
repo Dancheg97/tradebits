@@ -40,6 +40,7 @@ func Create(
 	OutputFee uint64,
 	WorkTime string,
 ) error {
+	// add check that market has all field set up properly
 	if len(adress) != 64 {
 		return errors.New("bad adress length")
 	}

@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"encoding/binary"
+	"errors"
+	"fmt"
 	pb "sync_tree/api"
 	"sync_tree/calc"
 	"sync_tree/market"
@@ -13,7 +15,6 @@ func (s *server) MarketCreate(
 	ctx context.Context,
 	in *pb.MarketCreateRequest,
 ) (*pb.Response, error) {
-	//// fmt.Println("got request to craete new market, name", in.Name)
 	concatedMessage := [][]byte{
 		in.PublicKey,
 		in.MesssageKey,
@@ -23,24 +24,25 @@ func (s *server) MarketCreate(
 	}
 	checkErr := calc.Verify(concatedMessage, in.PublicKey, in.Sign)
 	if checkErr == nil {
-		if len(in.Name) < 15 {
-			adress := calc.Hash(in.PublicKey)
-			craeteErr := market.Create(
-				adress,
-				in.Name,
-				in.MesssageKey,
-				in.Descr,
-				in.Img,
-				in.InputFee,
-				in.OutputFee,
-				in.WorkTime,
-			)
-			if craeteErr == nil {
-				return &pb.Response{Passed: true}, nil
-			}
+		adress := calc.Hash(in.PublicKey)
+		craeteErr := market.Create(
+			adress,
+			in.Name,
+			in.MesssageKey,
+			in.Descr,
+			in.Img,
+			in.InputFee,
+			in.OutputFee,
+			in.WorkTime,
+		)
+		if craeteErr == nil {
+			return &pb.Response{Passed: true}, nil
 		}
+		fmt.Sprintln("[MarketCreate] - Error create error: ", craeteErr)
+		return &pb.Response{Passed: false}, craeteErr
 	}
-	return &pb.Response{Passed: false}, nil
+	fmt.Sprintln("[MarketCreate] - Error sign fail")
+	return &pb.Response{Passed: false}, errors.New("sign fail")
 }
 
 func (s *server) MarketDeposit(

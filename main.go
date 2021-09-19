@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
 
@@ -14,9 +15,9 @@ type server struct {
 }
 
 func main() {
-	// fmt.Println("the game goes on")
 	createNewUsers()
 	createStartMarket()
+	fmt.Sprintln("Server has started! port: 8080 open")
 	lis, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
