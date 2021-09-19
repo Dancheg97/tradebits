@@ -38,11 +38,17 @@ func (s *server) InfoMarket(
 		for _, buy := range m.Pool.Buys {
 			buys = append(buys, buy.Offer)
 			buys = append(buys, buy.Recieve)
+			if len(buys) == 10 {
+				break
+			}
 		}
 		sells := []uint64{}
 		for _, sell := range m.Pool.Sells {
 			sells = append(sells, sell.Offer)
 			sells = append(sells, sell.Recieve)
+			if len(sells) == 10 {
+				break
+			}
 		}
 		return &pb.InfoMarketResponse{
 			MesKey:      m.MesKey,

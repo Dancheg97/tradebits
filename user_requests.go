@@ -11,44 +11,6 @@ import (
 	"sync_tree/user"
 )
 
-func (s *server) UserBuy(
-	ctx context.Context,
-	in *pb.UserBuyRequest,
-) (*pb.Response, error) {
-	fmt.Println("buy: [offer / recieve] [", in.Offer, "/", in.Recieve, "]")
-	buyerAdress := calc.Hash(in.PublicKey)
-	buyer := user.Get(buyerAdress)
-	if buyer != nil {
-		defer buyer.Save()
-		curMarket := market.Get(in.Adress)
-		if curMarket != nil {
-			defer curMarket.Save()
-			fmt.Println("passed")
-			concMessage := [][]byte{
-				in.PublicKey,
-				in.Adress,
-				calc.NumberToBytes(in.Recieve),
-				calc.NumberToBytes(in.Offer),
-			}
-			signErr := calc.Verify(concMessage, in.PublicKey, in.Sign)
-			if signErr == nil {
-				trade := trade.Buy{
-					Offer:   in.Offer,
-					Recieve: in.Offer,
-				}
-				attachedUsr := buyer.AttachBuy(&trade)
-				if attachedUsr {
-					attachedMkt := curMarket.AttachBuy(&trade)
-					if attachedMkt {
-						return &pb.Response{Passed: true}, nil
-					}
-				}
-			}
-		}
-	}
-	return &pb.Response{Passed: false}, nil
-}
-
 func (s *server) UserCreate(
 	ctx context.Context,
 	in *pb.UserCreateRequest,
@@ -71,6 +33,32 @@ func (s *server) UserCreate(
 			in.PublicName,
 		)
 		if create_err == nil {
+			return &pb.Response{Passed: true}, nil
+		}
+	}
+	return &pb.Response{Passed: false}, nil
+}
+
+func (s *server) UserUpdate(
+	ctx context.Context,
+	in *pb.UserUpdateRequest,
+) (*pb.Response, error) {
+	senderAdress := calc.Hash(in.PublicKey)
+	fmt.Println("updating user name", in.PublicName)
+	signError := calc.Verify(
+		[][]byte{
+			in.PublicKey,
+			in.MesssageKey,
+			[]byte(in.PublicName),
+		},
+		in.PublicKey,
+		in.Sign,
+	)
+	if signError == nil {
+		user := user.Get(senderAdress)
+		if user != nil {
+			user.PublicName = in.PublicName
+			user.Save()
 			return &pb.Response{Passed: true}, nil
 		}
 	}
@@ -140,8 +128,8 @@ func (s *server) UserSell(
 	in *pb.UserSellRequest,
 ) (*pb.Response, error) {
 	fmt.Println("sell offer / recieve: ", in.Offer, "/", in.Recieve)
-	buyerAdress := calc.Hash(in.PublicKey)
-	seller := user.Get(buyerAdress)
+	sellerAdress := calc.Hash(in.PublicKey)
+	seller := user.Get(sellerAdress)
 	if seller != nil {
 		defer seller.Save()
 		curMarket := market.Get(in.Adress)
@@ -155,15 +143,17 @@ func (s *server) UserSell(
 			}
 			signErr := calc.Verify(concMessage, in.PublicKey, in.Sign)
 			if signErr == nil {
-				trade := trade.Sell{
-					Offer:   in.Offer,
-					Recieve: in.Recieve,
-				}
-				attachedUsr := seller.AttachSell(&trade, in.Adress)
-				if attachedUsr {
-					attachedMkt := curMarket.AttachSell(&trade)
-					if attachedMkt {
-						return &pb.Response{Passed: true}, nil
+				if !curMarket.HasTrades(sellerAdress) {
+					trade := trade.Sell{
+						Offer:   in.Offer,
+						Recieve: in.Recieve,
+					}
+					attachedUsr := seller.AttachSell(&trade, in.Adress)
+					if attachedUsr {
+						attachedMkt := curMarket.AttachSell(&trade)
+						if attachedMkt {
+							return &pb.Response{Passed: true}, nil
+						}
 					}
 				}
 			}
@@ -172,27 +162,41 @@ func (s *server) UserSell(
 	return &pb.Response{Passed: false}, nil
 }
 
-func (s *server) UserUpdate(
+func (s *server) UserBuy(
 	ctx context.Context,
-	in *pb.UserUpdateRequest,
+	in *pb.UserBuyRequest,
 ) (*pb.Response, error) {
-	senderAdress := calc.Hash(in.PublicKey)
-	fmt.Println("updating user name", in.PublicName)
-	signError := calc.Verify(
-		[][]byte{
-			in.PublicKey,
-			in.MesssageKey,
-			[]byte(in.PublicName),
-		},
-		in.PublicKey,
-		in.Sign,
-	)
-	if signError == nil {
-		user := user.Get(senderAdress)
-		if user != nil {
-			user.PublicName = in.PublicName
-			user.Save()
-			return &pb.Response{Passed: true}, nil
+	fmt.Println("buy: [offer / recieve] [", in.Offer, "/", in.Recieve, "]")
+	buyerAdress := calc.Hash(in.PublicKey)
+	buyer := user.Get(buyerAdress)
+	if buyer != nil {
+		defer buyer.Save()
+		curMarket := market.Get(in.Adress)
+		if curMarket != nil {
+			defer curMarket.Save()
+			fmt.Println("passed")
+			concMessage := [][]byte{
+				in.PublicKey,
+				in.Adress,
+				calc.NumberToBytes(in.Recieve),
+				calc.NumberToBytes(in.Offer),
+			}
+			signErr := calc.Verify(concMessage, in.PublicKey, in.Sign)
+			if signErr == nil {
+				if !curMarket.HasTrades(buyerAdress) {
+					trade := trade.Buy{
+						Offer:   in.Offer,
+						Recieve: in.Offer,
+					}
+					attachedUsr := buyer.AttachBuy(&trade)
+					if attachedUsr {
+						attachedMkt := curMarket.AttachBuy(&trade)
+						if attachedMkt {
+							return &pb.Response{Passed: true}, nil
+						}
+					}
+				}
+			}
 		}
 	}
 	return &pb.Response{Passed: false}, nil

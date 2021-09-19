@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"errors"
+	"fmt"
 	"reflect"
 	"sync_tree/data"
 	"sync_tree/lock"
@@ -101,11 +102,11 @@ func Get(adress []byte) *market {
 
 // This function is saving changes to the market in database and removes ability
 // to make a double save by removing adress from class struct.
-func (a *market) Save() {
-	saveAdress := a.adress
-	a.adress = nil
+func (m *market) Save() {
+	saveAdress := m.adress
+	m.adress = nil
 	cache := new(bytes.Buffer)
-	gob.NewEncoder(cache).Encode(a)
+	gob.NewEncoder(cache).Encode(m)
 	data.Change(saveAdress, cache.Bytes())
 	lock.Unlock(saveAdress)
 }
@@ -137,6 +138,7 @@ func (m *market) AttachBuy(b *trade.Buy) bool {
 	}
 	m.Pool.OperateBuy(*b)
 	for _, output := range m.Pool.Outputs {
+		fmt.Sprintln("outputing ", output.Adress, "   ", output.Main, "   ", output.Market)
 		go m.operateOutput(output)
 	}
 	m.Pool.Outputs = []trade.Output{}
