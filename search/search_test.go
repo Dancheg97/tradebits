@@ -53,9 +53,9 @@ func TestSearchAddMultipleAdressesOnSameName(t *testing.T) {
 
 func TestSearchOver30requests(t *testing.T) {
 	adresses := [][]byte{}
-	for i := 0; i < 9; i++ {
+	for i := 0; i < 35; i++ {
 		adr := calc.Rand()
-		SearchAdd("stuff", adr)
+		SearchAdd("stuff ", adr)
 		adresses = append(adresses, adr)
 	}
 	rez := Search("stuff")

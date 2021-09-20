@@ -6,7 +6,7 @@
 *.dylib
 *.ldb
 data/leveldb/*
-search/bleeve/*
+search/bleve/*
 
 # Test binary, built with `go test -c`
 *.test
