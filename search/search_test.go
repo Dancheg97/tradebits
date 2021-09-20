@@ -2,6 +2,7 @@ package search
 
 import (
 	"reflect"
+	"sync_tree/calc"
 	"testing"
 )
 
@@ -48,4 +49,25 @@ func TestSearchAddMultipleAdressesOnSameName(t *testing.T) {
 	}
 	searcher.Delete(string(adr1))
 	searcher.Delete(string(adr2))
+}
+
+func TestSearchOver30requests(t *testing.T) {
+	adresses := [][]byte{}
+	for i := 0; i < 9; i++ {
+		adr := calc.Rand()
+		SearchAdd("stuff", adr)
+		adresses = append(adresses, adr)
+	}
+	rez := Search("stuff")
+	if len(rez) != 30 {
+		t.Error(rez)
+		t.Error("lenght: =>", len(rez))
+	}
+	for _, adr := range adresses {
+		searcher.Delete(string(adr))
+	}
+}
+
+func TestRecreateSearcher(t *testing.T) {
+
 }
