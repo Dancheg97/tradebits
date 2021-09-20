@@ -5,6 +5,7 @@ import (
 	"sync_tree/calc"
 	"sync_tree/data"
 	"sync_tree/trade"
+	"sync_tree/user"
 	"testing"
 )
 
@@ -229,8 +230,6 @@ func TestMarketLook(t *testing.T) {
 	data.TestRM(adress)
 }
 
-// Tests for market trade logic start here, patience
-
 func TestAttachUnboundedTrades(t *testing.T) {
 	var adress = calc.Rand()
 	Create(
@@ -261,56 +260,73 @@ func TestAttachUnboundedTrades(t *testing.T) {
 	data.TestRM(adress)
 }
 
-// func TestAttachToLookedMarket(t *testing.T) {
-// 	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 119, 120, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 229}
-// 	var mesKey = []byte{1, 2, 3, 4, 5}
-// 	Create(adress, name, mesKey, descr, img, inpFee, outFee, workTime)
-// 	mkt := Look(adress)
-// 	sell := trade.Sell{
-// 		Offer:   100,
-// 		Recieve: 100,
-// 	}
-// 	buy := trade.Buy{
-// 		Offer:   100,
-// 		Recieve: 100,
-// 	}
-// 	buyAttached := mkt.AttachBuy(&buy)
-// 	sellAttached := mkt.AttachSell(&sell)
-// 	if buyAttached || sellAttached {
-// 		t.Error("those trades should not be attached cuz they are unbounded")
-// 	}
-// 	data.TestRM(adress)
-// }
+func TestAttachToLookedMarket(t *testing.T) {
+	var adress = calc.Rand()
+	Create(
+		adress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	mkt := Look(adress)
+	sell := trade.Sell{
+		Offer:   100,
+		Recieve: 100,
+	}
+	buy := trade.Buy{
+		Offer:   100,
+		Recieve: 100,
+	}
+	buyAttached := mkt.AttachBuy(&buy)
+	sellAttached := mkt.AttachSell(&sell)
+	if buyAttached || sellAttached {
+		t.Error("those trades should not be attached cuz they are unbounded")
+	}
+	data.TestRM(adress)
+}
 
-// func TestAttachSingleNormalBuy(t *testing.T) {
-// 	var marketAdress = []byte{1, 2, 33, 42, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 119, 120, 21, 22, 23, 124, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 122, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 161, 62, 63, 229}
-// 	var marketMesKey = []byte{1, 2, 3, 4, 5}
-// 	var marketImg = "asset image link . example"
-// 	var name = "newAsset"
-// 	var descr = "descrx"
-// 	Create(marketAdress, name, marketMesKey, descr, marketImg, inpFee, outFee, workTime)
-// 	mkt := Get(marketAdress)
-// 	var adress = []byte{1, 22, 3, 44, 5, 16, 7, 8, 9, 10, 11, 112, 13, 14, 15, 16, 19, 18, 19, 20, 21, 122, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 121, 59, 22, 91, 91, 91, 91}
-// 	var mesKey = []byte{1, 2, 3, 4, 5}
-// 	var img = "user image link"
-// 	user.Create(adress, mesKey, img)
-// 	usr := user.Get(adress)
-// 	usr.Balance = 100
-// 	buy := trade.Buy{
-// 		Offer:   100,
-// 		Recieve: 100,
-// 	}
-// 	attachedToUser := usr.AttachBuy(&buy)
-// 	if !attachedToUser {
-// 		t.Error("trade should be attached to user")
-// 	}
-// 	attachedToMarket := mkt.AttachBuy(&buy)
-// 	if !attachedToMarket {
-// 		t.Error("trade should be attached to market")
-// 	}
-// 	data.TestRM(marketAdress)
-// 	data.TestRM(adress)
-// }
+func TestAttachSingleNormalBuy(t *testing.T) {
+	var marketAdress = calc.Rand()
+	Create(
+		marketAdress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	mkt := Get(marketAdress)
+	var userAdress = calc.Rand()
+	user.Create(
+		userAdress, 
+		dummyMessageKey,
+		dummyName,
+	)
+	usr := user.Get(userAdress)
+	usr.Balance = 100
+	buy := trade.Buy{
+		Offer:   100,
+		Recieve: 100,
+	}
+	attachedToUser := usr.AttachBuy(&buy)
+	if !attachedToUser {
+		t.Error("trade should be attached to user")
+	}
+	attachedToMarket := mkt.AttachBuy(&buy)
+	if !attachedToMarket {
+		t.Error("trade should be attached to market")
+	}
+	data.TestRM(marketAdress)
+	data.TestRM(userAdress)
+}
 
 // func TestAttachSingleNormalSell(t *testing.T) {
 // 	var marketAdress = []byte{11, 2, 33, 42, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 119, 120, 121, 22, 23, 124, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 122, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 161, 62, 63, 229}
