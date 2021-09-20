@@ -1,9 +1,13 @@
 package search
 
 import (
+	"os"
+	"path"
 	"reflect"
+	"runtime"
 	"sync_tree/calc"
 	"testing"
+	"time"
 )
 
 func TestSearchAdd(t *testing.T) {
@@ -60,7 +64,6 @@ func TestSearchOver30requests(t *testing.T) {
 	}
 	rez := Search("stuff")
 	if len(rez) != 30 {
-		t.Error(rez)
 		t.Error("lenght: =>", len(rez))
 	}
 	for _, adr := range adresses {
@@ -69,5 +72,10 @@ func TestSearchOver30requests(t *testing.T) {
 }
 
 func TestRecreateSearcher(t *testing.T) {
-
+	time.Sleep(time.Second * 3)
+	searcher.Close()
+	_, filename, _, _ := runtime.Caller(0)
+	searchPath := path.Dir(filename) + "/bleve"
+	os.RemoveAll(searchPath)
+	openSearch()
 }

@@ -46,13 +46,11 @@ func SearchChange(newName string, adress []byte) {
 func Search(info string) [][]byte {
 	query := bleve.NewMatchQuery(info)
 	search := bleve.NewSearchRequest(query)
+	search.Size = 30
 	searchRez, _ := searcher.Search(search)
 	rezArr := [][]byte{}
-	for idx, hit := range searchRez.Hits {
+	for _, hit := range searchRez.Hits {
 		rezArr = append(rezArr, []byte(hit.ID))
-		if idx == 30 {
-			break
-		}
 	}
 	return rezArr
 }
