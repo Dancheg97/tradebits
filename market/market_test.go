@@ -436,85 +436,105 @@ func TestTwoUserTradesWithSameOffers(t *testing.T) {
 	data.TestRM(marketAdress)
 }
 
-// func TestFourUserTradesWithRandomOffers(t *testing.T) {
-// 	var marketAdress = []byte{129, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 20, 21, 122, 123, 1, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 140, 21, 1, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 59, 1, 91, 91, 91, 91}
-// 	var mesKey = []byte{1, 2, 3, 4, 5}
-// 	var img = "asset image link . example"
-// 	Create(marketAdress, img, mesKey, img, img, inpFee, outFee, workTime)
-// 	mkt := Get(marketAdress)
+func TestFourUserTradesWithRandomOffers(t *testing.T) {
+	var marketAdress = calc.Rand()
+	Create(
+		marketAdress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	mkt := Get(marketAdress)
 
-// 	var firstUserAdress = []byte{129, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 20, 21, 122, 123, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 140, 21, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 59, 22, 1, 1, 91, 91}
-// 	user.Create(firstUserAdress, mesKey, img)
-// 	firstUser := user.Get(firstUserAdress)
-// 	firstUser.Balance = 300
-// 	firstUserTrade := trade.Buy{
-// 		Offer:   270,
-// 		Recieve: 130,
-// 	}
-// 	firstUser.AttachBuy(&firstUserTrade)
-// 	mkt.AttachBuy(&firstUserTrade)
-// 	firstUser.Save()
+	var firstUserAdress = calc.Rand()
+	user.Create(
+		firstUserAdress,
+		dummyMessageKey,
+		dummyName,
+	)
+	firstUser := user.Get(firstUserAdress)
+	firstUser.Balance = 300
+	firstUserTrade := trade.Buy{
+		Offer:   270,
+		Recieve: 130,
+	}
+	firstUser.AttachBuy(&firstUserTrade)
+	mkt.AttachBuy(&firstUserTrade)
+	firstUser.Save()
 
-// 	var secondUserAdress = []byte{129, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 20, 21, 1, 123, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 1, 21, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 1, 22, 91, 91, 91, 91}
-// 	user.Create(secondUserAdress, mesKey, img)
-// 	secondUser := user.Get(secondUserAdress)
-// 	secondUser.Balances[string(marketAdress)] = 150
-// 	secondUserTrade := trade.Sell{
-// 		Offer:   80,
-// 		Recieve: 130,
-// 	}
-// 	secondUser.AttachSell(&secondUserTrade, marketAdress)
-// 	mkt.AttachSell(&secondUserTrade)
-// 	secondUser.Save()
+	var secondUserAdress = calc.Rand()
+	user.Create(
+		secondUserAdress,
+		dummyMessageKey,
+		dummyName,
+	)
+	secondUser := user.Get(secondUserAdress)
+	secondUser.Balances[string(marketAdress)] = 150
+	secondUserTrade := trade.Sell{
+		Offer:   80,
+		Recieve: 130,
+	}
+	secondUser.AttachSell(&secondUserTrade, marketAdress)
+	mkt.AttachSell(&secondUserTrade)
+	secondUser.Save()
 
-// 	var thirdUserAdress = []byte{1, 1, 1, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 20, 21, 1, 123, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 1, 21, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 1, 22, 91, 91, 91, 91}
-// 	user.Create(thirdUserAdress, mesKey, img)
-// 	thirdUser := user.Get(thirdUserAdress)
-// 	thirdUser.Balances[string(marketAdress)] = 150
-// 	thirdUserTrade := trade.Sell{
-// 		Offer:   20,
-// 		Recieve: 15,
-// 	}
-// 	thirdUser.AttachSell(&thirdUserTrade, marketAdress)
-// 	mkt.AttachSell(&thirdUserTrade)
-// 	thirdUser.Save()
+	var thirdUserAdress = calc.Rand()
+	user.Create(
+		thirdUserAdress,
+		dummyMessageKey,
+		dummyName,
+	)
+	thirdUser := user.Get(thirdUserAdress)
+	thirdUser.Balances[string(marketAdress)] = 150
+	thirdUserTrade := trade.Sell{
+		Offer:   20,
+		Recieve: 15,
+	}
+	thirdUser.AttachSell(&thirdUserTrade, marketAdress)
+	mkt.AttachSell(&thirdUserTrade)
+	thirdUser.Save()
 
-// 	time.Sleep(time.Second * 1)
-// 	firstUserCheck := user.Look(firstUserAdress)
-// 	if firstUserCheck.Balance != 30 {
-// 		t.Error("first user balance should be equal to 30")
-// 	}
-// 	if firstUserCheck.Balances[string(marketAdress)] != 100 {
-// 		t.Error("first user market balance should be equal to 100")
-// 	}
-// 	secondUserCheck := user.Look(secondUserAdress)
-// 	if secondUserCheck.Balance != 130 {
-// 		t.Error("second user balance should be equal to 130")
-// 	}
-// 	if secondUserCheck.Balances[string(marketAdress)] != 70 {
-// 		t.Error("second user market balance should be equal to 70")
-// 	}
-// 	if len(mkt.Pool.Buys) != 1 {
-// 		t.Error("market pool length should be equal to one")
-// 	}
-// 	if mkt.Pool.Buys[0].Offer != 125 {
-// 		t.Error("current offer of market buy should be equal to 125")
-// 		t.Error(mkt.Pool.Buys[0].Offer)
-// 	}
-// 	if mkt.Pool.Buys[0].Recieve != 30 {
-// 		t.Error("current offer of market buy should be equal to 30")
-// 		t.Error(mkt.Pool.Buys[0].Recieve)
-// 	}
-// 	if len(mkt.Pool.Sells) != 0 {
-// 		t.Error("there should not be any active market sell")
-// 	}
-// 	if len(mkt.Pool.Outputs) != 0 {
-// 		t.Error("there should not be any market outputs")
-// 	}
-// 	data.TestRM(marketAdress)
-// 	data.TestRM(firstUserAdress)
-// 	data.TestRM(secondUserAdress)
-// }
+	time.Sleep(time.Second * 1)
+	firstUserCheck := user.Look(firstUserAdress)
+	if firstUserCheck.Balance != 30 {
+		t.Error("first user balance should be equal to 30")
+	}
+	if firstUserCheck.Balances[string(marketAdress)] != 100 {
+		t.Error("first user market balance should be equal to 100")
+	}
+	secondUserCheck := user.Look(secondUserAdress)
+	if secondUserCheck.Balance != 130 {
+		t.Error("second user balance should be equal to 130")
+	}
+	if secondUserCheck.Balances[string(marketAdress)] != 70 {
+		t.Error("second user market balance should be equal to 70")
+	}
+	if len(mkt.Pool.Buys) != 1 {
+		t.Error("market pool length should be equal to one")
+	}
+	if mkt.Pool.Buys[0].Offer != 125 {
+		t.Error("current offer of market buy should be equal to 125")
+		t.Error(mkt.Pool.Buys[0].Offer)
+	}
+	if mkt.Pool.Buys[0].Recieve != 30 {
+		t.Error("current offer of market buy should be equal to 30")
+		t.Error(mkt.Pool.Buys[0].Recieve)
+	}
+	if len(mkt.Pool.Sells) != 0 {
+		t.Error("there should not be any active market sell")
+	}
+	if len(mkt.Pool.Outputs) != 0 {
+		t.Error("there should not be any market outputs")
+	}
+	data.TestRM(marketAdress)
+	data.TestRM(firstUserAdress)
+	data.TestRM(secondUserAdress)
+}
 
 // func TestAttachFirstlySellThanBuy(t *testing.T) {
 // 	var marketAdress = []byte{1, 22, 13, 44, 5, 16, 7, 8, 9, 10, 110, 112, 13, 14, 15, 16, 19, 18, 19, 20, 1, 122, 123, 1, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 1, 39, 140, 21, 1, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 1, 1, 1, 59, 1, 91, 91, 91, 91}
