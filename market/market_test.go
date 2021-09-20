@@ -11,7 +11,7 @@ import (
 
 var img = "asset image link . example"
 var name = "newAsset"
-var descr = "descrx"
+var descr = "very cool and informative market description... yes it matches the min required description length!"
 var inpFee = uint64(100)
 var outFee = uint64(100)
 var workTime = "+3GMT 9:00 - 21:00"
