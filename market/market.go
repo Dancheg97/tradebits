@@ -63,13 +63,13 @@ func Create(
 	if len(name) < 10 || len(name) > 30 {
 		return errors.New("bad name length")
 	}
-	if len(descr) < 160 || len(descr) > 480 {
+	if len(descr) < 160 || len(descr) > 760 {
 		return errors.New("bad description length")
 	}
 	if inputFee > 500 || outputFee > 500 {
 		return errors.New("fee too big")
 	}
-	if len(workTime) < 15 || len(workTime) > 45 {
+	if len(workTime) < 10 || len(workTime) > 40 {
 		return errors.New("work time is bad")
 	}
 	if delimiter > 10 {

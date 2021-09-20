@@ -1,62 +1,177 @@
 package market
 
 import (
+	"reflect"
 	"sync_tree/calc"
 	"sync_tree/data"
 	"testing"
 )
 
-var mesKey = []byte{1, 2, 3, 4, 5}
-var img = "test.imagelink/thereisnoimagebythislink"
-var name = "Test Market Name"
-var descr = "very cool and informative market description... yes it matches the min required description length! alalalal alalalallalallaalalalala lalalallalallaalalalalalalalallal allaalalalalalalalallalallaal alalalalalalallalallaalalalalalal alallalalla"
-var inpFee = uint64(100)
-var outFee = uint64(100)
-var workTime = "+3GMT 9:00 - 21:00"
-var delimiter = uint64(2)
+var dummyMessageKey = []byte{1, 2, 3, 4, 5}
+var dummyImageLink = "test.imagelink/thereisnoimagebythislink"
+var dummyName = "Test Market Name"
+var dummyDescription = `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`
+var dummyInputFee = uint64(100)
+var dummyOutputFee = uint64(100)
+var dummyWorkTime = "+3GMT 9:00 - 21:00"
+var dummyDelimiter = uint64(2)
 
 func TestCreateNewMarket(t *testing.T) {
-	var adress = calc.Rand()
+	var dummyAdress = calc.Rand()
 	err := Create(
-		adress,
-		name,
-		mesKey,
-		descr,
-		img,
-		inpFee,
-		outFee,
-		workTime,
-		delimiter,
+		dummyAdress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
 	)
 	if err != nil {
 		t.Error(err)
 	}
-	data.TestRM(adress)
+	data.TestRM(dummyAdress)
+}
+
+func TestCreateMarketBadAdress(t *testing.T) {
+	var badAdress = []byte{0, 1, 2, 3}
+	err := Create(
+		badAdress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	if err == nil {
+		t.Error("market with bad adress should not be created")
+		data.TestRM(badAdress)
+	}
+}
+
+func TestCreateMarketBadName(t *testing.T) {
+	var dummyAdress = calc.Rand()
+	err := Create(
+		dummyAdress,
+		"ola",
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	if err == nil {
+		t.Error("market with name that small should not be created")
+		data.TestRM(dummyAdress)
+	}
+}
+
+func TestCreateMarketBadDescription(t *testing.T) {
+	var dummyAdress = calc.Rand()
+	err := Create(
+		dummyAdress,
+		dummyName,
+		dummyMessageKey,
+		"coca cola",
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	if err == nil {
+		t.Error("market with description that small should not be created")
+		data.TestRM(dummyAdress)
+	}
+}
+
+func TestCreateMarketBadFee(t *testing.T) {
+	var dummyAdress = calc.Rand()
+	err := Create(
+		dummyAdress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		502,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	if err == nil {
+		t.Error("market with fee that big should not be created")
+		data.TestRM(dummyAdress)
+	}
+}
+
+func TestCreateMarketBadWorkTime(t *testing.T) {
+	var dummyAdress = calc.Rand()
+	err := Create(
+		dummyAdress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		"9-21",
+		dummyDelimiter,
+	)
+	if err == nil {
+		t.Error("market with work time that small should not be created")
+		data.TestRM(dummyAdress)
+	}
+}
+
+func TestCreateMarketBadDelimited(t *testing.T) {
+	var dummyAdress = calc.Rand()
+	err := Create(
+		dummyAdress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		42,
+	)
+	if err == nil {
+		t.Error("market with delimiter that big should not be created")
+		data.TestRM(dummyAdress)
+	}
 }
 
 func TestCreateExistingMarket(t *testing.T) {
 	var adress = calc.Rand()
 	Create(
 		adress,
-		name,
-		mesKey,
-		descr,
-		img,
-		inpFee,
-		outFee,
-		workTime,
-		delimiter,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
 	)
 	err := Create(
 		adress,
-		name,
-		mesKey,
-		descr,
-		img,
-		inpFee,
-		outFee,
-		workTime,
-		delimiter,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
 	)
 	if err == nil {
 		t.Error("new market should not be craeted")
@@ -64,48 +179,52 @@ func TestCreateExistingMarket(t *testing.T) {
 	data.TestRM(adress)
 }
 
-// func TestGetFreeMarket(t *testing.T) {
-// 	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 89}
-// 	var mesKey = []byte{1, 2, 3, 4, 5}
-// 	Create(adress, name, mesKey, descr, img, inpFee, outFee, workTime)
-// 	market := Get(adress)
-// 	defer market.Save()
-// 	if !reflect.DeepEqual(market.MesKey, mesKey) {
-// 		t.Error("keys are not the same, get asset error")
-// 	}
-// 	data.TestRM(adress)
-// }
+func TestGetFreeMarket(t *testing.T) {
+	var adress = calc.Rand()
+	Create(
+		adress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	market := Get(adress)
+	if !reflect.DeepEqual(market.Name, dummyName) {
+		t.Error("keys are not the same, get asset error")
+	}
+	market.Save()
+	data.TestRM(adress)
+}
+
+func TestGetMarketThatDontExist(t *testing.T) {
+	var adress = calc.Rand()
+	mkt := Get(adress)
+	if mkt != nil {
+		t.Error("that test should not return anything")
+	}
+}
 
 // func TestMarketLook(t *testing.T) {
-// 	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 12}
-// 	var mesKey = []byte{1, 2, 3, 4, 5}
-// 	Create(adress, name, mesKey, descr, img, inpFee, outFee, workTime)
+// 	var adress = calc.Rand()
+// 	Create(
+// 		adress,
+// 		dummyName,
+// 		dummyMessageKey,
+// 		dummyDescription,
+// 		dummyImageLink,
+// 		dummyInputFee,
+// 		dummyOutputFee,
+// 		dummyWorkTime,
+// 		dummyDelimiter,
+// 	)
 // 	mkt := Look(adress)
 // 	if !reflect.DeepEqual(mkt.MesKey, mesKey) {
 // 		t.Error("keys are not the same, look asset error")
 // 	}
-// 	data.TestRM(adress)
-// }
-
-// var mkt2 *market
-
-// func getBusyMarket(adress []byte) {
-// 	mkt2 = Get(adress)
-// }
-
-// func TestMarketGetAfterBusy(t *testing.T) {
-// 	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 129}
-// 	var mesKey = []byte{1, 2, 3, 4, 5}
-// 	Create(adress, name, mesKey, descr, img, inpFee, outFee, workTime)
-// 	mkt1 := Get(adress)
-// 	go getBusyMarket(adress)
-// 	time.Sleep(time.Second)
-// 	mkt1.Save()
-// 	time.Sleep(time.Second)
-// 	if !reflect.DeepEqual(mkt2.adress, adress) {
-// 		t.Error("adresses should be equal")
-// 	}
-// 	mkt2.Save()
 // 	data.TestRM(adress)
 // }
 
