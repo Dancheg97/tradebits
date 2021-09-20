@@ -328,35 +328,48 @@ func TestAttachSingleNormalBuy(t *testing.T) {
 	data.TestRM(userAdress)
 }
 
-// func TestAttachSingleNormalSell(t *testing.T) {
-// 	var marketAdress = []byte{11, 2, 33, 42, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 119, 120, 121, 22, 23, 124, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 122, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 161, 62, 63, 229}
-// 	var marketMesKey = []byte{1, 2, 3, 4, 5}
-// 	var marketImg = "asset image link . example"
-// 	var name = "newAsset"
-// 	var descr = "descrx"
-// 	Create(marketAdress, name, marketMesKey, descr, marketImg, inpFee, outFee, workTime)
-// 	mkt := Get(marketAdress)
-// 	var adress = []byte{1, 22, 13, 44, 5, 16, 7, 8, 9, 10, 11, 112, 13, 14, 15, 16, 19, 18, 19, 20, 21, 122, 123, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 40, 21, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 121, 59, 22, 91, 91, 91, 91}
-// 	var mesKey = []byte{1, 2, 3, 4, 5}
-// 	var img = "user image link"
-// 	user.Create(adress, mesKey, img)
-// 	usr := user.Get(adress)
-// 	usr.Balances[string(marketAdress)] = 100
-// 	buy := trade.Sell{
-// 		Offer:   100,
-// 		Recieve: 100,
-// 	}
-// 	attachedToUser := usr.AttachSell(&buy, marketAdress)
-// 	if !attachedToUser {
-// 		t.Error("trade should be attached to user")
-// 	}
-// 	attachedToMarket := mkt.AttachSell(&buy)
-// 	if !attachedToMarket {
-// 		t.Error("trade should be attached to market")
-// 	}
-// 	data.TestRM(marketAdress)
-// 	data.TestRM(adress)
-// }
+func TestAttachSingleNormalSell(t *testing.T) {
+	var marketAdress = calc.Rand()
+	Create(
+		marketAdress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	mkt := Get(marketAdress)
+	var userAdress = calc.Rand()
+	user.Create(
+		userAdress, 
+		dummyMessageKey,
+		dummyName,
+	)
+	user.Create(
+		userAdress, 
+		dummyMessageKey,
+		dummyName,
+	)
+	usr := user.Get(userAdress)
+	usr.Balances[string(marketAdress)] = 100
+	buy := trade.Sell{
+		Offer:   100,
+		Recieve: 100,
+	}
+	attachedToUser := usr.AttachSell(&buy, marketAdress)
+	if !attachedToUser {
+		t.Error("trade should be attached to user")
+	}
+	attachedToMarket := mkt.AttachSell(&buy)
+	if !attachedToMarket {
+		t.Error("trade should be attached to market")
+	}
+	data.TestRM(marketAdress)
+	data.TestRM(userAdress)
+}
 
 // func TestTwoUserTradesWithSameOffers(t *testing.T) {
 // 	var marketAdress = []byte{1, 2, 33, 42, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 119, 1, 121, 22, 23, 124, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 111, 38, 1, 40, 41, 122, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 161, 62, 63, 229}
