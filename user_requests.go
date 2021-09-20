@@ -179,7 +179,6 @@ func (s *server) UserBuy(
 	ctx context.Context,
 	in *pb.UserBuyRequest,
 ) (*pb.Response, error) {
-	// fmt.Println("buy: [offer / recieve] [", in.Offer, "/", in.Recieve, "]")
 	buyerAdress := calc.Hash(in.PublicKey)
 	buyer := user.Get(buyerAdress)
 	if buyer != nil {
@@ -187,7 +186,6 @@ func (s *server) UserBuy(
 		curMarket := market.Get(in.Adress)
 		if curMarket != nil {
 			defer curMarket.Save()
-			// fmt.Println("passed")
 			concMessage := [][]byte{
 				in.PublicKey,
 				in.Adress,
