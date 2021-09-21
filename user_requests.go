@@ -38,7 +38,7 @@ func (s *server) Create(
 	)
 	if create_err != nil {
 		fmt.Sprintln("[UserCreate] - Create error")
-		return nil, errors.New("create error")
+		return nil, errors.New(create_err.Error())
 
 	}
 	fmt.Sprintln("[UserCreate] - User created")
@@ -245,9 +245,9 @@ func (s *server) CancelTrades(
 	return &pb.Response{}, nil
 }
 
-func (s *server) UserSendMessage(
+func (s *server) SendMessage(
 	ctx context.Context,
-	in *pb.UserSendMessageRequest,
+	in *pb.UserRequests_SendMessage,
 ) (*pb.Response, error) {
 	concMes := [][]byte{
 		in.PublicKey,
@@ -255,18 +255,18 @@ func (s *server) UserSendMessage(
 		[]byte(in.Message),
 	}
 	signCheckErr := calc.Verify(concMes, in.PublicKey, in.Sign)
-	if signCheckErr == nil {
-		senderAdress := calc.Hash(in.PublicKey)
-		u := user.Get(senderAdress)
-		if u != nil {
-			u.PutUserMessage(in.Adress, in.Message)
-			u.Save()
-			fmt.Sprintln("[UserSendMessage] - Message sent: ", u.PublicName)
-			return &pb.Response{Passed: true}, nil
-		}
-		fmt.Sprintln("[UserSendMessage] - User not found error")
-		return &pb.Response{Passed: false}, errors.New("user not found")
+	if signCheckErr != nil {
+		fmt.Sprintln("[UserSendMessage] - Sign error")
+		return nil, errors.New("sign error")
 	}
-	fmt.Sprintln("[UserSendMessage] - Sign error")
-	return &pb.Response{Passed: false}, errors.New("sign error")
+	senderAdress := calc.Hash(in.PublicKey)
+	u := user.Get(senderAdress)
+	if u == nil {
+		fmt.Sprintln("[UserSendMessage] - User not found error")
+		return nil, errors.New("user not found")
+	}
+	u.PutUserMessage(in.Adress, in.Message)
+	u.Save()
+	fmt.Sprintln("[UserSendMessage] - Message sent: ", u.PublicName)
+	return &pb.Response{}, nil
 }
