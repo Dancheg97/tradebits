@@ -7,11 +7,8 @@ package api;
 /*
 CODE GENERATION BASH COMMANDS:
 Go:
-
 protoc api/api.proto --go-grpc_out=. --go_out=.
-
 Dart:
-
 protoc lib/_net/api.proto --dart_out=grpc:.
 */
 
@@ -26,11 +23,11 @@ message Response{}
 
 service Info{
     rpc InfoUser(InfoUserRequest) returns (InfoUserResponse) {}
+    rpc InfoUserName(InfoUserNameRequest) returns (InfoUserNameResponse) {}
+    rpc InfoUserHasTrades(InfoHasTradesRequest) returns (Response) {}
     rpc InfoMarket(InfoMarketRequest) returns (InfoMarketResponse) {}
     rpc InfoSearch(InfoSearchRequest) returns (InfoSearchResponse) {}
-    rpc InfoHasTrades(InfoHasTradesRequest) returns (Response) {}
     rpc InfoMessages(InfoMessagesRequest) returns (InfoMessagesResponse) {}
-    rpc InfoUserName(InfoUserNameRequest) returns (InfoUserNameResponse) {}
 }
 
 // InfoUser
@@ -43,6 +40,20 @@ message InfoUserResponse{
     bytes messageKey = 3;
     repeated bytes marketAdresses = 4;
     repeated uint64 marketBalances = 5;
+}
+
+// InfoUserName
+message InfoUserNameRequest{
+    bytes Adress = 1;
+}
+message InfoUserNameResponse {
+    string name = 1;
+}
+
+// InfoUserHasTrades
+message InfoHasTradesRequest{
+    bytes marketAdress = 1;
+    bytes userAdress = 2;
 }
 
 // InfoMarket
@@ -73,12 +84,6 @@ message InfoSearchResponse{
     repeated bytes concatenatedMarketAdresses = 1;
 }
 
-// InfoHasTrades
-message InfoHasTradesRequest{
-    bytes marketAdress = 1;
-    bytes userAdress = 2;
-}
-
 // InfoMessages
 message InfoMessagesRequest{
     bytes marketAdress = 1;
@@ -88,13 +93,6 @@ message InfoMessagesResponse{
     repeated string messages = 1;
 }
 
-// InfoUserName
-message InfoUserNameRequest{
-    bytes Adress = 1;
-}
-message InfoUserNameResponse {
-    string name = 1;
-}
 
 
 
@@ -210,58 +208,6 @@ message MarketUpdateRequest{
     uint64 outputFee = 8;
     string workTime = 9;
     uint64 delimiter = 10;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-message UserInfoRequest{
-    bytes Adress = 1;
-}
-
-message UserTradeRequest{
-    bytes PublicKey = 1;
-    bytes MarketAdress = 2;
-    uint64 Offer = 3;
-    uint64 Recieve = 4;
-    bool IsSell = 5;
-    bytes Sign = 6;
-}
-
-
-
-
-
-
-message UserSearchRequest{
-    string Name = 1;
-}
-
-
-
-
-
-
-
-
-
-
-message MarketInfoRequest{
-    bytes adress = 1;
 }
 
 message MarketDepositRequest{
