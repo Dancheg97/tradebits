@@ -108,18 +108,6 @@ message UserRequests{
         bytes RecieverAdress = 3;
         bytes Sign = 4;
     }
-    message Deposit{
-        bytes PublicKey = 1;
-        bytes MarketAdress = 2;
-        uint64 Amount = 3;
-        bytes Sign = 4;
-    }
-    message Withdrawal{
-        bytes PublicKey = 1;
-        bytes MarketAdress = 2;
-        uint64 Amount = 3;
-        bytes Sign = 4;
-    }
     message Message{
         bytes PublicKey = 1;
         bytes Adress = 2;

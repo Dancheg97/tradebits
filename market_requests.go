@@ -83,7 +83,7 @@ func (s *server) Refresh(
 
 func (s *server) Deposit(
 	ctx context.Context,
-	in *pb.MarketDepositRequest,
+	in *pb.MarketRequests_Deposit,
 ) (*pb.Response, error) {
 	amBytes := make([]byte, 8)
 	binary.LittleEndian.PutUint64(amBytes, uint64(in.Amount))
@@ -94,19 +94,19 @@ func (s *server) Deposit(
 	}
 	checkErr := calc.Verify(concatedMessage, in.PublicKey, in.Sign)
 	if checkErr == nil {
-		adress := calc.Hash(in.PublicKey)
-		u := user.Get(in.UserAdress)
-		if u != nil {
-			strAdr := string(adress)
-			u.Balances[strAdr] = u.Balances[strAdr] + in.Amount
-			fmt.Sprintln("[MarketDeposit] - Deposit verified: ", u.PublicName)
-			return &pb.Response{Passed: true}, nil
-		}
-		fmt.Sprintln("[MarketDeposit] - User not found error")
-		return &pb.Response{Passed: false}, errors.New("user not found error")
+		fmt.Sprintln("[MarketDeposit] - Sign error")
+		return nil, errors.New("sign error")
 	}
-	fmt.Sprintln("[MarketDeposit] - Sign error")
-	return &pb.Response{Passed: false}, errors.New("sign error")
+	adress := calc.Hash(in.PublicKey)
+	u := user.Get(in.UserAdress)
+	if u == nil {
+		fmt.Sprintln("[MarketDeposit] - User not found error")
+		return nil, errors.New("user not found error")
+	}
+	strAdr := string(adress)
+	u.Balances[strAdr] = u.Balances[strAdr] + in.Amount
+	fmt.Sprintln("[MarketDeposit] - Deposit verified: ", u.PublicName)
+	return &pb.Response{}, nil
 }
 
 func (s *infoServer) Reply(
