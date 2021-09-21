@@ -183,6 +183,7 @@ message MarketCreateRequest{
     uint64 inputFee = 7;
     uint64 outputFee = 8;
     string workTime = 9;
+    uint64 delimiter = 10;
 }
 
 message MarketUpdateRequest{
