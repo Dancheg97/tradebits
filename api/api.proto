@@ -16,7 +16,8 @@ service SyncTree{
     rpc InfoMarket(InfoMarketRequest) returns (InfoMarketResponse) {}
     rpc InfoSearch(InfoSearchRequest) returns (InfoSearchResponse) {}
     rpc InfoHasTrades(InfoHasTradesRequest) returns (Response) {}
-    rpc InfoMessages(InfoMessagesRequest) returns (Messages) {}
+    rpc InfoUserMessages(InfoMessagesRequest) returns (InfoMessagesResponse) {}
+    rpc InfoUserName(InfoUserNameRequest) returns (InfoUserNameResponse) {}
 
     rpc UserCreate(UserCreateRequest) returns (Response) {}
     rpc UserUpdate(UserUpdateRequest) returns (Response) {}
@@ -39,7 +40,7 @@ message Response{
     bool Passed = 1;
 }
 
-message Messages{
+message InfoMessagesResponse{
     repeated string messages = 1;
 }
 
@@ -55,12 +56,20 @@ message InfoSearchRequest{
     string info = 1;
 }
 
+message InfoUserNameRequest{
+    bytes Adress = 1;
+}
+
 message InfoUserResponse{
     string PublicName = 1;
     uint64 Balance = 2;
     bytes mesKey = 3;
     repeated bytes marketAdresses = 4;
     repeated uint64 marketBalances = 5;
+}
+
+message InfoUserNameResponse {
+    string name = 1;
 }
 
 message InfoMarketResponse{
@@ -76,6 +85,7 @@ message InfoMarketResponse{
     uint64 inputFee = 10;
     uint64 outputFee = 11;
     string workTime = 12;
+    uint64 delimiter = 14;
 }
 
 message InfoHasTradesRequest{
