@@ -57,20 +57,23 @@ func TestSearchChange(t *testing.T) {
 // 	}
 // }
 
-// func TestSearchAddDifferentAdressesToSameName(t *testing.T) {
-// 	firstAdress := []byte{1, 2, 3}
-// 	secondAdress := []byte{1, 2, 3, 4}
-// 	Add("name", firstAdress)
-// 	Add("name", secondAdress)
-// 	firstSearch := Search("name")
-// 	secondSearch := Search("name")
-// 	if !reflect.DeepEqual(firstSearch[0], firstAdress) {
-// 		t.Error("first adress not matching")
-// 	}
-// 	if !reflect.DeepEqual(secondSearch[0], secondAdress) {
-// 		t.Error("second adress not matching")
-// 	}
-// }
+func TestSearchAddDifferentAdressesToSameName(t *testing.T) {
+	firstAdress := []byte{1, 2, 3}
+	secondAdress := []byte{1, 2, 3, 4}
+	Add("name", firstAdress)
+	Add("name", secondAdress)
+	search := Search("name")
+	firstCondition := reflect.DeepEqual(search[0], firstAdress)
+	secondCondition := reflect.DeepEqual(search[1], secondAdress)
+	thirdCondtition := reflect.DeepEqual(search[0], secondAdress)
+	fourthCondition := reflect.DeepEqual(search[1], firstAdress)
+	if firstCondition && secondCondition {
+		t.Error("first case conditions not satisfied")
+	}
+	if thirdCondtition && fourthCondition {
+		t.Error("second case condtitions not satifsfied")
+	}
+}
 
 func TestSearchAddMultipleAdressesOnSameName(t *testing.T) {
 	adr1 := []byte{0, 1, 2, 3}

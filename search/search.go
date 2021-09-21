@@ -34,14 +34,14 @@ func openSearch() bleve.Index {
 
 func Add(name string, adress []byte) {
 	adressAsString := string(adress)
-	searcher.Index(adressAsString, name+" "+adressAsString[:16])
+	searcher.Index(adressAsString, name+" "+adressAsString)
 }
 
 func Change(newName string, adress []byte) {
 	// отгрузить предыдущий результат
 	adressAsString := string(adress)
 	searcher.Delete(adressAsString)
-	searcher.Index(adressAsString, newName)
+	searcher.Index(adressAsString, newName+" "+adressAsString)
 }
 
 func Search(info string) [][]byte {
