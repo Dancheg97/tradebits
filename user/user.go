@@ -23,14 +23,14 @@ type user struct {
 Create new user, in case there is already user with same adress
 the error will be logged
 */
-func Create(adress []byte, MesKey []byte, PublicName string) error {
+func Create(adress []byte, mesKey []byte, publicName string) error {
 	if len(adress) != 64 {
 		return errors.New("bad adress length")
 	}
-	if len(PublicName) > 12 {
+	if len(publicName) > 12 {
 		return errors.New("name too big")
 	}
-	if len(MesKey) != 256 {
+	if len(mesKey) != 256 {
 		return errors.New("invalid message key length")
 	}
 	if data.Check(adress) {
@@ -38,8 +38,8 @@ func Create(adress []byte, MesKey []byte, PublicName string) error {
 	}
 	u := user{
 		Balance:    0,
-		MesKey:     MesKey,
-		PublicName: PublicName,
+		MesKey:     mesKey,
+		PublicName: publicName,
 		Balances:   make(map[string]uint64),
 		Messages:   make(map[string][]string),
 		Arch:       map[string]string{},
