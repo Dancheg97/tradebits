@@ -12,9 +12,9 @@ import (
 	"sync_tree/user"
 )
 
-func (s *infoServer) UserCreate(
+func (s *server) Create(
 	ctx context.Context,
-	in *pb.UserCreateRequest,
+	in *pb.UserRequests_Create,
 ) (*pb.Response, error) {
 	senderAdress := calc.Hash(in.PublicKey)
 	signError := calc.Verify(
@@ -26,26 +26,28 @@ func (s *infoServer) UserCreate(
 		in.PublicKey,
 		in.Sign,
 	)
-	if signError == nil {
-		create_err := user.Create(
-			senderAdress,
-			in.MesssageKey,
-			in.PublicName,
-		)
-		if create_err == nil {
-			fmt.Sprintln("[UserCreate] - User created")
-			return &pb.Response{Passed: true}, nil
-		}
-		fmt.Sprintln("[UserCreate] - Create error")
-		return &pb.Response{Passed: false}, errors.New("create error")
+	if signError != nil {
+		fmt.Sprintln("[UserCreate] - Sign error")
+		return nil, errors.New("user create error")
+
 	}
-	fmt.Sprintln("[UserCreate] - Sign error")
-	return &pb.Response{Passed: false}, errors.New("user create error")
+	create_err := user.Create(
+		senderAdress,
+		in.MesssageKey,
+		in.PublicName,
+	)
+	if create_err != nil {
+		fmt.Sprintln("[UserCreate] - Create error")
+		return nil, errors.New("create error")
+
+	}
+	fmt.Sprintln("[UserCreate] - User created")
+	return &pb.Response{}, nil
 }
 
-func (s *infoServer) UserUpdate(
+func (s *server) Update(
 	ctx context.Context,
-	in *pb.UserUpdateRequest,
+	in *pb.UserRequests_Update,
 ) (*pb.Response, error) {
 	senderAdress := calc.Hash(in.PublicKey)
 	signError := calc.Verify(
@@ -57,19 +59,19 @@ func (s *infoServer) UserUpdate(
 		in.PublicKey,
 		in.Sign,
 	)
-	if signError == nil {
-		user := user.Get(senderAdress)
-		if user != nil {
-			user.PublicName = in.PublicName
-			user.Save()
-			fmt.Sprintln("[UserUpdate] - User info updated: ", user.PublicName)
-			return &pb.Response{Passed: true}, nil
-		}
-		fmt.Sprintln("[UserUpdate] - User not found")
-		return &pb.Response{Passed: false}, errors.New("user not found error")
+	if signError != nil {
+		fmt.Sprintln("[UserUpdate] - Sign error")
+		return nil, errors.New("sign check error")
 	}
-	fmt.Sprintln("[UserUpdate] - Sign error")
-	return &pb.Response{Passed: false}, errors.New("sign check error")
+	user := user.Get(senderAdress)
+	if user == nil {
+		fmt.Sprintln("[UserUpdate] - User not found")
+		return nil, errors.New("user not found error")
+	}
+	user.PublicName = in.PublicName
+	user.Save()
+	fmt.Sprintln("[UserUpdate] - User info updated: ", user.PublicName)
+	return &pb.Response{}, nil
 }
 
 func (s *infoServer) UserSendMessage(
