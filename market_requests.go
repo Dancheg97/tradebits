@@ -11,7 +11,7 @@ import (
 	"sync_tree/user"
 )
 
-func (s *server) CreateM(
+func (s *server) Spawn(
 	ctx context.Context,
 	in *pb.MarketRequests_Create,
 ) (*pb.Response, error) {
@@ -47,7 +47,7 @@ func (s *server) CreateM(
 	return &pb.Response{}, nil
 }
 
-func (s *server) UpdateM(
+func (s *server) Refresh(
 	ctx context.Context,
 	in *pb.MarketRequests_Update,
 ) (*pb.Response, error) {
@@ -81,7 +81,7 @@ func (s *server) UpdateM(
 	return &pb.Response{}, nil
 }
 
-func (s *server) MarketDeposit(
+func (s *server) Deposit(
 	ctx context.Context,
 	in *pb.MarketDepositRequest,
 ) (*pb.Response, error) {
@@ -109,7 +109,7 @@ func (s *server) MarketDeposit(
 	return &pb.Response{Passed: false}, errors.New("sign error")
 }
 
-func (s *infoServer) MarketSendMessage(
+func (s *infoServer) Reply(
 	ctx context.Context,
 	in *pb.MarketSendMessageRequest,
 ) (*pb.Response, error) {
@@ -135,7 +135,7 @@ func (s *infoServer) MarketSendMessage(
 	return &pb.Response{Passed: false}, errors.New("sign error")
 }
 
-func (s *infoServer) MarketWithdrawal(
+func (s *infoServer) Withdrawal(
 	ctx context.Context,
 	in *pb.MarketWithdrawalRequest,
 ) (*pb.Response, error) {

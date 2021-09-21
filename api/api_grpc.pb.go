@@ -550,11 +550,11 @@ var User_ServiceDesc = grpc.ServiceDesc{
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MarketClient interface {
-	CraeteM(ctx context.Context, in *MarketRequests_Create, opts ...grpc.CallOption) (*Response, error)
-	UpdateM(ctx context.Context, in *MarketRequests_Update, opts ...grpc.CallOption) (*Response, error)
+	Spawn(ctx context.Context, in *MarketRequests_Create, opts ...grpc.CallOption) (*Response, error)
+	Refresh(ctx context.Context, in *MarketRequests_Update, opts ...grpc.CallOption) (*Response, error)
 	Deposit(ctx context.Context, in *MarketRequests_Deposit, opts ...grpc.CallOption) (*Response, error)
 	Withdrawal(ctx context.Context, in *MarketRequests_Withdrawal, opts ...grpc.CallOption) (*Response, error)
-	Message(ctx context.Context, in *MarketRequests_Message, opts ...grpc.CallOption) (*Response, error)
+	Reply(ctx context.Context, in *MarketRequests_Message, opts ...grpc.CallOption) (*Response, error)
 }
 
 type marketClient struct {
@@ -565,18 +565,18 @@ func NewMarketClient(cc grpc.ClientConnInterface) MarketClient {
 	return &marketClient{cc}
 }
 
-func (c *marketClient) CraeteM(ctx context.Context, in *MarketRequests_Create, opts ...grpc.CallOption) (*Response, error) {
+func (c *marketClient) Spawn(ctx context.Context, in *MarketRequests_Create, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.Market/CraeteM", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.Market/Spawn", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *marketClient) UpdateM(ctx context.Context, in *MarketRequests_Update, opts ...grpc.CallOption) (*Response, error) {
+func (c *marketClient) Refresh(ctx context.Context, in *MarketRequests_Update, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.Market/UpdateM", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.Market/Refresh", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -601,9 +601,9 @@ func (c *marketClient) Withdrawal(ctx context.Context, in *MarketRequests_Withdr
 	return out, nil
 }
 
-func (c *marketClient) Message(ctx context.Context, in *MarketRequests_Message, opts ...grpc.CallOption) (*Response, error) {
+func (c *marketClient) Reply(ctx context.Context, in *MarketRequests_Message, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.Market/Message", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.Market/Reply", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -614,11 +614,11 @@ func (c *marketClient) Message(ctx context.Context, in *MarketRequests_Message, 
 // All implementations must embed UnimplementedMarketServer
 // for forward compatibility
 type MarketServer interface {
-	CraeteM(context.Context, *MarketRequests_Create) (*Response, error)
-	UpdateM(context.Context, *MarketRequests_Update) (*Response, error)
+	Spawn(context.Context, *MarketRequests_Create) (*Response, error)
+	Refresh(context.Context, *MarketRequests_Update) (*Response, error)
 	Deposit(context.Context, *MarketRequests_Deposit) (*Response, error)
 	Withdrawal(context.Context, *MarketRequests_Withdrawal) (*Response, error)
-	Message(context.Context, *MarketRequests_Message) (*Response, error)
+	Reply(context.Context, *MarketRequests_Message) (*Response, error)
 	mustEmbedUnimplementedMarketServer()
 }
 
@@ -626,11 +626,11 @@ type MarketServer interface {
 type UnimplementedMarketServer struct {
 }
 
-func (UnimplementedMarketServer) CraeteM(context.Context, *MarketRequests_Create) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CraeteM not implemented")
+func (UnimplementedMarketServer) Spawn(context.Context, *MarketRequests_Create) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Spawn not implemented")
 }
-func (UnimplementedMarketServer) UpdateM(context.Context, *MarketRequests_Update) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateM not implemented")
+func (UnimplementedMarketServer) Refresh(context.Context, *MarketRequests_Update) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Refresh not implemented")
 }
 func (UnimplementedMarketServer) Deposit(context.Context, *MarketRequests_Deposit) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Deposit not implemented")
@@ -638,8 +638,8 @@ func (UnimplementedMarketServer) Deposit(context.Context, *MarketRequests_Deposi
 func (UnimplementedMarketServer) Withdrawal(context.Context, *MarketRequests_Withdrawal) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Withdrawal not implemented")
 }
-func (UnimplementedMarketServer) Message(context.Context, *MarketRequests_Message) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Message not implemented")
+func (UnimplementedMarketServer) Reply(context.Context, *MarketRequests_Message) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Reply not implemented")
 }
 func (UnimplementedMarketServer) mustEmbedUnimplementedMarketServer() {}
 
@@ -654,38 +654,38 @@ func RegisterMarketServer(s grpc.ServiceRegistrar, srv MarketServer) {
 	s.RegisterService(&Market_ServiceDesc, srv)
 }
 
-func _Market_CraeteM_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Market_Spawn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MarketRequests_Create)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MarketServer).CraeteM(ctx, in)
+		return srv.(MarketServer).Spawn(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.Market/CraeteM",
+		FullMethod: "/api.Market/Spawn",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MarketServer).CraeteM(ctx, req.(*MarketRequests_Create))
+		return srv.(MarketServer).Spawn(ctx, req.(*MarketRequests_Create))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Market_UpdateM_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Market_Refresh_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MarketRequests_Update)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MarketServer).UpdateM(ctx, in)
+		return srv.(MarketServer).Refresh(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.Market/UpdateM",
+		FullMethod: "/api.Market/Refresh",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MarketServer).UpdateM(ctx, req.(*MarketRequests_Update))
+		return srv.(MarketServer).Refresh(ctx, req.(*MarketRequests_Update))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -726,20 +726,20 @@ func _Market_Withdrawal_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Market_Message_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Market_Reply_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MarketRequests_Message)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MarketServer).Message(ctx, in)
+		return srv.(MarketServer).Reply(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.Market/Message",
+		FullMethod: "/api.Market/Reply",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MarketServer).Message(ctx, req.(*MarketRequests_Message))
+		return srv.(MarketServer).Reply(ctx, req.(*MarketRequests_Message))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -752,12 +752,12 @@ var Market_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MarketServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CraeteM",
-			Handler:    _Market_CraeteM_Handler,
+			MethodName: "Spawn",
+			Handler:    _Market_Spawn_Handler,
 		},
 		{
-			MethodName: "UpdateM",
-			Handler:    _Market_UpdateM_Handler,
+			MethodName: "Refresh",
+			Handler:    _Market_Refresh_Handler,
 		},
 		{
 			MethodName: "Deposit",
@@ -768,8 +768,8 @@ var Market_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Market_Withdrawal_Handler,
 		},
 		{
-			MethodName: "Message",
-			Handler:    _Market_Message_Handler,
+			MethodName: "Reply",
+			Handler:    _Market_Reply_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
