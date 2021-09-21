@@ -11,7 +11,9 @@ import (
 )
 
 type server struct {
-	pb.UnimplementedSyncTreeServer
+	pb.UnimplementedInfoServer
+	pb.UnimplementedMarketServer
+	pb.UnimplementedUserServer
 }
 
 func main() {
@@ -22,9 +24,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	s := grpc.NewServer()
-	pb.RegisterSyncTreeServer(s, &server{})
-	if err := s.Serve(lis); err != nil {
+	serv := grpc.NewServer()
+	pb.RegisterInfoServer(serv, &server{})
+	pb.RegisterMarketServer(serv, &server{})
+	pb.RegisterUserServer(serv, &server{})
+	if err := serv.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
 }

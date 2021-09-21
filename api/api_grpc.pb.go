@@ -18,12 +18,11 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type InfoClient interface {
-	InfoUser(ctx context.Context, in *InfoUserRequest, opts ...grpc.CallOption) (*InfoUserResponse, error)
-	InfoMarket(ctx context.Context, in *InfoMarketRequest, opts ...grpc.CallOption) (*InfoMarketResponse, error)
-	InfoSearch(ctx context.Context, in *InfoSearchRequest, opts ...grpc.CallOption) (*InfoSearchResponse, error)
-	InfoHasTrades(ctx context.Context, in *InfoHasTradesRequest, opts ...grpc.CallOption) (*Response, error)
-	InfoMessages(ctx context.Context, in *InfoMessagesRequest, opts ...grpc.CallOption) (*InfoMessagesResponse, error)
-	InfoUserName(ctx context.Context, in *InfoUserNameRequest, opts ...grpc.CallOption) (*InfoUserNameResponse, error)
+	User(ctx context.Context, in *InfIn_Adress, opts ...grpc.CallOption) (*InfOut_User, error)
+	HasTrades(ctx context.Context, in *InfIn_UserMarketAdresses, opts ...grpc.CallOption) (*InfOut_HasTrades, error)
+	Market(ctx context.Context, in *InfIn_Adress, opts ...grpc.CallOption) (*InfOut_MarketInfo, error)
+	Search(ctx context.Context, in *InfIn_SearchText, opts ...grpc.CallOption) (*InfOut_Adresses, error)
+	Messages(ctx context.Context, in *InfIn_UserMarketAdresses, opts ...grpc.CallOption) (*InfOut_Messages, error)
 }
 
 type infoClient struct {
@@ -34,54 +33,45 @@ func NewInfoClient(cc grpc.ClientConnInterface) InfoClient {
 	return &infoClient{cc}
 }
 
-func (c *infoClient) InfoUser(ctx context.Context, in *InfoUserRequest, opts ...grpc.CallOption) (*InfoUserResponse, error) {
-	out := new(InfoUserResponse)
-	err := c.cc.Invoke(ctx, "/api.Info/InfoUser", in, out, opts...)
+func (c *infoClient) User(ctx context.Context, in *InfIn_Adress, opts ...grpc.CallOption) (*InfOut_User, error) {
+	out := new(InfOut_User)
+	err := c.cc.Invoke(ctx, "/api.Info/User", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *infoClient) InfoMarket(ctx context.Context, in *InfoMarketRequest, opts ...grpc.CallOption) (*InfoMarketResponse, error) {
-	out := new(InfoMarketResponse)
-	err := c.cc.Invoke(ctx, "/api.Info/InfoMarket", in, out, opts...)
+func (c *infoClient) HasTrades(ctx context.Context, in *InfIn_UserMarketAdresses, opts ...grpc.CallOption) (*InfOut_HasTrades, error) {
+	out := new(InfOut_HasTrades)
+	err := c.cc.Invoke(ctx, "/api.Info/HasTrades", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *infoClient) InfoSearch(ctx context.Context, in *InfoSearchRequest, opts ...grpc.CallOption) (*InfoSearchResponse, error) {
-	out := new(InfoSearchResponse)
-	err := c.cc.Invoke(ctx, "/api.Info/InfoSearch", in, out, opts...)
+func (c *infoClient) Market(ctx context.Context, in *InfIn_Adress, opts ...grpc.CallOption) (*InfOut_MarketInfo, error) {
+	out := new(InfOut_MarketInfo)
+	err := c.cc.Invoke(ctx, "/api.Info/Market", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *infoClient) InfoHasTrades(ctx context.Context, in *InfoHasTradesRequest, opts ...grpc.CallOption) (*Response, error) {
-	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.Info/InfoHasTrades", in, out, opts...)
+func (c *infoClient) Search(ctx context.Context, in *InfIn_SearchText, opts ...grpc.CallOption) (*InfOut_Adresses, error) {
+	out := new(InfOut_Adresses)
+	err := c.cc.Invoke(ctx, "/api.Info/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *infoClient) InfoMessages(ctx context.Context, in *InfoMessagesRequest, opts ...grpc.CallOption) (*InfoMessagesResponse, error) {
-	out := new(InfoMessagesResponse)
-	err := c.cc.Invoke(ctx, "/api.Info/InfoMessages", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *infoClient) InfoUserName(ctx context.Context, in *InfoUserNameRequest, opts ...grpc.CallOption) (*InfoUserNameResponse, error) {
-	out := new(InfoUserNameResponse)
-	err := c.cc.Invoke(ctx, "/api.Info/InfoUserName", in, out, opts...)
+func (c *infoClient) Messages(ctx context.Context, in *InfIn_UserMarketAdresses, opts ...grpc.CallOption) (*InfOut_Messages, error) {
+	out := new(InfOut_Messages)
+	err := c.cc.Invoke(ctx, "/api.Info/Messages", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -92,12 +82,11 @@ func (c *infoClient) InfoUserName(ctx context.Context, in *InfoUserNameRequest, 
 // All implementations must embed UnimplementedInfoServer
 // for forward compatibility
 type InfoServer interface {
-	InfoUser(context.Context, *InfoUserRequest) (*InfoUserResponse, error)
-	InfoMarket(context.Context, *InfoMarketRequest) (*InfoMarketResponse, error)
-	InfoSearch(context.Context, *InfoSearchRequest) (*InfoSearchResponse, error)
-	InfoHasTrades(context.Context, *InfoHasTradesRequest) (*Response, error)
-	InfoMessages(context.Context, *InfoMessagesRequest) (*InfoMessagesResponse, error)
-	InfoUserName(context.Context, *InfoUserNameRequest) (*InfoUserNameResponse, error)
+	User(context.Context, *InfIn_Adress) (*InfOut_User, error)
+	HasTrades(context.Context, *InfIn_UserMarketAdresses) (*InfOut_HasTrades, error)
+	Market(context.Context, *InfIn_Adress) (*InfOut_MarketInfo, error)
+	Search(context.Context, *InfIn_SearchText) (*InfOut_Adresses, error)
+	Messages(context.Context, *InfIn_UserMarketAdresses) (*InfOut_Messages, error)
 	mustEmbedUnimplementedInfoServer()
 }
 
@@ -105,23 +94,20 @@ type InfoServer interface {
 type UnimplementedInfoServer struct {
 }
 
-func (UnimplementedInfoServer) InfoUser(context.Context, *InfoUserRequest) (*InfoUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method InfoUser not implemented")
+func (UnimplementedInfoServer) User(context.Context, *InfIn_Adress) (*InfOut_User, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method User not implemented")
 }
-func (UnimplementedInfoServer) InfoMarket(context.Context, *InfoMarketRequest) (*InfoMarketResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method InfoMarket not implemented")
+func (UnimplementedInfoServer) HasTrades(context.Context, *InfIn_UserMarketAdresses) (*InfOut_HasTrades, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HasTrades not implemented")
 }
-func (UnimplementedInfoServer) InfoSearch(context.Context, *InfoSearchRequest) (*InfoSearchResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method InfoSearch not implemented")
+func (UnimplementedInfoServer) Market(context.Context, *InfIn_Adress) (*InfOut_MarketInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Market not implemented")
 }
-func (UnimplementedInfoServer) InfoHasTrades(context.Context, *InfoHasTradesRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method InfoHasTrades not implemented")
+func (UnimplementedInfoServer) Search(context.Context, *InfIn_SearchText) (*InfOut_Adresses, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
-func (UnimplementedInfoServer) InfoMessages(context.Context, *InfoMessagesRequest) (*InfoMessagesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method InfoMessages not implemented")
-}
-func (UnimplementedInfoServer) InfoUserName(context.Context, *InfoUserNameRequest) (*InfoUserNameResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method InfoUserName not implemented")
+func (UnimplementedInfoServer) Messages(context.Context, *InfIn_UserMarketAdresses) (*InfOut_Messages, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Messages not implemented")
 }
 func (UnimplementedInfoServer) mustEmbedUnimplementedInfoServer() {}
 
@@ -136,110 +122,92 @@ func RegisterInfoServer(s grpc.ServiceRegistrar, srv InfoServer) {
 	s.RegisterService(&Info_ServiceDesc, srv)
 }
 
-func _Info_InfoUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InfoUserRequest)
+func _Info_User_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InfIn_Adress)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InfoServer).InfoUser(ctx, in)
+		return srv.(InfoServer).User(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.Info/InfoUser",
+		FullMethod: "/api.Info/User",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfoServer).InfoUser(ctx, req.(*InfoUserRequest))
+		return srv.(InfoServer).User(ctx, req.(*InfIn_Adress))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Info_InfoMarket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InfoMarketRequest)
+func _Info_HasTrades_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InfIn_UserMarketAdresses)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InfoServer).InfoMarket(ctx, in)
+		return srv.(InfoServer).HasTrades(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.Info/InfoMarket",
+		FullMethod: "/api.Info/HasTrades",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfoServer).InfoMarket(ctx, req.(*InfoMarketRequest))
+		return srv.(InfoServer).HasTrades(ctx, req.(*InfIn_UserMarketAdresses))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Info_InfoSearch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InfoSearchRequest)
+func _Info_Market_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InfIn_Adress)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InfoServer).InfoSearch(ctx, in)
+		return srv.(InfoServer).Market(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.Info/InfoSearch",
+		FullMethod: "/api.Info/Market",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfoServer).InfoSearch(ctx, req.(*InfoSearchRequest))
+		return srv.(InfoServer).Market(ctx, req.(*InfIn_Adress))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Info_InfoHasTrades_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InfoHasTradesRequest)
+func _Info_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InfIn_SearchText)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InfoServer).InfoHasTrades(ctx, in)
+		return srv.(InfoServer).Search(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.Info/InfoHasTrades",
+		FullMethod: "/api.Info/Search",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfoServer).InfoHasTrades(ctx, req.(*InfoHasTradesRequest))
+		return srv.(InfoServer).Search(ctx, req.(*InfIn_SearchText))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Info_InfoMessages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InfoMessagesRequest)
+func _Info_Messages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InfIn_UserMarketAdresses)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InfoServer).InfoMessages(ctx, in)
+		return srv.(InfoServer).Messages(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.Info/InfoMessages",
+		FullMethod: "/api.Info/Messages",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfoServer).InfoMessages(ctx, req.(*InfoMessagesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Info_InfoUserName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InfoUserNameRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(InfoServer).InfoUserName(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.Info/InfoUserName",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfoServer).InfoUserName(ctx, req.(*InfoUserNameRequest))
+		return srv.(InfoServer).Messages(ctx, req.(*InfIn_UserMarketAdresses))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -252,28 +220,24 @@ var Info_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*InfoServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "InfoUser",
-			Handler:    _Info_InfoUser_Handler,
+			MethodName: "User",
+			Handler:    _Info_User_Handler,
 		},
 		{
-			MethodName: "InfoMarket",
-			Handler:    _Info_InfoMarket_Handler,
+			MethodName: "HasTrades",
+			Handler:    _Info_HasTrades_Handler,
 		},
 		{
-			MethodName: "InfoSearch",
-			Handler:    _Info_InfoSearch_Handler,
+			MethodName: "Market",
+			Handler:    _Info_Market_Handler,
 		},
 		{
-			MethodName: "InfoHasTrades",
-			Handler:    _Info_InfoHasTrades_Handler,
+			MethodName: "Search",
+			Handler:    _Info_Search_Handler,
 		},
 		{
-			MethodName: "InfoMessages",
-			Handler:    _Info_InfoMessages_Handler,
-		},
-		{
-			MethodName: "InfoUserName",
-			Handler:    _Info_InfoUserName_Handler,
+			MethodName: "Messages",
+			Handler:    _Info_Messages_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -284,15 +248,15 @@ var Info_ServiceDesc = grpc.ServiceDesc{
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserClient interface {
-	UserCreate(ctx context.Context, in *UserCreateRequest, opts ...grpc.CallOption) (*Response, error)
-	UserUpdate(ctx context.Context, in *UserUpdateRequest, opts ...grpc.CallOption) (*Response, error)
-	UserSend(ctx context.Context, in *UserSendRequest, opts ...grpc.CallOption) (*Response, error)
-	UserDeposit(ctx context.Context, in *UserDepositRequest, opts ...grpc.CallOption) (*Response, error)
-	UserWithdrawal(ctx context.Context, in *UserWithdrawalRequest, opts ...grpc.CallOption) (*Response, error)
-	UserSendMessage(ctx context.Context, in *UserSendMessageRequest, opts ...grpc.CallOption) (*Response, error)
-	UserBuy(ctx context.Context, in *UserBuyRequest, opts ...grpc.CallOption) (*Response, error)
-	UserSell(ctx context.Context, in *UserSellRequest, opts ...grpc.CallOption) (*Response, error)
-	UserCancelTrade(ctx context.Context, in *UserCancelTradeRequest, opts ...grpc.CallOption) (*Response, error)
+	Create(ctx context.Context, in *UserRequests_Create, opts ...grpc.CallOption) (*Response, error)
+	Update(ctx context.Context, in *UserRequests_Update, opts ...grpc.CallOption) (*Response, error)
+	Send(ctx context.Context, in *UserRequests_Send, opts ...grpc.CallOption) (*Response, error)
+	Deposit(ctx context.Context, in *UserRequests_Deposit, opts ...grpc.CallOption) (*Response, error)
+	Withdrawal(ctx context.Context, in *UserRequests_Withdrawal, opts ...grpc.CallOption) (*Response, error)
+	SendMessage(ctx context.Context, in *UserRequests_SendMessage, opts ...grpc.CallOption) (*Response, error)
+	Buy(ctx context.Context, in *UserRequests_Buy, opts ...grpc.CallOption) (*Response, error)
+	Sell(ctx context.Context, in *UserRequests_Sell, opts ...grpc.CallOption) (*Response, error)
+	CancelTrade(ctx context.Context, in *UserRequests_CancelTrade, opts ...grpc.CallOption) (*Response, error)
 }
 
 type userClient struct {
@@ -303,81 +267,81 @@ func NewUserClient(cc grpc.ClientConnInterface) UserClient {
 	return &userClient{cc}
 }
 
-func (c *userClient) UserCreate(ctx context.Context, in *UserCreateRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *userClient) Create(ctx context.Context, in *UserRequests_Create, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.User/UserCreate", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.User/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userClient) UserUpdate(ctx context.Context, in *UserUpdateRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *userClient) Update(ctx context.Context, in *UserRequests_Update, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.User/UserUpdate", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.User/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userClient) UserSend(ctx context.Context, in *UserSendRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *userClient) Send(ctx context.Context, in *UserRequests_Send, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.User/UserSend", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.User/Send", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userClient) UserDeposit(ctx context.Context, in *UserDepositRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *userClient) Deposit(ctx context.Context, in *UserRequests_Deposit, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.User/UserDeposit", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.User/Deposit", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userClient) UserWithdrawal(ctx context.Context, in *UserWithdrawalRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *userClient) Withdrawal(ctx context.Context, in *UserRequests_Withdrawal, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.User/UserWithdrawal", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.User/Withdrawal", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userClient) UserSendMessage(ctx context.Context, in *UserSendMessageRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *userClient) SendMessage(ctx context.Context, in *UserRequests_SendMessage, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.User/UserSendMessage", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.User/SendMessage", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userClient) UserBuy(ctx context.Context, in *UserBuyRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *userClient) Buy(ctx context.Context, in *UserRequests_Buy, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.User/UserBuy", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.User/Buy", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userClient) UserSell(ctx context.Context, in *UserSellRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *userClient) Sell(ctx context.Context, in *UserRequests_Sell, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.User/UserSell", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.User/Sell", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userClient) UserCancelTrade(ctx context.Context, in *UserCancelTradeRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *userClient) CancelTrade(ctx context.Context, in *UserRequests_CancelTrade, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.User/UserCancelTrade", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.User/CancelTrade", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -388,15 +352,15 @@ func (c *userClient) UserCancelTrade(ctx context.Context, in *UserCancelTradeReq
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
 type UserServer interface {
-	UserCreate(context.Context, *UserCreateRequest) (*Response, error)
-	UserUpdate(context.Context, *UserUpdateRequest) (*Response, error)
-	UserSend(context.Context, *UserSendRequest) (*Response, error)
-	UserDeposit(context.Context, *UserDepositRequest) (*Response, error)
-	UserWithdrawal(context.Context, *UserWithdrawalRequest) (*Response, error)
-	UserSendMessage(context.Context, *UserSendMessageRequest) (*Response, error)
-	UserBuy(context.Context, *UserBuyRequest) (*Response, error)
-	UserSell(context.Context, *UserSellRequest) (*Response, error)
-	UserCancelTrade(context.Context, *UserCancelTradeRequest) (*Response, error)
+	Create(context.Context, *UserRequests_Create) (*Response, error)
+	Update(context.Context, *UserRequests_Update) (*Response, error)
+	Send(context.Context, *UserRequests_Send) (*Response, error)
+	Deposit(context.Context, *UserRequests_Deposit) (*Response, error)
+	Withdrawal(context.Context, *UserRequests_Withdrawal) (*Response, error)
+	SendMessage(context.Context, *UserRequests_SendMessage) (*Response, error)
+	Buy(context.Context, *UserRequests_Buy) (*Response, error)
+	Sell(context.Context, *UserRequests_Sell) (*Response, error)
+	CancelTrade(context.Context, *UserRequests_CancelTrade) (*Response, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -404,32 +368,32 @@ type UserServer interface {
 type UnimplementedUserServer struct {
 }
 
-func (UnimplementedUserServer) UserCreate(context.Context, *UserCreateRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserCreate not implemented")
+func (UnimplementedUserServer) Create(context.Context, *UserRequests_Create) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedUserServer) UserUpdate(context.Context, *UserUpdateRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserUpdate not implemented")
+func (UnimplementedUserServer) Update(context.Context, *UserRequests_Update) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedUserServer) UserSend(context.Context, *UserSendRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserSend not implemented")
+func (UnimplementedUserServer) Send(context.Context, *UserRequests_Send) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Send not implemented")
 }
-func (UnimplementedUserServer) UserDeposit(context.Context, *UserDepositRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserDeposit not implemented")
+func (UnimplementedUserServer) Deposit(context.Context, *UserRequests_Deposit) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Deposit not implemented")
 }
-func (UnimplementedUserServer) UserWithdrawal(context.Context, *UserWithdrawalRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserWithdrawal not implemented")
+func (UnimplementedUserServer) Withdrawal(context.Context, *UserRequests_Withdrawal) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Withdrawal not implemented")
 }
-func (UnimplementedUserServer) UserSendMessage(context.Context, *UserSendMessageRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserSendMessage not implemented")
+func (UnimplementedUserServer) SendMessage(context.Context, *UserRequests_SendMessage) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendMessage not implemented")
 }
-func (UnimplementedUserServer) UserBuy(context.Context, *UserBuyRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserBuy not implemented")
+func (UnimplementedUserServer) Buy(context.Context, *UserRequests_Buy) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Buy not implemented")
 }
-func (UnimplementedUserServer) UserSell(context.Context, *UserSellRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserSell not implemented")
+func (UnimplementedUserServer) Sell(context.Context, *UserRequests_Sell) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Sell not implemented")
 }
-func (UnimplementedUserServer) UserCancelTrade(context.Context, *UserCancelTradeRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserCancelTrade not implemented")
+func (UnimplementedUserServer) CancelTrade(context.Context, *UserRequests_CancelTrade) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CancelTrade not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 
@@ -444,164 +408,164 @@ func RegisterUserServer(s grpc.ServiceRegistrar, srv UserServer) {
 	s.RegisterService(&User_ServiceDesc, srv)
 }
 
-func _User_UserCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserCreateRequest)
+func _User_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRequests_Create)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).UserCreate(ctx, in)
+		return srv.(UserServer).Create(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.User/UserCreate",
+		FullMethod: "/api.User/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).UserCreate(ctx, req.(*UserCreateRequest))
+		return srv.(UserServer).Create(ctx, req.(*UserRequests_Create))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_UserUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserUpdateRequest)
+func _User_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRequests_Update)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).UserUpdate(ctx, in)
+		return srv.(UserServer).Update(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.User/UserUpdate",
+		FullMethod: "/api.User/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).UserUpdate(ctx, req.(*UserUpdateRequest))
+		return srv.(UserServer).Update(ctx, req.(*UserRequests_Update))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_UserSend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserSendRequest)
+func _User_Send_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRequests_Send)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).UserSend(ctx, in)
+		return srv.(UserServer).Send(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.User/UserSend",
+		FullMethod: "/api.User/Send",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).UserSend(ctx, req.(*UserSendRequest))
+		return srv.(UserServer).Send(ctx, req.(*UserRequests_Send))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_UserDeposit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserDepositRequest)
+func _User_Deposit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRequests_Deposit)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).UserDeposit(ctx, in)
+		return srv.(UserServer).Deposit(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.User/UserDeposit",
+		FullMethod: "/api.User/Deposit",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).UserDeposit(ctx, req.(*UserDepositRequest))
+		return srv.(UserServer).Deposit(ctx, req.(*UserRequests_Deposit))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_UserWithdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserWithdrawalRequest)
+func _User_Withdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRequests_Withdrawal)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).UserWithdrawal(ctx, in)
+		return srv.(UserServer).Withdrawal(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.User/UserWithdrawal",
+		FullMethod: "/api.User/Withdrawal",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).UserWithdrawal(ctx, req.(*UserWithdrawalRequest))
+		return srv.(UserServer).Withdrawal(ctx, req.(*UserRequests_Withdrawal))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_UserSendMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserSendMessageRequest)
+func _User_SendMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRequests_SendMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).UserSendMessage(ctx, in)
+		return srv.(UserServer).SendMessage(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.User/UserSendMessage",
+		FullMethod: "/api.User/SendMessage",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).UserSendMessage(ctx, req.(*UserSendMessageRequest))
+		return srv.(UserServer).SendMessage(ctx, req.(*UserRequests_SendMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_UserBuy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserBuyRequest)
+func _User_Buy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRequests_Buy)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).UserBuy(ctx, in)
+		return srv.(UserServer).Buy(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.User/UserBuy",
+		FullMethod: "/api.User/Buy",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).UserBuy(ctx, req.(*UserBuyRequest))
+		return srv.(UserServer).Buy(ctx, req.(*UserRequests_Buy))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_UserSell_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserSellRequest)
+func _User_Sell_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRequests_Sell)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).UserSell(ctx, in)
+		return srv.(UserServer).Sell(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.User/UserSell",
+		FullMethod: "/api.User/Sell",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).UserSell(ctx, req.(*UserSellRequest))
+		return srv.(UserServer).Sell(ctx, req.(*UserRequests_Sell))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_UserCancelTrade_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserCancelTradeRequest)
+func _User_CancelTrade_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRequests_CancelTrade)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).UserCancelTrade(ctx, in)
+		return srv.(UserServer).CancelTrade(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.User/UserCancelTrade",
+		FullMethod: "/api.User/CancelTrade",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).UserCancelTrade(ctx, req.(*UserCancelTradeRequest))
+		return srv.(UserServer).CancelTrade(ctx, req.(*UserRequests_CancelTrade))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -614,40 +578,40 @@ var User_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*UserServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "UserCreate",
-			Handler:    _User_UserCreate_Handler,
+			MethodName: "Create",
+			Handler:    _User_Create_Handler,
 		},
 		{
-			MethodName: "UserUpdate",
-			Handler:    _User_UserUpdate_Handler,
+			MethodName: "Update",
+			Handler:    _User_Update_Handler,
 		},
 		{
-			MethodName: "UserSend",
-			Handler:    _User_UserSend_Handler,
+			MethodName: "Send",
+			Handler:    _User_Send_Handler,
 		},
 		{
-			MethodName: "UserDeposit",
-			Handler:    _User_UserDeposit_Handler,
+			MethodName: "Deposit",
+			Handler:    _User_Deposit_Handler,
 		},
 		{
-			MethodName: "UserWithdrawal",
-			Handler:    _User_UserWithdrawal_Handler,
+			MethodName: "Withdrawal",
+			Handler:    _User_Withdrawal_Handler,
 		},
 		{
-			MethodName: "UserSendMessage",
-			Handler:    _User_UserSendMessage_Handler,
+			MethodName: "SendMessage",
+			Handler:    _User_SendMessage_Handler,
 		},
 		{
-			MethodName: "UserBuy",
-			Handler:    _User_UserBuy_Handler,
+			MethodName: "Buy",
+			Handler:    _User_Buy_Handler,
 		},
 		{
-			MethodName: "UserSell",
-			Handler:    _User_UserSell_Handler,
+			MethodName: "Sell",
+			Handler:    _User_Sell_Handler,
 		},
 		{
-			MethodName: "UserCancelTrade",
-			Handler:    _User_UserCancelTrade_Handler,
+			MethodName: "CancelTrade",
+			Handler:    _User_CancelTrade_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -658,11 +622,11 @@ var User_ServiceDesc = grpc.ServiceDesc{
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MarketClient interface {
-	MarketCraete(ctx context.Context, in *MarketCreateRequest, opts ...grpc.CallOption) (*Response, error)
-	MarketUpdate(ctx context.Context, in *MarketUpdateRequest, opts ...grpc.CallOption) (*Response, error)
-	MarketDeposit(ctx context.Context, in *MarketDepositRequest, opts ...grpc.CallOption) (*Response, error)
-	MarketWithdrawal(ctx context.Context, in *MarketWithdrawalRequest, opts ...grpc.CallOption) (*Response, error)
-	MarketSendMessage(ctx context.Context, in *MarketSendMessageRequest, opts ...grpc.CallOption) (*Response, error)
+	Craete(ctx context.Context, in *MarketRequests_Create, opts ...grpc.CallOption) (*Response, error)
+	Update(ctx context.Context, in *MarketRequests_Update, opts ...grpc.CallOption) (*Response, error)
+	Deposit(ctx context.Context, in *MarketRequests_Deposit, opts ...grpc.CallOption) (*Response, error)
+	Withdrawal(ctx context.Context, in *MarketRequests_Withdrawal, opts ...grpc.CallOption) (*Response, error)
+	SendMessage(ctx context.Context, in *MarketRequests_SendMessage, opts ...grpc.CallOption) (*Response, error)
 }
 
 type marketClient struct {
@@ -673,45 +637,45 @@ func NewMarketClient(cc grpc.ClientConnInterface) MarketClient {
 	return &marketClient{cc}
 }
 
-func (c *marketClient) MarketCraete(ctx context.Context, in *MarketCreateRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *marketClient) Craete(ctx context.Context, in *MarketRequests_Create, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.Market/MarketCraete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.Market/Craete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *marketClient) MarketUpdate(ctx context.Context, in *MarketUpdateRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *marketClient) Update(ctx context.Context, in *MarketRequests_Update, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.Market/MarketUpdate", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.Market/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *marketClient) MarketDeposit(ctx context.Context, in *MarketDepositRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *marketClient) Deposit(ctx context.Context, in *MarketRequests_Deposit, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.Market/MarketDeposit", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.Market/Deposit", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *marketClient) MarketWithdrawal(ctx context.Context, in *MarketWithdrawalRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *marketClient) Withdrawal(ctx context.Context, in *MarketRequests_Withdrawal, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.Market/MarketWithdrawal", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.Market/Withdrawal", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *marketClient) MarketSendMessage(ctx context.Context, in *MarketSendMessageRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *marketClient) SendMessage(ctx context.Context, in *MarketRequests_SendMessage, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.Market/MarketSendMessage", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.Market/SendMessage", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -722,11 +686,11 @@ func (c *marketClient) MarketSendMessage(ctx context.Context, in *MarketSendMess
 // All implementations must embed UnimplementedMarketServer
 // for forward compatibility
 type MarketServer interface {
-	MarketCraete(context.Context, *MarketCreateRequest) (*Response, error)
-	MarketUpdate(context.Context, *MarketUpdateRequest) (*Response, error)
-	MarketDeposit(context.Context, *MarketDepositRequest) (*Response, error)
-	MarketWithdrawal(context.Context, *MarketWithdrawalRequest) (*Response, error)
-	MarketSendMessage(context.Context, *MarketSendMessageRequest) (*Response, error)
+	Craete(context.Context, *MarketRequests_Create) (*Response, error)
+	Update(context.Context, *MarketRequests_Update) (*Response, error)
+	Deposit(context.Context, *MarketRequests_Deposit) (*Response, error)
+	Withdrawal(context.Context, *MarketRequests_Withdrawal) (*Response, error)
+	SendMessage(context.Context, *MarketRequests_SendMessage) (*Response, error)
 	mustEmbedUnimplementedMarketServer()
 }
 
@@ -734,20 +698,20 @@ type MarketServer interface {
 type UnimplementedMarketServer struct {
 }
 
-func (UnimplementedMarketServer) MarketCraete(context.Context, *MarketCreateRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MarketCraete not implemented")
+func (UnimplementedMarketServer) Craete(context.Context, *MarketRequests_Create) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Craete not implemented")
 }
-func (UnimplementedMarketServer) MarketUpdate(context.Context, *MarketUpdateRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MarketUpdate not implemented")
+func (UnimplementedMarketServer) Update(context.Context, *MarketRequests_Update) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedMarketServer) MarketDeposit(context.Context, *MarketDepositRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MarketDeposit not implemented")
+func (UnimplementedMarketServer) Deposit(context.Context, *MarketRequests_Deposit) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Deposit not implemented")
 }
-func (UnimplementedMarketServer) MarketWithdrawal(context.Context, *MarketWithdrawalRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MarketWithdrawal not implemented")
+func (UnimplementedMarketServer) Withdrawal(context.Context, *MarketRequests_Withdrawal) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Withdrawal not implemented")
 }
-func (UnimplementedMarketServer) MarketSendMessage(context.Context, *MarketSendMessageRequest) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MarketSendMessage not implemented")
+func (UnimplementedMarketServer) SendMessage(context.Context, *MarketRequests_SendMessage) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendMessage not implemented")
 }
 func (UnimplementedMarketServer) mustEmbedUnimplementedMarketServer() {}
 
@@ -762,92 +726,92 @@ func RegisterMarketServer(s grpc.ServiceRegistrar, srv MarketServer) {
 	s.RegisterService(&Market_ServiceDesc, srv)
 }
 
-func _Market_MarketCraete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MarketCreateRequest)
+func _Market_Craete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MarketRequests_Create)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MarketServer).MarketCraete(ctx, in)
+		return srv.(MarketServer).Craete(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.Market/MarketCraete",
+		FullMethod: "/api.Market/Craete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MarketServer).MarketCraete(ctx, req.(*MarketCreateRequest))
+		return srv.(MarketServer).Craete(ctx, req.(*MarketRequests_Create))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Market_MarketUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MarketUpdateRequest)
+func _Market_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MarketRequests_Update)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MarketServer).MarketUpdate(ctx, in)
+		return srv.(MarketServer).Update(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.Market/MarketUpdate",
+		FullMethod: "/api.Market/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MarketServer).MarketUpdate(ctx, req.(*MarketUpdateRequest))
+		return srv.(MarketServer).Update(ctx, req.(*MarketRequests_Update))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Market_MarketDeposit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MarketDepositRequest)
+func _Market_Deposit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MarketRequests_Deposit)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MarketServer).MarketDeposit(ctx, in)
+		return srv.(MarketServer).Deposit(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.Market/MarketDeposit",
+		FullMethod: "/api.Market/Deposit",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MarketServer).MarketDeposit(ctx, req.(*MarketDepositRequest))
+		return srv.(MarketServer).Deposit(ctx, req.(*MarketRequests_Deposit))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Market_MarketWithdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MarketWithdrawalRequest)
+func _Market_Withdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MarketRequests_Withdrawal)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MarketServer).MarketWithdrawal(ctx, in)
+		return srv.(MarketServer).Withdrawal(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.Market/MarketWithdrawal",
+		FullMethod: "/api.Market/Withdrawal",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MarketServer).MarketWithdrawal(ctx, req.(*MarketWithdrawalRequest))
+		return srv.(MarketServer).Withdrawal(ctx, req.(*MarketRequests_Withdrawal))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Market_MarketSendMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MarketSendMessageRequest)
+func _Market_SendMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MarketRequests_SendMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MarketServer).MarketSendMessage(ctx, in)
+		return srv.(MarketServer).SendMessage(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.Market/MarketSendMessage",
+		FullMethod: "/api.Market/SendMessage",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MarketServer).MarketSendMessage(ctx, req.(*MarketSendMessageRequest))
+		return srv.(MarketServer).SendMessage(ctx, req.(*MarketRequests_SendMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -860,24 +824,24 @@ var Market_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MarketServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "MarketCraete",
-			Handler:    _Market_MarketCraete_Handler,
+			MethodName: "Craete",
+			Handler:    _Market_Craete_Handler,
 		},
 		{
-			MethodName: "MarketUpdate",
-			Handler:    _Market_MarketUpdate_Handler,
+			MethodName: "Update",
+			Handler:    _Market_Update_Handler,
 		},
 		{
-			MethodName: "MarketDeposit",
-			Handler:    _Market_MarketDeposit_Handler,
+			MethodName: "Deposit",
+			Handler:    _Market_Deposit_Handler,
 		},
 		{
-			MethodName: "MarketWithdrawal",
-			Handler:    _Market_MarketWithdrawal_Handler,
+			MethodName: "Withdrawal",
+			Handler:    _Market_Withdrawal_Handler,
 		},
 		{
-			MethodName: "MarketSendMessage",
-			Handler:    _Market_MarketSendMessage_Handler,
+			MethodName: "SendMessage",
+			Handler:    _Market_SendMessage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

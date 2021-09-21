@@ -12,7 +12,7 @@ import (
 	"sync_tree/user"
 )
 
-func (s *server) UserCreate(
+func (s *infoServer) UserCreate(
 	ctx context.Context,
 	in *pb.UserCreateRequest,
 ) (*pb.Response, error) {
@@ -43,7 +43,7 @@ func (s *server) UserCreate(
 	return &pb.Response{Passed: false}, errors.New("user create error")
 }
 
-func (s *server) UserUpdate(
+func (s *infoServer) UserUpdate(
 	ctx context.Context,
 	in *pb.UserUpdateRequest,
 ) (*pb.Response, error) {
@@ -72,7 +72,7 @@ func (s *server) UserUpdate(
 	return &pb.Response{Passed: false}, errors.New("sign check error")
 }
 
-func (s *server) UserSendMessage(
+func (s *infoServer) UserSendMessage(
 	ctx context.Context,
 	in *pb.UserSendMessageRequest,
 ) (*pb.Response, error) {
@@ -98,7 +98,7 @@ func (s *server) UserSendMessage(
 	return &pb.Response{Passed: false}, errors.New("sign error")
 }
 
-func (s *server) UserSend(
+func (s *infoServer) UserSend(
 	ctx context.Context,
 	in *pb.UserSendRequest,
 ) (*pb.Response, error) {
@@ -135,7 +135,7 @@ func (s *server) UserSend(
 	return &pb.Response{Passed: false}, errors.New("send error")
 }
 
-func (s *server) UserSell(
+func (s *infoServer) UserSell(
 	ctx context.Context,
 	in *pb.UserSellRequest,
 ) (*pb.Response, error) {
@@ -175,9 +175,9 @@ func (s *server) UserSell(
 	return &pb.Response{Passed: false}, errors.New("sell error")
 }
 
-func (s *server) UserBuy(
+func (s *infoServer) Buy(
 	ctx context.Context,
-	in *pb.UserBuyRequest,
+	in *pb.UserRequests_Buy,
 ) (*pb.Response, error) {
 	buyerAdress := calc.Hash(in.PublicKey)
 	buyer := user.Get(buyerAdress)
@@ -215,7 +215,7 @@ func (s *server) UserBuy(
 	return &pb.Response{Passed: false}, errors.New("buy error")
 }
 
-func (s *server) UserCancelTrade(
+func (s *infoServer) UserCancelTrade(
 	ctx context.Context,
 	in *pb.UserCancelTradeRequest,
 ) (*pb.Response, error) {

@@ -23,7 +23,7 @@ message Response{}
 
 service Info{
     rpc User(InfIn.Adress) returns (InfOut.User);
-    rpc UserHasTrades(InfIn.UserMarketAdresses) returns (InfOut.HasTrades);
+    rpc HasTrades(InfIn.UserMarketAdresses) returns (InfOut.HasTrades);
     rpc Market(InfIn.Adress) returns (InfOut.MarketInfo);
     rpc Search(InfIn.SearchText) returns (InfOut.Adresses);
     rpc Messages(InfIn.UserMarketAdresses) returns (InfOut.Messages);

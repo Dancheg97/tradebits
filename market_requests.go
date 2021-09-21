@@ -11,7 +11,7 @@ import (
 	"sync_tree/user"
 )
 
-func (s *server) MarketCreate(
+func (s *infoServer) MarketCreate(
 	ctx context.Context,
 	in *pb.MarketCreateRequest,
 ) (*pb.Response, error) {
@@ -46,7 +46,7 @@ func (s *server) MarketCreate(
 	return &pb.Response{Passed: false}, errors.New("sign fail")
 }
 
-func (s *server) MarketDeposit(
+func (s *infoServer) MarketDeposit(
 	ctx context.Context,
 	in *pb.MarketDepositRequest,
 ) (*pb.Response, error) {
@@ -74,7 +74,7 @@ func (s *server) MarketDeposit(
 	return &pb.Response{Passed: false}, errors.New("sign error")
 }
 
-func (s *server) MarketSendMessage(
+func (s *infoServer) MarketSendMessage(
 	ctx context.Context,
 	in *pb.MarketSendMessageRequest,
 ) (*pb.Response, error) {
@@ -100,7 +100,7 @@ func (s *server) MarketSendMessage(
 	return &pb.Response{Passed: false}, errors.New("sign error")
 }
 
-func (s *server) MarketUpdate(
+func (s *infoServer) MarketUpdate(
 	ctx context.Context,
 	in *pb.MarketUpdateRequest,
 ) (*pb.Response, error) {
@@ -134,7 +134,7 @@ func (s *server) MarketUpdate(
 	return &pb.Response{Passed: false}, errors.New("sign error")
 }
 
-func (s *server) MarketWithdrawal(
+func (s *infoServer) MarketWithdrawal(
 	ctx context.Context,
 	in *pb.MarketWithdrawalRequest,
 ) (*pb.Response, error) {
