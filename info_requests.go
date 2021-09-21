@@ -88,14 +88,14 @@ func (s *server) Search(
 	return &pb.InfOut_Adresses{MarketAdresses: results}, nil
 }
 
-func (s *infoServer) InfoUser(
+func (s *server) User(
 	ctx context.Context,
-	in *pb.InfoUserRequest,
-) (*pb.InfoUserResponse, error) {
+	in *pb.InfIn_Adress,
+) (*pb.InfOut_User, error) {
 	user := user.Look(in.Adress)
 	if user == nil {
 		fmt.Sprintln("[InfoUser] - error user not found")
-		return &pb.InfoUserResponse{}, errors.New("user not found")
+		return nil, errors.New("user not found")
 	}
 	adressesSlice := [][]byte{}
 	balancesSlice := []uint64{}
@@ -104,23 +104,23 @@ func (s *infoServer) InfoUser(
 		balancesSlice = append(balancesSlice, bal)
 	}
 	fmt.Sprintln("[InfoUser] - info about user: ", user.PublicName)
-	return &pb.InfoUserResponse{
+	return &pb.InfOut_User{
 		PublicName:     user.PublicName,
 		Balance:        user.Balance,
-		MesKey:         user.MesKey,
+		MessageKey:     user.MesKey,
 		MarketAdresses: adressesSlice,
 		MarketBalances: balancesSlice,
 	}, nil
 }
 
-func (s *infoServer) InfoMessages(
+func (s *server) Messages(
 	ctx context.Context,
-	in *pb.InfoMessagesRequest,
-) (*pb.Messages, error) {
+	in *pb.InfIn_UserMarketAdresses,
+) (*pb.InfOut_Messages, error) {
 	usr := user.Look(in.UserAdress)
-	msgs := usr.GetMessages(in.MarketAdress)
+	messages := usr.GetMessages(in.MarketAdress)
 	fmt.Sprintln("[InfoMessages] - giving cipher messages of some user")
-	return &pb.Messages{
-		Messages: msgs,
+	return &pb.InfOut_Messages{
+		Messages: messages,
 	}, nil
 }
