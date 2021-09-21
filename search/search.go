@@ -38,7 +38,6 @@ func Add(name string, adress []byte) {
 }
 
 func Change(newName string, adress []byte) {
-	// отгрузить предыдущий результат
 	adressAsString := string(adress)
 	searcher.Delete(adressAsString)
 	searcher.Index(adressAsString, newName+" "+adressAsString)

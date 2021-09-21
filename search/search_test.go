@@ -12,14 +12,14 @@ import (
 
 func TestSearchAdd(t *testing.T) {
 	name := "name22"
-	adr := []byte{1, 2, 3}
+	adr := calc.Rand()
 	Add(name, adr)
 	searcher.Delete(string(adr))
 }
 
 func TestSearchSearch(t *testing.T) {
 	name := "name122"
-	adr := []byte{1, 2, 3}
+	adr := calc.Rand()
 	Add(name, adr)
 	rez := Search(name)
 	if !reflect.DeepEqual(rez[0], adr) {
@@ -29,7 +29,7 @@ func TestSearchSearch(t *testing.T) {
 }
 
 func TestSearchChange(t *testing.T) {
-	adr := []byte{1, 1, 1}
+	adr := calc.Rand()
 	name1 := "Xname22"
 	name2 := "Fname22"
 	Add(name1, adr)
@@ -41,25 +41,9 @@ func TestSearchChange(t *testing.T) {
 	searcher.Delete(string(adr))
 }
 
-func TestSearchWithAttemptOfNameSubstitution(t *testing.T) {
-	firstAdress := []byte{1, 2, 3}
-	secondAdress := []byte{1, 2, 3}
-	Add("name", firstAdress)
-	Add("name", secondAdress)
-	Change("anotherName", secondAdress)
-	firstSearch := Search("name")
-	secondSearch := Search("antoherName")
-	if !reflect.DeepEqual(firstSearch[0], firstAdress) {
-		t.Error("first adress not matching")
-	}
-	if !reflect.DeepEqual(secondSearch[0], secondAdress) {
-		t.Error("second adress not matching")
-	}
-}
-
 func TestSearchAddDifferentAdressesToSameName(t *testing.T) {
-	firstAdress := []byte{1, 2, 3}
-	secondAdress := []byte{1, 2, 3, 4}
+	firstAdress := calc.Rand()
+	secondAdress := calc.Rand()
 	Add("name", firstAdress)
 	Add("name", secondAdress)
 	search := Search("name")
@@ -74,8 +58,8 @@ func TestSearchAddDifferentAdressesToSameName(t *testing.T) {
 }
 
 func TestSearchAddMultipleAdressesOnSameName(t *testing.T) {
-	adr1 := []byte{0, 1, 2, 3}
-	adr2 := []byte{0, 1, 2, 4}
+	adr1 := calc.Rand()
+	adr2 := calc.Rand()
 	sameName := "snm"
 	Add(sameName, adr1)
 	Add(sameName, adr2)
@@ -104,10 +88,28 @@ func TestSearchOver30requests(t *testing.T) {
 }
 
 func TestRecreateSearcher(t *testing.T) {
-	time.Sleep(time.Second * 4)
+	time.Sleep(time.Second * 8)
 	searcher.Close()
 	_, filename, _, _ := runtime.Caller(0)
 	searchPath := path.Dir(filename) + "/bleve"
 	os.RemoveAll(searchPath)
 	openSearch()
+}
+
+func TestSearchWithAttemptOfNameSubstitution(t *testing.T) {
+	firstAdress := calc.Rand()
+	secondAdress := calc.Rand()
+	Add("name", firstAdress)
+	Add("name", secondAdress)
+	Change("another", secondAdress)
+	firstSearch := Search("name")
+	secondSearch := Search("another")
+	if !reflect.DeepEqual(firstSearch[0], firstAdress) {
+		t.Error("first adress not matching")
+	}
+	if !reflect.DeepEqual(secondSearch[0], secondAdress) {
+		t.Error("second adress not matching")
+	}
+	searcher.Delete(string(firstAdress))
+	searcher.Delete(string(secondAdress))
 }
