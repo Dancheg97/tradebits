@@ -69,7 +69,7 @@ message InfoHasTradesRequest{
     bytes userAdress = 2;
 }
 
-// Info Messages
+// InfoMessages
 message InfoMessagesRequest{
     bytes marketAdress = 1;
     bytes userAdress = 2;
@@ -78,8 +78,13 @@ message InfoMessagesResponse{
     repeated string messages = 1;
 }
 
-// 
-
+// InfoUserName
+message InfoUserNameRequest{
+    bytes Adress = 1;
+}
+message InfoUserNameResponse {
+    string name = 1;
+}
 service User{
     rpc UserCreate(UserCreateRequest) returns (Response) {}
     rpc UserUpdate(UserUpdateRequest) returns (Response) {}
@@ -108,14 +113,7 @@ service Market{
 
 
 
-message InfoUserNameRequest{
-    bytes Adress = 1;
-}
 
-
-message InfoUserNameResponse {
-    string name = 1;
-}
 
 
 
