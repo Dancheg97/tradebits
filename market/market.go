@@ -24,6 +24,7 @@ type market struct {
 	OutputFee uint64
 	WorkTime  string
 	Delimiter uint64
+	Users     [][]byte
 }
 
 // Create new market by passed values. Checks wether market with passed adress
@@ -98,6 +99,7 @@ func Create(
 		OutputFee: outputFee,
 		WorkTime:  workTime,
 		Delimiter: delimiter,
+		Users:     [][]byte{},
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newMarket)

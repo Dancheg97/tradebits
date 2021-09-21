@@ -81,23 +81,23 @@ func (s *server) Send(
 ) (*pb.Response, error) {
 	senderAdress := calc.Hash(in.PublicKey)
 	if reflect.DeepEqual(senderAdress, in.RecieverAdress) {
-		fmt.Sprintln("[UserSendMessage] - Reciever is sender")
+		fmt.Sprintln("[UserSend] - Reciever is sender")
 		return nil, errors.New("reciever is sender")
 	}
 	sender := user.Get(senderAdress)
 	if sender == nil {
-		fmt.Sprintln("[UserSendMessage] - Sender dont exist")
+		fmt.Sprintln("[UserSend] - Sender dont exist")
 		return nil, errors.New("Sender dont exist")
 	}
 	defer sender.Save()
 	reciever := user.Get(in.RecieverAdress)
 	if reciever == nil {
-		fmt.Sprintln("[UserSendMessage] - Reciever dont exits")
+		fmt.Sprintln("[UserSend] - Reciever dont exits")
 		return nil, errors.New("Reciever dont exist")
 	}
 	defer reciever.Save()
 	if sender.Balance >= in.SendAmount {
-		fmt.Sprintln("[UserSendMessage] - Not enough balance")
+		fmt.Sprintln("[UserSend] - Not enough balance")
 		return nil, errors.New("Not enough balance")
 	}
 	amountBytes := calc.NumberToBytes(in.SendAmount)

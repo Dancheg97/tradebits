@@ -10,9 +10,10 @@ import (
 	"time"
 )
 
-var dummyMessageKey = []byte{1, 2, 3, 4, 5}
+var dummyMessageKey = []byte{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 var dummyImageLink = "test.imagelink/thereisnoimagebythislink"
 var dummyName = "Test Market Name"
+var dummyUserName = "CocaCola"
 var dummyDescription = `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`
 var dummyInputFee = uint64(100)
 var dummyOutputFee = uint64(100)
@@ -309,7 +310,7 @@ func TestAttachSingleNormalBuy(t *testing.T) {
 	user.Create(
 		userAdress,
 		dummyMessageKey,
-		dummyName,
+		dummyUserName,
 	)
 	usr := user.Get(userAdress)
 	usr.Balance = 100
@@ -347,7 +348,7 @@ func TestAttachSingleNormalSell(t *testing.T) {
 	user.Create(
 		userAdress,
 		dummyMessageKey,
-		dummyName,
+		dummyUserName,
 	)
 	usr := user.Get(userAdress)
 	usr.Balances[string(marketAdress)] = 100
@@ -386,7 +387,7 @@ func TestTwoUserTradesWithSameOffers(t *testing.T) {
 	user.Create(
 		firstUserAdress,
 		dummyMessageKey,
-		dummyName,
+		dummyUserName,
 	)
 	firstUser := user.Get(firstUserAdress)
 	firstUser.Balance = 100
@@ -402,7 +403,7 @@ func TestTwoUserTradesWithSameOffers(t *testing.T) {
 	user.Create(
 		secondUserAdress,
 		dummyMessageKey,
-		dummyName,
+		dummyUserName,
 	)
 	secondUser := user.Get(secondUserAdress)
 	secondUser.Balances[string(marketAdress)] = 100
@@ -455,7 +456,7 @@ func TestFourUserTradesWithRandomOffers(t *testing.T) {
 	user.Create(
 		firstUserAdress,
 		dummyMessageKey,
-		dummyName,
+		dummyUserName,
 	)
 	firstUser := user.Get(firstUserAdress)
 	firstUser.Balance = 300
@@ -471,7 +472,7 @@ func TestFourUserTradesWithRandomOffers(t *testing.T) {
 	user.Create(
 		secondUserAdress,
 		dummyMessageKey,
-		dummyName,
+		dummyUserName,
 	)
 	secondUser := user.Get(secondUserAdress)
 	secondUser.Balances[string(marketAdress)] = 150
@@ -487,7 +488,7 @@ func TestFourUserTradesWithRandomOffers(t *testing.T) {
 	user.Create(
 		thirdUserAdress,
 		dummyMessageKey,
-		dummyName,
+		dummyUserName,
 	)
 	thirdUser := user.Get(thirdUserAdress)
 	thirdUser.Balances[string(marketAdress)] = 150
@@ -555,7 +556,7 @@ func TestAttachFirstlySellThanBuy(t *testing.T) {
 	user.Create(
 		firstUserAdress,
 		dummyMessageKey,
-		dummyName,
+		dummyUserName,
 	)
 	firstUser := user.Get(firstUserAdress)
 	firstUser.Balance = 300
