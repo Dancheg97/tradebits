@@ -83,9 +83,7 @@ service User{
     rpc Create(UserRequests.Create) returns (Response);
     rpc Update(UserRequests.Update) returns (Response);
     rpc Send(UserRequests.Send) returns (Response);
-    rpc Deposit(UserRequests.Deposit) returns (Response);
-    rpc Withdrawal(UserRequests.Withdrawal) returns (Response);
-    rpc SendMessage(UserRequests.SendMessage) returns (Response);
+    rpc Message(UserRequests.Message) returns (Response);
     rpc Buy(UserRequests.Buy) returns (Response);
     rpc Sell(UserRequests.Sell) returns (Response);
     rpc CancelTrade(UserRequests.CancelTrade) returns (Response);
@@ -122,7 +120,7 @@ message UserRequests{
         uint64 Amount = 3;
         bytes Sign = 4;
     }
-    message SendMessage{
+    message Message{
         bytes PublicKey = 1;
         bytes Adress = 2;
         string Message = 3;
@@ -153,11 +151,11 @@ message UserRequests{
 
 
 service Market{
-    rpc Craete(MarketRequests.Create) returns (Response) {}
-    rpc Update(MarketRequests.Update) returns (Response) {}
-    rpc Deposit(MarketRequests.Deposit) returns (Response) {}
-    rpc Withdrawal(MarketRequests.Withdrawal) returns (Response) {}
-    rpc SendMessage(MarketRequests.SendMessage) returns (Response) {}
+    rpc CraeteM(MarketRequests.Create) returns (Response);
+    rpc UpdateM(MarketRequests.Update) returns (Response);
+    rpc Deposit(MarketRequests.Deposit) returns (Response);
+    rpc Withdrawal(MarketRequests.Withdrawal) returns (Response);
+    rpc Reply(MarketRequests.Message) returns (Response);
 }
 
 message MarketRequests{
@@ -197,7 +195,7 @@ message MarketRequests{
         uint64 Amount = 3;
         bytes Sign = 4;
     }
-    message SendMessage{
+    message Message{
         bytes PublicKey = 1;
         bytes Adress = 2;
         string Message = 3;

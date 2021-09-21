@@ -11,9 +11,9 @@ import (
 	"sync_tree/user"
 )
 
-func (s *infoServer) MarketCreate(
+func (s *server) CreateM(
 	ctx context.Context,
-	in *pb.MarketCreateRequest,
+	in *pb.MarketRequests_Create,
 ) (*pb.Response, error) {
 	concatedMessage := [][]byte{
 		in.PublicKey,
@@ -23,30 +23,65 @@ func (s *infoServer) MarketCreate(
 		[]byte(in.Descr),
 	}
 	checkErr := calc.Verify(concatedMessage, in.PublicKey, in.Sign)
-	if checkErr == nil {
-		adress := calc.Hash(in.PublicKey)
-		craeteErr := market.Create(
-			adress,
-			in.Name,
-			in.MesssageKey,
-			in.Descr,
-			in.Img,
-			in.InputFee,
-			in.OutputFee,
-			in.WorkTime,
-		)
-		if craeteErr == nil {
-			fmt.Sprintln("[MarketCreate] - Market created, name: ", in.Name)
-			return &pb.Response{Passed: true}, nil
-		}
-		fmt.Sprintln("[MarketCreate] - Error create error: ", craeteErr)
-		return &pb.Response{Passed: false}, craeteErr
+	if checkErr != nil {
+		fmt.Sprintln("[MarketCreate] - Error sign fail")
+		return nil, errors.New("sign fail")
 	}
-	fmt.Sprintln("[MarketCreate] - Error sign fail")
-	return &pb.Response{Passed: false}, errors.New("sign fail")
+	adress := calc.Hash(in.PublicKey)
+	craeteErr := market.Create(
+		adress,
+		in.Name,
+		in.MesssageKey,
+		in.Descr,
+		in.Img,
+		in.InputFee,
+		in.OutputFee,
+		in.WorkTime,
+		in.Delimiter,
+	)
+	if craeteErr != nil {
+		fmt.Sprintln("[MarketCreate] - Error create error: ", craeteErr)
+		return nil, craeteErr
+	}
+	fmt.Sprintln("[MarketCreate] - Market created, name: ", in.Name)
+	return &pb.Response{}, nil
 }
 
-func (s *infoServer) MarketDeposit(
+func (s *server) UpdateM(
+	ctx context.Context,
+	in *pb.MarketRequests_Update,
+) (*pb.Response, error) {
+	concatedMessage := [][]byte{
+		in.PublicKey,
+		in.MesssageKey,
+		[]byte(in.Name),
+		[]byte(in.Img),
+		[]byte(in.Descr),
+	}
+	checkErr := calc.Verify(concatedMessage, in.PublicKey, in.Sign)
+	if checkErr != nil {
+		fmt.Sprintln("[MarketUpdate] - Sign error")
+		return nil, errors.New("sign error")
+	}
+	adress := calc.Hash(in.PublicKey)
+	mkt := market.Get(adress)
+	if mkt == nil {
+		fmt.Sprintln("[MarketUpdate] - Market not found error")
+		return nil, errors.New("sign error")
+	}
+	mkt.Name = in.Name
+	mkt.MesKey = in.MesssageKey
+	mkt.Descr = in.Descr
+	mkt.Img = in.Img
+	mkt.InputFee = in.InputFee
+	mkt.OutputFee = in.OutputFee
+	mkt.WorkTime = in.WorkTime
+	mkt.Save()
+	fmt.Sprintln("[MarketUpdate] - Market info updated")
+	return &pb.Response{}, nil
+}
+
+func (s *server) MarketDeposit(
 	ctx context.Context,
 	in *pb.MarketDepositRequest,
 ) (*pb.Response, error) {
@@ -97,40 +132,6 @@ func (s *infoServer) MarketSendMessage(
 		return &pb.Response{Passed: false}, errors.New("sign error")
 	}
 	fmt.Sprintln("[MarketSendMessage] - Sign error")
-	return &pb.Response{Passed: false}, errors.New("sign error")
-}
-
-func (s *infoServer) MarketUpdate(
-	ctx context.Context,
-	in *pb.MarketUpdateRequest,
-) (*pb.Response, error) {
-	concatedMessage := [][]byte{
-		in.PublicKey,
-		in.MesssageKey,
-		[]byte(in.Name),
-		[]byte(in.Img),
-		[]byte(in.Descr),
-	}
-	checkErr := calc.Verify(concatedMessage, in.PublicKey, in.Sign)
-	if checkErr == nil {
-		adress := calc.Hash(in.PublicKey)
-		m := market.Get(adress)
-		if m != nil {
-			m.Name = in.Name
-			m.MesKey = in.MesssageKey
-			m.Descr = in.Descr
-			m.Img = in.Img
-			m.InputFee = in.InputFee
-			m.OutputFee = in.OutputFee
-			m.WorkTime = in.WorkTime
-			m.Save()
-			fmt.Sprintln("[MarketUpdate] - Market info updated")
-			return &pb.Response{Passed: true}, nil
-		}
-		fmt.Sprintln("[MarketUpdate] - Market not found error")
-		return &pb.Response{Passed: false}, errors.New("sign error")
-	}
-	fmt.Sprintln("[MarketUpdate] - Sign error")
 	return &pb.Response{Passed: false}, errors.New("sign error")
 }
 

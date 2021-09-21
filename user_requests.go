@@ -38,7 +38,7 @@ func (s *server) Create(
 	)
 	if create_err != nil {
 		fmt.Sprintln("[UserCreate] - Create error")
-		return nil, errors.New(create_err.Error())
+		return nil, create_err
 
 	}
 	fmt.Sprintln("[UserCreate] - User created")
@@ -247,7 +247,7 @@ func (s *server) CancelTrades(
 
 func (s *server) SendMessage(
 	ctx context.Context,
-	in *pb.UserRequests_SendMessage,
+	in *pb.UserRequests_Message,
 ) (*pb.Response, error) {
 	concMes := [][]byte{
 		in.PublicKey,
