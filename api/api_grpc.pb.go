@@ -22,7 +22,8 @@ type SyncTreeClient interface {
 	InfoMarket(ctx context.Context, in *InfoMarketRequest, opts ...grpc.CallOption) (*InfoMarketResponse, error)
 	InfoSearch(ctx context.Context, in *InfoSearchRequest, opts ...grpc.CallOption) (*InfoSearchResponse, error)
 	InfoHasTrades(ctx context.Context, in *InfoHasTradesRequest, opts ...grpc.CallOption) (*Response, error)
-	InfoMessages(ctx context.Context, in *InfoMessagesRequest, opts ...grpc.CallOption) (*Messages, error)
+	InfoUserMessages(ctx context.Context, in *InfoMessagesRequest, opts ...grpc.CallOption) (*InfoMessagesResponse, error)
+	InfoUserName(ctx context.Context, in *InfoUserNameRequest, opts ...grpc.CallOption) (*InfoUserNameResponse, error)
 	UserCreate(ctx context.Context, in *UserCreateRequest, opts ...grpc.CallOption) (*Response, error)
 	UserUpdate(ctx context.Context, in *UserUpdateRequest, opts ...grpc.CallOption) (*Response, error)
 	UserSend(ctx context.Context, in *UserSendRequest, opts ...grpc.CallOption) (*Response, error)
@@ -83,9 +84,18 @@ func (c *syncTreeClient) InfoHasTrades(ctx context.Context, in *InfoHasTradesReq
 	return out, nil
 }
 
-func (c *syncTreeClient) InfoMessages(ctx context.Context, in *InfoMessagesRequest, opts ...grpc.CallOption) (*Messages, error) {
-	out := new(Messages)
-	err := c.cc.Invoke(ctx, "/api.SyncTree/InfoMessages", in, out, opts...)
+func (c *syncTreeClient) InfoUserMessages(ctx context.Context, in *InfoMessagesRequest, opts ...grpc.CallOption) (*InfoMessagesResponse, error) {
+	out := new(InfoMessagesResponse)
+	err := c.cc.Invoke(ctx, "/api.SyncTree/InfoUserMessages", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *syncTreeClient) InfoUserName(ctx context.Context, in *InfoUserNameRequest, opts ...grpc.CallOption) (*InfoUserNameResponse, error) {
+	out := new(InfoUserNameResponse)
+	err := c.cc.Invoke(ctx, "/api.SyncTree/InfoUserName", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -226,7 +236,8 @@ type SyncTreeServer interface {
 	InfoMarket(context.Context, *InfoMarketRequest) (*InfoMarketResponse, error)
 	InfoSearch(context.Context, *InfoSearchRequest) (*InfoSearchResponse, error)
 	InfoHasTrades(context.Context, *InfoHasTradesRequest) (*Response, error)
-	InfoMessages(context.Context, *InfoMessagesRequest) (*Messages, error)
+	InfoUserMessages(context.Context, *InfoMessagesRequest) (*InfoMessagesResponse, error)
+	InfoUserName(context.Context, *InfoUserNameRequest) (*InfoUserNameResponse, error)
 	UserCreate(context.Context, *UserCreateRequest) (*Response, error)
 	UserUpdate(context.Context, *UserUpdateRequest) (*Response, error)
 	UserSend(context.Context, *UserSendRequest) (*Response, error)
@@ -260,8 +271,11 @@ func (UnimplementedSyncTreeServer) InfoSearch(context.Context, *InfoSearchReques
 func (UnimplementedSyncTreeServer) InfoHasTrades(context.Context, *InfoHasTradesRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InfoHasTrades not implemented")
 }
-func (UnimplementedSyncTreeServer) InfoMessages(context.Context, *InfoMessagesRequest) (*Messages, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method InfoMessages not implemented")
+func (UnimplementedSyncTreeServer) InfoUserMessages(context.Context, *InfoMessagesRequest) (*InfoMessagesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method InfoUserMessages not implemented")
+}
+func (UnimplementedSyncTreeServer) InfoUserName(context.Context, *InfoUserNameRequest) (*InfoUserNameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method InfoUserName not implemented")
 }
 func (UnimplementedSyncTreeServer) UserCreate(context.Context, *UserCreateRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserCreate not implemented")
@@ -390,20 +404,38 @@ func _SyncTree_InfoHasTrades_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SyncTree_InfoMessages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _SyncTree_InfoUserMessages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(InfoMessagesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SyncTreeServer).InfoMessages(ctx, in)
+		return srv.(SyncTreeServer).InfoUserMessages(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.SyncTree/InfoMessages",
+		FullMethod: "/api.SyncTree/InfoUserMessages",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SyncTreeServer).InfoMessages(ctx, req.(*InfoMessagesRequest))
+		return srv.(SyncTreeServer).InfoUserMessages(ctx, req.(*InfoMessagesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SyncTree_InfoUserName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InfoUserNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SyncTreeServer).InfoUserName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.SyncTree/InfoUserName",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SyncTreeServer).InfoUserName(ctx, req.(*InfoUserNameRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -684,8 +716,12 @@ var SyncTree_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SyncTree_InfoHasTrades_Handler,
 		},
 		{
-			MethodName: "InfoMessages",
-			Handler:    _SyncTree_InfoMessages_Handler,
+			MethodName: "InfoUserMessages",
+			Handler:    _SyncTree_InfoUserMessages_Handler,
+		},
+		{
+			MethodName: "InfoUserName",
+			Handler:    _SyncTree_InfoUserName_Handler,
 		},
 		{
 			MethodName: "UserCreate",
