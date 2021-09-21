@@ -22,29 +22,14 @@ message Response{}
 
 
 service Info{
-    rpc UserName (InfReq.Adress)
-    returns (InfRes.UserName);
-
-    rpc UserBalance (InfReq.Adress)
-    returns (InfRes.UserInfo);
-
-    rpc UserMarketBalance (InfReq.UserMarketAdresses)
-    returns (InfRes.Balance);
-
-    rpc UserHasTrades (InfReq.UserMarketAdresses)
-    returns (InfRes.HasTrades);
-
-    rpc Market(InfReq.Adress) 
-    returns (InfRes.MarketInfo);
-
-    rpc Search(InfReq.SearchText) 
-    returns (InfRes.MarketAdresses);
-
-    rpc Messages(InfReq.UserMarketAdresses) 
-    returns (InfRes.Messages);
+    rpc User(InfIn.Adress) returns (InfOut.User);
+    rpc UserHasTrades(InfIn.UserMarketAdresses) returns (InfOut.HasTrades);
+    rpc Market(InfIn.Adress) returns (InfOut.MarketInfo);
+    rpc Search(InfIn.SearchText) returns (InfOut.Adresses);
+    rpc Messages(InfIn.UserMarketAdresses) returns (InfOut.Messages);
 }
 
-message InfReq{
+message InfIn{
     message Adress{
         bytes adress = 1;
     }
@@ -57,19 +42,13 @@ message InfReq{
     }
 }
 
-message InfRes {
-    message UserInfo{
+message InfOut {
+    message User{
         string public_name = 1;
         uint64 balance = 2;
         bytes message_key = 3;
         repeated bytes market_adresses = 4;
         repeated uint64 market_balances = 5;
-    }
-    message UserName {
-        string name = 1;
-    }
-    message Balance {
-        uint64 balance = 1;
     }
     message MarketInfo{
         string name = 1;
@@ -77,8 +56,8 @@ message InfRes {
         string imageLink = 3;
         string description = 4;
         uint64 operationCount = 5;
-        repeated uint64 buys = 6; //each pair - single deal
-        repeated uint64 sells = 7; //each pair - single deal
+        repeated Trade buys = 6;
+        repeated Trade sells = 7;
         uint64 activeBuys = 8;
         uint64 activeSells = 9;
         uint64 inputFee = 10;
@@ -86,14 +65,18 @@ message InfRes {
         string workTime = 12;
         uint64 delimiter = 14;
     }
-    message MarketAdresses{
-        repeated bytes concatenatedMarketAdresses = 1;
+    message Adresses{
+        repeated bytes marketAdresses = 1;
     }
     message Messages{
         repeated string messages = 1;
     }
     message HasTrades{
         bool hasTrades = 1;
+    }
+    message Trade{
+        uint64 offer = 1;
+        uint64 recieve = 2;
     }
 }
 
