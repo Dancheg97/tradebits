@@ -16,7 +16,7 @@ func stringToKeyBytes(key string) []byte {
 	return block.Bytes
 }
 
-func createNewUsers() {
+func CreateNewUsers() {
 	alcoSplitted := strings.Split(alcoKeyString, "|")
 	alcoAdress := calc.Hash(stringToKeyBytes(alcoSplitted[1]))
 	alcoMesKey := stringToKeyBytes(alcoSplitted[3])
@@ -36,7 +36,7 @@ func createNewUsers() {
 	nico.Save()
 }
 
-func createStartMarket() {
+func CreateNewMarkets() {
 	alcoSplitted := strings.Split(alcoKeyString, "|")
 	alcoAdress := calc.Hash(stringToKeyBytes(alcoSplitted[1]))
 	market.Create(
