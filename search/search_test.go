@@ -13,14 +13,14 @@ import (
 func TestSearchAdd(t *testing.T) {
 	name := "name22"
 	adr := []byte{1, 2, 3}
-	SearchAdd(name, adr)
+	Add(name, adr)
 	searcher.Delete(string(adr))
 }
 
 func TestSearchSearch(t *testing.T) {
 	name := "name122"
 	adr := []byte{1, 2, 3}
-	SearchAdd(name, adr)
+	Add(name, adr)
 	rez := Search(name)
 	if !reflect.DeepEqual(rez[0], adr) {
 		t.Error("adresses should not match")
@@ -32,21 +32,52 @@ func TestSearchChange(t *testing.T) {
 	adr := []byte{1, 1, 1}
 	name1 := "Xname22"
 	name2 := "Fname22"
-	SearchAdd(name1, adr)
-	SearchChange(name2, adr)
-	rez := Search(name2)
-	if !reflect.DeepEqual(rez[0], adr) {
+	Add(name1, adr)
+	Change(name2, adr)
+	rez1 := Search(name2)
+	if !reflect.DeepEqual(rez1[0], adr) {
 		t.Error("found name should be equal to second")
 	}
 	searcher.Delete(string(adr))
 }
 
+// func TestSearchChange1name2adresses(t *testing.T) {
+// 	firstAdress := []byte{1, 2, 3}
+// 	secondAdress := []byte{1, 2, 3}
+// 	Add("name", firstAdress)
+// 	Add("name", secondAdress)
+// 	Change("anotherName", secondAdress)
+// 	firstSearch := Search("name")
+// 	secondSearch := Search("antoherName")
+// 	if !reflect.DeepEqual(firstSearch[0], firstAdress) {
+// 		t.Error("first adress not matching")
+// 	}
+// 	if !reflect.DeepEqual(secondSearch[0], secondAdress) {
+// 		t.Error("second adress not matching")
+// 	}
+// }
+
+// func TestSearchAddDifferentAdressesToSameName(t *testing.T) {
+// 	firstAdress := []byte{1, 2, 3}
+// 	secondAdress := []byte{1, 2, 3, 4}
+// 	Add("name", firstAdress)
+// 	Add("name", secondAdress)
+// 	firstSearch := Search("name")
+// 	secondSearch := Search("name")
+// 	if !reflect.DeepEqual(firstSearch[0], firstAdress) {
+// 		t.Error("first adress not matching")
+// 	}
+// 	if !reflect.DeepEqual(secondSearch[0], secondAdress) {
+// 		t.Error("second adress not matching")
+// 	}
+// }
+
 func TestSearchAddMultipleAdressesOnSameName(t *testing.T) {
 	adr1 := []byte{0, 1, 2, 3}
 	adr2 := []byte{0, 1, 2, 4}
 	sameName := "snm"
-	SearchAdd(sameName, adr1)
-	SearchAdd(sameName, adr2)
+	Add(sameName, adr1)
+	Add(sameName, adr2)
 	rez := Search(sameName)
 	if len(rez) != 2 {
 		t.Error()
@@ -59,7 +90,7 @@ func TestSearchOver30requests(t *testing.T) {
 	adresses := [][]byte{}
 	for i := 0; i < 35; i++ {
 		adr := calc.Rand()
-		SearchAdd("stuff ", adr)
+		Add("stuff ", adr)
 		adresses = append(adresses, adr)
 	}
 	rez := Search("stuff")

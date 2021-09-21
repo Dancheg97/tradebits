@@ -99,7 +99,7 @@ func Create(
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newMarket)
 	data.Put(adress, cache.Bytes())
-	search.SearchAdd(name, adress)
+	search.Add(name, adress)
 	return nil
 }
 
