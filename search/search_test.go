@@ -41,21 +41,21 @@ func TestSearchChange(t *testing.T) {
 	searcher.Delete(string(adr))
 }
 
-// func TestSearchChange1name2adresses(t *testing.T) {
-// 	firstAdress := []byte{1, 2, 3}
-// 	secondAdress := []byte{1, 2, 3}
-// 	Add("name", firstAdress)
-// 	Add("name", secondAdress)
-// 	Change("anotherName", secondAdress)
-// 	firstSearch := Search("name")
-// 	secondSearch := Search("antoherName")
-// 	if !reflect.DeepEqual(firstSearch[0], firstAdress) {
-// 		t.Error("first adress not matching")
-// 	}
-// 	if !reflect.DeepEqual(secondSearch[0], secondAdress) {
-// 		t.Error("second adress not matching")
-// 	}
-// }
+func TestSearchWithAttemptOfNameSubstitution(t *testing.T) {
+	firstAdress := []byte{1, 2, 3}
+	secondAdress := []byte{1, 2, 3}
+	Add("name", firstAdress)
+	Add("name", secondAdress)
+	Change("anotherName", secondAdress)
+	firstSearch := Search("name")
+	secondSearch := Search("antoherName")
+	if !reflect.DeepEqual(firstSearch[0], firstAdress) {
+		t.Error("first adress not matching")
+	}
+	if !reflect.DeepEqual(secondSearch[0], secondAdress) {
+		t.Error("second adress not matching")
+	}
+}
 
 func TestSearchAddDifferentAdressesToSameName(t *testing.T) {
 	firstAdress := []byte{1, 2, 3}
@@ -63,16 +63,14 @@ func TestSearchAddDifferentAdressesToSameName(t *testing.T) {
 	Add("name", firstAdress)
 	Add("name", secondAdress)
 	search := Search("name")
-	firstCondition := reflect.DeepEqual(search[0], firstAdress)
-	secondCondition := reflect.DeepEqual(search[1], secondAdress)
-	thirdCondtition := reflect.DeepEqual(search[0], secondAdress)
-	fourthCondition := reflect.DeepEqual(search[1], firstAdress)
-	if firstCondition && secondCondition {
-		t.Error("first case conditions not satisfied")
+	firstCondition := (reflect.DeepEqual(search[0], firstAdress) &&
+		reflect.DeepEqual(search[1], secondAdress))
+	secondCondition := (reflect.DeepEqual(search[0], secondAdress) &&
+		reflect.DeepEqual(search[1], firstAdress))
+	if firstCondition || secondCondition {
+		return
 	}
-	if thirdCondtition && fourthCondition {
-		t.Error("second case condtitions not satifsfied")
-	}
+	t.Error("conditions not satisfied", firstCondition, secondCondition)
 }
 
 func TestSearchAddMultipleAdressesOnSameName(t *testing.T) {
@@ -106,7 +104,7 @@ func TestSearchOver30requests(t *testing.T) {
 }
 
 func TestRecreateSearcher(t *testing.T) {
-	time.Sleep(time.Second * 3)
+	time.Sleep(time.Second * 4)
 	searcher.Close()
 	_, filename, _, _ := runtime.Caller(0)
 	searchPath := path.Dir(filename) + "/bleve"
