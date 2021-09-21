@@ -5,14 +5,24 @@ option go_package = "./api";
 package api;
 
 /*
-Go gen:
+CODE GENERATION BASH COMMANDS:
+Go:
+
 protoc api/api.proto --go-grpc_out=. --go_out=.
-Dart gen:
+
+Dart:
+
 protoc lib/_net/api.proto --dart_out=grpc:.
 */
 
+
+
+
 //Response (universal response, when no return value required)
 message Response{}
+
+
+
 
 service Info{
     rpc InfoUser(InfoUserRequest) returns (InfoUserResponse) {}
@@ -85,6 +95,10 @@ message InfoUserNameRequest{
 message InfoUserNameResponse {
     string name = 1;
 }
+
+
+
+
 service User{
     rpc UserCreate(UserCreateRequest) returns (Response) {}
     rpc UserUpdate(UserUpdateRequest) returns (Response) {}
@@ -96,28 +110,6 @@ service User{
     rpc UserSell(UserSellRequest) returns (Response) {}
     rpc UserCancelTrade(UserCancelTradeRequest) returns (Response) {}
 }
-
-service Market{
-    rpc MarketCraete(MarketCreateRequest) returns (Response) {}
-    rpc MarketUpdate(MarketUpdateRequest) returns (Response) {}
-    rpc MarketDeposit(MarketDepositRequest) returns (Response) {}
-    rpc MarketWithdrawal(MarketWithdrawalRequest) returns (Response) {}
-    rpc MarketSendMessage(MarketSendMessageRequest) returns (Response) {}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 message UserCreateRequest{
     bytes PublicKey = 1;
@@ -140,25 +132,6 @@ message UserSendRequest{
     bytes Sign = 4;
 }
 
-message UserInfoRequest{
-    bytes Adress = 1;
-}
-
-message UserTradeRequest{
-    bytes PublicKey = 1;
-    bytes MarketAdress = 2;
-    uint64 Offer = 3;
-    uint64 Recieve = 4;
-    bool IsSell = 5;
-    bytes Sign = 6;
-}
-
-message UserCancelTradeRequest{
-    bytes PublicKey = 1;
-    bytes MarketAdress = 2;
-    bytes Sign = 3;
-}
-
 message UserDepositRequest{
     bytes PublicKey = 1;
     bytes MarketAdress = 2;
@@ -171,10 +144,6 @@ message UserWithdrawalRequest{
     bytes MarketAdress = 2;
     uint64 Amount = 3;
     bytes Sign = 4;
-}
-
-message UserSearchRequest{
-    string Name = 1;
 }
 
 message UserSendMessageRequest{
@@ -199,6 +168,71 @@ message UserSellRequest{
     uint64 Offer = 4;
     bytes Sign = 5;
 }
+
+message UserCancelTradeRequest{
+    bytes PublicKey = 1;
+    bytes MarketAdress = 2;
+    bytes Sign = 3;
+}
+
+
+
+
+service Market{
+    rpc MarketCraete(MarketCreateRequest) returns (Response) {}
+    rpc MarketUpdate(MarketUpdateRequest) returns (Response) {}
+    rpc MarketDeposit(MarketDepositRequest) returns (Response) {}
+    rpc MarketWithdrawal(MarketWithdrawalRequest) returns (Response) {}
+    rpc MarketSendMessage(MarketSendMessageRequest) returns (Response) {}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+message UserInfoRequest{
+    bytes Adress = 1;
+}
+
+message UserTradeRequest{
+    bytes PublicKey = 1;
+    bytes MarketAdress = 2;
+    uint64 Offer = 3;
+    uint64 Recieve = 4;
+    bool IsSell = 5;
+    bytes Sign = 6;
+}
+
+
+
+
+
+
+message UserSearchRequest{
+    string Name = 1;
+}
+
+
+
+
+
+
 
 message MarketCreateRequest{
     bytes PublicKey = 1;
