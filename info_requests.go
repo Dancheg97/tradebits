@@ -17,16 +17,16 @@ func (s *server) HasTrades(
 ) (*pb.InfOut_HasTrades, error) {
 	user := user.Look(in.UserAdress)
 	if user == nil {
-		fmt.Sprintln("[InfoHasTrades] - user not found")
+		fmt.Println("[InfoHasTrades] - user not found")
 		return nil, errors.New("user not found")
 	}
 	market := market.Look(in.MarketAdress)
 	if market == nil {
-		fmt.Sprintln("[InfoHasTrades] - market not found")
+		fmt.Println("[InfoHasTrades] - market not found")
 		return nil, errors.New("market not found")
 	}
 	hasTrades := market.HasTrades(in.UserAdress)
-	fmt.Sprintln("[InfoHasTrades] - has trades - ", hasTrades)
+	fmt.Println("[InfoHasTrades] - has trades - ", hasTrades)
 	return &pb.InfOut_HasTrades{HasTrades: true}, nil
 
 }
@@ -37,7 +37,7 @@ func (s *server) Market(
 ) (*pb.InfOut_MarketInfo, error) {
 	mkt := market.Look(in.Adress)
 	if mkt == nil {
-		fmt.Sprintln("[InfoMarket] - market not found")
+		fmt.Println("[InfoMarket] - market not found")
 		return nil, errors.New("market not found")
 
 	}
@@ -61,7 +61,7 @@ func (s *server) Market(
 			break
 		}
 	}
-	fmt.Sprintln("[InfoMarket] - info abound market: ", mkt.Name)
+	fmt.Println("[InfoMarket] - info abound market: ", mkt.Name)
 	return &pb.InfOut_MarketInfo{
 		MessageKey:     mkt.MesKey,
 		Name:           mkt.Name,
@@ -84,7 +84,7 @@ func (s *server) Search(
 	in *pb.InfIn_SearchText,
 ) (*pb.InfOut_Adresses, error) {
 	results := search.Search(in.Text)
-	fmt.Sprintln("[InfoSearch] - search results len: ", len(results))
+	fmt.Println("[InfoSearch] - search results len: ", len(results))
 	return &pb.InfOut_Adresses{MarketAdresses: results}, nil
 }
 
@@ -94,7 +94,7 @@ func (s *server) User(
 ) (*pb.InfOut_User, error) {
 	user := user.Look(in.Adress)
 	if user == nil {
-		fmt.Sprintln("[InfoUser] - error user not found")
+		fmt.Println("[InfoUser] - error user not found")
 		return nil, errors.New("user not found")
 	}
 	adressesSlice := [][]byte{}
@@ -103,7 +103,7 @@ func (s *server) User(
 		adressesSlice = append(adressesSlice, []byte(strAdr))
 		balancesSlice = append(balancesSlice, bal)
 	}
-	fmt.Sprintln("[InfoUser] - info about user: ", user.PublicName)
+	fmt.Println("[InfoUser] - info about user: ", user.PublicName)
 	return &pb.InfOut_User{
 		PublicName:     user.PublicName,
 		Balance:        user.Balance,
@@ -119,7 +119,7 @@ func (s *server) Messages(
 ) (*pb.InfOut_Messages, error) {
 	usr := user.Look(in.UserAdress)
 	messages := usr.GetMessages(in.MarketAdress)
-	fmt.Sprintln("[InfoMessages] - giving cipher messages of some user")
+	fmt.Println("[InfoMessages] - giving cipher messages of some user")
 	return &pb.InfOut_Messages{
 		Messages: messages,
 	}, nil

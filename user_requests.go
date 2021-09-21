@@ -27,7 +27,7 @@ func (s *server) Create(
 		in.Sign,
 	)
 	if signError != nil {
-		fmt.Sprintln("[UserCreate] - Sign error")
+		fmt.Println("[UserCreate] - Sign error")
 		return nil, errors.New("user create error")
 
 	}
@@ -37,11 +37,11 @@ func (s *server) Create(
 		in.PublicName,
 	)
 	if create_err != nil {
-		fmt.Sprintln("[UserCreate] - Create error")
+		fmt.Println("[UserCreate] - Create error")
 		return nil, create_err
 
 	}
-	fmt.Sprintln("[UserCreate] - User created")
+	fmt.Println("[UserCreate] - User created")
 	return &pb.Response{}, nil
 }
 
@@ -60,18 +60,18 @@ func (s *server) Update(
 		in.Sign,
 	)
 	if signError != nil {
-		fmt.Sprintln("[UserUpdate] - Sign error")
+		fmt.Println("[UserUpdate] - Sign error")
 		return nil, errors.New("sign check error")
 	}
 	user := user.Get(senderAdress)
 	if user == nil {
-		fmt.Sprintln("[UserUpdate] - User not found")
+		fmt.Println("[UserUpdate] - User not found")
 		return nil, errors.New("user not found error")
 	}
 	user.PublicName = in.PublicName
 	user.MesKey = in.MesssageKey
 	user.Save()
-	fmt.Sprintln("[UserUpdate] - User info updated: ", user.PublicName)
+	fmt.Println("[UserUpdate] - User info updated: ", user.PublicName)
 	return &pb.Response{}, nil
 }
 
@@ -81,24 +81,24 @@ func (s *server) Send(
 ) (*pb.Response, error) {
 	senderAdress := calc.Hash(in.PublicKey)
 	if reflect.DeepEqual(senderAdress, in.RecieverAdress) {
-		fmt.Sprintln("[UserSend] - Reciever is sender")
+		fmt.Println("[UserSend] - Reciever is sender")
 		return nil, errors.New("reciever is sender")
 	}
 	sender := user.Get(senderAdress)
 	if sender == nil {
-		fmt.Sprintln("[UserSend] - Sender dont exist")
-		return nil, errors.New("Sender dont exist")
+		fmt.Println("[UserSend] - Sender dont exist")
+		return nil, errors.New("sender dont exist")
 	}
 	defer sender.Save()
 	reciever := user.Get(in.RecieverAdress)
 	if reciever == nil {
-		fmt.Sprintln("[UserSend] - Reciever dont exits")
-		return nil, errors.New("Reciever dont exist")
+		fmt.Println("[UserSend] - Reciever dont exits")
+		return nil, errors.New("reciever dont exist")
 	}
 	defer reciever.Save()
 	if sender.Balance >= in.SendAmount {
-		fmt.Sprintln("[UserSend] - Not enough balance")
-		return nil, errors.New("Not enough balance")
+		fmt.Println("[UserSend] - Not enough balance")
+		return nil, errors.New("not enough balance")
 	}
 	amountBytes := calc.NumberToBytes(in.SendAmount)
 	signError := calc.Verify(
@@ -111,12 +111,12 @@ func (s *server) Send(
 		in.Sign,
 	)
 	if signError != nil {
-		fmt.Sprintln("[UserSendMessage] - Sign error")
+		fmt.Println("[UserSendMessage] - Sign error")
 		return nil, errors.New("sign error")
 	}
 	sender.Balance = sender.Balance - in.SendAmount
 	reciever.Balance = reciever.Balance + in.SendAmount
-	fmt.Sprintln("[UserSendMessage] - Message sent: ", sender.PublicName)
+	fmt.Println("[UserSendMessage] - Message sent: ", sender.PublicName)
 	return &pb.Response{}, nil
 }
 
@@ -127,13 +127,13 @@ func (s *server) UserSell(
 	sellerAdress := calc.Hash(in.PublicKey)
 	seller := user.Get(sellerAdress)
 	if seller == nil {
-		fmt.Sprintln("[UserSell] - Seller dont exists")
+		fmt.Println("[UserSell] - Seller dont exists")
 		return nil, errors.New("seller dont exist")
 	}
 	defer seller.Save()
 	curMarket := market.Get(in.Adress)
 	if curMarket == nil {
-		fmt.Sprintln("[UserSell] - Market dont exists")
+		fmt.Println("[UserSell] - Market dont exists")
 		return nil, errors.New("market dont exist")
 	}
 	defer curMarket.Save()
@@ -149,24 +149,24 @@ func (s *server) UserSell(
 	}
 	signErr := calc.Verify(concMessage, in.PublicKey, in.Sign)
 	if signErr != nil {
-		fmt.Sprintln("[UserSell] - Sign check fail")
+		fmt.Println("[UserSell] - Sign check fail")
 		return nil, errors.New("sign check fail")
 	}
 	if curMarket.HasTrades(sellerAdress) {
-		fmt.Sprintln("[UserSell] - Has active trades")
+		fmt.Println("[UserSell] - Has active trades")
 		return nil, errors.New("has active trades")
 	}
 	attachedToUser := seller.AttachSell(&trade, in.Adress)
 	if !attachedToUser {
-		fmt.Sprintln("[UserSell] - Trade user attach fail")
+		fmt.Println("[UserSell] - Trade user attach fail")
 		return nil, errors.New("trade user attach fail")
 	}
 	attachedToMarket := curMarket.AttachSell(&trade)
 	if !attachedToMarket {
-		fmt.Sprintln("[UserSell] - Trade market attach fail")
+		fmt.Println("[UserSell] - Trade market attach fail")
 		return nil, errors.New("trade market attach fail")
 	}
-	fmt.Sprintln("[UserSell] - Sell order complete: ", seller.PublicName)
+	fmt.Println("[UserSell] - Sell order complete: ", seller.PublicName)
 	return &pb.Response{}, nil
 }
 
@@ -177,13 +177,13 @@ func (s *server) Buy(
 	buyerAdress := calc.Hash(in.PublicKey)
 	buyer := user.Get(buyerAdress)
 	if buyer == nil {
-		fmt.Sprintln("[UserBuy] - Buyer dont exists")
-		return nil, errors.New("Buyer dont exist")
+		fmt.Println("[UserBuy] - Buyer dont exists")
+		return nil, errors.New("buyer dont exist")
 	}
 	defer buyer.Save()
 	curMarket := market.Get(in.Adress)
 	if curMarket == nil {
-		fmt.Sprintln("[UserBuy] - Market dont exists")
+		fmt.Println("[UserBuy] - Market dont exists")
 		return nil, errors.New("market dont exist")
 	}
 	defer curMarket.Save()
@@ -199,24 +199,24 @@ func (s *server) Buy(
 	}
 	signErr := calc.Verify(concMessage, in.PublicKey, in.Sign)
 	if signErr != nil {
-		fmt.Sprintln("[UserBUy] - Sign check fail")
+		fmt.Println("[UserBUy] - Sign check fail")
 		return nil, errors.New("sign check fail")
 	}
 	if curMarket.HasTrades(buyerAdress) {
-		fmt.Sprintln("[UserBUy] - Has active trades")
+		fmt.Println("[UserBUy] - Has active trades")
 		return nil, errors.New("has active trades")
 	}
 	attachedToUser := buyer.AttachBuy(&trade)
 	if !attachedToUser {
-		fmt.Sprintln("[UserBUy] - Trade user attach fail")
+		fmt.Println("[UserBUy] - Trade user attach fail")
 		return nil, errors.New("trade user attach fail")
 	}
 	attachedToMarket := curMarket.AttachBuy(&trade)
 	if !attachedToMarket {
-		fmt.Sprintln("[UserBUy] - Trade market attach fail")
+		fmt.Println("[UserBUy] - Trade market attach fail")
 		return nil, errors.New("trade market attach fail")
 	}
-	fmt.Sprintln("[UserBUy] - Sell order complete: ", buyer.PublicName)
+	fmt.Println("[UserBUy] - Sell order complete: ", buyer.PublicName)
 	return &pb.Response{}, nil
 }
 
@@ -226,7 +226,7 @@ func (s *server) CancelTrades(
 ) (*pb.Response, error) {
 	mkt := market.Get(in.MarketAdress)
 	if mkt == nil {
-		fmt.Sprintln("[CancelTrade] - No such market")
+		fmt.Println("[CancelTrade] - No such market")
 		return nil, errors.New("no such market")
 	}
 	defer mkt.Save()
@@ -237,11 +237,11 @@ func (s *server) CancelTrades(
 	}
 	verifyErr := calc.Verify(concMes, in.PublicKey, in.Sign)
 	if verifyErr != nil {
-		fmt.Sprintln("[CancelTrade] - Sign error")
+		fmt.Println("[CancelTrade] - Sign error")
 		return nil, errors.New("sign error")
 	}
 	mkt.CancelTrades(userAdress)
-	fmt.Sprintln("[UserCancelTrade] - Trade canceled successfully")
+	fmt.Println("[UserCancelTrade] - Trade canceled successfully")
 	return &pb.Response{}, nil
 }
 
@@ -256,17 +256,17 @@ func (s *server) SendMessage(
 	}
 	signCheckErr := calc.Verify(concMes, in.PublicKey, in.Sign)
 	if signCheckErr != nil {
-		fmt.Sprintln("[UserSendMessage] - Sign error")
+		fmt.Println("[UserSendMessage] - Sign error")
 		return nil, errors.New("sign error")
 	}
 	senderAdress := calc.Hash(in.PublicKey)
 	u := user.Get(senderAdress)
 	if u == nil {
-		fmt.Sprintln("[UserSendMessage] - User not found error")
+		fmt.Println("[UserSendMessage] - User not found error")
 		return nil, errors.New("user not found")
 	}
 	u.PutUserMessage(in.Adress, in.Message)
 	u.Save()
-	fmt.Sprintln("[UserSendMessage] - Message sent: ", u.PublicName)
+	fmt.Println("[UserSendMessage] - Message sent: ", u.PublicName)
 	return &pb.Response{}, nil
 }

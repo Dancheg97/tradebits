@@ -67,10 +67,22 @@ func CreateNewMarkets() {
 
 	market.Create(
 		calc.Rand(),
-		"Cardano",
+		"Cardano ftem",
 		dummyMessageKey,
 		dummyDescription,
 		"https://cdn-icons-png.flaticon.com/512/5245/5245441.png",
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+
+	market.Create(
+		calc.Rand(),
+		"Zcash ftem",
+		dummyMessageKey,
+		dummyDescription,
+		"https://cdn-icons-png.flaticon.com/512/1412/1412814.png",
 		dummyInputFee,
 		dummyOutputFee,
 		dummyWorkTime,

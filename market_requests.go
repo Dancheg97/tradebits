@@ -24,7 +24,7 @@ func (s *server) Spawn(
 	}
 	checkErr := calc.Verify(concatedMessage, in.PublicKey, in.Sign)
 	if checkErr != nil {
-		fmt.Sprintln("[MarketCreate] - Error sign fail")
+		fmt.Println("[MarketCreate] - Error sign fail")
 		return nil, errors.New("sign fail")
 	}
 	adress := calc.Hash(in.PublicKey)
@@ -40,10 +40,10 @@ func (s *server) Spawn(
 		in.Delimiter,
 	)
 	if craeteErr != nil {
-		fmt.Sprintln("[MarketCreate] - Error create error: ", craeteErr)
+		fmt.Println("[MarketCreate] - Error create error: ", craeteErr)
 		return nil, craeteErr
 	}
-	fmt.Sprintln("[MarketCreate] - Market created, name: ", in.Name)
+	fmt.Println("[MarketCreate] - Market created, name: ", in.Name)
 	return &pb.Response{}, nil
 }
 
@@ -60,13 +60,13 @@ func (s *server) Refresh(
 	}
 	checkErr := calc.Verify(concatedMessage, in.PublicKey, in.Sign)
 	if checkErr != nil {
-		fmt.Sprintln("[MarketUpdate] - Sign error")
+		fmt.Println("[MarketUpdate] - Sign error")
 		return nil, errors.New("sign error")
 	}
 	adress := calc.Hash(in.PublicKey)
 	mkt := market.Get(adress)
 	if mkt == nil {
-		fmt.Sprintln("[MarketUpdate] - Market not found error")
+		fmt.Println("[MarketUpdate] - Market not found error")
 		return nil, errors.New("sign error")
 	}
 	mkt.Name = in.Name
@@ -77,7 +77,7 @@ func (s *server) Refresh(
 	mkt.OutputFee = in.OutputFee
 	mkt.WorkTime = in.WorkTime
 	mkt.Save()
-	fmt.Sprintln("[MarketUpdate] - Market info updated")
+	fmt.Println("[MarketUpdate] - Market info updated")
 	return &pb.Response{}, nil
 }
 
@@ -94,18 +94,18 @@ func (s *server) Deposit(
 	}
 	checkErr := calc.Verify(concatedMessage, in.PublicKey, in.Sign)
 	if checkErr == nil {
-		fmt.Sprintln("[MarketDeposit] - Sign error")
+		fmt.Println("[MarketDeposit] - Sign error")
 		return nil, errors.New("sign error")
 	}
 	adress := calc.Hash(in.PublicKey)
 	u := user.Get(in.UserAdress)
 	if u == nil {
-		fmt.Sprintln("[MarketDeposit] - User not found error")
+		fmt.Println("[MarketDeposit] - User not found error")
 		return nil, errors.New("user not found error")
 	}
 	strAdr := string(adress)
 	u.Balances[strAdr] = u.Balances[strAdr] + in.Amount
-	fmt.Sprintln("[MarketDeposit] - Deposit verified: ", u.PublicName)
+	fmt.Println("[MarketDeposit] - Deposit verified: ", u.PublicName)
 	return &pb.Response{}, nil
 }
 
@@ -120,18 +120,18 @@ func (s *server) Reply(
 	}
 	signCheckErr := calc.Verify(concMes, in.PublicKey, in.Sign)
 	if signCheckErr == nil {
-		fmt.Sprintln("[MarketSendMessage] - Sign error")
+		fmt.Println("[MarketSendMessage] - Sign error")
 		return nil, errors.New("sign error")
 	}
 	senderAdress := calc.Hash(in.PublicKey)
 	u := user.Get(senderAdress)
 	if u == nil {
-		fmt.Sprintln("[MarketSendMessage] - User not found error")
+		fmt.Println("[MarketSendMessage] - User not found error")
 		return nil, errors.New("sign error")
 	}
 	u.PutMarketMessage(in.Adress, in.Message)
 	u.Save()
-	fmt.Sprintln("[MarketSendMessage] - Message sent", u.PublicName)
+	fmt.Println("[MarketSendMessage] - Message sent", u.PublicName)
 	return &pb.Response{}, nil
 }
 
@@ -148,22 +148,22 @@ func (s *server) Withdrawal(
 	}
 	checkErr := calc.Verify(concatedMessage, in.PublicKey, in.Sign)
 	if checkErr != nil {
-		fmt.Sprintln("[MarketWithdrawal] - Sign error")
+		fmt.Println("[MarketWithdrawal] - Sign error")
 		return nil, errors.New("sign error")
 	}
 	adress := calc.Hash(in.PublicKey)
 	usr := user.Get(in.UserAdress)
 	if usr == nil {
-		fmt.Sprintln("[MarketWithdrawal] - User not found error")
+		fmt.Println("[MarketWithdrawal] - User not found error")
 		return nil, errors.New("user not found")
 	}
 	defer usr.Save()
 	strAdr := string(adress)
 	if in.Amount > usr.Balances[strAdr] {
-		fmt.Sprintln("[MarketWithdrawal] - Withdrawal balance error")
+		fmt.Println("[MarketWithdrawal] - Withdrawal balance error")
 		return nil, errors.New("bakance error")
 	}
 	usr.Balances[strAdr] = usr.Balances[strAdr] - in.Amount
-	fmt.Sprintln("[MarketWithdrawal] - Withdrawal accepted")
+	fmt.Println("[MarketWithdrawal] - Withdrawal accepted")
 	return &pb.Response{}, nil
 }
