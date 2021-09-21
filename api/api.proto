@@ -11,55 +11,22 @@ Dart gen:
 protoc lib/_net/api.proto --dart_out=grpc:.
 */
 
-service SyncTree{
+//Response (universal response, when no return value required)
+message Response{}
+
+service Info{
     rpc InfoUser(InfoUserRequest) returns (InfoUserResponse) {}
     rpc InfoMarket(InfoMarketRequest) returns (InfoMarketResponse) {}
     rpc InfoSearch(InfoSearchRequest) returns (InfoSearchResponse) {}
     rpc InfoHasTrades(InfoHasTradesRequest) returns (Response) {}
-    rpc InfoUserMessages(InfoMessagesRequest) returns (InfoMessagesResponse) {}
+    rpc InfoMessages(InfoMessagesRequest) returns (InfoMessagesResponse) {}
     rpc InfoUserName(InfoUserNameRequest) returns (InfoUserNameResponse) {}
-
-    rpc UserCreate(UserCreateRequest) returns (Response) {}
-    rpc UserUpdate(UserUpdateRequest) returns (Response) {}
-    rpc UserSend(UserSendRequest) returns (Response) {}
-    rpc UserDeposit(UserDepositRequest) returns (Response) {}
-    rpc UserWithdrawal(UserWithdrawalRequest) returns (Response) {}
-    rpc UserSendMessage(UserSendMessageRequest) returns (Response) {}
-    rpc UserBuy(UserBuyRequest) returns (Response) {}
-    rpc UserSell(UserSellRequest) returns (Response) {}
-    rpc UserCancelTrade(UserCancelTradeRequest) returns (Response) {}
-
-    rpc MarketCraete(MarketCreateRequest) returns (Response) {}
-    rpc MarketUpdate(MarketUpdateRequest) returns (Response) {}
-    rpc MarketDeposit(MarketDepositRequest) returns (Response) {}
-    rpc MarketWithdrawal(MarketWithdrawalRequest) returns (Response) {}
-    rpc MarketSendMessage(MarketSendMessageRequest) returns (Response) {}
 }
 
-message Response{
-    bool Passed = 1;
-}
-
-message InfoMessagesResponse{
-    repeated string messages = 1;
-}
-
+// InfoUser
 message InfoUserRequest{
     bytes Adress = 1;
 }
-
-message InfoMarketRequest{
-    bytes Adress = 1;
-}
-
-message InfoSearchRequest{
-    string info = 1;
-}
-
-message InfoUserNameRequest{
-    bytes Adress = 1;
-}
-
 message InfoUserResponse{
     string PublicName = 1;
     uint64 Balance = 2;
@@ -68,10 +35,10 @@ message InfoUserResponse{
     repeated uint64 marketBalances = 5;
 }
 
-message InfoUserNameResponse {
-    string name = 1;
+// InfoMarket
+message InfoMarketRequest{
+    bytes Adress = 1;
 }
-
 message InfoMarketResponse{
     string Name = 1;
     bytes MesKey = 2;
@@ -88,19 +55,71 @@ message InfoMarketResponse{
     uint64 delimiter = 14;
 }
 
+// InfoSearch
+message InfoSearchRequest{
+    string info = 1;
+}
+message InfoSearchResponse{
+    repeated bytes ConcMarkets = 1;
+}
+
+// InfoHasTrades
 message InfoHasTradesRequest{
     bytes marketAdress = 1;
     bytes userAdress = 2;
 }
 
-message InfoSearchResponse{
-    repeated bytes ConcMarkets = 1;
-}
-
+// Info Messages
 message InfoMessagesRequest{
     bytes marketAdress = 1;
     bytes userAdress = 2;
 }
+message InfoMessagesResponse{
+    repeated string messages = 1;
+}
+
+// 
+
+service User{
+    rpc UserCreate(UserCreateRequest) returns (Response) {}
+    rpc UserUpdate(UserUpdateRequest) returns (Response) {}
+    rpc UserSend(UserSendRequest) returns (Response) {}
+    rpc UserDeposit(UserDepositRequest) returns (Response) {}
+    rpc UserWithdrawal(UserWithdrawalRequest) returns (Response) {}
+    rpc UserSendMessage(UserSendMessageRequest) returns (Response) {}
+    rpc UserBuy(UserBuyRequest) returns (Response) {}
+    rpc UserSell(UserSellRequest) returns (Response) {}
+    rpc UserCancelTrade(UserCancelTradeRequest) returns (Response) {}
+}
+
+service Market{
+    rpc MarketCraete(MarketCreateRequest) returns (Response) {}
+    rpc MarketUpdate(MarketUpdateRequest) returns (Response) {}
+    rpc MarketDeposit(MarketDepositRequest) returns (Response) {}
+    rpc MarketWithdrawal(MarketWithdrawalRequest) returns (Response) {}
+    rpc MarketSendMessage(MarketSendMessageRequest) returns (Response) {}
+}
+
+
+
+
+
+
+
+
+
+message InfoUserNameRequest{
+    bytes Adress = 1;
+}
+
+
+message InfoUserNameResponse {
+    string name = 1;
+}
+
+
+
+
 
 message UserCreateRequest{
     bytes PublicKey = 1;
