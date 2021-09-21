@@ -27,6 +27,12 @@ func Create(adress []byte, MesKey []byte, PublicName string) error {
 	if len(adress) != 64 {
 		return errors.New("bad adress length")
 	}
+	if len(PublicName) > 12 {
+		return errors.New("name too big")
+	}
+	if len(MesKey) != 256 {
+		return errors.New("invalid message key length")
+	}
 	if data.Check(adress) {
 		return errors.New("possibly user already exists")
 	}

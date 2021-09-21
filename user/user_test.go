@@ -52,7 +52,7 @@ func TestGetFreeUser(t *testing.T) {
 	)
 	freeUser := Get(adress)
 	freeUser.Save()
-	if freeUser.PublicName != "user image link" {
+	if freeUser.PublicName != "Name" {
 		t.Error("get free user error")
 	}
 	data.TestRM(adress)
