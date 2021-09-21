@@ -19,8 +19,6 @@ protoc lib/_net/api.proto --dart_out=grpc:.
 message Response{}
 
 
-
-
 service Info{
     rpc User(InfIn.Adress) returns (InfOut.User);
     rpc HasTrades(InfIn.UserMarketAdresses) returns (InfOut.HasTrades);
@@ -42,7 +40,7 @@ message InfIn{
     }
 }
 
-message InfOut {
+message InfOut{
     message User{
         string public_name = 1;
         uint64 balance = 2;
@@ -150,7 +148,6 @@ message UserRequests{
         bytes Sign = 3;
     }
 }
-
 
 
 

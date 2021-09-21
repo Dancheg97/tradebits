@@ -14,7 +14,7 @@ import (
 func (s *server) HasTrades(
 	ctx context.Context,
 	in *pb.InfIn_UserMarketAdresses,
-) (*pb.Response, error) {
+) (*pb.InfOut_HasTrades, error) {
 	user := user.Look(in.UserAdress)
 	if user == nil {
 		fmt.Sprintln("[InfoHasTrades] - user not found")
@@ -27,7 +27,7 @@ func (s *server) HasTrades(
 	}
 	hasTrades := market.HasTrades(in.UserAdress)
 	fmt.Sprintln("[InfoHasTrades] - has trades - ", hasTrades)
-	return &pb.Response{}, nil
+	return &pb.InfOut_HasTrades{HasTrades: true}, nil
 
 }
 

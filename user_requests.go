@@ -69,42 +69,37 @@ func (s *server) Update(
 		return nil, errors.New("user not found error")
 	}
 	user.PublicName = in.PublicName
+	user.MesKey = in.MesssageKey
 	user.Save()
 	fmt.Sprintln("[UserUpdate] - User info updated: ", user.PublicName)
 	return &pb.Response{}, nil
 }
 
-func (s *infoServer) UserSendMessage(
+func (s *server) Send(
 	ctx context.Context,
-	in *pb.UserSendMessageRequest,
-) (*pb.Response, error) {
-	concMes := [][]byte{
-		in.PublicKey,
-		in.Adress,
-		[]byte(in.Message),
-	}
-	signCheckErr := calc.Verify(concMes, in.PublicKey, in.Sign)
-	if signCheckErr == nil {
-		senderAdress := calc.Hash(in.PublicKey)
-		u := user.Get(senderAdress)
-		if u != nil {
-			u.PutUserMessage(in.Adress, in.Message)
-			u.Save()
-			fmt.Sprintln("[UserSendMessage] - Message sent: ", u.PublicName)
-			return &pb.Response{Passed: true}, nil
-		}
-		fmt.Sprintln("[UserSendMessage] - User not found error")
-		return &pb.Response{Passed: false}, errors.New("user not found")
-	}
-	fmt.Sprintln("[UserSendMessage] - Sign error")
-	return &pb.Response{Passed: false}, errors.New("sign error")
-}
-
-func (s *infoServer) UserSend(
-	ctx context.Context,
-	in *pb.UserSendRequest,
+	in *pb.UserRequests_Send,
 ) (*pb.Response, error) {
 	senderAdress := calc.Hash(in.PublicKey)
+	if reflect.DeepEqual(senderAdress, in.RecieverAdress) {
+		fmt.Sprintln("[UserSendMessage] - Reciever is sender")
+		return nil, errors.New("reciever is sender")
+	}
+	sender := user.Get(senderAdress)
+	if sender == nil {
+		fmt.Sprintln("[UserSendMessage] - Sender dont exist")
+		return nil, errors.New("Sender dont exist")
+	}
+	defer sender.Save()
+	reciever := user.Get(in.RecieverAdress)
+	if reciever == nil {
+		fmt.Sprintln("[UserSendMessage] - Reciever dont exits")
+		return nil, errors.New("Reciever dont exist")
+	}
+	defer reciever.Save()
+	if sender.Balance >= in.SendAmount {
+		fmt.Sprintln("[UserSendMessage] - Not enough balance")
+		return nil, errors.New("Not enough balance")
+	}
 	amountBytes := calc.NumberToBytes(in.SendAmount)
 	signError := calc.Verify(
 		[][]byte{
@@ -115,66 +110,64 @@ func (s *infoServer) UserSend(
 		in.PublicKey,
 		in.Sign,
 	)
-	if !reflect.DeepEqual(senderAdress, in.RecieverAdress) {
-		if signError == nil {
-			sender := user.Get(senderAdress)
-			if sender != nil {
-				defer sender.Save()
-				if sender.Balance >= in.SendAmount {
-					reciever := user.Get(in.RecieverAdress)
-					if reciever != nil {
-						defer reciever.Save()
-						sender.Balance = sender.Balance - in.SendAmount
-						reciever.Balance = reciever.Balance + in.SendAmount
-						fmt.Sprintln("[UserSendMessage] - Message sent: ", sender.PublicName)
-						return &pb.Response{Passed: true}, nil
-					}
-				}
-			}
-		}
+	if signError != nil {
+		fmt.Sprintln("[UserSendMessage] - Sign error")
+		return nil, errors.New("sign error")
 	}
-	fmt.Sprintln("[UserSendMessage] - User send error")
-	return &pb.Response{Passed: false}, errors.New("send error")
+	sender.Balance = sender.Balance - in.SendAmount
+	reciever.Balance = reciever.Balance + in.SendAmount
+	fmt.Sprintln("[UserSendMessage] - Message sent: ", sender.PublicName)
+	return &pb.Response{}, nil
 }
 
-func (s *infoServer) UserSell(
+func (s *server) UserSell(
 	ctx context.Context,
-	in *pb.UserSellRequest,
+	in *pb.UserRequests_Sell,
 ) (*pb.Response, error) {
 	sellerAdress := calc.Hash(in.PublicKey)
 	seller := user.Get(sellerAdress)
-	if seller != nil {
-		defer seller.Save()
-		curMarket := market.Get(in.Adress)
-		if curMarket != nil {
-			defer curMarket.Save()
-			concMessage := [][]byte{
-				in.PublicKey,
-				in.Adress,
-				calc.NumberToBytes(in.Recieve),
-				calc.NumberToBytes(in.Offer),
-			}
-			signErr := calc.Verify(concMessage, in.PublicKey, in.Sign)
-			if signErr == nil {
-				if !curMarket.HasTrades(sellerAdress) {
-					trade := trade.Sell{
-						Offer:   in.Offer,
-						Recieve: in.Recieve,
-					}
-					attachedUsr := seller.AttachSell(&trade, in.Adress)
-					if attachedUsr {
-						attachedMkt := curMarket.AttachSell(&trade)
-						if attachedMkt {
-							fmt.Sprintln("[UserSell] - Sell order complete: ", seller.PublicName)
-							return &pb.Response{Passed: true}, nil
-						}
-					}
-				}
-			}
-		}
+	if seller == nil {
+		fmt.Sprintln("[UserSell] - Seller dont exists")
+		return nil, errors.New("seller dont exist")
 	}
-	fmt.Sprintln("[UserSell] - User sell error")
-	return &pb.Response{Passed: false}, errors.New("sell error")
+	defer seller.Save()
+	curMarket := market.Get(in.Adress)
+	if curMarket == nil {
+		fmt.Sprintln("[UserSell] - Market dont exists")
+		return nil, errors.New("market dont exist")
+	}
+	defer curMarket.Save()
+	trade := trade.Sell{
+		Offer:   in.Offer,
+		Recieve: in.Recieve,
+	}
+	concMessage := [][]byte{
+		in.PublicKey,
+		in.Adress,
+		calc.NumberToBytes(in.Recieve),
+		calc.NumberToBytes(in.Offer),
+	}
+	signErr := calc.Verify(concMessage, in.PublicKey, in.Sign)
+	if signErr != nil {
+		fmt.Sprintln("[UserSell] - Sign check fail")
+		return nil, errors.New("sign check fail")
+	}
+	if curMarket.HasTrades(sellerAdress) {
+		fmt.Sprintln("[UserSell] - Has active trades")
+		return nil, errors.New("has active trades")
+	}
+	attachedToUser := seller.AttachSell(&trade, in.Adress)
+	if !attachedToUser {
+		fmt.Sprintln("[UserSell] - Trade user attach fail")
+		return nil, errors.New("trade user attach fail")
+	}
+	attachedToMarket := curMarket.AttachSell(&trade)
+	if !attachedToMarket {
+		fmt.Sprintln("[UserSell] - Trade market attach fail")
+		return nil, errors.New("trade market attach fail")
+	}
+	fmt.Sprintln("[UserSell] - Sell order complete: ", seller.PublicName)
+	return &pb.Response{}, nil
 }
 
 func (s *infoServer) Buy(
@@ -238,4 +231,30 @@ func (s *infoServer) UserCancelTrade(
 	}
 	fmt.Sprintln("[UserCancelTrade] - Error canceling trade")
 	return &pb.Response{Passed: false}, errors.New("cancel trade eeror")
+}
+
+func (s *server) UserSendMessage(
+	ctx context.Context,
+	in *pb.UserSendMessageRequest,
+) (*pb.Response, error) {
+	concMes := [][]byte{
+		in.PublicKey,
+		in.Adress,
+		[]byte(in.Message),
+	}
+	signCheckErr := calc.Verify(concMes, in.PublicKey, in.Sign)
+	if signCheckErr == nil {
+		senderAdress := calc.Hash(in.PublicKey)
+		u := user.Get(senderAdress)
+		if u != nil {
+			u.PutUserMessage(in.Adress, in.Message)
+			u.Save()
+			fmt.Sprintln("[UserSendMessage] - Message sent: ", u.PublicName)
+			return &pb.Response{Passed: true}, nil
+		}
+		fmt.Sprintln("[UserSendMessage] - User not found error")
+		return &pb.Response{Passed: false}, errors.New("user not found")
+	}
+	fmt.Sprintln("[UserSendMessage] - Sign error")
+	return &pb.Response{Passed: false}, errors.New("sign error")
 }
