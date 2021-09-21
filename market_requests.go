@@ -109,9 +109,9 @@ func (s *server) Deposit(
 	return &pb.Response{}, nil
 }
 
-func (s *infoServer) Reply(
+func (s *server) Reply(
 	ctx context.Context,
-	in *pb.MarketSendMessageRequest,
+	in *pb.MarketRequests_Reply,
 ) (*pb.Response, error) {
 	concMes := [][]byte{
 		in.PublicKey,
@@ -120,24 +120,24 @@ func (s *infoServer) Reply(
 	}
 	signCheckErr := calc.Verify(concMes, in.PublicKey, in.Sign)
 	if signCheckErr == nil {
-		senderAdress := calc.Hash(in.PublicKey)
-		u := user.Get(senderAdress)
-		if u != nil {
-			u.PutMarketMessage(in.Adress, in.Message)
-			u.Save()
-			fmt.Sprintln("[MarketSendMessage] - Message sent", u.PublicName)
-			return &pb.Response{Passed: true}, nil
-		}
-		fmt.Sprintln("[MarketSendMessage] - User not found error")
-		return &pb.Response{Passed: false}, errors.New("sign error")
+		fmt.Sprintln("[MarketSendMessage] - Sign error")
+		return nil, errors.New("sign error")
 	}
-	fmt.Sprintln("[MarketSendMessage] - Sign error")
-	return &pb.Response{Passed: false}, errors.New("sign error")
+	senderAdress := calc.Hash(in.PublicKey)
+	u := user.Get(senderAdress)
+	if u == nil {
+		fmt.Sprintln("[MarketSendMessage] - User not found error")
+		return nil, errors.New("sign error")
+	}
+	u.PutMarketMessage(in.Adress, in.Message)
+	u.Save()
+	fmt.Sprintln("[MarketSendMessage] - Message sent", u.PublicName)
+	return &pb.Response{}, nil
 }
 
-func (s *infoServer) Withdrawal(
+func (s *server) Withdrawal(
 	ctx context.Context,
-	in *pb.MarketWithdrawalRequest,
+	in *pb.MarketRequests_Withdrawal,
 ) (*pb.Response, error) {
 	amBytes := make([]byte, 8)
 	binary.LittleEndian.PutUint64(amBytes, uint64(in.Amount))
@@ -147,22 +147,23 @@ func (s *infoServer) Withdrawal(
 		amBytes,
 	}
 	checkErr := calc.Verify(concatedMessage, in.PublicKey, in.Sign)
-	if checkErr == nil {
-		adress := calc.Hash(in.PublicKey)
-		u := user.Get(in.UserAdress)
-		if u != nil {
-			strAdr := string(adress)
-			if in.Amount < u.Balances[strAdr] {
-				u.Balances[strAdr] = u.Balances[strAdr] - in.Amount
-				fmt.Sprintln("[MarketWithdrawal] - Withdrawal accepted")
-				return &pb.Response{Passed: true}, nil
-			}
-			fmt.Sprintln("[MarketWithdrawal] - Withdrawal balance error")
-			return &pb.Response{Passed: false}, errors.New("bakance error")
-		}
-		fmt.Sprintln("[MarketWithdrawal] - User not found error")
-		return &pb.Response{Passed: false}, errors.New("user not found")
+	if checkErr != nil {
+		fmt.Sprintln("[MarketWithdrawal] - Sign error")
+		return nil, errors.New("sign error")
 	}
-	fmt.Sprintln("[MarketWithdrawal] - Sign error")
-	return &pb.Response{Passed: false}, errors.New("sign error")
+	adress := calc.Hash(in.PublicKey)
+	usr := user.Get(in.UserAdress)
+	if usr == nil {
+		fmt.Sprintln("[MarketWithdrawal] - User not found error")
+		return nil, errors.New("user not found")
+	}
+	defer usr.Save()
+	strAdr := string(adress)
+	if in.Amount > usr.Balances[strAdr] {
+		fmt.Sprintln("[MarketWithdrawal] - Withdrawal balance error")
+		return nil, errors.New("bakance error")
+	}
+	usr.Balances[strAdr] = usr.Balances[strAdr] - in.Amount
+	fmt.Sprintln("[MarketWithdrawal] - Withdrawal accepted")
+	return &pb.Response{}, nil
 }

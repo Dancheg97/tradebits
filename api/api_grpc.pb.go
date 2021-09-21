@@ -554,7 +554,7 @@ type MarketClient interface {
 	Refresh(ctx context.Context, in *MarketRequests_Update, opts ...grpc.CallOption) (*Response, error)
 	Deposit(ctx context.Context, in *MarketRequests_Deposit, opts ...grpc.CallOption) (*Response, error)
 	Withdrawal(ctx context.Context, in *MarketRequests_Withdrawal, opts ...grpc.CallOption) (*Response, error)
-	Reply(ctx context.Context, in *MarketRequests_Message, opts ...grpc.CallOption) (*Response, error)
+	Reply(ctx context.Context, in *MarketRequests_Reply, opts ...grpc.CallOption) (*Response, error)
 }
 
 type marketClient struct {
@@ -601,7 +601,7 @@ func (c *marketClient) Withdrawal(ctx context.Context, in *MarketRequests_Withdr
 	return out, nil
 }
 
-func (c *marketClient) Reply(ctx context.Context, in *MarketRequests_Message, opts ...grpc.CallOption) (*Response, error) {
+func (c *marketClient) Reply(ctx context.Context, in *MarketRequests_Reply, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
 	err := c.cc.Invoke(ctx, "/api.Market/Reply", in, out, opts...)
 	if err != nil {
@@ -618,7 +618,7 @@ type MarketServer interface {
 	Refresh(context.Context, *MarketRequests_Update) (*Response, error)
 	Deposit(context.Context, *MarketRequests_Deposit) (*Response, error)
 	Withdrawal(context.Context, *MarketRequests_Withdrawal) (*Response, error)
-	Reply(context.Context, *MarketRequests_Message) (*Response, error)
+	Reply(context.Context, *MarketRequests_Reply) (*Response, error)
 	mustEmbedUnimplementedMarketServer()
 }
 
@@ -638,7 +638,7 @@ func (UnimplementedMarketServer) Deposit(context.Context, *MarketRequests_Deposi
 func (UnimplementedMarketServer) Withdrawal(context.Context, *MarketRequests_Withdrawal) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Withdrawal not implemented")
 }
-func (UnimplementedMarketServer) Reply(context.Context, *MarketRequests_Message) (*Response, error) {
+func (UnimplementedMarketServer) Reply(context.Context, *MarketRequests_Reply) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Reply not implemented")
 }
 func (UnimplementedMarketServer) mustEmbedUnimplementedMarketServer() {}
@@ -727,7 +727,7 @@ func _Market_Withdrawal_Handler(srv interface{}, ctx context.Context, dec func(i
 }
 
 func _Market_Reply_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MarketRequests_Message)
+	in := new(MarketRequests_Reply)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -739,7 +739,7 @@ func _Market_Reply_Handler(srv interface{}, ctx context.Context, dec func(interf
 		FullMethod: "/api.Market/Reply",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MarketServer).Reply(ctx, req.(*MarketRequests_Message))
+		return srv.(MarketServer).Reply(ctx, req.(*MarketRequests_Reply))
 	}
 	return interceptor(ctx, in, info, handler)
 }

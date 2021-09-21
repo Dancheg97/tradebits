@@ -143,7 +143,7 @@ service Market{
     rpc Refresh(MarketRequests.Update) returns (Response);
     rpc Deposit(MarketRequests.Deposit) returns (Response);
     rpc Withdrawal(MarketRequests.Withdrawal) returns (Response);
-    rpc Reply(MarketRequests.Message) returns (Response);
+    rpc Reply(MarketRequests.Reply) returns (Response);
 }
 
 message MarketRequests{
@@ -183,7 +183,7 @@ message MarketRequests{
         uint64 Amount = 3;
         bytes Sign = 4;
     }
-    message Message{
+    message Reply{
         bytes PublicKey = 1;
         bytes Adress = 2;
         string Message = 3;
