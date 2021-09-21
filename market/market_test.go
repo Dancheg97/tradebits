@@ -571,7 +571,7 @@ func TestAttachFirstlySellThanBuy(t *testing.T) {
 	user.Create(
 		secondUserAdress,
 		dummyMessageKey,
-		dummyName,
+		dummyUserName,
 	)
 	secondUser := user.Get(secondUserAdress)
 	secondUser.Balances[string(marketAdress)] = 150
@@ -692,7 +692,7 @@ func TestUserCancelBuy(t *testing.T) {
 	user.Create(
 		userAdress,
 		dummyMessageKey,
-		dummyName,
+		dummyUserName,
 	)
 	usr := user.Get(userAdress)
 	usr.Balance = 300
@@ -735,7 +735,7 @@ func TestUserCancelSell(t *testing.T) {
 	user.Create(
 		userAdress,
 		dummyMessageKey,
-		dummyName,
+		dummyUserName,
 	)
 	usr := user.Get(userAdress)
 	usr.Balances[string(marketAdress)] = 150
