@@ -104,6 +104,7 @@ func (s *server) Deposit(
 		fmt.Println("[MarketDeposit] - User not found error")
 		return nil, errors.New("user not found error")
 	}
+	defer u.Save()
 	strAdr := string(adress)
 	u.Balances[strAdr] = u.Balances[strAdr] + in.Amount
 	fmt.Println("[MarketDeposit] - Deposit verified: ", u.PublicName)
@@ -130,6 +131,7 @@ func (s *server) Reply(
 		fmt.Println("[MarketSendMessage] - User not found error")
 		return nil, errors.New("sign error")
 	}
+	defer u.Save()
 	u.PutMarketMessage(in.Adress, in.Message)
 	u.Save()
 	fmt.Println("[MarketSendMessage] - Message sent", u.PublicName)

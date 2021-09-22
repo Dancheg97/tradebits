@@ -16,6 +16,7 @@ func (s *server) Create(
 	ctx context.Context,
 	in *pb.UserRequests_Create,
 ) (*pb.Response, error) {
+	fmt.Println("[UserCreate] - start")
 	senderAdress := calc.Hash(in.PublicKey)
 	signError := calc.Verify(
 		[][]byte{
@@ -49,6 +50,7 @@ func (s *server) Update(
 	ctx context.Context,
 	in *pb.UserRequests_Update,
 ) (*pb.Response, error) {
+	fmt.Println("[UserUpdate] - start")
 	senderAdress := calc.Hash(in.PublicKey)
 	signError := calc.Verify(
 		[][]byte{
@@ -63,11 +65,12 @@ func (s *server) Update(
 		fmt.Println("[UserUpdate] - Sign error")
 		return nil, errors.New("sign check error")
 	}
-	user := user.Get(senderAdress)
-	if user == nil {
+	usr := user.Get(senderAdress)
+	if usr == nil {
 		fmt.Println("[UserUpdate] - User not found")
 		return nil, errors.New("user not found error")
 	}
+	defer usr.Save()
 	if len(in.PublicName) > 12 {
 		fmt.Println("[UserUpdate] - Bad public name length")
 		return nil, errors.New("public name too big")
@@ -76,10 +79,9 @@ func (s *server) Update(
 		fmt.Println("[UserUpdate] - Bad message key length")
 		return nil, errors.New("wrong mes key length")
 	}
-	user.PublicName = in.PublicName
-	user.MesKey = in.MesssageKey
-	user.Save()
-	fmt.Println("[UserUpdate] - User info updated: ", user.PublicName)
+	usr.PublicName = in.PublicName
+	usr.MesKey = in.MesssageKey
+	fmt.Println("[UserUpdate] - User info updated: ", usr.PublicName)
 	return &pb.Response{}, nil
 }
 
@@ -87,6 +89,7 @@ func (s *server) Send(
 	ctx context.Context,
 	in *pb.UserRequests_Send,
 ) (*pb.Response, error) {
+	fmt.Println("[UserSend] - start")
 	senderAdress := calc.Hash(in.PublicKey)
 	if reflect.DeepEqual(senderAdress, in.RecieverAdress) {
 		fmt.Println("[UserSend] - Reciever is sender")
@@ -132,6 +135,7 @@ func (s *server) Message(
 	ctx context.Context,
 	in *pb.UserRequests_Message,
 ) (*pb.Response, error) {
+	fmt.Println("[Message] - start")
 	concMes := [][]byte{
 		in.PublicKey,
 		in.Adress,
@@ -148,8 +152,8 @@ func (s *server) Message(
 		fmt.Println("[Message] - User not found error")
 		return nil, errors.New("user not found")
 	}
+	defer u.Save()
 	u.PutUserMessage(in.Adress, in.Message)
-	u.Save()
 	fmt.Println("[Message] - Message sent: ", u.PublicName)
 	return &pb.Response{}, nil
 }
@@ -158,6 +162,7 @@ func (s *server) Buy(
 	ctx context.Context,
 	in *pb.UserRequests_Buy,
 ) (*pb.Response, error) {
+	fmt.Println("[UserBuy] - start")
 	buyerAdress := calc.Hash(in.PublicKey)
 	buyer := user.Get(buyerAdress)
 	if buyer == nil {
@@ -208,6 +213,7 @@ func (s *server) Sell(
 	ctx context.Context,
 	in *pb.UserRequests_Sell,
 ) (*pb.Response, error) {
+	fmt.Println("[UserSell] - start")
 	sellerAdress := calc.Hash(in.PublicKey)
 	seller := user.Get(sellerAdress)
 	if seller == nil {
@@ -254,10 +260,11 @@ func (s *server) Sell(
 	return &pb.Response{}, nil
 }
 
-func (s *server) CancelTrades(
+func (s *server) CancelTrade(
 	ctx context.Context,
 	in *pb.UserRequests_CancelTrade,
 ) (*pb.Response, error) {
+	fmt.Println("[UserCancelTrade] - start")
 	mkt := market.Get(in.MarketAdress)
 	if mkt == nil {
 		fmt.Println("[CancelTrade] - No such market")

@@ -15,6 +15,7 @@ func (s *server) HasTrades(
 	ctx context.Context,
 	in *pb.InfIn_UserMarketAdresses,
 ) (*pb.InfOut_HasTrades, error) {
+	fmt.Println("[InfoHasTrades] - start")
 	user := user.Look(in.UserAdress)
 	if user == nil {
 		fmt.Println("[InfoHasTrades] - user not found")
@@ -34,6 +35,7 @@ func (s *server) Market(
 	ctx context.Context,
 	in *pb.InfIn_Adress,
 ) (*pb.InfOut_MarketInfo, error) {
+	fmt.Println("[InfoMarket] - start")
 	mkt := market.Look(in.Adress)
 	if mkt == nil {
 		fmt.Println("[InfoMarket] - market not found")
@@ -91,6 +93,7 @@ func (s *server) User(
 	ctx context.Context,
 	in *pb.InfIn_Adress,
 ) (*pb.InfOut_User, error) {
+	fmt.Println("[InfoUser] - start")
 	user := user.Look(in.Adress)
 	if user == nil {
 		fmt.Println("[InfoUser] - error user not found")
@@ -116,6 +119,7 @@ func (s *server) Messages(
 	ctx context.Context,
 	in *pb.InfIn_UserMarketAdresses,
 ) (*pb.InfOut_Messages, error) {
+	fmt.Println("[InfoMessages] - start")
 	usr := user.Look(in.UserAdress)
 	messages := usr.GetMessages(in.MarketAdress)
 	fmt.Println("[InfoMessages] - giving cipher messages of some user")
