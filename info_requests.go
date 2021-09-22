@@ -20,13 +20,13 @@ func (s *server) InfoHasTrades(
 		market := market.Look(in.MarketAdress)
 		if market != nil {
 			hasTrades := market.HasTrades(in.UserAdress)
-			fmt.Sprintln("[InfoHasTrades] - has trades")
+			fmt.Println("[InfoHasTrades] - has trades")
 			return &pb.Response{Passed: hasTrades}, nil
 		}
-		fmt.Sprintln("[InfoHasTrades] - market not found")
+		fmt.Println("[InfoHasTrades] - market not found")
 		return &pb.Response{Passed: false}, errors.New("market not found")
 	}
-	fmt.Sprintln("[InfoHasTrades] - user not found")
+	fmt.Println("[InfoHasTrades] - user not found")
 	return &pb.Response{Passed: false}, errors.New("user not found")
 }
 
@@ -52,7 +52,7 @@ func (s *server) InfoMarket(
 				break
 			}
 		}
-		fmt.Sprintln("[InfoMarket] - info abound market: ", m.Name)
+		fmt.Println("[InfoMarket] - info abound market: ", m.Name)
 		return &pb.InfoMarketResponse{
 			MesKey:      m.MesKey,
 			Name:        m.Name,
@@ -68,7 +68,7 @@ func (s *server) InfoMarket(
 			WorkTime:    m.WorkTime,
 		}, nil
 	}
-	fmt.Sprintln("[InfoMarket] - market not found")
+	fmt.Println("[InfoMarket] - market not found")
 	return &pb.InfoMarketResponse{}, errors.New("market not found")
 }
 
@@ -80,7 +80,7 @@ func (s *server) InfoSearch(
 	if len(results) > 30 {
 		results = results[0:30]
 	}
-	fmt.Sprintln("[InfoSearch] - search results len: ", len(results))
+	fmt.Println("[InfoSearch] - search results len: ", len(results))
 	return &pb.InfoSearchResponse{ConcMarkets: results}, nil
 }
 
@@ -96,7 +96,7 @@ func (s *server) InfoUser(
 			adressesSlice = append(adressesSlice, []byte(strAdr))
 			balancesSlice = append(balancesSlice, bal)
 		}
-		fmt.Sprintln("[InfoUser] - info about user: ", user.PublicName)
+		fmt.Println("[InfoUser] - info about user: ", user.PublicName)
 		return &pb.InfoUserResponse{
 			PublicName:     user.PublicName,
 			Balance:        user.Balance,
@@ -105,7 +105,7 @@ func (s *server) InfoUser(
 			MarketBalances: balancesSlice,
 		}, nil
 	}
-	fmt.Sprintln("[InfoUser] - error user not found")
+	fmt.Println("[InfoUser] - error user not found")
 	return &pb.InfoUserResponse{}, errors.New("user not found")
 }
 
@@ -115,7 +115,7 @@ func (s *server) InfoMessages(
 ) (*pb.Messages, error) {
 	usr := user.Look(in.UserAdress)
 	msgs := usr.GetMessages(in.MarketAdress)
-	fmt.Sprintln("[InfoMessages] - giving cipher messages of some user")
+	fmt.Println("[InfoMessages] - giving cipher messages of some user")
 	return &pb.Messages{
 		Messages: msgs,
 	}, nil

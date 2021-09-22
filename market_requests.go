@@ -36,13 +36,13 @@ func (s *server) MarketCreate(
 			in.WorkTime,
 		)
 		if craeteErr == nil {
-			fmt.Sprintln("[MarketCreate] - Market created, name: ", in.Name)
+			fmt.Println("[MarketCreate] - Market created, name: ", in.Name)
 			return &pb.Response{Passed: true}, nil
 		}
-		fmt.Sprintln("[MarketCreate] - Error create error: ", craeteErr)
+		fmt.Println("[MarketCreate] - Error create error: ", craeteErr)
 		return &pb.Response{Passed: false}, craeteErr
 	}
-	fmt.Sprintln("[MarketCreate] - Error sign fail")
+	fmt.Println("[MarketCreate] - Error sign fail")
 	return &pb.Response{Passed: false}, errors.New("sign fail")
 }
 
@@ -64,13 +64,13 @@ func (s *server) MarketDeposit(
 		if u != nil {
 			strAdr := string(adress)
 			u.Balances[strAdr] = u.Balances[strAdr] + in.Amount
-			fmt.Sprintln("[MarketDeposit] - Deposit verified: ", u.PublicName)
+			fmt.Println("[MarketDeposit] - Deposit verified: ", u.PublicName)
 			return &pb.Response{Passed: true}, nil
 		}
-		fmt.Sprintln("[MarketDeposit] - User not found error")
+		fmt.Println("[MarketDeposit] - User not found error")
 		return &pb.Response{Passed: false}, errors.New("user not found error")
 	}
-	fmt.Sprintln("[MarketDeposit] - Sign error")
+	fmt.Println("[MarketDeposit] - Sign error")
 	return &pb.Response{Passed: false}, errors.New("sign error")
 }
 
@@ -90,13 +90,13 @@ func (s *server) MarketSendMessage(
 		if u != nil {
 			u.PutMarketMessage(in.Adress, in.Message)
 			u.Save()
-			fmt.Sprintln("[MarketSendMessage] - Message sent", u.PublicName)
+			fmt.Println("[MarketSendMessage] - Message sent", u.PublicName)
 			return &pb.Response{Passed: true}, nil
 		}
-		fmt.Sprintln("[MarketSendMessage] - User not found error")
+		fmt.Println("[MarketSendMessage] - User not found error")
 		return &pb.Response{Passed: false}, errors.New("sign error")
 	}
-	fmt.Sprintln("[MarketSendMessage] - Sign error")
+	fmt.Println("[MarketSendMessage] - Sign error")
 	return &pb.Response{Passed: false}, errors.New("sign error")
 }
 
@@ -124,13 +124,13 @@ func (s *server) MarketUpdate(
 			m.OutputFee = in.OutputFee
 			m.WorkTime = in.WorkTime
 			m.Save()
-			fmt.Sprintln("[MarketUpdate] - Market info updated")
+			fmt.Println("[MarketUpdate] - Market info updated")
 			return &pb.Response{Passed: true}, nil
 		}
-		fmt.Sprintln("[MarketUpdate] - Market not found error")
+		fmt.Println("[MarketUpdate] - Market not found error")
 		return &pb.Response{Passed: false}, errors.New("sign error")
 	}
-	fmt.Sprintln("[MarketUpdate] - Sign error")
+	fmt.Println("[MarketUpdate] - Sign error")
 	return &pb.Response{Passed: false}, errors.New("sign error")
 }
 
@@ -153,15 +153,15 @@ func (s *server) MarketWithdrawal(
 			strAdr := string(adress)
 			if in.Amount < u.Balances[strAdr] {
 				u.Balances[strAdr] = u.Balances[strAdr] - in.Amount
-				fmt.Sprintln("[MarketWithdrawal] - Withdrawal accepted")
+				fmt.Println("[MarketWithdrawal] - Withdrawal accepted")
 				return &pb.Response{Passed: true}, nil
 			}
-			fmt.Sprintln("[MarketWithdrawal] - Withdrawal balance error")
+			fmt.Println("[MarketWithdrawal] - Withdrawal balance error")
 			return &pb.Response{Passed: false}, errors.New("bakance error")
 		}
-		fmt.Sprintln("[MarketWithdrawal] - User not found error")
+		fmt.Println("[MarketWithdrawal] - User not found error")
 		return &pb.Response{Passed: false}, errors.New("user not found")
 	}
-	fmt.Sprintln("[MarketWithdrawal] - Sign error")
+	fmt.Println("[MarketWithdrawal] - Sign error")
 	return &pb.Response{Passed: false}, errors.New("sign error")
 }

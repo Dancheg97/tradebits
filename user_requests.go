@@ -33,13 +33,13 @@ func (s *server) UserCreate(
 			in.PublicName,
 		)
 		if create_err == nil {
-			fmt.Sprintln("[UserCreate] - User created")
+			fmt.Println("[UserCreate] - User created")
 			return &pb.Response{Passed: true}, nil
 		}
-		fmt.Sprintln("[UserCreate] - Create error")
+		fmt.Println("[UserCreate] - Create error")
 		return &pb.Response{Passed: false}, errors.New("create error")
 	}
-	fmt.Sprintln("[UserCreate] - Sign error")
+	fmt.Println("[UserCreate] - Sign error")
 	return &pb.Response{Passed: false}, errors.New("user create error")
 }
 
@@ -62,13 +62,13 @@ func (s *server) UserUpdate(
 		if user != nil {
 			user.PublicName = in.PublicName
 			user.Save()
-			fmt.Sprintln("[UserUpdate] - User info updated: ", user.PublicName)
+			fmt.Println("[UserUpdate] - User info updated: ", user.PublicName)
 			return &pb.Response{Passed: true}, nil
 		}
-		fmt.Sprintln("[UserUpdate] - User not found")
+		fmt.Println("[UserUpdate] - User not found")
 		return &pb.Response{Passed: false}, errors.New("user not found error")
 	}
-	fmt.Sprintln("[UserUpdate] - Sign error")
+	fmt.Println("[UserUpdate] - Sign error")
 	return &pb.Response{Passed: false}, errors.New("sign check error")
 }
 
@@ -88,13 +88,13 @@ func (s *server) UserSendMessage(
 		if u != nil {
 			u.PutUserMessage(in.Adress, in.Message)
 			u.Save()
-			fmt.Sprintln("[UserSendMessage] - Message sent: ", u.PublicName)
+			fmt.Println("[UserSendMessage] - Message sent: ", u.PublicName)
 			return &pb.Response{Passed: true}, nil
 		}
-		fmt.Sprintln("[UserSendMessage] - User not found error")
+		fmt.Println("[UserSendMessage] - User not found error")
 		return &pb.Response{Passed: false}, errors.New("user not found")
 	}
-	fmt.Sprintln("[UserSendMessage] - Sign error")
+	fmt.Println("[UserSendMessage] - Sign error")
 	return &pb.Response{Passed: false}, errors.New("sign error")
 }
 
@@ -124,14 +124,14 @@ func (s *server) UserSend(
 						defer reciever.Save()
 						sender.Balance = sender.Balance - in.SendAmount
 						reciever.Balance = reciever.Balance + in.SendAmount
-						fmt.Sprintln("[UserSendMessage] - Message sent: ", sender.PublicName)
+						fmt.Println("[UserSendMessage] - Message sent: ", sender.PublicName)
 						return &pb.Response{Passed: true}, nil
 					}
 				}
 			}
 		}
 	}
-	fmt.Sprintln("[UserSendMessage] - User send error")
+	fmt.Println("[UserSendMessage] - User send error")
 	return &pb.Response{Passed: false}, errors.New("send error")
 }
 
@@ -163,7 +163,7 @@ func (s *server) UserSell(
 					if attachedUsr {
 						attachedMkt := curMarket.AttachSell(&trade)
 						if attachedMkt {
-							fmt.Sprintln("[UserSell] - Sell order complete: ", seller.PublicName)
+							fmt.Println("[UserSell] - Sell order complete: ", seller.PublicName)
 							return &pb.Response{Passed: true}, nil
 						}
 					}
@@ -171,7 +171,7 @@ func (s *server) UserSell(
 			}
 		}
 	}
-	fmt.Sprintln("[UserSell] - User sell error")
+	fmt.Println("[UserSell] - User sell error")
 	return &pb.Response{Passed: false}, errors.New("sell error")
 }
 
@@ -205,7 +205,7 @@ func (s *server) UserBuy(
 					if attachedUsr {
 						attachedMkt := curMarket.AttachBuy(&trade)
 						if attachedMkt {
-							fmt.Sprintln("[UserBuy] - Buy order complete: ", buyer.PublicName)
+							fmt.Println("[UserBuy] - Buy order complete: ", buyer.PublicName)
 							return &pb.Response{Passed: true}, nil
 						}
 					}
@@ -213,7 +213,7 @@ func (s *server) UserBuy(
 			}
 		}
 	}
-	fmt.Sprintln("[UserBuy] - User buy error")
+	fmt.Println("[UserBuy] - User buy error")
 	return &pb.Response{Passed: false}, errors.New("buy error")
 }
 
@@ -232,10 +232,10 @@ func (s *server) UserCancelTrade(
 		if m != nil {
 			defer m.Save()
 			m.CancelTrades(userAdress)
-			fmt.Sprintln("[UserCancelTrade] - Trade canceled")
+			fmt.Println("[UserCancelTrade] - Trade canceled")
 			return &pb.Response{Passed: true}, nil
 		}
 	}
-	fmt.Sprintln("[UserCancelTrade] - Error canceling trade")
+	fmt.Println("[UserCancelTrade] - Error canceling trade")
 	return &pb.Response{Passed: false}, errors.New("cancel trade eeror")
 }

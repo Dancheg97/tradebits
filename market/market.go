@@ -140,7 +140,7 @@ func (m *market) AttachBuy(b *trade.Buy) bool {
 	}
 	m.Pool.OperateBuy(*b)
 	for _, output := range m.Pool.Outputs {
-		fmt.Sprintln("outputing ", output.Adress, "   ", output.Main, "   ", output.Market)
+		fmt.Println("outputing ", output.Adress, "   ", output.Main, "   ", output.Market)
 		go operateOutput(output, m.adress)
 	}
 	m.Pool.Outputs = []trade.Output{}
@@ -159,7 +159,7 @@ func (m *market) AttachSell(s *trade.Sell) bool {
 	}
 	m.Pool.OperateSell(*s)
 	for _, output := range m.Pool.Outputs {
-		fmt.Sprintln("outputing ", output.Adress, "   ", output.Main, "   ", output.Market)
+		fmt.Println("outputing ", output.Adress, "   ", output.Main, "   ", output.Market)
 		go operateOutput(output, m.adress)
 	}
 	m.Pool.Outputs = []trade.Output{}
