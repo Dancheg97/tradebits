@@ -11,112 +11,116 @@ import (
 	pb "sync_tree/api"
 )
 
-func (s *server) InfoHasTrades(
+func (s *server) HasTrades(
 	ctx context.Context,
-	in *pb.InfoHasTradesRequest,
-) (*pb.Response, error) {
+	in *pb.InfIn_UserMarketAdresses,
+) (*pb.InfOut_HasTrades, error) {
 	user := user.Look(in.UserAdress)
-	if user != nil {
-		market := market.Look(in.MarketAdress)
-		if market != nil {
-			hasTrades := market.HasTrades(in.UserAdress)
-			fmt.Println("[InfoHasTrades] - has trades")
-			return &pb.Response{Passed: hasTrades}, nil
-		}
+	if user == nil {
+		fmt.Println("[InfoHasTrades] - user not found")
+		return nil, errors.New("user not found")
+	}
+	market := market.Look(in.MarketAdress)
+	if market == nil {
 		fmt.Println("[InfoHasTrades] - market not found")
-		return &pb.Response{Passed: false}, errors.New("market not found")
+		return nil, errors.New("market not found")
 	}
-	fmt.Println("[InfoHasTrades] - user not found")
-	return &pb.Response{Passed: false}, errors.New("user not found")
+	hasTrades := market.HasTrades(in.UserAdress)
+	fmt.Println("[InfoHasTrades] - has trades - ", hasTrades)
+	return &pb.InfOut_HasTrades{HasTrades: true}, nil
+
 }
 
-func (s *server) InfoMarket(
+func (s *server) Market(
 	ctx context.Context,
-	in *pb.InfoMarketRequest,
-) (*pb.InfoMarketResponse, error) {
-	m := market.Look(in.Adress)
-	if m != nil {
-		buys := []uint64{}
-		for _, buy := range m.Pool.Buys {
-			buys = append(buys, buy.Offer)
-			buys = append(buys, buy.Recieve)
-			if len(buys) == 10 {
-				break
-			}
-		}
-		sells := []uint64{}
-		for _, sell := range m.Pool.Sells {
-			sells = append(sells, sell.Offer)
-			sells = append(sells, sell.Recieve)
-			if len(sells) == 10 {
-				break
-			}
-		}
-		fmt.Println("[InfoMarket] - info abound market: ", m.Name)
-		return &pb.InfoMarketResponse{
-			MesKey:      m.MesKey,
-			Name:        m.Name,
-			Img:         m.Img,
-			Descr:       m.Descr,
-			OpCount:     m.OpCount,
-			Buys:        buys,
-			Sells:       sells,
-			ActiveBuys:  uint64(len(buys) / 2),
-			ActiveSells: uint64(len(sells) / 2),
-			InputFee:    m.InputFee,
-			OutputFee:   m.OutputFee,
-			WorkTime:    m.WorkTime,
-		}, nil
+	in *pb.InfIn_Adress,
+) (*pb.InfOut_MarketInfo, error) {
+	mkt := market.Look(in.Adress)
+	if mkt == nil {
+		fmt.Println("[InfoMarket] - market not found")
+		return nil, errors.New("market not found")
+
 	}
-	fmt.Println("[InfoMarket] - market not found")
-	return &pb.InfoMarketResponse{}, errors.New("market not found")
+	buys := []*pb.InfOut_Trade{}
+	for _, buy := range mkt.Pool.Buys {
+		buys = append(buys, &pb.InfOut_Trade{
+			Offer:   buy.Offer,
+			Recieve: buy.Recieve,
+		})
+		if len(buys) == 10 {
+			break
+		}
+	}
+	sells := []*pb.InfOut_Trade{}
+	for _, sell := range mkt.Pool.Sells {
+		sells = append(sells, &pb.InfOut_Trade{
+			Offer:   sell.Offer,
+			Recieve: sell.Recieve,
+		})
+		if len(sells) == 10 {
+			break
+		}
+	}
+	fmt.Println("[InfoMarket] - info abound market: ", mkt.Name)
+	return &pb.InfOut_MarketInfo{
+		MessageKey:     mkt.MesKey,
+		Name:           mkt.Name,
+		ImageLink:      mkt.Img,
+		Description:    mkt.Descr,
+		OperationCount: mkt.OpCount,
+		Buys:           buys,
+		Sells:          sells,
+		ActiveBuys:     uint64(len(buys) / 2),
+		ActiveSells:    uint64(len(sells) / 2),
+		InputFee:       mkt.InputFee,
+		OutputFee:      mkt.OutputFee,
+		WorkTime:       mkt.WorkTime,
+		Delimiter:      mkt.Delimiter,
+	}, nil
 }
 
-func (s *server) InfoSearch(
+func (s *server) Search(
 	ctx context.Context,
-	in *pb.InfoSearchRequest,
-) (*pb.InfoSearchResponse, error) {
-	results := search.Search(in.Info)
-	if len(results) > 30 {
-		results = results[0:30]
-	}
+	in *pb.InfIn_SearchText,
+) (*pb.InfOut_Adresses, error) {
+	results := search.Search(in.Text)
 	fmt.Println("[InfoSearch] - search results len: ", len(results))
-	return &pb.InfoSearchResponse{ConcMarkets: results}, nil
+	return &pb.InfOut_Adresses{MarketAdresses: results}, nil
 }
 
-func (s *server) InfoUser(
+func (s *server) User(
 	ctx context.Context,
-	in *pb.InfoUserRequest,
-) (*pb.InfoUserResponse, error) {
+	in *pb.InfIn_Adress,
+) (*pb.InfOut_User, error) {
 	user := user.Look(in.Adress)
-	if user != nil {
-		adressesSlice := [][]byte{}
-		balancesSlice := []uint64{}
-		for strAdr, bal := range user.Balances {
-			adressesSlice = append(adressesSlice, []byte(strAdr))
-			balancesSlice = append(balancesSlice, bal)
-		}
-		fmt.Println("[InfoUser] - info about user: ", user.PublicName)
-		return &pb.InfoUserResponse{
-			PublicName:     user.PublicName,
-			Balance:        user.Balance,
-			MesKey:         user.MesKey,
-			MarketAdresses: adressesSlice,
-			MarketBalances: balancesSlice,
-		}, nil
+	if user == nil {
+		fmt.Println("[InfoUser] - error user not found")
+		return nil, errors.New("user not found")
 	}
-	fmt.Println("[InfoUser] - error user not found")
-	return &pb.InfoUserResponse{}, errors.New("user not found")
+	adressesSlice := [][]byte{}
+	balancesSlice := []uint64{}
+	for strAdr, bal := range user.Balances {
+		adressesSlice = append(adressesSlice, []byte(strAdr))
+		balancesSlice = append(balancesSlice, bal)
+	}
+	fmt.Println("[InfoUser] - info about user: ", user.PublicName)
+	return &pb.InfOut_User{
+		PublicName:     user.PublicName,
+		Balance:        user.Balance,
+		MessageKey:     user.MesKey,
+		MarketAdresses: adressesSlice,
+		MarketBalances: balancesSlice,
+	}, nil
 }
 
-func (s *server) InfoMessages(
+func (s *server) Messages(
 	ctx context.Context,
-	in *pb.InfoMessagesRequest,
-) (*pb.Messages, error) {
+	in *pb.InfIn_UserMarketAdresses,
+) (*pb.InfOut_Messages, error) {
 	usr := user.Look(in.UserAdress)
-	msgs := usr.GetMessages(in.MarketAdress)
+	messages := usr.GetMessages(in.MarketAdress)
 	fmt.Println("[InfoMessages] - giving cipher messages of some user")
-	return &pb.Messages{
-		Messages: msgs,
+	return &pb.InfOut_Messages{
+		Messages: messages,
 	}, nil
 }

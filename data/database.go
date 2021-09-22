@@ -14,7 +14,9 @@ func openDB() *leveldb.DB {
 	dbPath := path.Dir(filename) + "/leveldb"
 	db, openErr := leveldb.OpenFile(dbPath, nil)
 	if openErr != nil {
-		return openDB()
+		panic(openErr)
+		return nil
+		//return openDB()
 	}
 	return db
 }

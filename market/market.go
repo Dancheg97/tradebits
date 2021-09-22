@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/gob"
 	"errors"
-	"fmt"
 	"reflect"
 	"sync_tree/data"
 	"sync_tree/lock"
@@ -20,29 +19,65 @@ type market struct {
 	Descr     string
 	Img       string
 	OpCount   uint64
-	Msg       map[string]string
-	Arch      map[string]string
 	Pool      trade.TradePool
 	InputFee  uint64
 	OutputFee uint64
 	WorkTime  string
+	Delimiter uint64
+	Users     [][]byte
 }
 
 // Create new market by passed values. Checks wether market with passed adress
-// exists and creates new one.
+// exists and creates new one. Here is field description:
+//
+// - Adress: represens hash of markets public key
+//
+// - Name: market name visible for users (min 10, max 30)
+//
+// - MesKey: message key that is gonna be used to check
+//
+// - Descr: market description visible for users (min 160, max 480)
+//
+// - Img: url link to the image, bcs market dont store images
+//
+// - InputFee: fee value, each round number representing 0.01% (min 0, max 500)
+//
+// - OutputFee: fee value, each round number representing 0.01% (min 0, max 500)
+//
+// - WorkTime: representing when market is working with messages (min15, max 45)
+//
+// - Delimiter: value that is representing decimal places of its value (max 10)
 func Create(
 	adress []byte,
-	Name string,
-	MesKey []byte,
-	Descr string,
-	Img string,
-	InputFee uint64,
-	OutputFee uint64,
-	WorkTime string,
+	name string,
+	mesKey []byte,
+	descr string,
+	imgLink string,
+	inputFee uint64,
+	outputFee uint64,
+	workTime string,
+	delimiter uint64,
 ) error {
-	// add check that market has all field set up properly
 	if len(adress) != 64 {
 		return errors.New("bad adress length")
+	}
+	if len(name) < 10 || len(name) > 30 {
+		return errors.New("bad name length")
+	}
+	if len(mesKey) != 270 {
+		return errors.New("invalid message key length")
+	}
+	if len(descr) < 160 || len(descr) > 760 {
+		return errors.New("bad description length")
+	}
+	if inputFee > 500 || outputFee > 500 {
+		return errors.New("fee too big")
+	}
+	if len(workTime) < 10 || len(workTime) > 40 {
+		return errors.New("work time is bad")
+	}
+	if delimiter > 10 {
+		return errors.New("delimiter length is too long")
 	}
 	if data.Check(adress) {
 		return errors.New("possibly market already exists")
@@ -54,51 +89,38 @@ func Create(
 	}
 	newMarket := market{
 		adress:    adress,
-		Name:      Name,
-		Descr:     Descr,
-		Img:       Img,
-		MesKey:    MesKey,
+		Name:      name,
+		Descr:     descr,
+		Img:       imgLink,
+		MesKey:    mesKey,
 		OpCount:   0,
-		Msg:       make(map[string]string),
-		Arch:      make(map[string]string),
 		Pool:      pool,
-		InputFee:  InputFee,
-		OutputFee: OutputFee,
-		WorkTime:  WorkTime,
+		InputFee:  inputFee,
+		OutputFee: outputFee,
+		WorkTime:  workTime,
+		Delimiter: delimiter,
+		Users:     [][]byte{},
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newMarket)
 	data.Put(adress, cache.Bytes())
-	search.SearchAdd(Name, adress)
+	search.Add(name, adress)
 	return nil
 }
 
-/*
-This function is blocking, it gives an instance of market, so that the
-values of that market can be modified. To save changes to DB call Save().
-
-Only one instance of market can be called at same time.
-
-This function should be used only in case those values are modified:
- - Name
- - ImgLink
- - MesKey
- - Likes
- - DisLikes
-*/
+// This function is blocking, it gives an instance of market, so that the
+// values of that market can be modified. To save changes made in market call
+// Save() method of returned instance.
 func Get(adress []byte) *market {
-	if len(adress) != 64 {
-		return nil
-	}
 	if !data.Check(adress) {
 		return nil
 	}
 	lock.Lock(adress)
-	a := market{adress: adress}
+	m := market{adress: adress}
 	marketBytes := data.Get(adress)
 	cache := bytes.NewBuffer(marketBytes)
-	gob.NewDecoder(cache).Decode(&a)
-	return &a
+	gob.NewDecoder(cache).Decode(&m)
+	return &m
 }
 
 // This function is saving changes to the market in database and removes ability
@@ -140,7 +162,6 @@ func (m *market) AttachBuy(b *trade.Buy) bool {
 	}
 	m.Pool.OperateBuy(*b)
 	for _, output := range m.Pool.Outputs {
-		fmt.Println("outputing ", output.Adress, "   ", output.Main, "   ", output.Market)
 		go operateOutput(output, m.adress)
 	}
 	m.Pool.Outputs = []trade.Output{}
@@ -159,7 +180,6 @@ func (m *market) AttachSell(s *trade.Sell) bool {
 	}
 	m.Pool.OperateSell(*s)
 	for _, output := range m.Pool.Outputs {
-		fmt.Println("outputing ", output.Adress, "   ", output.Main, "   ", output.Market)
 		go operateOutput(output, m.adress)
 	}
 	m.Pool.Outputs = []trade.Output{}
@@ -168,7 +188,7 @@ func (m *market) AttachSell(s *trade.Sell) bool {
 	return true
 }
 
-// making change, wether some user has trades on that market
+// making a check, wether some user has trades on that market
 func (m *market) HasTrades(adress []byte) bool {
 	for _, trade := range m.Pool.Buys {
 		if reflect.DeepEqual(trade.Adress, adress) {
@@ -183,16 +203,16 @@ func (m *market) HasTrades(adress []byte) bool {
 	return false
 }
 
-func (m *market) CancelBuy(adress []byte, trd *trade.Buy) {
-	usr := user.Get(adress)
-	usr.Balance = usr.Balance + trd.Offer
+func cancelBuy(userAdress []byte, offer uint64) {
+	usr := user.Get(userAdress)
+	usr.Balance = usr.Balance + offer
 	usr.Save()
 }
 
-func (m *market) CancelSell(adress []byte, trd *trade.Sell) {
-	usr := user.Get(adress)
-	mktAdress := string(m.adress)
-	usr.Balances[mktAdress] = usr.Balances[mktAdress] + trd.Offer
+func cancelSell(userAdress []byte, marketAdress []byte, offer uint64) {
+	usr := user.Get(userAdress)
+	mktAdress := string(marketAdress)
+	usr.Balances[mktAdress] = usr.Balances[mktAdress] + offer
 	usr.Save()
 }
 
@@ -200,13 +220,13 @@ func (m *market) CancelSell(adress []byte, trd *trade.Sell) {
 func (m *market) CancelTrades(adress []byte) {
 	for idx, trade := range m.Pool.Buys {
 		if reflect.DeepEqual(trade.Adress, adress) {
-			go m.CancelBuy(adress, &trade)
+			go cancelBuy(adress, trade.Offer)
 			m.Pool.Buys = append(m.Pool.Buys[:idx], m.Pool.Buys[idx+1:]...)
 		}
 	}
 	for idx, trade := range m.Pool.Sells {
 		if reflect.DeepEqual(trade.Adress, adress) {
-			go m.CancelSell(adress, &trade)
+			go cancelSell(adress, m.adress, trade.Offer)
 			m.Pool.Sells = append(m.Pool.Sells[:idx], m.Pool.Sells[idx+1:]...)
 		}
 	}

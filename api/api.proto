@@ -5,219 +5,188 @@ option go_package = "./api";
 package api;
 
 /*
-Go gen:
+CODE GENERATION BASH COMMANDS:
+Go:
 protoc api/api.proto --go-grpc_out=. --go_out=.
-Dart gen:
+Dart:
 protoc lib/_net/api.proto --dart_out=grpc:.
 */
 
-service SyncTree{
-    rpc InfoUser(InfoUserRequest) returns (InfoUserResponse) {}
-    rpc InfoMarket(InfoMarketRequest) returns (InfoMarketResponse) {}
-    rpc InfoSearch(InfoSearchRequest) returns (InfoSearchResponse) {}
-    rpc InfoHasTrades(InfoHasTradesRequest) returns (Response) {}
-    rpc InfoMessages(InfoMessagesRequest) returns (Messages) {}
 
-    rpc UserCreate(UserCreateRequest) returns (Response) {}
-    rpc UserUpdate(UserUpdateRequest) returns (Response) {}
-    rpc UserSend(UserSendRequest) returns (Response) {}
-    rpc UserDeposit(UserDepositRequest) returns (Response) {}
-    rpc UserWithdrawal(UserWithdrawalRequest) returns (Response) {}
-    rpc UserSendMessage(UserSendMessageRequest) returns (Response) {}
-    rpc UserBuy(UserBuyRequest) returns (Response) {}
-    rpc UserSell(UserSellRequest) returns (Response) {}
-    rpc UserCancelTrade(UserCancelTradeRequest) returns (Response) {}
 
-    rpc MarketCraete(MarketCreateRequest) returns (Response) {}
-    rpc MarketUpdate(MarketUpdateRequest) returns (Response) {}
-    rpc MarketDeposit(MarketDepositRequest) returns (Response) {}
-    rpc MarketWithdrawal(MarketWithdrawalRequest) returns (Response) {}
-    rpc MarketSendMessage(MarketSendMessageRequest) returns (Response) {}
+
+//Response (universal response, when no return value required)
+message Response{}
+
+
+service Info{
+    rpc User(InfIn.Adress) returns (InfOut.User);
+    rpc HasTrades(InfIn.UserMarketAdresses) returns (InfOut.HasTrades);
+    rpc Market(InfIn.Adress) returns (InfOut.MarketInfo);
+    rpc Search(InfIn.SearchText) returns (InfOut.Adresses);
+    rpc Messages(InfIn.UserMarketAdresses) returns (InfOut.Messages);
 }
 
-message Response{
-    bool Passed = 1;
+message InfIn{
+    message Adress{
+        bytes adress = 1;
+    }
+    message SearchText{
+        string text = 1;
+    }
+    message UserMarketAdresses{
+        bytes market_adress = 1;
+        bytes user_adress = 2;
+    }
 }
 
-message Messages{
-    repeated string messages = 1;
+message InfOut{
+    message User{
+        string public_name = 1;
+        uint64 balance = 2;
+        bytes message_key = 3;
+        repeated bytes market_adresses = 4;
+        repeated uint64 market_balances = 5;
+    }
+    message MarketInfo{
+        string name = 1;
+        bytes messageKey = 2;
+        string imageLink = 3;
+        string description = 4;
+        uint64 operationCount = 5;
+        repeated Trade buys = 6;
+        repeated Trade sells = 7;
+        uint64 activeBuys = 8;
+        uint64 activeSells = 9;
+        uint64 inputFee = 10;
+        uint64 outputFee = 11;
+        string workTime = 12;
+        uint64 delimiter = 14;
+    }
+    message Adresses{
+        repeated bytes marketAdresses = 1;
+    }
+    message Messages{
+        repeated string messages = 1;
+    }
+    message HasTrades{
+        bool hasTrades = 1;
+    }
+    message Trade{
+        uint64 offer = 1;
+        uint64 recieve = 2;
+    }
 }
 
-message InfoUserRequest{
-    bytes Adress = 1;
+
+service User{
+    rpc Create(UserRequests.Create) returns (Response);
+    rpc Update(UserRequests.Update) returns (Response);
+    rpc Send(UserRequests.Send) returns (Response);
+    rpc Message(UserRequests.Message) returns (Response);
+    rpc Buy(UserRequests.Buy) returns (Response);
+    rpc Sell(UserRequests.Sell) returns (Response);
+    rpc CancelTrade(UserRequests.CancelTrade) returns (Response);
 }
 
-message InfoMarketRequest{
-    bytes Adress = 1;
+message UserRequests{
+    message Create{
+        bytes PublicKey = 1;
+        bytes MesssageKey = 2;
+        string PublicName = 3;
+        bytes Sign = 4;
+    }  
+    message Update{
+        bytes PublicKey = 1;
+        bytes MesssageKey = 2;
+        string PublicName = 3;
+        bytes Sign = 4;
+    }
+    message Send{
+        bytes PublicKey = 1;
+        uint64 SendAmount = 2;
+        bytes RecieverAdress = 3;
+        bytes Sign = 4;
+    }
+    message Message{
+        bytes PublicKey = 1;
+        bytes Adress = 2;
+        string Message = 3;
+        bytes Sign = 4;
+    }
+    message Buy{
+        bytes PublicKey = 1;
+        bytes Adress = 2;
+        uint64 Recieve = 3;
+        uint64 Offer = 4;
+        bytes Sign = 5;
+    }
+    message Sell{
+        bytes PublicKey = 1;
+        bytes Adress = 2;
+        uint64 Recieve = 3;
+        uint64 Offer = 4;
+        bytes Sign = 5;
+    }
+    message CancelTrade{
+        bytes PublicKey = 1;
+        bytes MarketAdress = 2;
+        bytes Sign = 3;
+    }
 }
 
-message InfoSearchRequest{
-    string info = 1;
+
+
+
+service Market{
+    rpc Spawn(MarketRequests.Create) returns (Response);
+    rpc Refresh(MarketRequests.Update) returns (Response);
+    rpc Deposit(MarketRequests.Deposit) returns (Response);
+    rpc Withdrawal(MarketRequests.Withdrawal) returns (Response);
+    rpc Reply(MarketRequests.Reply) returns (Response);
 }
 
-message InfoUserResponse{
-    string PublicName = 1;
-    uint64 Balance = 2;
-    bytes mesKey = 3;
-    repeated bytes marketAdresses = 4;
-    repeated uint64 marketBalances = 5;
-}
-
-message InfoMarketResponse{
-    string Name = 1;
-    bytes MesKey = 2;
-    string Img = 3;
-    string Descr = 4;
-    uint64 OpCount = 5;
-    repeated uint64 buys = 6; //each pair - single deal
-    repeated uint64 sells = 7; //each pair - single deal
-    uint64 activeBuys = 8;
-    uint64 activeSells = 9;
-    uint64 inputFee = 10;
-    uint64 outputFee = 11;
-    string workTime = 12;
-}
-
-message InfoHasTradesRequest{
-    bytes marketAdress = 1;
-    bytes userAdress = 2;
-}
-
-message InfoSearchResponse{
-    repeated bytes ConcMarkets = 1;
-}
-
-message InfoMessagesRequest{
-    bytes marketAdress = 1;
-    bytes userAdress = 2;
-}
-
-message UserCreateRequest{
-    bytes PublicKey = 1;
-    bytes MesssageKey = 2;
-    string PublicName = 3;
-    bytes Sign = 4;
-}
-
-message UserUpdateRequest{
-    bytes PublicKey = 1;
-    bytes MesssageKey = 2;
-    string PublicName = 3;
-    bytes Sign = 4;
-}
-
-message UserSendRequest{
-    bytes PublicKey = 1;
-    uint64 SendAmount = 2;
-    bytes RecieverAdress = 3;
-    bytes Sign = 4;
-}
-
-message UserInfoRequest{
-    bytes Adress = 1;
-}
-
-message UserTradeRequest{
-    bytes PublicKey = 1;
-    bytes MarketAdress = 2;
-    uint64 Offer = 3;
-    uint64 Recieve = 4;
-    bool IsSell = 5;
-    bytes Sign = 6;
-}
-
-message UserCancelTradeRequest{
-    bytes PublicKey = 1;
-    bytes MarketAdress = 2;
-    bytes Sign = 3;
-}
-
-message UserDepositRequest{
-    bytes PublicKey = 1;
-    bytes MarketAdress = 2;
-    uint64 Amount = 3;
-    bytes Sign = 4;
-}
-
-message UserWithdrawalRequest{
-    bytes PublicKey = 1;
-    bytes MarketAdress = 2;
-    uint64 Amount = 3;
-    bytes Sign = 4;
-}
-
-message UserSearchRequest{
-    string Name = 1;
-}
-
-message UserSendMessageRequest{
-    bytes PublicKey = 1;
-    bytes Adress = 2;
-    string Message = 3;
-    bytes Sign = 4;
-}
-
-message UserBuyRequest{
-    bytes PublicKey = 1;
-    bytes Adress = 2;
-    uint64 Recieve = 3;
-    uint64 Offer = 4;
-    bytes Sign = 5;
-}
-
-message UserSellRequest{
-    bytes PublicKey = 1;
-    bytes Adress = 2;
-    uint64 Recieve = 3;
-    uint64 Offer = 4;
-    bytes Sign = 5;
-}
-
-message MarketCreateRequest{
-    bytes PublicKey = 1;
-    bytes MesssageKey = 2;
-    string Name = 3;
-    string Img = 4;
-    string Descr = 5;
-    bytes Sign = 6;
-    uint64 inputFee = 7;
-    uint64 outputFee = 8;
-    string workTime = 9;
-}
-
-message MarketUpdateRequest{
-    bytes PublicKey = 1;
-    bytes MesssageKey = 2;
-    string Name = 3;
-    string Img = 4;
-    string Descr = 5;
-    bytes Sign = 6;
-    uint64 inputFee = 7;
-    uint64 outputFee = 8;
-    string workTime = 9;
-}
-
-message MarketInfoRequest{
-    bytes adress = 1;
-}
-
-message MarketDepositRequest{
-    bytes PublicKey = 1;
-    bytes UserAdress = 2;
-    uint64 Amount = 3;
-    bytes Sign = 4;
-}
-
-message MarketWithdrawalRequest{
-    bytes PublicKey = 1;
-    bytes UserAdress = 2;
-    uint64 Amount = 3;
-    bytes Sign = 4;
-}
-
-message MarketSendMessageRequest{
-    bytes PublicKey = 1;
-    bytes Adress = 2;
-    string Message = 3;
-    bytes Sign = 4;
+message MarketRequests{
+    message Create{
+        bytes PublicKey = 1;
+        bytes MesssageKey = 2;
+        string Name = 3;
+        string Img = 4;
+        string Descr = 5;
+        bytes Sign = 6;
+        uint64 inputFee = 7;
+        uint64 outputFee = 8;
+        string workTime = 9;
+        uint64 delimiter = 10;
+    }
+    message Update{
+        bytes PublicKey = 1;
+        bytes MesssageKey = 2;
+        string Name = 3;
+        string Img = 4;
+        string Descr = 5;
+        bytes Sign = 6;
+        uint64 inputFee = 7;
+        uint64 outputFee = 8;
+        string workTime = 9;
+        uint64 delimiter = 10;
+    }
+    message Deposit{
+        bytes PublicKey = 1;
+        bytes UserAdress = 2;
+        uint64 Amount = 3;
+        bytes Sign = 4;
+    }
+    message Withdrawal{
+        bytes PublicKey = 1;
+        bytes UserAdress = 2;
+        uint64 Amount = 3;
+        bytes Sign = 4;
+    }
+    message Reply{
+        bytes PublicKey = 1;
+        bytes Adress = 2;
+        string Message = 3;
+        bytes Sign = 4;
+    }
 }

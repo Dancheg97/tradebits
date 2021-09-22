@@ -21,7 +21,7 @@ var searcher = openSearch()
 
 func openSearch() bleve.Index {
 	_, filename, _, _ := runtime.Caller(0)
-	searchPath := path.Dir(filename) + "/bleeve"
+	searchPath := path.Dir(filename) + "/bleve"
 	_, existErr := os.Stat(searchPath)
 	if existErr != nil {
 		mapping := bleve.NewIndexMapping()
@@ -32,27 +32,25 @@ func openSearch() bleve.Index {
 	return searcher
 }
 
-func SearchAdd(name string, adress []byte) {
+func Add(name string, adress []byte) {
 	adressAsString := string(adress)
-	searcher.Index(adressAsString, name)
+	searcher.Index(adressAsString, name+" "+adressAsString)
 }
 
-func SearchChange(newName string, adress []byte) {
+func Change(newName string, adress []byte) {
 	adressAsString := string(adress)
 	searcher.Delete(adressAsString)
-	searcher.Index(adressAsString, newName)
+	searcher.Index(adressAsString, newName+" "+adressAsString)
 }
 
 func Search(info string) [][]byte {
 	query := bleve.NewMatchQuery(info)
 	search := bleve.NewSearchRequest(query)
+	search.Size = 30
 	searchRez, _ := searcher.Search(search)
 	rezArr := [][]byte{}
-	for idx, hit := range searchRez.Hits {
+	for _, hit := range searchRez.Hits {
 		rezArr = append(rezArr, []byte(hit.ID))
-		if idx == 30 {
-			break
-		}
 	}
 	return rezArr
 }

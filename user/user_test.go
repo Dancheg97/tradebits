@@ -2,17 +2,23 @@ package user
 
 import (
 	"reflect"
+	"sync_tree/calc"
 	"sync_tree/data"
 	"sync_tree/trade"
 	"testing"
 	"time"
 )
 
+var dummyMesKey = []byte{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2}
+var dummyName = "Name"
+
 func TestCreateUser(t *testing.T) {
-	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 6, 5, 4, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 1, 3, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 2, 60, 61, 62, 91, 91}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	err := Create(adress, mesKey, img)
+	var adress = calc.Rand()
+	err := Create(
+		adress,
+		dummyMesKey,
+		dummyName,
+	)
 	if err != nil {
 		t.Error("attemt to create new user failed")
 	}
@@ -20,11 +26,17 @@ func TestCreateUser(t *testing.T) {
 }
 
 func TestCreateExisting(t *testing.T) {
-	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 91, 91, 91}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	Create(adress, mesKey, img)
-	err := Create(adress, mesKey, img)
+	var adress = calc.Rand()
+	Create(
+		adress,
+		dummyMesKey,
+		dummyName,
+	)
+	err := Create(
+		adress,
+		dummyMesKey,
+		dummyName,
+	)
 	if err == nil {
 		t.Error("attemt to create existing user succeded, that is bad error")
 	}
@@ -32,13 +44,15 @@ func TestCreateExisting(t *testing.T) {
 }
 
 func TestGetFreeUser(t *testing.T) {
-	var adress = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 22, 91, 91, 91, 91}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	Create(adress, mesKey, img)
+	var adress = calc.Rand()
+	Create(
+		adress,
+		dummyMesKey,
+		dummyName,
+	)
 	freeUser := Get(adress)
 	freeUser.Save()
-	if freeUser.PublicName != "user image link" {
+	if freeUser.PublicName != "Name" {
 		t.Error("get free user error")
 	}
 	data.TestRM(adress)
@@ -51,10 +65,12 @@ func getBusyUser(adress []byte) {
 }
 
 func TestGetBusyUser(t *testing.T) {
-	var adress = []byte{1, 22, 3, 44, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 22, 91, 91, 91, 91}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	Create(adress, mesKey, img)
+	var adress = calc.Rand()
+	Create(
+		adress,
+		dummyMesKey,
+		dummyName,
+	)
 	usr1 := Get(adress)
 	go getBusyUser(adress)
 	time.Sleep(time.Second)
@@ -67,25 +83,29 @@ func TestGetBusyUser(t *testing.T) {
 }
 
 func TestUserLook(t *testing.T) {
-	var adress = []byte{1, 22, 3, 44, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 121, 59, 22, 91, 91, 91, 91}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	Create(adress, mesKey, img)
+	var adress = calc.Rand()
+	Create(
+		adress,
+		dummyMesKey,
+		dummyName,
+	)
 	usr := Look(adress)
 	if len(usr.adress) != 0 {
 		t.Error("user adress should be empty")
 	}
-	if usr.PublicName != img {
+	if usr.PublicName != dummyName {
 		t.Error("user info is incorrect")
 	}
 	data.TestRM(adress)
 }
 
 func TestPutUserMessage(t *testing.T) {
-	var adress = []byte{1, 22, 3, 44, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 1, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 32, 32, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 59, 56, 32, 121, 59, 22, 91, 191, 191, 91}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	Create(adress, mesKey, img)
+	var adress = calc.Rand()
+	Create(
+		adress,
+		dummyMesKey,
+		dummyName,
+	)
 	usr := Get(adress)
 	usr.PutUserMessage([]byte{1, 2, 3}, "message")
 	usr.Save()
@@ -97,10 +117,12 @@ func TestPutUserMessage(t *testing.T) {
 }
 
 func TestPutMarketMessage(t *testing.T) {
-	var adress = []byte{1, 22, 3, 1, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 1, 23, 23, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 32, 32, 41, 42, 19, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 59, 56, 32, 121, 59, 22, 91, 191, 191, 91}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	Create(adress, mesKey, img)
+	var adress = calc.Rand()
+	Create(
+		adress,
+		dummyMesKey,
+		dummyName,
+	)
 	usr := Get(adress)
 	usr.PutMarketMessage([]byte{1, 2, 3}, "message")
 	usr.Save()
@@ -112,10 +134,12 @@ func TestPutMarketMessage(t *testing.T) {
 }
 
 func TestNewUserNonNullableMessageMap(t *testing.T) {
-	var adress = []byte{1, 22, 3, 1, 5, 6, 7, 8, 9, 123, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 1, 23, 23, 25, 26, 123, 123, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 32, 32, 41, 42, 19, 44, 45, 16, 47, 48, 49, 50, 51, 52, 53, 54, 59, 56, 32, 121, 59, 22, 91, 191, 191, 12}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	Create(adress, mesKey, img)
+	var adress = calc.Rand()
+	Create(
+		adress,
+		dummyMesKey,
+		dummyName,
+	)
 	usr := Get(adress)
 	if usr.Messages == nil {
 		t.Error("user messages should never be null")
@@ -125,10 +149,12 @@ func TestNewUserNonNullableMessageMap(t *testing.T) {
 }
 
 func TestAttachToLookedUser(t *testing.T) {
-	var adress = []byte{1, 22, 3, 44, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 59, 56, 99, 121, 59, 22, 91, 191, 191, 91}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	Create(adress, mesKey, img)
+	var adress = calc.Rand()
+	Create(
+		adress,
+		dummyMesKey,
+		dummyName,
+	)
 	usr := Look(adress)
 	buy := trade.Buy{}
 	buyAttached := usr.AttachBuy(&buy)
@@ -144,10 +170,12 @@ func TestAttachToLookedUser(t *testing.T) {
 }
 
 func TestAttachTradesWithZeroOffer(t *testing.T) {
-	var adress = []byte{1, 22, 3, 44, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 19, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 121, 59, 22, 91, 91, 91, 91}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	Create(adress, mesKey, img)
+	var adress = calc.Rand()
+	Create(
+		adress,
+		dummyMesKey,
+		dummyName,
+	)
 	usr := Get(adress)
 	buy := trade.Buy{
 		Offer:   0,
@@ -169,10 +197,12 @@ func TestAttachTradesWithZeroOffer(t *testing.T) {
 }
 
 func TestAttachTradeWithBigBalance(t *testing.T) {
-	var adress = []byte{1, 22, 3, 44, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 116, 19, 18, 19, 20, 21, 22, 23, 224, 25, 232, 27, 28, 29, 30, 31, 32, 33, 134, 35, 11, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 156, 57, 121, 59, 22, 91, 91, 232, 91}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	Create(adress, mesKey, img)
+	var adress = calc.Rand()
+	Create(
+		adress,
+		dummyMesKey,
+		dummyName,
+	)
 	usr := Get(adress)
 	buy := trade.Buy{
 		Offer:   1000,
@@ -195,10 +225,12 @@ func TestAttachTradeWithBigBalance(t *testing.T) {
 }
 
 func TestAttachNormalTrades(t *testing.T) {
-	var adress = []byte{1, 22, 3, 44, 15, 6, 7, 8, 9, 110, 11, 12, 13, 14, 15, 16, 19, 18, 19, 20, 21, 22, 23, 24, 25, 232, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 38, 87, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 121, 59, 22, 91, 91, 232, 91}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	Create(adress, mesKey, img)
+	var adress = calc.Rand()
+	Create(
+		adress,
+		dummyMesKey,
+		dummyName,
+	)
 	usr := Get(adress)
 	usr.Balance = 1000
 	buy := trade.Buy{
@@ -228,10 +260,12 @@ func TestAttachNormalTrades(t *testing.T) {
 }
 
 func TestAttachSellNonExistingMarket(t *testing.T) {
-	var adress = []byte{1, 22, 3, 44, 15, 6, 7, 8, 9, 110, 11, 12, 13, 14, 15, 16, 19, 18, 19, 121, 21, 22, 23, 24, 25, 232, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 138, 87, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 59, 22, 91, 91, 232, 91}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	Create(adress, mesKey, img)
+	var adress = calc.Rand()
+	Create(
+		adress,
+		dummyMesKey,
+		dummyName,
+	)
 	usr := Get(adress)
 	sell := trade.Sell{
 		Offer:   1000,
@@ -245,10 +279,12 @@ func TestAttachSellNonExistingMarket(t *testing.T) {
 }
 
 func TestAttchBoundedTrades(t *testing.T) {
-	var adress = []byte{1, 22, 3, 44, 22, 32, 7, 8, 9, 110, 11, 12, 13, 14, 15, 16, 19, 18, 19, 121, 21, 22, 23, 124, 25, 232, 27, 28, 29, 30, 31, 32, 33, 34, 35, 11, 37, 138, 87, 40, 41, 142, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 157, 121, 59, 122, 91, 91, 232, 91}
-	var mesKey = []byte{1, 2, 3, 4, 5}
-	var img = "user image link"
-	Create(adress, mesKey, img)
+	var adress = calc.Rand()
+	Create(
+		adress,
+		dummyMesKey,
+		dummyName,
+	)
 	usr := Get(adress)
 	usr.Balance = 100
 	usr.Balances["x"] = 100
