@@ -43,12 +43,10 @@ func CreateNewUsers() {
 }
 
 func CreateNewMarkets() {
-	alcoSplitted := strings.Split(alcoKeyString, "|")
-	alcoAdress := calc.Hash(stringToKeyBytes(alcoSplitted[1]))
-	market.Create(
-		alcoAdress,
+	btcErr := market.Create(
+		dummyMarketAdress1,
 		"Bitcoin Ftem",
-		dummyMessageKey,
+		dummyMesKey,
 		dummyDescription,
 		"https://image.flaticon.com/icons/png/512/1490/1490849.png",
 		dummyInputFee,
@@ -56,13 +54,14 @@ func CreateNewMarkets() {
 		dummyWorkTime,
 		dummyDelimiter,
 	)
+	if btcErr != nil {
+		panic(btcErr)
+	}
 
-	nicoSplitted := strings.Split(nicoKeyString, "|")
-	nicoAdress := calc.Hash(stringToKeyBytes(nicoSplitted[1]))
-	market.Create(
-		nicoAdress,
+	rubErr := market.Create(
+		dummyMarketAdress2,
 		"Sber ruble ftem",
-		dummyMessageKey,
+		dummyMesKey,
 		dummyDescription,
 		"https://cdn-icons-png.flaticon.com/512/1548/1548946.png",
 		dummyInputFee,
@@ -70,11 +69,14 @@ func CreateNewMarkets() {
 		dummyWorkTime,
 		dummyDelimiter,
 	)
+	if rubErr != nil {
+		panic(rubErr)
+	}
 
-	market.Create(
+	cardErr := market.Create(
 		calc.Rand(),
 		"Cardano ftem",
-		dummyMessageKey,
+		dummyMesKey,
 		dummyDescription,
 		"https://cdn-icons-png.flaticon.com/512/5245/5245441.png",
 		dummyInputFee,
@@ -82,11 +84,14 @@ func CreateNewMarkets() {
 		dummyWorkTime,
 		dummyDelimiter,
 	)
+	if cardErr != nil {
+		panic(cardErr)
+	}
 
-	market.Create(
+	zcashErr := market.Create(
 		calc.Rand(),
 		"Zcash ftem",
-		dummyMessageKey,
+		dummyMesKey,
 		dummyDescription,
 		"https://cdn-icons-png.flaticon.com/512/1412/1412814.png",
 		dummyInputFee,
@@ -94,4 +99,7 @@ func CreateNewMarkets() {
 		dummyWorkTime,
 		dummyDelimiter,
 	)
+	if zcashErr != nil {
+		panic(zcashErr)
+	}
 }
