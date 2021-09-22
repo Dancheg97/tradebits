@@ -7,6 +7,7 @@
 *.ldb
 data/leveldb/*
 search/bleve/*
+start.cmd
 
 # Test binary, built with `go test -c`
 *.test
