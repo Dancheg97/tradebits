@@ -72,7 +72,7 @@ func (s *server) Update(
 		fmt.Println("[UserUpdate] - Bad public name length")
 		return nil, errors.New("public name too big")
 	}
-	if len(in.MesssageKey) != 270 {
+	if len(in.MesssageKey) < 240 || len(in.MesssageKey) > 320 {
 		fmt.Println("[UserUpdate] - Bad message key length")
 		return nil, errors.New("wrong mes key length")
 	}

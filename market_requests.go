@@ -51,6 +51,7 @@ func (s *server) Refresh(
 	ctx context.Context,
 	in *pb.MarketRequests_Update,
 ) (*pb.Response, error) {
+	// TODO add same checks as in market craete (ps move to another func)
 	concatedMessage := [][]byte{
 		in.PublicKey,
 		in.MesssageKey,

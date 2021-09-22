@@ -26,7 +26,7 @@ func CreateNewUsers() {
 	}
 	alco := user.Get(alcoAdress)
 	alco.Balance = 50000
-	alco.Balances[string(alcoAdress)] = 10000
+	alco.Balances[string(dummyMarketAdress1)] = 10000
 	alco.Save()
 
 	nicoSplitted := strings.Split(nicoKeyString, "|")
@@ -38,7 +38,7 @@ func CreateNewUsers() {
 	}
 	nico := user.Get(nicoAdress)
 	nico.Balance = 80000
-	nico.Balances[string(nicoAdress)] = 4000
+	nico.Balances[string(dummyMarketAdress2)] = 4000
 	nico.Save()
 }
 
