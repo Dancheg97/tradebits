@@ -9,7 +9,7 @@ CODE GENERATION BASH COMMANDS:
 Go:
 protoc api/api.proto --go-grpc_out=. --go_out=.
 Dart:
-protoc lib/_net/api.proto --dart_out=grpc:.
+protoc lib/src/net/api.proto --dart_out=grpc:.
 */
 
 
