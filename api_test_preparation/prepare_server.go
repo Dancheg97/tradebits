@@ -20,7 +20,10 @@ func CreateNewUsers() {
 	alcoSplitted := strings.Split(alcoKeyString, "|")
 	alcoAdress := calc.Hash(stringToKeyBytes(alcoSplitted[1]))
 	alcoMesKey := stringToKeyBytes(alcoSplitted[3])
-	user.Create(alcoAdress, alcoMesKey, "Alcohol")
+	alcErr := user.Create(alcoAdress, alcoMesKey, "Alcohol")
+	if alcErr != nil {
+		panic(alcErr)
+	}
 	alco := user.Get(alcoAdress)
 	alco.Balance = 50000
 	alco.Balances[string(alcoAdress)] = 10000
@@ -29,7 +32,10 @@ func CreateNewUsers() {
 	nicoSplitted := strings.Split(nicoKeyString, "|")
 	nicoAdress := calc.Hash(stringToKeyBytes(nicoSplitted[1]))
 	nicoMesKey := stringToKeyBytes(nicoSplitted[3])
-	user.Create(nicoAdress, nicoMesKey, "Nicotin")
+	nicErr := user.Create(nicoAdress, nicoMesKey, "Nicotin")
+	if nicErr != nil {
+		panic(nicErr)
+	}
 	nico := user.Get(nicoAdress)
 	nico.Balance = 80000
 	nico.Balances[string(nicoAdress)] = 4000
