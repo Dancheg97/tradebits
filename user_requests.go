@@ -68,6 +68,14 @@ func (s *server) Update(
 		fmt.Println("[UserUpdate] - User not found")
 		return nil, errors.New("user not found error")
 	}
+	if len(in.PublicName) > 12 {
+		fmt.Println("[UserUpdate] - Bad public name length")
+		return nil, errors.New("public name too big")
+	}
+	if len(in.MesssageKey) != 270 {
+		fmt.Println("[UserUpdate] - Bad message key length")
+		return nil, errors.New("wrong mes key length")
+	}
 	user.PublicName = in.PublicName
 	user.MesKey = in.MesssageKey
 	user.Save()

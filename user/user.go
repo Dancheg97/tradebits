@@ -30,7 +30,7 @@ func Create(adress []byte, mesKey []byte, publicName string) error {
 	if len(publicName) > 12 {
 		return errors.New("name too big")
 	}
-	if len(mesKey) != 270 {
+	if len(mesKey) < 240 || len(mesKey) > 320  {
 		return errors.New("invalid message key length")
 	}
 	if data.Check(adress) {

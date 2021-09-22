@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"errors"
+	"fmt"
 	"reflect"
 	"sync_tree/data"
 	"sync_tree/lock"
@@ -64,7 +65,8 @@ func Create(
 	if len(name) < 10 || len(name) > 30 {
 		return errors.New("bad name length")
 	}
-	if len(mesKey) != 270 {
+	if len(mesKey) < 240 || len(mesKey) > 320 {
+		fmt.Println(len(mesKey))
 		return errors.New("invalid message key length")
 	}
 	if len(descr) < 160 || len(descr) > 760 {
