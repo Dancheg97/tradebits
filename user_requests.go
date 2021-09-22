@@ -68,6 +68,14 @@ func (s *server) Update(
 		fmt.Println("[UserUpdate] - User not found")
 		return nil, errors.New("user not found error")
 	}
+	if len(in.PublicName) > 12 {
+		fmt.Println("[UserUpdate] - Bad public name length")
+		return nil, errors.New("public name too big")
+	}
+	if len(in.MesssageKey) != 270 {
+		fmt.Println("[UserUpdate] - Bad message key length")
+		return nil, errors.New("wrong mes key length")
+	}
 	user.PublicName = in.PublicName
 	user.MesKey = in.MesssageKey
 	user.Save()
@@ -96,7 +104,7 @@ func (s *server) Send(
 		return nil, errors.New("reciever dont exist")
 	}
 	defer reciever.Save()
-	if sender.Balance >= in.SendAmount {
+	if sender.Balance < in.SendAmount {
 		fmt.Println("[UserSend] - Not enough balance")
 		return nil, errors.New("not enough balance")
 	}
