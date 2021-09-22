@@ -18,13 +18,8 @@ type server struct {
 }
 
 func main() {
-<<<<<<< HEAD
-	createNewUsers()
-	createStartMarket()
-=======
 	api_test_preparation.CreateNewUsers()
 	api_test_preparation.CreateNewMarkets()
->>>>>>> ebae813c220497fb4b90f6557ae6034f04d3999a
 	fmt.Println("Server has started! port: 8080 open")
 	lis, err := net.Listen("tcp", ":8080")
 	if err != nil {
