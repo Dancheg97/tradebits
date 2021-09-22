@@ -150,7 +150,6 @@ func (s *server) Buy(
 	ctx context.Context,
 	in *pb.UserRequests_Buy,
 ) (*pb.Response, error) {
-	fmt.Println("XXX")
 	buyerAdress := calc.Hash(in.PublicKey)
 	buyer := user.Get(buyerAdress)
 	if buyer == nil {
