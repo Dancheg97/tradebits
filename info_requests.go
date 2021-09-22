@@ -27,8 +27,7 @@ func (s *server) HasTrades(
 	}
 	hasTrades := market.HasTrades(in.UserAdress)
 	fmt.Println("[InfoHasTrades] - has trades - ", hasTrades)
-	return &pb.InfOut_HasTrades{HasTrades: true}, nil
-
+	return &pb.InfOut_HasTrades{HasTrades: hasTrades}, nil
 }
 
 func (s *server) Market(
