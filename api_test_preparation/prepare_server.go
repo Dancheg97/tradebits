@@ -6,6 +6,7 @@ import (
 	"strings"
 	"sync_tree/calc"
 	"sync_tree/market"
+	"sync_tree/trade"
 	"sync_tree/user"
 )
 
@@ -102,4 +103,90 @@ func CreateNewMarkets() {
 	if zcashErr != nil {
 		panic(zcashErr)
 	}
+
+	rippleErr := market.Create(
+		calc.Rand(),
+		"Ripple ftem",
+		dummyMesKey,
+		dummyDescription,
+		"https://cdn-icons-png.flaticon.com/512/1181/1181387.png",
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	if rippleErr != nil {
+		panic(zcashErr)
+	}
+
+	dogeErr := market.Create(
+		calc.Rand(),
+		"Doge coin ftem",
+		dummyMesKey,
+		dummyDescription,
+		"https://cdn-icons-png.flaticon.com/512/5004/5004807.png",
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	if dogeErr != nil {
+		panic(zcashErr)
+	}
+
+	ethErr := market.Create(
+		calc.Rand(),
+		"Ethereum ftem",
+		dummyMesKey,
+		dummyDescription,
+		"https://cdn-icons-png.flaticon.com/512/1319/1319596.png",
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	if ethErr != nil {
+		panic(zcashErr)
+	}
+}
+
+func FullFillWithTrades() {
+	btcMarket := market.Get(dummyMarketAdress1)
+
+	firstDummyBuy := trade.Buy{
+		Offer:   43000000,
+		Recieve: 1800000,
+	}
+	secondDummyBuy := trade.Buy{
+		Offer:   41500000,
+		Recieve: 1790000,
+	}
+	thirdDummyBuy := trade.Buy{
+		Offer:   41800000,
+		Recieve: 1795000,
+	}
+	fourthDummyBuy := trade.Buy{
+		Offer:   42100000,
+		Recieve: 1895000,
+	}
+	fifthDummyBuy := trade.Buy{
+		Offer:   42050000,
+		Recieve: 1895398,
+	}
+	allDummyBuys := []trade.Buy{
+		firstDummyBuy,
+		secondDummyBuy,
+		thirdDummyBuy,
+		fourthDummyBuy,
+		fifthDummyBuy,
+	}
+	for _, buy := range allDummyBuys {
+		adr := calc.Rand()
+		user.Create(adr, dummyMesKey, "dummy")
+		usr := user.Get(adr)
+		usr.Balance = 44800000
+		usr.AttachBuy(&buy)
+		btcMarket.AttachBuy(&buy)
+	}
+
 }
