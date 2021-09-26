@@ -189,4 +189,39 @@ func FullFillWithTrades() {
 		btcMarket.AttachBuy(&buy)
 	}
 
+	firstDummySell := trade.Sell{
+		Offer:   1799999,
+		Recieve: 43000000,
+	}
+	secondDummySell := trade.Sell{
+		Offer:   1799999,
+		Recieve: 43000765,
+	}
+	thirdDummySell := trade.Sell{
+		Offer:   1799999,
+		Recieve: 43000853,
+	}
+	fourthDummySell := trade.Sell{
+		Offer:   1799865,
+		Recieve: 43000923,
+	}
+	fifthDummySell := trade.Sell{
+		Offer:   1799212,
+		Recieve: 43000999,
+	}
+	allDummySells := []trade.Sell{
+		firstDummySell,
+		secondDummySell,
+		thirdDummySell,
+		fourthDummySell,
+		fifthDummySell,
+	}
+	for _, sell := range allDummySells {
+		adr := calc.Rand()
+		user.Create(adr, dummyMesKey, "dummy")
+		usr := user.Get(adr)
+		usr.Balances[string(dummyMarketAdress1)] = 44800000
+		usr.AttachSell(&sell, dummyMarketAdress1)
+		btcMarket.AttachSell(&sell)
+	}
 }
