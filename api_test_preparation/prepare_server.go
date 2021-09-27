@@ -224,4 +224,5 @@ func FullFillWithTrades() {
 		usr.AttachSell(&sell, dummyMarketAdress1)
 		btcMarket.AttachSell(&sell)
 	}
+	btcMarket.Save()
 }
