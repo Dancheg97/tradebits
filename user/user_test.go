@@ -1,6 +1,7 @@
 package user
 
 import (
+	"bytes"
 	"reflect"
 	"sync_tree/calc"
 	"sync_tree/data"
@@ -107,28 +108,11 @@ func TestPutUserMessage(t *testing.T) {
 		dummyName,
 	)
 	usr := Get(adress)
-	usr.PutUserMessage([]byte{1, 2, 3}, "message")
+	usr.PutMessage([]byte{1, 2, 3}, []byte{1, 2, 3})
 	usr.Save()
 	mes := Look(adress).GetMessages([]byte{1, 2, 3})[0]
-	if mes != "umessage" {
-		t.Error("the message should be 'message' - " + mes)
-	}
-	data.TestRM(adress)
-}
-
-func TestPutMarketMessage(t *testing.T) {
-	var adress = calc.Rand()
-	Create(
-		adress,
-		dummyMesKey,
-		dummyName,
-	)
-	usr := Get(adress)
-	usr.PutMarketMessage([]byte{1, 2, 3}, "message")
-	usr.Save()
-	mes := Look(adress).GetMessages([]byte{1, 2, 3})[0]
-	if mes != "mmessage" {
-		t.Error("the message should be 'message' - " + mes)
+	if bytes.Compare(mes, []byte{1, 2, 3}) == 3 {
+		t.Error("the message should be '[]byte{1, 2, 3}' - ", mes)
 	}
 	data.TestRM(adress)
 }

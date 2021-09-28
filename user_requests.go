@@ -141,20 +141,22 @@ func (s *server) Message(
 		in.Adress,
 		[]byte(in.Message),
 	}
+	fmt.Println(in.Message)
+	fmt.Println([]byte(in.Message))
 	signCheckErr := calc.Verify(concMes, in.PublicKey, in.Sign)
 	if signCheckErr != nil {
-		fmt.Println("[Message] - Sign error")
+		fmt.Println("[UserMessage] - Sign error")
 		return nil, errors.New("sign error")
 	}
 	senderAdress := calc.Hash(in.PublicKey)
 	u := user.Get(senderAdress)
 	if u == nil {
-		fmt.Println("[Message] - User not found error")
+		fmt.Println("[UserMessage] - User not found error")
 		return nil, errors.New("user not found")
 	}
 	defer u.Save()
 	u.PutUserMessage(in.Adress, in.Message)
-	fmt.Println("[Message] - Message sent: ", u.PublicName)
+	fmt.Println("[UserMessage] - Message sent: ", u.PublicName)
 	return &pb.Response{}, nil
 }
 

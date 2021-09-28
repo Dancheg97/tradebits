@@ -15,7 +15,7 @@ type user struct {
 	MesKey     []byte
 	PublicName string
 	Balances   map[string]uint64
-	Messages   map[string][]string
+	Messages   map[string][][]byte
 	Arch       map[string]string
 }
 
@@ -41,7 +41,7 @@ func Create(adress []byte, mesKey []byte, publicName string) error {
 		MesKey:     mesKey,
 		PublicName: publicName,
 		Balances:   make(map[string]uint64),
-		Messages:   make(map[string][]string),
+		Messages:   make(map[string][][]byte),
 		Arch:       map[string]string{},
 	}
 	cache := new(bytes.Buffer)
@@ -98,19 +98,10 @@ func (u *user) Save() {
 /*
 Function to add message from some adress to concrete user
 */
-func (u *user) PutUserMessage(adress []byte, mes string) {
+func (u *user) PutMessage(adress []byte, mes []byte) {
 	strAdress := string(adress)
 	if u.Messages[strAdress] == nil {
-		u.Messages[strAdress] = []string{"u" + mes}
-		return
-	}
-	u.Messages[strAdress] = append(u.Messages[strAdress], mes)
-}
-
-func (u *user) PutMarketMessage(adress []byte, mes string) {
-	strAdress := string(adress)
-	if u.Messages[strAdress] == nil {
-		u.Messages[strAdress] = []string{"m" + mes}
+		u.Messages[strAdress] = [][]byte{mes}
 		return
 	}
 	u.Messages[strAdress] = append(u.Messages[strAdress], mes)
@@ -120,7 +111,7 @@ func (u *user) PutMarketMessage(adress []byte, mes string) {
 This function is made to get all new messages and to put all current messages
 to archieve
 */
-func (u *user) GetMessages(adress []byte) []string {
+func (u *user) GetMessages(adress []byte) [][]byte {
 	return u.Messages[string(adress)]
 }
 
