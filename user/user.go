@@ -111,7 +111,7 @@ func (u *user) PutMessage(adress []byte, mes []byte) {
 This function is made to get all new messages and to put all current messages
 to archieve
 */
-func (u *user) GetMessages(adress []byte) [][]byte {
+func (u *user) GetMessages(adress []byte) [][]byte{
 	return u.Messages[string(adress)]
 }
 

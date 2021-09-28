@@ -67,7 +67,7 @@ message InfOut{
         repeated bytes marketAdresses = 1;
     }
     message Messages{
-        repeated string messages = 1;
+        repeated bytes messages = 1;
     }
     message HasTrades{
         bool hasTrades = 1;
@@ -77,6 +77,8 @@ message InfOut{
         uint64 recieve = 2;
     }
 }
+
+
 
 
 service User{
@@ -111,7 +113,7 @@ message UserRequests{
     message Message{
         bytes PublicKey = 1;
         bytes Adress = 2;
-        string Message = 3;
+        bytes Message = 3;
         bytes Sign = 4;
     }
     message Buy{
@@ -186,7 +188,7 @@ message MarketRequests{
     message Reply{
         bytes PublicKey = 1;
         bytes Adress = 2;
-        string Message = 3;
+        bytes Message = 3;
         bytes Sign = 4;
     }
 }
