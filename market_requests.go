@@ -118,7 +118,7 @@ func (s *server) Reply(
 	concMes := [][]byte{
 		in.PublicKey,
 		in.Adress,
-		[]byte(in.Message),
+		in.Message,
 	}
 	signCheckErr := calc.Verify(concMes, in.PublicKey, in.Sign)
 	if signCheckErr == nil {
@@ -132,7 +132,7 @@ func (s *server) Reply(
 		return nil, errors.New("sign error")
 	}
 	defer u.Save()
-	u.PutMarketMessage(in.Adress, in.Message)
+	u.PutMessage(in.Adress, in.Message)
 	u.Save()
 	fmt.Println("[MarketSendMessage] - Message sent", u.PublicName)
 	return &pb.Response{}, nil

@@ -155,7 +155,7 @@ func (s *server) Message(
 		return nil, errors.New("user not found")
 	}
 	defer u.Save()
-	u.PutUserMessage(in.Adress, in.Message)
+	u.PutMessage(in.Adress, in.Message)
 	fmt.Println("[UserMessage] - Message sent: ", u.PublicName)
 	return &pb.Response{}, nil
 }
