@@ -139,10 +139,8 @@ func (s *server) Message(
 	concMes := [][]byte{
 		in.PublicKey,
 		in.Adress,
-		[]byte(in.Message),
+		in.Message,
 	}
-	fmt.Println(in.Message)
-	fmt.Println([]byte(in.Message))
 	signCheckErr := calc.Verify(concMes, in.PublicKey, in.Sign)
 	if signCheckErr != nil {
 		fmt.Println("[UserMessage] - Sign error")
