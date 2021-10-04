@@ -135,7 +135,7 @@ message UserRequests{
 
 service Market{
     rpc Spawn(MarketRequests.Create) returns (Response);
-    rpc Refresh(MarketRequests.Update) returns (Response);
+    rpc Update(MarketRequests.Update) returns (Response);
     rpc Deposit(MarketRequests.Deposit) returns (Response);
     rpc Withdrawal(MarketRequests.Withdrawal) returns (Response);
     rpc Reply(MarketRequests.Reply) returns (Response);

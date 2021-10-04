@@ -249,7 +249,6 @@ var Info_ServiceDesc = grpc.ServiceDesc{
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserClient interface {
 	Create(ctx context.Context, in *UserRequests_Create, opts ...grpc.CallOption) (*Response, error)
-	Update(ctx context.Context, in *UserRequests_Update, opts ...grpc.CallOption) (*Response, error)
 	Send(ctx context.Context, in *UserRequests_Send, opts ...grpc.CallOption) (*Response, error)
 	Message(ctx context.Context, in *UserRequests_Message, opts ...grpc.CallOption) (*Response, error)
 	Buy(ctx context.Context, in *UserRequests_Buy, opts ...grpc.CallOption) (*Response, error)
@@ -268,15 +267,6 @@ func NewUserClient(cc grpc.ClientConnInterface) UserClient {
 func (c *userClient) Create(ctx context.Context, in *UserRequests_Create, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
 	err := c.cc.Invoke(ctx, "/api.User/Create", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userClient) Update(ctx context.Context, in *UserRequests_Update, opts ...grpc.CallOption) (*Response, error) {
-	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.User/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -333,7 +323,6 @@ func (c *userClient) CancelTrade(ctx context.Context, in *UserRequests_CancelTra
 // for forward compatibility
 type UserServer interface {
 	Create(context.Context, *UserRequests_Create) (*Response, error)
-	Update(context.Context, *UserRequests_Update) (*Response, error)
 	Send(context.Context, *UserRequests_Send) (*Response, error)
 	Message(context.Context, *UserRequests_Message) (*Response, error)
 	Buy(context.Context, *UserRequests_Buy) (*Response, error)
@@ -348,9 +337,6 @@ type UnimplementedUserServer struct {
 
 func (UnimplementedUserServer) Create(context.Context, *UserRequests_Create) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
-}
-func (UnimplementedUserServer) Update(context.Context, *UserRequests_Update) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedUserServer) Send(context.Context, *UserRequests_Send) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Send not implemented")
@@ -394,24 +380,6 @@ func _User_Create_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServer).Create(ctx, req.(*UserRequests_Create))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _User_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserRequests_Update)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServer).Update(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.User/Update",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).Update(ctx, req.(*UserRequests_Update))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -518,10 +486,6 @@ var User_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _User_Create_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _User_Update_Handler,
-		},
-		{
 			MethodName: "Send",
 			Handler:    _User_Send_Handler,
 		},
@@ -551,7 +515,7 @@ var User_ServiceDesc = grpc.ServiceDesc{
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MarketClient interface {
 	Spawn(ctx context.Context, in *MarketRequests_Create, opts ...grpc.CallOption) (*Response, error)
-	Refresh(ctx context.Context, in *MarketRequests_Update, opts ...grpc.CallOption) (*Response, error)
+	Update(ctx context.Context, in *MarketRequests_Update, opts ...grpc.CallOption) (*Response, error)
 	Deposit(ctx context.Context, in *MarketRequests_Deposit, opts ...grpc.CallOption) (*Response, error)
 	Withdrawal(ctx context.Context, in *MarketRequests_Withdrawal, opts ...grpc.CallOption) (*Response, error)
 	Reply(ctx context.Context, in *MarketRequests_Reply, opts ...grpc.CallOption) (*Response, error)
@@ -574,9 +538,9 @@ func (c *marketClient) Spawn(ctx context.Context, in *MarketRequests_Create, opt
 	return out, nil
 }
 
-func (c *marketClient) Refresh(ctx context.Context, in *MarketRequests_Update, opts ...grpc.CallOption) (*Response, error) {
+func (c *marketClient) Update(ctx context.Context, in *MarketRequests_Update, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/api.Market/Refresh", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.Market/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -615,7 +579,7 @@ func (c *marketClient) Reply(ctx context.Context, in *MarketRequests_Reply, opts
 // for forward compatibility
 type MarketServer interface {
 	Spawn(context.Context, *MarketRequests_Create) (*Response, error)
-	Refresh(context.Context, *MarketRequests_Update) (*Response, error)
+	Update(context.Context, *MarketRequests_Update) (*Response, error)
 	Deposit(context.Context, *MarketRequests_Deposit) (*Response, error)
 	Withdrawal(context.Context, *MarketRequests_Withdrawal) (*Response, error)
 	Reply(context.Context, *MarketRequests_Reply) (*Response, error)
@@ -629,8 +593,8 @@ type UnimplementedMarketServer struct {
 func (UnimplementedMarketServer) Spawn(context.Context, *MarketRequests_Create) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Spawn not implemented")
 }
-func (UnimplementedMarketServer) Refresh(context.Context, *MarketRequests_Update) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Refresh not implemented")
+func (UnimplementedMarketServer) Update(context.Context, *MarketRequests_Update) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedMarketServer) Deposit(context.Context, *MarketRequests_Deposit) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Deposit not implemented")
@@ -672,20 +636,20 @@ func _Market_Spawn_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Market_Refresh_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Market_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MarketRequests_Update)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MarketServer).Refresh(ctx, in)
+		return srv.(MarketServer).Update(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.Market/Refresh",
+		FullMethod: "/api.Market/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MarketServer).Refresh(ctx, req.(*MarketRequests_Update))
+		return srv.(MarketServer).Update(ctx, req.(*MarketRequests_Update))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -756,8 +720,8 @@ var Market_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Market_Spawn_Handler,
 		},
 		{
-			MethodName: "Refresh",
-			Handler:    _Market_Refresh_Handler,
+			MethodName: "Update",
+			Handler:    _Market_Update_Handler,
 		},
 		{
 			MethodName: "Deposit",

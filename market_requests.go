@@ -54,10 +54,11 @@ func (s *server) Refresh(
 	// TODO add same checks as in market craete (ps move to another func)
 	concatedMessage := [][]byte{
 		in.PublicKey,
-		in.MesssageKey,
-		[]byte(in.Name),
 		[]byte(in.Img),
 		[]byte(in.Descr),
+		calc.NumberToBytes(in.InputFee),
+		calc.NumberToBytes(in.OutputFee),
+		[]byte(in.WorkTime),
 	}
 	checkErr := calc.Verify(concatedMessage, in.PublicKey, in.Sign)
 	if checkErr != nil {
@@ -70,8 +71,6 @@ func (s *server) Refresh(
 		fmt.Println("[MarketUpdate] - Market not found error")
 		return nil, errors.New("sign error")
 	}
-	mkt.Name = in.Name
-	mkt.MesKey = in.MesssageKey
 	mkt.Descr = in.Descr
 	mkt.Img = in.Img
 	mkt.InputFee = in.InputFee
