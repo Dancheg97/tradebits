@@ -197,7 +197,6 @@ func TestCreateExistingMarket(t *testing.T) {
 }
 
 func TestGetFreeMarket(t *testing.T) {
-	time.Sleep(time.Second * 12)
 	var adress = calc.Rand()
 	dummyName := string(calc.Rand()[0:16])
 	Create(
@@ -573,225 +572,234 @@ func TestFourUserTradesWithRandomOffers(t *testing.T) {
 	data.TestRM([]byte(dummyUserName3))
 }
 
-// func TestAttachFirstlySellThanBuy(t *testing.T) {
-// 	var marketAdress = calc.Rand()
-// 	Create(
-// 		marketAdress,
-// 		dummyName,
-// 		dummyMessageKey,
-// 		dummyDescription,
-// 		dummyImageLink,
-// 		dummyInputFee,
-// 		dummyOutputFee,
-// 		dummyWorkTime,
-// 		dummyDelimiter,
-// 	)
-// 	mkt := Get(marketAdress)
+func TestAttachFirstlySellThanBuy(t *testing.T) {
+	var marketAdress = calc.Rand()
+	dummyName := string(calc.Rand()[0:16])
+	Create(
+		marketAdress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	mkt := Get(marketAdress)
+	var firstUserAdress = calc.Rand()
+	dummyUserName := string(calc.Rand()[0:8])
+	user.Create(
+		firstUserAdress,
+		dummyMessageKey,
+		dummyUserName,
+	)
+	firstUser := user.Get(firstUserAdress)
+	firstUser.Balance = 300
+	firstUserTrade := trade.Buy{
+		Offer:   270,
+		Recieve: 130,
+	}
+	firstUser.AttachBuy(&firstUserTrade)
+	firstUser.Save()
+	var secondUserAdress = calc.Rand()
+	dummyUserName2 := string(calc.Rand()[0:8])
+	user.Create(
+		secondUserAdress,
+		dummyMessageKey,
+		dummyUserName2,
+	)
+	secondUser := user.Get(secondUserAdress)
+	secondUser.Balances[string(marketAdress)] = 150
+	secondUserTrade := trade.Sell{
+		Offer:   80,
+		Recieve: 130,
+	}
+	secondUser.AttachSell(&secondUserTrade, marketAdress)
+	secondUser.Save()
+	mkt.AttachSell(&secondUserTrade)
+	mkt.AttachBuy(&firstUserTrade)
+	time.Sleep(time.Second)
+	firstUserCheck := user.Look(firstUserAdress)
+	secondUserCheck := user.Look(secondUserAdress)
+	if firstUserCheck.Balance != 30 {
+		t.Error("first user balance should be equal to 30")
+	}
+	if firstUserCheck.Balances[string(marketAdress)] != 80 {
+		t.Error("first user market balance should be equal to 80")
+	}
+	if secondUserCheck.Balance != 130 {
+		t.Error("second user main balance should be equal to 130")
+	}
+	if secondUserCheck.Balances[string(marketAdress)] != 70 {
+		t.Error("second user market balance should be equal to 70")
+	}
+	if mkt.Pool.Buys[0].Offer != 140 {
+		t.Error("active buy offer should be equal tp 140")
+	}
+	if mkt.Pool.Buys[0].Recieve != 50 {
+		t.Error("acrive buy recieve should be equal to 50")
+	}
+	data.TestRM(marketAdress)
+	data.TestRM(firstUserAdress)
+	data.TestRM(secondUserAdress)
+	data.TestRM([]byte(dummyName))
+	data.TestRM([]byte(dummyUserName))
+	data.TestRM([]byte(dummyUserName2))
+}
 
-// 	var firstUserAdress = calc.Rand()
-// 	user.Create(
-// 		firstUserAdress,
-// 		dummyMessageKey,
-// 		dummyUserName,
-// 	)
-// 	firstUser := user.Get(firstUserAdress)
-// 	firstUser.Balance = 300
-// 	firstUserTrade := trade.Buy{
-// 		Offer:   270,
-// 		Recieve: 130,
-// 	}
-// 	firstUser.AttachBuy(&firstUserTrade)
-// 	firstUser.Save()
+func TestIfUserHasTrdadesWhenHeHaveSome(t *testing.T) {
+	var marketAdress = calc.Rand()
+	dummyName := string(calc.Rand()[0:16])
+	Create(
+		marketAdress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	mkt := Get(marketAdress)
+	sell := trade.Sell{
+		Adress:  []byte{0},
+		Offer:   1,
+		Recieve: 5,
+	}
+	mkt.AttachSell(&sell)
+	userHaveSell := mkt.HasTrades([]byte{0})
+	if !userHaveSell {
+		t.Error("error, this user should have some sell trade")
+	}
+	buy := trade.Buy{
+		Adress:  []byte{0},
+		Offer:   1,
+		Recieve: 5,
+	}
+	mkt.AttachBuy(&buy)
+	userHaveBuy := mkt.HasTrades([]byte{0})
+	if !userHaveBuy {
+		t.Error("error, this user should have some buy trade")
+	}
+	data.TestRM(marketAdress)
+	data.TestRM([]byte(dummyName))
+}
 
-// 	var secondUserAdress = calc.Rand()
-// 	user.Create(
-// 		secondUserAdress,
-// 		dummyMessageKey,
-// 		dummyUserName,
-// 	)
-// 	secondUser := user.Get(secondUserAdress)
-// 	secondUser.Balances[string(marketAdress)] = 150
-// 	secondUserTrade := trade.Sell{
-// 		Offer:   80,
-// 		Recieve: 130,
-// 	}
-// 	secondUser.AttachSell(&secondUserTrade, marketAdress)
-// 	secondUser.Save()
+func TestIfUserHasTradesWhenHeDont(t *testing.T) {
+	var marketAdress = calc.Rand()
+	dummyName := string(calc.Rand()[0:16])
+	Create(
+		marketAdress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	mkt := Get(marketAdress)
 
-// 	mkt.AttachSell(&secondUserTrade)
-// 	mkt.AttachBuy(&firstUserTrade)
+	userHaveSomeTrades := mkt.HasTrades([]byte{1})
+	if userHaveSomeTrades {
+		t.Error("there should not be any active trades for that adress")
+	}
 
-// 	time.Sleep(time.Second)
+	data.TestRM(marketAdress)
+	data.TestRM([]byte(dummyName))
+}
 
-// 	firstUserCheck := user.Look(firstUserAdress)
-// 	secondUserCheck := user.Look(secondUserAdress)
-// 	if firstUserCheck.Balance != 30 {
-// 		t.Error("first user balance should be equal to 30")
-// 	}
-// 	if firstUserCheck.Balances[string(marketAdress)] != 80 {
-// 		t.Error("first user market balance should be equal to 80")
-// 	}
-// 	if secondUserCheck.Balance != 130 {
-// 		t.Error("second user main balance should be equal to 130")
-// 	}
-// 	if secondUserCheck.Balances[string(marketAdress)] != 70 {
-// 		t.Error("second user market balance should be equal to 70")
-// 	}
-// 	if mkt.Pool.Buys[0].Offer != 140 {
-// 		t.Error("active buy offer should be equal tp 140")
-// 	}
-// 	if mkt.Pool.Buys[0].Recieve != 50 {
-// 		t.Error("acrive buy recieve should be equal to 50")
-// 	}
+func TestUserCancelBuy(t *testing.T) {
+	var marketAdress = calc.Rand()
+	dummyName := string(calc.Rand()[0:16])
+	Create(
+		marketAdress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	mkt := Get(marketAdress)
+	var userAdress = calc.Rand()
+	dummyUserName := string(calc.Rand()[0:8])
+	user.Create(
+		userAdress,
+		dummyMessageKey,
+		dummyUserName,
+	)
+	usr := user.Get(userAdress)
+	usr.Balance = 300
+	usrBuy := trade.Buy{
+		Offer:   270,
+		Recieve: 130,
+	}
+	usr.AttachBuy(&usrBuy)
+	mkt.AttachBuy(&usrBuy)
+	usr.Save()
+	mkt.CancelTrades(userAdress)
+	time.Sleep(time.Second)
+	userCheck := user.Look(userAdress)
+	if len(mkt.Pool.Buys) != 0 {
+		t.Error("the trade have not been cancelled, there should not be active trades on the market")
+	}
+	if userCheck.Balance != 300 {
+		t.Error("user main balance should be equal to 300, cuz his trade has benn cancelled")
+	}
+	data.TestRM(marketAdress)
+	data.TestRM(userAdress)
+	data.TestRM([]byte(dummyName))
+	data.TestRM([]byte(dummyUserName))
+}
 
-// 	data.TestRM(marketAdress)
-// 	data.TestRM(firstUserAdress)
-// 	data.TestRM(secondUserAdress)
-// }
-
-// func TestIfUserHasTrdadesWhenHeHaveSome(t *testing.T) {
-// 	var marketAdress = calc.Rand()
-// 	Create(
-// 		marketAdress,
-// 		dummyName,
-// 		dummyMessageKey,
-// 		dummyDescription,
-// 		dummyImageLink,
-// 		dummyInputFee,
-// 		dummyOutputFee,
-// 		dummyWorkTime,
-// 		dummyDelimiter,
-// 	)
-// 	mkt := Get(marketAdress)
-// 	sell := trade.Sell{
-// 		Adress:  []byte{0},
-// 		Offer:   1,
-// 		Recieve: 5,
-// 	}
-// 	mkt.AttachSell(&sell)
-// 	userHaveSell := mkt.HasTrades([]byte{0})
-// 	if !userHaveSell {
-// 		t.Error("error, this user should have some sell trade")
-// 	}
-// 	buy := trade.Buy{
-// 		Adress:  []byte{0},
-// 		Offer:   1,
-// 		Recieve: 5,
-// 	}
-// 	mkt.AttachBuy(&buy)
-// 	userHaveBuy := mkt.HasTrades([]byte{0})
-// 	if !userHaveBuy {
-// 		t.Error("error, this user should have some buy trade")
-// 	}
-// 	data.TestRM(marketAdress)
-// }
-
-// func TestIfUserHasTradesWhenHeDont(t *testing.T) {
-// 	var marketAdress = calc.Rand()
-// 	Create(
-// 		marketAdress,
-// 		dummyName,
-// 		dummyMessageKey,
-// 		dummyDescription,
-// 		dummyImageLink,
-// 		dummyInputFee,
-// 		dummyOutputFee,
-// 		dummyWorkTime,
-// 		dummyDelimiter,
-// 	)
-// 	mkt := Get(marketAdress)
-
-// 	userHaveSomeTrades := mkt.HasTrades([]byte{1})
-// 	if userHaveSomeTrades {
-// 		t.Error("there should not be any active trades for that adress")
-// 	}
-
-// 	data.TestRM(marketAdress)
-// }
-
-// func TestUserCancelBuy(t *testing.T) {
-// 	var marketAdress = calc.Rand()
-// 	Create(
-// 		marketAdress,
-// 		dummyName,
-// 		dummyMessageKey,
-// 		dummyDescription,
-// 		dummyImageLink,
-// 		dummyInputFee,
-// 		dummyOutputFee,
-// 		dummyWorkTime,
-// 		dummyDelimiter,
-// 	)
-// 	mkt := Get(marketAdress)
-
-// 	var userAdress = calc.Rand()
-// 	user.Create(
-// 		userAdress,
-// 		dummyMessageKey,
-// 		dummyUserName,
-// 	)
-// 	usr := user.Get(userAdress)
-// 	usr.Balance = 300
-// 	usrBuy := trade.Buy{
-// 		Offer:   270,
-// 		Recieve: 130,
-// 	}
-// 	usr.AttachBuy(&usrBuy)
-// 	mkt.AttachBuy(&usrBuy)
-// 	usr.Save()
-
-// 	mkt.CancelTrades(userAdress)
-
-// 	time.Sleep(time.Second)
-// 	userCheck := user.Look(userAdress)
-// 	if len(mkt.Pool.Buys) != 0 {
-// 		t.Error("the trade have not been cancelled, there should not be active trades on the market")
-// 	}
-// 	if userCheck.Balance != 300 {
-// 		t.Error("user main balance should be equal to 300, cuz his trade has benn cancelled")
-// 	}
-// }
-
-// func TestUserCancelSell(t *testing.T) {
-// 	var marketAdress = calc.Rand()
-// 	Create(
-// 		marketAdress,
-// 		dummyName,
-// 		dummyMessageKey,
-// 		dummyDescription,
-// 		dummyImageLink,
-// 		dummyInputFee,
-// 		dummyOutputFee,
-// 		dummyWorkTime,
-// 		dummyDelimiter,
-// 	)
-// 	mkt := Get(marketAdress)
-
-// 	var userAdress = calc.Rand()
-// 	user.Create(
-// 		userAdress,
-// 		dummyMessageKey,
-// 		dummyUserName,
-// 	)
-// 	usr := user.Get(userAdress)
-// 	usr.Balances[string(marketAdress)] = 150
-// 	sell := trade.Sell{
-// 		Offer:   80,
-// 		Recieve: 130,
-// 	}
-// 	usr.AttachSell(&sell, marketAdress)
-// 	usr.Save()
-
-// 	mkt.AttachSell(&sell)
-
-// 	mkt.CancelTrades(userAdress)
-
-// 	time.Sleep(time.Second)
-// 	userCheck := user.Look(userAdress)
-// 	if len(mkt.Pool.Sells) != 0 {
-// 		t.Error("there should not be any active sell, because user cancelled that")
-// 	}
-// 	if userCheck.Balances[string(marketAdress)] != 150 {
-// 		t.Error("user market balance should be equal to 150 after sell trade cancellation")
-// 	}
-// }
+func TestUserCancelSell(t *testing.T) {
+	var marketAdress = calc.Rand()
+	dummyName := string(calc.Rand()[0:16])
+	Create(
+		marketAdress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	mkt := Get(marketAdress)
+	var userAdress = calc.Rand()
+	dummyUserName := string(calc.Rand()[0:8])
+	user.Create(
+		userAdress,
+		dummyMessageKey,
+		dummyUserName,
+	)
+	usr := user.Get(userAdress)
+	usr.Balances[string(marketAdress)] = 150
+	sell := trade.Sell{
+		Offer:   80,
+		Recieve: 130,
+	}
+	usr.AttachSell(&sell, marketAdress)
+	usr.Save()
+	mkt.AttachSell(&sell)
+	mkt.CancelTrades(userAdress)
+	time.Sleep(time.Second)
+	userCheck := user.Look(userAdress)
+	if len(mkt.Pool.Sells) != 0 {
+		t.Error("there should not be any active sell, because user cancelled that")
+	}
+	if userCheck.Balances[string(marketAdress)] != 150 {
+		t.Error("user market balance should be equal to 150 after sell trade cancellation")
+	}
+	data.TestRM(marketAdress)
+	data.TestRM(userAdress)
+	data.TestRM([]byte(dummyName))
+	data.TestRM([]byte(dummyUserName))
+}

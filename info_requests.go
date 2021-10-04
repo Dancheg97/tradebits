@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sync_tree/data"
 	"sync_tree/market"
 	"sync_tree/search"
 	"sync_tree/user"
@@ -89,6 +90,14 @@ func (s *server) Search(
 	return &pb.InfOut_Adresses{MarketAdresses: results}, nil
 }
 
+func (s *server) CheckName(
+	ctx context.Context,
+	in *pb.InfIn_Text,
+) (*pb.InfOut_Bool, error) {
+	rez := data.Check([]byte(in.Text))
+	fmt.Println("[CheckName] - Name:", in.Text, ", rez:", rez)
+	return &pb.InfOut_Bool{Value: rez}, nil
+}
 func (s *server) User(
 	ctx context.Context,
 	in *pb.InfIn_Adress,
