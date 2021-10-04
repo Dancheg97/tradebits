@@ -47,7 +47,7 @@ func (s *server) Spawn(
 	return &pb.Response{}, nil
 }
 
-func (s *server) Refresh(
+func (s *server) Update(
 	ctx context.Context,
 	in *pb.MarketRequests_Update,
 ) (*pb.Response, error) {

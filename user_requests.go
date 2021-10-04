@@ -46,45 +46,6 @@ func (s *server) Create(
 	return &pb.Response{}, nil
 }
 
-func (s *server) Update(
-	ctx context.Context,
-	in *pb.UserRequests_Update,
-) (*pb.Response, error) {
-	fmt.Println("[UserUpdate] - start")
-	senderAdress := calc.Hash(in.PublicKey)
-	signError := calc.Verify(
-		[][]byte{
-			in.PublicKey,
-			in.MesssageKey,
-			[]byte(in.PublicName),
-		},
-		in.PublicKey,
-		in.Sign,
-	)
-	if signError != nil {
-		fmt.Println("[UserUpdate] - Sign error")
-		return nil, errors.New("sign check error")
-	}
-	usr := user.Get(senderAdress)
-	if usr == nil {
-		fmt.Println("[UserUpdate] - User not found")
-		return nil, errors.New("user not found error")
-	}
-	defer usr.Save()
-	if len(in.PublicName) > 12 {
-		fmt.Println("[UserUpdate] - Bad public name length")
-		return nil, errors.New("public name too big")
-	}
-	if len(in.MesssageKey) < 240 || len(in.MesssageKey) > 320 {
-		fmt.Println("[UserUpdate] - Bad message key length")
-		return nil, errors.New("wrong mes key length")
-	}
-	usr.PublicName = in.PublicName
-	usr.MesKey = in.MesssageKey
-	fmt.Println("[UserUpdate] - User info updated: ", usr.PublicName)
-	return &pb.Response{}, nil
-}
-
 func (s *server) Send(
 	ctx context.Context,
 	in *pb.UserRequests_Send,
