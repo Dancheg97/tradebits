@@ -21,13 +21,13 @@ func CreateNewUsers() {
 	alcoSplitted := strings.Split(alcoKeyString, "|")
 	alcoAdress := calc.Hash(stringToKeyBytes(alcoSplitted[1]))
 	alcoMesKey := stringToKeyBytes(alcoSplitted[3])
-	alcErr := user.Create(alcoAdress, alcoMesKey, "Alcohol")
+	alcErr := user.Create(alcoAdress, alcoMesKey, "Gopher")
 	if alcErr != nil {
 		panic(alcErr)
 	}
 	alco := user.Get(alcoAdress)
-	alco.Balance = 50000
-	alco.Balances[string(dummyMarketAdress1)] = 10000
+	alco.Balance = 500000
+	alco.Balances[string(dummyMarketAdress1)] = 1000000
 	alco.Save()
 
 	nicoSplitted := strings.Split(nicoKeyString, "|")
@@ -39,21 +39,21 @@ func CreateNewUsers() {
 	}
 	nico := user.Get(nicoAdress)
 	nico.Balance = 80000
-	nico.Balances[string(dummyMarketAdress2)] = 4000
+	nico.Balances[string(dummyMarketAdress2)] = 40000000
 	nico.Save()
 }
 
 func CreateNewMarkets() {
 	btcErr := market.Create(
 		dummyMarketAdress1,
-		"Bitcoin Ftem",
+		"Bitcoin ftem",
 		dummyMesKey,
 		dummyDescription,
 		"https://image.flaticon.com/icons/png/512/1490/1490849.png",
 		dummyInputFee,
 		dummyOutputFee,
 		dummyWorkTime,
-		dummyDelimiter,
+		9,
 	)
 	if btcErr != nil {
 		panic(btcErr)
@@ -83,7 +83,7 @@ func CreateNewMarkets() {
 		dummyInputFee,
 		dummyOutputFee,
 		dummyWorkTime,
-		dummyDelimiter,
+		8,
 	)
 	if cardErr != nil {
 		panic(cardErr)
@@ -98,7 +98,7 @@ func CreateNewMarkets() {
 		dummyInputFee,
 		dummyOutputFee,
 		dummyWorkTime,
-		dummyDelimiter,
+		7,
 	)
 	if zcashErr != nil {
 		panic(zcashErr)
@@ -113,7 +113,7 @@ func CreateNewMarkets() {
 		dummyInputFee,
 		dummyOutputFee,
 		dummyWorkTime,
-		dummyDelimiter,
+		9,
 	)
 	if rippleErr != nil {
 		panic(zcashErr)
@@ -182,7 +182,7 @@ func FullFillWithTrades() {
 	}
 	for _, buy := range allDummyBuys {
 		adr := calc.Rand()
-		user.Create(adr, dummyMesKey, "dummy")
+		user.Create(adr, dummyMesKey, string(calc.Rand()[0:8]))
 		usr := user.Get(adr)
 		usr.Balance = 44800000
 		usr.AttachBuy(&buy)
@@ -218,7 +218,7 @@ func FullFillWithTrades() {
 	}
 	for _, sell := range allDummySells {
 		adr := calc.Rand()
-		user.Create(adr, dummyMesKey, "dummy")
+		user.Create(adr, dummyMesKey, string(calc.Rand()[0:8]))
 		usr := user.Get(adr)
 		usr.Balances[string(dummyMarketAdress1)] = 44800000
 		usr.AttachSell(&sell, dummyMarketAdress1)

@@ -96,9 +96,10 @@ func Create(
 	if isBadName {
 		return errors.New("name contains bad words")
 	}
-	isBadDescr, _, _ := filter.Filter.ProfanityCheck(descr)
+	isBadDescr, wrds, _ := filter.Filter.ProfanityCheck(descr)
 	if isBadDescr {
-		return errors.New("description contains profane words")
+		err := fmt.Sprint("description contains bad words", wrds)
+		return errors.New(err)
 	}
 	data.Put([]byte(name), []byte{})
 	pool := trade.TradePool{
