@@ -14,7 +14,7 @@ import (
 func (s *server) HasTrades(
 	ctx context.Context,
 	in *pb.InfIn_UserMarketAdresses,
-) (*pb.InfOut_HasTrades, error) {
+) (*pb.InfOut_Bool, error) {
 	fmt.Println("[InfoHasTrades] - start")
 	user := user.Look(in.UserAdress)
 	if user == nil {
@@ -28,7 +28,7 @@ func (s *server) HasTrades(
 	}
 	hasTrades := market.HasTrades(in.UserAdress)
 	fmt.Println("[InfoHasTrades] - has trades - ", hasTrades)
-	return &pb.InfOut_HasTrades{HasTrades: hasTrades}, nil
+	return &pb.InfOut_Bool{Value: hasTrades}, nil
 }
 
 func (s *server) Market(
@@ -82,7 +82,7 @@ func (s *server) Market(
 
 func (s *server) Search(
 	ctx context.Context,
-	in *pb.InfIn_SearchText,
+	in *pb.InfIn_Text,
 ) (*pb.InfOut_Adresses, error) {
 	results := search.Search(in.Text)
 	fmt.Println("[InfoSearch] - search results len: ", len(results))

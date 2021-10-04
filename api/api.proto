@@ -21,17 +21,18 @@ message Response{}
 
 service Info{
     rpc User(InfIn.Adress) returns (InfOut.User);
-    rpc HasTrades(InfIn.UserMarketAdresses) returns (InfOut.HasTrades);
+    rpc HasTrades(InfIn.UserMarketAdresses) returns (InfOut.Bool);
     rpc Market(InfIn.Adress) returns (InfOut.MarketInfo);
-    rpc Search(InfIn.SearchText) returns (InfOut.Adresses);
+    rpc Search(InfIn.Text) returns (InfOut.Adresses);
     rpc Messages(InfIn.UserMarketAdresses) returns (InfOut.Messages);
+    rpc CheckName(InfIn.Text) returns (InfOut.Bool);
 }
 
 message InfIn{
     message Adress{
         bytes adress = 1;
     }
-    message SearchText{
+    message Text{
         string text = 1;
     }
     message UserMarketAdresses{
@@ -69,8 +70,8 @@ message InfOut{
     message Messages{
         repeated bytes messages = 1;
     }
-    message HasTrades{
-        bool hasTrades = 1;
+    message Bool{
+        bool value = 1;
     }
     message Trade{
         uint64 offer = 1;

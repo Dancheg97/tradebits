@@ -19,10 +19,11 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type InfoClient interface {
 	User(ctx context.Context, in *InfIn_Adress, opts ...grpc.CallOption) (*InfOut_User, error)
-	HasTrades(ctx context.Context, in *InfIn_UserMarketAdresses, opts ...grpc.CallOption) (*InfOut_HasTrades, error)
+	HasTrades(ctx context.Context, in *InfIn_UserMarketAdresses, opts ...grpc.CallOption) (*InfOut_Bool, error)
 	Market(ctx context.Context, in *InfIn_Adress, opts ...grpc.CallOption) (*InfOut_MarketInfo, error)
-	Search(ctx context.Context, in *InfIn_SearchText, opts ...grpc.CallOption) (*InfOut_Adresses, error)
+	Search(ctx context.Context, in *InfIn_Text, opts ...grpc.CallOption) (*InfOut_Adresses, error)
 	Messages(ctx context.Context, in *InfIn_UserMarketAdresses, opts ...grpc.CallOption) (*InfOut_Messages, error)
+	CheckName(ctx context.Context, in *InfIn_Text, opts ...grpc.CallOption) (*InfOut_Bool, error)
 }
 
 type infoClient struct {
@@ -42,8 +43,8 @@ func (c *infoClient) User(ctx context.Context, in *InfIn_Adress, opts ...grpc.Ca
 	return out, nil
 }
 
-func (c *infoClient) HasTrades(ctx context.Context, in *InfIn_UserMarketAdresses, opts ...grpc.CallOption) (*InfOut_HasTrades, error) {
-	out := new(InfOut_HasTrades)
+func (c *infoClient) HasTrades(ctx context.Context, in *InfIn_UserMarketAdresses, opts ...grpc.CallOption) (*InfOut_Bool, error) {
+	out := new(InfOut_Bool)
 	err := c.cc.Invoke(ctx, "/api.Info/HasTrades", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -60,7 +61,7 @@ func (c *infoClient) Market(ctx context.Context, in *InfIn_Adress, opts ...grpc.
 	return out, nil
 }
 
-func (c *infoClient) Search(ctx context.Context, in *InfIn_SearchText, opts ...grpc.CallOption) (*InfOut_Adresses, error) {
+func (c *infoClient) Search(ctx context.Context, in *InfIn_Text, opts ...grpc.CallOption) (*InfOut_Adresses, error) {
 	out := new(InfOut_Adresses)
 	err := c.cc.Invoke(ctx, "/api.Info/Search", in, out, opts...)
 	if err != nil {
@@ -78,15 +79,25 @@ func (c *infoClient) Messages(ctx context.Context, in *InfIn_UserMarketAdresses,
 	return out, nil
 }
 
+func (c *infoClient) CheckName(ctx context.Context, in *InfIn_Text, opts ...grpc.CallOption) (*InfOut_Bool, error) {
+	out := new(InfOut_Bool)
+	err := c.cc.Invoke(ctx, "/api.Info/CheckName", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // InfoServer is the server API for Info service.
 // All implementations must embed UnimplementedInfoServer
 // for forward compatibility
 type InfoServer interface {
 	User(context.Context, *InfIn_Adress) (*InfOut_User, error)
-	HasTrades(context.Context, *InfIn_UserMarketAdresses) (*InfOut_HasTrades, error)
+	HasTrades(context.Context, *InfIn_UserMarketAdresses) (*InfOut_Bool, error)
 	Market(context.Context, *InfIn_Adress) (*InfOut_MarketInfo, error)
-	Search(context.Context, *InfIn_SearchText) (*InfOut_Adresses, error)
+	Search(context.Context, *InfIn_Text) (*InfOut_Adresses, error)
 	Messages(context.Context, *InfIn_UserMarketAdresses) (*InfOut_Messages, error)
+	CheckName(context.Context, *InfIn_Text) (*InfOut_Bool, error)
 	mustEmbedUnimplementedInfoServer()
 }
 
@@ -97,17 +108,20 @@ type UnimplementedInfoServer struct {
 func (UnimplementedInfoServer) User(context.Context, *InfIn_Adress) (*InfOut_User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method User not implemented")
 }
-func (UnimplementedInfoServer) HasTrades(context.Context, *InfIn_UserMarketAdresses) (*InfOut_HasTrades, error) {
+func (UnimplementedInfoServer) HasTrades(context.Context, *InfIn_UserMarketAdresses) (*InfOut_Bool, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HasTrades not implemented")
 }
 func (UnimplementedInfoServer) Market(context.Context, *InfIn_Adress) (*InfOut_MarketInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Market not implemented")
 }
-func (UnimplementedInfoServer) Search(context.Context, *InfIn_SearchText) (*InfOut_Adresses, error) {
+func (UnimplementedInfoServer) Search(context.Context, *InfIn_Text) (*InfOut_Adresses, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 func (UnimplementedInfoServer) Messages(context.Context, *InfIn_UserMarketAdresses) (*InfOut_Messages, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Messages not implemented")
+}
+func (UnimplementedInfoServer) CheckName(context.Context, *InfIn_Text) (*InfOut_Bool, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckName not implemented")
 }
 func (UnimplementedInfoServer) mustEmbedUnimplementedInfoServer() {}
 
@@ -177,7 +191,7 @@ func _Info_Market_Handler(srv interface{}, ctx context.Context, dec func(interfa
 }
 
 func _Info_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InfIn_SearchText)
+	in := new(InfIn_Text)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -189,7 +203,7 @@ func _Info_Search_Handler(srv interface{}, ctx context.Context, dec func(interfa
 		FullMethod: "/api.Info/Search",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfoServer).Search(ctx, req.(*InfIn_SearchText))
+		return srv.(InfoServer).Search(ctx, req.(*InfIn_Text))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -208,6 +222,24 @@ func _Info_Messages_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InfoServer).Messages(ctx, req.(*InfIn_UserMarketAdresses))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Info_CheckName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InfIn_Text)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InfoServer).CheckName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.Info/CheckName",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InfoServer).CheckName(ctx, req.(*InfIn_Text))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -238,6 +270,10 @@ var Info_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Messages",
 			Handler:    _Info_Messages_Handler,
+		},
+		{
+			MethodName: "CheckName",
+			Handler:    _Info_CheckName_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
