@@ -84,6 +84,10 @@ func Create(
 	if data.Check(adress) {
 		return errors.New("possibly market already exists")
 	}
+	if data.Check([]byte(name)) {
+		return errors.New("market with that name exists")
+	}
+	data.Put([]byte(name), []byte{})
 	pool := trade.TradePool{
 		Buys:    []trade.Buy{},
 		Sells:   []trade.Sell{},

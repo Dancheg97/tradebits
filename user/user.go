@@ -36,6 +36,10 @@ func Create(adress []byte, mesKey []byte, publicName string) error {
 	if data.Check(adress) {
 		return errors.New("possibly user already exists")
 	}
+	if data.Check([]byte(publicName)) {
+		return errors.New("user with that name exists")
+	}
+	data.Put([]byte(publicName), []byte{})
 	u := user{
 		Balance:    0,
 		MesKey:     mesKey,
@@ -111,7 +115,7 @@ func (u *user) PutMessage(adress []byte, mes []byte) {
 This function is made to get all new messages and to put all current messages
 to archieve
 */
-func (u *user) GetMessages(adress []byte) [][]byte{
+func (u *user) GetMessages(adress []byte) [][]byte {
 	return u.Messages[string(adress)]
 }
 
