@@ -5,6 +5,7 @@ import (
 	"sync_tree/calc"
 	"sync_tree/data"
 	"sync_tree/trade"
+	"sync_tree/user"
 	"testing"
 	"time"
 )
@@ -281,73 +282,79 @@ func TestAttachUnboundedTrades(t *testing.T) {
 	data.TestRM(adress)
 }
 
-// func TestAttachToLookedMarket(t *testing.T) {
-// 	var adress = calc.Rand()
-// 	Create(
-// 		adress,
-// 		dummyName,
-// 		dummyMessageKey,
-// 		dummyDescription,
-// 		dummyImageLink,
-// 		dummyInputFee,
-// 		dummyOutputFee,
-// 		dummyWorkTime,
-// 		dummyDelimiter,
-// 	)
-// 	mkt := Look(adress)
-// 	sell := trade.Sell{
-// 		Offer:   100,
-// 		Recieve: 100,
-// 	}
-// 	buy := trade.Buy{
-// 		Offer:   100,
-// 		Recieve: 100,
-// 	}
-// 	buyAttached := mkt.AttachBuy(&buy)
-// 	sellAttached := mkt.AttachSell(&sell)
-// 	if buyAttached || sellAttached {
-// 		t.Error("those trades should not be attached cuz they are unbounded")
-// 	}
-// 	data.TestRM(adress)
-// }
+func TestAttachToLookedMarket(t *testing.T) {
+	var adress = calc.Rand()
+	dummyName := string(calc.Rand()[0:16])
+	Create(
+		adress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	mkt := Look(adress)
+	sell := trade.Sell{
+		Offer:   100,
+		Recieve: 100,
+	}
+	buy := trade.Buy{
+		Offer:   100,
+		Recieve: 100,
+	}
+	buyAttached := mkt.AttachBuy(&buy)
+	sellAttached := mkt.AttachSell(&sell)
+	if buyAttached || sellAttached {
+		t.Error("those trades should not be attached cuz they are unbounded")
+	}
+	data.TestRM([]byte(dummyName))
+	data.TestRM(adress)
+}
 
-// func TestAttachSingleNormalBuy(t *testing.T) {
-// 	var marketAdress = calc.Rand()
-// 	Create(
-// 		marketAdress,
-// 		dummyName,
-// 		dummyMessageKey,
-// 		dummyDescription,
-// 		dummyImageLink,
-// 		dummyInputFee,
-// 		dummyOutputFee,
-// 		dummyWorkTime,
-// 		dummyDelimiter,
-// 	)
-// 	mkt := Get(marketAdress)
-// 	var userAdress = calc.Rand()
-// 	user.Create(
-// 		userAdress,
-// 		dummyMessageKey,
-// 		dummyUserName,
-// 	)
-// 	usr := user.Get(userAdress)
-// 	usr.Balance = 100
-// 	buy := trade.Buy{
-// 		Offer:   100,
-// 		Recieve: 100,
-// 	}
-// 	attachedToUser := usr.AttachBuy(&buy)
-// 	if !attachedToUser {
-// 		t.Error("trade should be attached to user")
-// 	}
-// 	attachedToMarket := mkt.AttachBuy(&buy)
-// 	if !attachedToMarket {
-// 		t.Error("trade should be attached to market")
-// 	}
-// 	data.TestRM(marketAdress)
-// 	data.TestRM(userAdress)
-// }
+func TestAttachSingleNormalBuy(t *testing.T) {
+	var marketAdress = calc.Rand()
+	dummyName := string(calc.Rand()[0:16])
+	Create(
+		marketAdress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	mkt := Get(marketAdress)
+	var userAdress = calc.Rand()
+	dummyUserName := string(calc.Rand()[0:8])
+	user.Create(
+		userAdress,
+		dummyMessageKey,
+		dummyUserName,
+	)
+	usr := user.Get(userAdress)
+	usr.Balance = 100
+	buy := trade.Buy{
+		Offer:   100,
+		Recieve: 100,
+	}
+	attachedToUser := usr.AttachBuy(&buy)
+	if !attachedToUser {
+		t.Error("trade should be attached to user")
+	}
+	attachedToMarket := mkt.AttachBuy(&buy)
+	if !attachedToMarket {
+		t.Error("trade should be attached to market")
+	}
+	data.TestRM([]byte(dummyUserName))
+	data.TestRM([]byte(dummyName))
+	data.TestRM(marketAdress)
+	data.TestRM(userAdress)
+}
 
 // func TestAttachSingleNormalSell(t *testing.T) {
 // 	var marketAdress = calc.Rand()
