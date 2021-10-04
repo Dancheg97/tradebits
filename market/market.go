@@ -89,7 +89,9 @@ func Create(
 	if data.Check([]byte(name)) {
 		return errors.New("market with that name exists")
 	}
-
+	if name[0] == " "[0] || name[len(name)-1] == " "[0] {
+		return errors.New("market name start/ends with space")
+	}
 	isBadName, _, _ := filter.Filter.ProfanityCheck(name)
 	if isBadName {
 		return errors.New("name contains bad words")

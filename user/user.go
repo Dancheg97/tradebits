@@ -41,6 +41,9 @@ func Create(adress []byte, mesKey []byte, name string) error {
 	if data.Check([]byte(name)) {
 		return errors.New("user with that name exists")
 	}
+	if name[0] == " "[0] || name[len(name)-1] == " "[0] {
+		return errors.New("market name start/ends with space")
+	}
 	isBadName, _, _ := filter.Filter.ProfanityCheck(name)
 	if isBadName {
 		return errors.New("name contains bad words")
