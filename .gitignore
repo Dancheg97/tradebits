@@ -5,6 +5,7 @@
 *.so
 *.dylib
 *.ldb
+*.DS_store
 data/leveldb/*
 search/bleve/*
 start.cmd
