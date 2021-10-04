@@ -7,27 +7,29 @@ import (
 	"sync_tree/data"
 	"sync_tree/lock"
 	"sync_tree/trade"
+
+	filter "github.com/AccelByte/profanity-filter-go"
 )
 
 type user struct {
-	adress     []byte
-	Balance    uint64
-	MesKey     []byte
-	PublicName string
-	Balances   map[string]uint64
-	Messages   map[string][][]byte
-	Arch       map[string]string
+	adress   []byte
+	Balance  uint64
+	MesKey   []byte
+	Name     string
+	Balances map[string]uint64
+	Messages map[string][][]byte
+	Arch     map[string]string
 }
 
 /*
 Create new user, in case there is already user with same adress
 the error will be logged
 */
-func Create(adress []byte, mesKey []byte, publicName string) error {
+func Create(adress []byte, mesKey []byte, name string) error {
 	if len(adress) != 64 {
 		return errors.New("bad adress length")
 	}
-	if len(publicName) > 12 {
+	if len(name) > 12 {
 		return errors.New("name too big")
 	}
 	if len(mesKey) < 240 || len(mesKey) > 320 {
@@ -36,17 +38,21 @@ func Create(adress []byte, mesKey []byte, publicName string) error {
 	if data.Check(adress) {
 		return errors.New("possibly user already exists")
 	}
-	if data.Check([]byte(publicName)) {
+	if data.Check([]byte(name)) {
 		return errors.New("user with that name exists")
 	}
-	data.Put([]byte(publicName), []byte{})
+	isBadName, _, _ := filter.Filter.ProfanityCheck(name)
+	if isBadName {
+		return errors.New("name contains bad words")
+	}
+	data.Put([]byte(name), []byte{})
 	u := user{
-		Balance:    0,
-		MesKey:     mesKey,
-		PublicName: publicName,
-		Balances:   make(map[string]uint64),
-		Messages:   make(map[string][][]byte),
-		Arch:       map[string]string{},
+		Balance:  0,
+		MesKey:   mesKey,
+		Name:     name,
+		Balances: make(map[string]uint64),
+		Messages: make(map[string][][]byte),
+		Arch:     map[string]string{},
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(u)

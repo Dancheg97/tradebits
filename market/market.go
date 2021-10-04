@@ -11,6 +11,8 @@ import (
 	"sync_tree/search"
 	"sync_tree/trade"
 	"sync_tree/user"
+
+	filter "github.com/AccelByte/profanity-filter-go"
 )
 
 type market struct {
@@ -86,6 +88,15 @@ func Create(
 	}
 	if data.Check([]byte(name)) {
 		return errors.New("market with that name exists")
+	}
+
+	isBadName, _, _ := filter.Filter.ProfanityCheck(name)
+	if isBadName {
+		return errors.New("name contains bad words")
+	}
+	isBadDescr, _, _ := filter.Filter.ProfanityCheck(descr)
+	if isBadDescr {
+		return errors.New("description contains profane words")
 	}
 	data.Put([]byte(name), []byte{})
 	pool := trade.TradePool{

@@ -3,6 +3,7 @@ module sync_tree
 go 1.16
 
 require (
+	github.com/AccelByte/profanity-filter-go v0.0.0-20200430061814-cf243c67e673
 	github.com/blevesearch/bleve/v2 v2.0.6
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/syndtr/goleveldb v1.0.0

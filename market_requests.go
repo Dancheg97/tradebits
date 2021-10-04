@@ -106,7 +106,7 @@ func (s *server) Deposit(
 	defer u.Save()
 	strAdr := string(adress)
 	u.Balances[strAdr] = u.Balances[strAdr] + in.Amount
-	fmt.Println("[MarketDeposit] - Deposit verified: ", u.PublicName)
+	fmt.Println("[MarketDeposit] - Deposit verified: ", u.Name)
 	return &pb.Response{}, nil
 }
 
@@ -133,7 +133,7 @@ func (s *server) Reply(
 	defer u.Save()
 	u.PutMessage(in.Adress, in.Message)
 	u.Save()
-	fmt.Println("[MarketSendMessage] - Message sent", u.PublicName)
+	fmt.Println("[MarketSendMessage] - Message sent", u.Name)
 	return &pb.Response{}, nil
 }
 

@@ -98,6 +98,7 @@ func (s *server) CheckName(
 	fmt.Println("[CheckName] - Name:", in.Text, ", rez:", rez)
 	return &pb.InfOut_Bool{Value: rez}, nil
 }
+
 func (s *server) User(
 	ctx context.Context,
 	in *pb.InfIn_Adress,
@@ -114,9 +115,9 @@ func (s *server) User(
 		adressesSlice = append(adressesSlice, []byte(strAdr))
 		balancesSlice = append(balancesSlice, bal)
 	}
-	fmt.Println("[InfoUser] - info about user: ", user.PublicName)
+	fmt.Println("[InfoUser] - info about user: ", user.Name)
 	return &pb.InfOut_User{
-		PublicName:     user.PublicName,
+		PublicName:     user.Name,
 		Balance:        user.Balance,
 		MessageKey:     user.MesKey,
 		MarketAdresses: adressesSlice,

@@ -88,7 +88,7 @@ func (s *server) Send(
 	}
 	sender.Balance = sender.Balance - in.SendAmount
 	reciever.Balance = reciever.Balance + in.SendAmount
-	fmt.Println("[UserSendMessage] - Message sent: ", sender.PublicName)
+	fmt.Println("[UserSendMessage] - Message sent: ", sender.Name)
 	return &pb.Response{}, nil
 }
 
@@ -117,7 +117,7 @@ func (s *server) Message(
 	}
 	defer u.Save()
 	u.PutMessage(in.Adress, in.Message)
-	fmt.Println("[UserMessage] - Message sent: ", u.PublicName)
+	fmt.Println("[UserMessage] - Message sent: ", u.Name)
 	return &pb.Response{}, nil
 }
 
@@ -168,7 +168,7 @@ func (s *server) Buy(
 		fmt.Println("[UserBuy] - Trade market attach fail")
 		return nil, errors.New("trade market attach fail")
 	}
-	fmt.Println("[UserBuy] - Buy order complete: ", buyer.PublicName)
+	fmt.Println("[UserBuy] - Buy order complete: ", buyer.Name)
 	return &pb.Response{}, nil
 }
 
@@ -219,7 +219,7 @@ func (s *server) Sell(
 		fmt.Println("[UserSell] - Trade market attach fail")
 		return nil, errors.New("trade market attach fail")
 	}
-	fmt.Println("[UserSell] - Sell order complete: ", seller.PublicName)
+	fmt.Println("[UserSell] - Sell order complete: ", seller.Name)
 	return &pb.Response{}, nil
 }
 
