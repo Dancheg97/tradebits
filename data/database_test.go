@@ -1,10 +1,8 @@
 package data
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
-	"time"
 )
 
 func TestPutValue(t *testing.T) {
@@ -90,23 +88,5 @@ func TestRemoveValue(t *testing.T) {
 	exists := Check(val)
 	if exists {
 		t.Error("this value should not exists, cuz it have been removed")
-	}
-}
-
-func TestGenerateOpenDBerror(t *testing.T) {
-	timeout := time.After(3 * time.Second)
-	done := make(chan bool)
-	go func() {
-		base1 := openDB()
-		base2 := openDB()
-		fmt.Println(base1, base2)
-		done <- true
-	}()
-
-	select {
-	case <-timeout:
-
-	case <-done:
-		t.Fatal("Test didn't finish in time")
 	}
 }

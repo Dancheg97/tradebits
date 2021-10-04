@@ -11,23 +11,25 @@ import (
 )
 
 var dummyMesKey = []byte{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2}
-var dummyName = "Name"
 
 func TestCreateUser(t *testing.T) {
 	var adress = calc.Rand()
+	dummyName := string(calc.Rand()[0:8])
 	err := Create(
 		adress,
 		dummyMesKey,
 		dummyName,
 	)
 	if err != nil {
-		t.Error("attemt to create new user failed")
+		t.Error("attemt to create new user failed", err)
 	}
+	data.TestRM([]byte(dummyName))
 	data.TestRM(adress)
 }
 
 func TestCreateExisting(t *testing.T) {
 	var adress = calc.Rand()
+	dummyName := string(calc.Rand()[0:8])
 	Create(
 		adress,
 		dummyMesKey,
@@ -41,11 +43,13 @@ func TestCreateExisting(t *testing.T) {
 	if err == nil {
 		t.Error("attemt to create existing user succeded, that is bad error")
 	}
+	data.TestRM([]byte(dummyName))
 	data.TestRM(adress)
 }
 
 func TestGetFreeUser(t *testing.T) {
 	var adress = calc.Rand()
+	dummyName := string(calc.Rand()[0:8])
 	Create(
 		adress,
 		dummyMesKey,
@@ -53,9 +57,10 @@ func TestGetFreeUser(t *testing.T) {
 	)
 	freeUser := Get(adress)
 	freeUser.Save()
-	if freeUser.PublicName != "Name" {
+	if reflect.DeepEqual(adress, freeUser.adress) {
 		t.Error("get free user error")
 	}
+	data.TestRM([]byte(dummyName))
 	data.TestRM(adress)
 }
 
@@ -67,6 +72,7 @@ func getBusyUser(adress []byte) {
 
 func TestGetBusyUser(t *testing.T) {
 	var adress = calc.Rand()
+	dummyName := string(calc.Rand()[0:8])
 	Create(
 		adress,
 		dummyMesKey,
@@ -80,11 +86,13 @@ func TestGetBusyUser(t *testing.T) {
 	if !reflect.DeepEqual(usr2.adress, adress) {
 		t.Error("adress of second user should be the same")
 	}
+	data.TestRM([]byte(dummyName))
 	data.TestRM(adress)
 }
 
 func TestUserLook(t *testing.T) {
 	var adress = calc.Rand()
+	dummyName := string(calc.Rand()[0:8])
 	Create(
 		adress,
 		dummyMesKey,
@@ -94,14 +102,16 @@ func TestUserLook(t *testing.T) {
 	if len(usr.adress) != 0 {
 		t.Error("user adress should be empty")
 	}
-	if usr.PublicName != dummyName {
+	if reflect.DeepEqual(adress, usr.adress) {
 		t.Error("user info is incorrect")
 	}
+	data.TestRM([]byte(dummyName))
 	data.TestRM(adress)
 }
 
 func TestPutUserMessage(t *testing.T) {
 	var adress = calc.Rand()
+	dummyName := string(calc.Rand()[0:8])
 	Create(
 		adress,
 		dummyMesKey,
@@ -114,11 +124,13 @@ func TestPutUserMessage(t *testing.T) {
 	if bytes.Compare(mes, []byte{1, 2, 3}) == 3 {
 		t.Error("the message should be '[]byte{1, 2, 3}' - ", mes)
 	}
+	data.TestRM([]byte(dummyName))
 	data.TestRM(adress)
 }
 
 func TestNewUserNonNullableMessageMap(t *testing.T) {
 	var adress = calc.Rand()
+	dummyName := string(calc.Rand()[0:8])
 	Create(
 		adress,
 		dummyMesKey,
@@ -129,11 +141,13 @@ func TestNewUserNonNullableMessageMap(t *testing.T) {
 		t.Error("user messages should never be null")
 	}
 	usr.Save()
+	data.TestRM([]byte(dummyName))
 	data.TestRM(adress)
 }
 
 func TestAttachToLookedUser(t *testing.T) {
 	var adress = calc.Rand()
+	dummyName := string(calc.Rand()[0:8])
 	Create(
 		adress,
 		dummyMesKey,
@@ -150,11 +164,13 @@ func TestAttachToLookedUser(t *testing.T) {
 	if sellAttached {
 		t.Error("sell trade should not be attached, cuz user can never be saved")
 	}
+	data.TestRM([]byte(dummyName))
 	data.TestRM(adress)
 }
 
 func TestAttachTradesWithZeroOffer(t *testing.T) {
 	var adress = calc.Rand()
+	dummyName := string(calc.Rand()[0:8])
 	Create(
 		adress,
 		dummyMesKey,
@@ -177,11 +193,13 @@ func TestAttachTradesWithZeroOffer(t *testing.T) {
 	if sellAttached {
 		t.Error("this sell should never be attached cuz 0 offer")
 	}
+	data.TestRM([]byte(dummyName))
 	data.TestRM(adress)
 }
 
 func TestAttachTradeWithBigBalance(t *testing.T) {
 	var adress = calc.Rand()
+	dummyName := string(calc.Rand()[0:8])
 	Create(
 		adress,
 		dummyMesKey,
@@ -205,11 +223,13 @@ func TestAttachTradeWithBigBalance(t *testing.T) {
 	if sellAttached {
 		t.Error("this sell should not be attached cuz its over users balance")
 	}
+	data.TestRM([]byte(dummyName))
 	data.TestRM(adress)
 }
 
 func TestAttachNormalTrades(t *testing.T) {
 	var adress = calc.Rand()
+	dummyName := string(calc.Rand()[0:8])
 	Create(
 		adress,
 		dummyMesKey,
@@ -240,11 +260,13 @@ func TestAttachNormalTrades(t *testing.T) {
 	if !reflect.DeepEqual(sell.Adress, usr.adress) {
 		t.Error("sell adress after bounding should be equal to users")
 	}
+	data.TestRM([]byte(dummyName))
 	data.TestRM(adress)
 }
 
 func TestAttachSellNonExistingMarket(t *testing.T) {
 	var adress = calc.Rand()
+	dummyName := string(calc.Rand()[0:8])
 	Create(
 		adress,
 		dummyMesKey,
@@ -259,11 +281,13 @@ func TestAttachSellNonExistingMarket(t *testing.T) {
 	if sellAttached {
 		t.Error("this sell should not be attached, cuz user dont have such market")
 	}
+	data.TestRM([]byte(dummyName))
 	data.TestRM(adress)
 }
 
 func TestAttchBoundedTrades(t *testing.T) {
 	var adress = calc.Rand()
+	dummyName := string(calc.Rand()[0:8])
 	Create(
 		adress,
 		dummyMesKey,
@@ -287,5 +311,6 @@ func TestAttchBoundedTrades(t *testing.T) {
 	if buyAttached || sellAttached {
 		t.Error("those trades are already bounded and should not be attached")
 	}
+	data.TestRM([]byte(dummyName))
 	data.TestRM(adress)
 }

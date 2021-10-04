@@ -184,6 +184,7 @@ func TestCreateExistingMarket(t *testing.T) {
 }
 
 func TestGetFreeMarket(t *testing.T) {
+	time.Sleep(time.Second*12)
 	var adress = calc.Rand()
 	Create(
 		adress,
