@@ -28,19 +28,6 @@ func TestSearchSearch(t *testing.T) {
 	searcher.Delete(string(adr))
 }
 
-func TestSearchChange(t *testing.T) {
-	adr := calc.Rand()
-	name1 := "Xname22"
-	name2 := "Fname22"
-	Add(name1, adr)
-	Change(name2, adr)
-	rez1 := Search(name2)
-	if !reflect.DeepEqual(rez1[0], adr) {
-		t.Error("found name should be equal to second")
-	}
-	searcher.Delete(string(adr))
-}
-
 func TestSearchAddDifferentAdressesToSameName(t *testing.T) {
 	firstAdress := calc.Rand()
 	secondAdress := calc.Rand()
@@ -88,23 +75,6 @@ func TestSearchOver30requests(t *testing.T) {
 	}
 }
 
-func TestSearchWithAttemptOfNameSubstitution(t *testing.T) {
-	firstAdress := calc.Rand()
-	secondAdress := calc.Rand()
-	Add("namio", firstAdress)
-	Add("namio", secondAdress)
-	Change("another", secondAdress)
-	firstSearch := Search("namio")
-	secondSearch := Search("another")
-	if !reflect.DeepEqual(firstSearch[0], firstAdress) {
-		t.Error("first adress not matching")
-	}
-	if !reflect.DeepEqual(secondSearch[0], secondAdress) {
-		t.Error("second adress not matching")
-	}
-	searcher.Delete(string(firstAdress))
-	searcher.Delete(string(secondAdress))
-}
 func TestRecreateSearcher(t *testing.T) {
 	time.Sleep(time.Second * 8)
 	searcher.Close()
