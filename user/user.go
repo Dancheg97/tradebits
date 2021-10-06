@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"errors"
+	"strings"
 	"sync_tree/data"
 	"sync_tree/lock"
 	"sync_tree/trade"
@@ -41,8 +42,8 @@ func Create(adress []byte, mesKey []byte, name string) error {
 	if data.Check([]byte(name)) {
 		return errors.New("user with that name exists")
 	}
-	if name[0] == " "[0] || name[len(name)-1] == " "[0] {
-		return errors.New("market name start/ends with space")
+	if name!= strings.Trim(name, " ") {
+		return errors.New("too many spaces")
 	}
 	isBadName, _, _ := filter.Filter.ProfanityCheck(name)
 	if isBadName {
