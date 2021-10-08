@@ -152,6 +152,27 @@ func TestCreateMarketBadDelimited(t *testing.T) {
 	data.TestRM(dummyAdress)
 }
 
+func TestCreateMarketBadMessageKey(t *testing.T) {
+	var dummyAdress = calc.Rand()
+	dummyName := string(calc.Rand()[0:16])
+	err := Create(
+		dummyAdress,
+		dummyName,
+		calc.Rand()[0:16],
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	if err == nil {
+		t.Error("market with mes key that small should not be created")
+	}
+	data.TestRM([]byte(dummyName))
+	data.TestRM(dummyAdress)
+}
+
 func TestCreateExistingMarket(t *testing.T) {
 	var adress = calc.Rand()
 	dummyName := string(calc.Rand()[0:16])
@@ -183,3 +204,38 @@ func TestCreateExistingMarket(t *testing.T) {
 	data.TestRM([]byte(dummyName))
 	data.TestRM(adress)
 }
+
+
+func TestCreateMarketsWithSameName(t *testing.T) {
+	var adress1 = calc.Rand()
+	dummyName := string(calc.Rand()[0:16])
+	Create(
+		adress1,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	var adress2 = calc.Rand()
+	err := Create(
+		adress2,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	if err == nil {
+		t.Error("market with same name should not be created")
+	}
+	data.TestRM([]byte(dummyName))
+	data.TestRM(adress1)
+}
+

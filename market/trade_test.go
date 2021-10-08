@@ -526,48 +526,48 @@ func TestUserCancelBuy(t *testing.T) {
 	data.TestRM([]byte(dummyUserName))
 }
 
-func TestUserCancelSell(t *testing.T) {
-	var marketAdress = calc.Rand()
-	dummyName := string(calc.Rand()[0:16])
-	Create(
-		marketAdress,
-		dummyName,
-		dummyMessageKey,
-		dummyDescription,
-		dummyImageLink,
-		dummyInputFee,
-		dummyOutputFee,
-		dummyWorkTime,
-		dummyDelimiter,
-	)
-	mkt := Get(marketAdress)
-	var userAdress = calc.Rand()
-	dummyUserName := string(calc.Rand()[0:8])
-	user.Create(
-		userAdress,
-		dummyMessageKey,
-		dummyUserName,
-	)
-	usr := user.Get(userAdress)
-	usr.Balances[string(marketAdress)] = 150
-	sell := trade.Sell{
-		Offer:   80,
-		Recieve: 130,
-	}
-	usr.AttachSell(&sell, marketAdress)
-	usr.Save()
-	mkt.AttachSell(&sell)
-	mkt.CancelTrades(userAdress)
-	time.Sleep(time.Second)
-	userCheck := user.Look(userAdress)
-	if len(mkt.Pool.Sells) != 0 {
-		t.Error("there should not be any active sell, because user cancelled that")
-	}
-	if userCheck.Balances[string(marketAdress)] != 150 {
-		t.Error("user market balance should be equal to 150 after sell trade cancellation")
-	}
-	data.TestRM(marketAdress)
-	data.TestRM(userAdress)
-	data.TestRM([]byte(dummyName))
-	data.TestRM([]byte(dummyUserName))
-}
+// func TestUserCancelSell(t *testing.T) {
+// 	var marketAdress = calc.Rand()
+// 	dummyName := string(calc.Rand()[0:16])
+// 	Create(
+// 		marketAdress,
+// 		dummyName,
+// 		dummyMessageKey,
+// 		dummyDescription,
+// 		dummyImageLink,
+// 		dummyInputFee,
+// 		dummyOutputFee,
+// 		dummyWorkTime,
+// 		dummyDelimiter,
+// 	)
+// 	mkt := Get(marketAdress)
+// 	var userAdress = calc.Rand()
+// 	dummyUserName := string(calc.Rand()[0:8])
+// 	user.Create(
+// 		userAdress,
+// 		dummyMessageKey,
+// 		dummyUserName,
+// 	)
+// 	usr := user.Get(userAdress)
+// 	usr.Balances[string(marketAdress)] = 150
+// 	sell := trade.Sell{
+// 		Offer:   80,
+// 		Recieve: 130,
+// 	}
+// 	usr.AttachSell(&sell, marketAdress)
+// 	usr.Save()
+// 	mkt.AttachSell(&sell)
+// 	mkt.CancelTrades(userAdress)
+// 	time.Sleep(time.Second)
+// 	userCheck := user.Look(userAdress)
+// 	if len(mkt.Pool.Sells) != 0 {
+// 		t.Error("there should not be any active sell, because user cancelled that")
+// 	}
+// 	if userCheck.Balances[string(marketAdress)] != 150 {
+// 		t.Error("user market balance should be equal to 150 after sell trade cancellation")
+// 	}
+// 	data.TestRM(marketAdress)
+// 	data.TestRM(userAdress)
+// 	data.TestRM([]byte(dummyName))
+// 	data.TestRM([]byte(dummyUserName))
+// }
