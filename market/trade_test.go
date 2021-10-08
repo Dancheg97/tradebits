@@ -6,6 +6,7 @@ import (
 	"sync_tree/trade"
 	"sync_tree/user"
 	"testing"
+	"time"
 )
 
 var dummyMessageKey = []byte{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2}
@@ -71,7 +72,39 @@ func TestAttachUnbounededBuys(t *testing.T) {
 	data.TestRM([]byte(dummyName))
 }
 
-func TestAttachAndOperateBuy(t *testing.T) {
+func TestAttachUnbounededSells(t *testing.T) {
+	adress := calc.Rand()
+	dummyName := string(calc.Rand()[0:16])
+	Create(
+		adress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	mkt := Get(adress)
+	badSell := trade.Sell{
+		Offer:   100,
+		Recieve: 100,
+	}
+	attached1 := mkt.AttachSell(&badSell)
+	if attached1 {
+		t.Error("trade without market attachment should not be attached")
+	}
+	lookedMkt := Look(adress)
+	attached2 := lookedMkt.AttachSell(&badSell)
+	if attached2 {
+		t.Error("trade should not be attached to looked market")
+	}
+	data.TestRM(adress)
+	data.TestRM([]byte(dummyName))
+}
+
+func TestAttachAndOperateOutputs(t *testing.T) {
 	marketAdress := calc.Rand()
 	dummyName := string(calc.Rand()[0:16])
 	Create(
@@ -95,6 +128,15 @@ func TestAttachAndOperateBuy(t *testing.T) {
 	)
 	seller := user.Get(sellerAdress)
 	seller.Balances[string(marketAdress)] = 100
+	sellerAdress2 := calc.Rand()
+	sellerName2 := string(calc.Rand()[0:8])
+	user.Create(
+		sellerAdress2,
+		dummyMessageKey,
+		sellerName2,
+	)
+	seller2 := user.Get(sellerAdress2)
+	seller.Balances[string(marketAdress)] = 100
 	buyerAdress := calc.Rand()
 	buyerName := string(calc.Rand()[0:8])
 	user.Create(
@@ -103,17 +145,24 @@ func TestAttachAndOperateBuy(t *testing.T) {
 		buyerName,
 	)
 	buyer := user.Get(buyerAdress)
-	buyer.Balance = 100
+	buyer.Balance = 200
 	sell := trade.Sell{
 		Offer:   100,
 		Recieve: 100,
 	}
 	buy := trade.Buy{
+		Offer:   200,
+		Recieve: 200,
+	}
+	sell2 := trade.Sell{
 		Offer:   100,
 		Recieve: 100,
 	}
 	buyer.AttachBuy(&buy)
 	seller.AttachSell(&sell, marketAdress)
+	seller2.AttachSell(&sell2, marketAdress)
 	mkt.AttachSell(&sell)
 	mkt.AttachBuy(&buy)
+	mkt.AttachSell(&sell2)
+	time.Sleep(time.Second)
 }
