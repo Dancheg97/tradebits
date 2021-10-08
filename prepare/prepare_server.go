@@ -1,4 +1,4 @@
-package api_test_preparation
+package prepare
 
 import (
 	"encoding/pem"
