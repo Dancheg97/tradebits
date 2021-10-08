@@ -39,3 +39,34 @@ func TestOperateOutput(t *testing.T) {
 	data.TestRM(dummyUserAdress)
 }
 
+func TestAttachUnbounededBuys(t *testing.T) {
+	adress := calc.Rand()
+	dummyName := string(calc.Rand()[0:16])
+	Create(
+		adress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	mkt := Get(adress)
+	badBuy := trade.Buy{
+		Offer: 100,
+		Recieve: 100,
+	}
+	attached1 := mkt.AttachBuy(&badBuy)
+	if attached1 {
+		t.Error("trade without market attachment should not be attached")
+	}
+	lookedMkt := Look(adress)
+	attached2 := lookedMkt.AttachBuy(&badBuy)
+	if attached2 {
+		t.Error("trade should not be attached to looked market")
+	}
+	data.TestRM(adress)
+	data.TestRM([]byte(dummyName))
+}

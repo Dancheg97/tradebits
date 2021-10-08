@@ -14,7 +14,6 @@ func operateOutput(t trade.Output, marketAdress []byte) {
 	u.Save()
 }
 
-// attaches buy trade to market, you can't attach trade twice
 func (m *market) AttachBuy(b *trade.Buy) bool {
 	if m.adress == nil {
 		return false
@@ -32,7 +31,6 @@ func (m *market) AttachBuy(b *trade.Buy) bool {
 	return true
 }
 
-// attaches sell trade to market, you can't attach trade twice
 func (m *market) AttachSell(s *trade.Sell) bool {
 	if m.adress == nil {
 		return false

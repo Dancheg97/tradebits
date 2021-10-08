@@ -7,7 +7,7 @@ import (
 )
 
 func TestMarketSave(t *testing.T) {
-	var adress = calc.Rand()
+	adress := calc.Rand()
 	dummyName := string(calc.Rand()[0:16])
 	Create(
 		adress,
