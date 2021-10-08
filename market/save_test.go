@@ -20,5 +20,10 @@ func TestMarketSave(t *testing.T) {
 		dummyDelimiter,
 	)
 	mkt := Get(adress)
+	mkt.Descr = "some new stuff"
 	mkt.Save()
+	lookedMkt := Look(adress)
+	if lookedMkt.Descr != "some new stuff" {
+		t.Error("Market have been saved but info have not been updated")
+	}
 }
