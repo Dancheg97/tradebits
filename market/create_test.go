@@ -152,6 +152,71 @@ func TestCreateMarketBadDelimited(t *testing.T) {
 	data.TestRM(dummyAdress)
 }
 
+func TestCreateUntrimmedMarket(t *testing.T) {
+	var adress1 = calc.Rand()
+	dummyName := string(calc.Rand()[0:16])
+	err := Create(
+		adress1,
+		" Name cont  spacezz  ",
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	if err == nil {
+		t.Error("market with same name should not be created")
+	}
+	data.TestRM([]byte(dummyName))
+	data.TestRM(adress1)
+}
+
+
+func TestCreateBadDescription(t *testing.T) {
+	var adress1 = calc.Rand()
+	dummyName := string(calc.Rand()[0:16])
+	dummyDescription := "We will fuck your ass!! We will fuck your ass!! We will fuck your ass!! We will fuck your ass!! We will fuck your ass!! We will fuck your ass!! We will fuck your ass!! We will fuck your ass!! We will fuck your ass!! We will fuck your ass!! We will fuck your ass!! We will fuck your ass!! We will fuck your ass!!"
+	err := Create(
+		adress1,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	data.TestRM([]byte(dummyName))
+	data.TestRM(adress1)
+	if err == nil {
+		t.Error("market with bad description should not be created")
+	}
+}
+
+func TestCreateBadNameMarket(t *testing.T) {
+	var adress1 = calc.Rand()
+	dummyName := "Shitting bitch marketplace"
+	err := Create(
+		adress1,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	if err == nil {
+		t.Error("market with same name should not be created")
+	}
+	data.TestRM([]byte(dummyName))
+	data.TestRM(adress1)
+}
+
 func TestCreateMarketBadMessageKey(t *testing.T) {
 	var dummyAdress = calc.Rand()
 	dummyName := string(calc.Rand()[0:16])
@@ -205,7 +270,6 @@ func TestCreateExistingMarket(t *testing.T) {
 	data.TestRM(adress)
 }
 
-
 func TestCreateMarketsWithSameName(t *testing.T) {
 	var adress1 = calc.Rand()
 	dummyName := string(calc.Rand()[0:16])
@@ -238,4 +302,3 @@ func TestCreateMarketsWithSameName(t *testing.T) {
 	data.TestRM([]byte(dummyName))
 	data.TestRM(adress1)
 }
-
