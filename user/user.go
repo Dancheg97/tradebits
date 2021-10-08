@@ -130,7 +130,7 @@ func (u *user) GetMessages(adress []byte) [][]byte {
 
 // This function is bounding specific sell function to user, if its not
 // possible, returns false, if operated successully, returns true
-func (u *user) AttachSell(sell *trade.Sell, adress []byte) bool {
+func (u *user) AttachSell(sell *trade.Sell, marketAdress []byte) bool {
 	if u.adress == nil {
 		return false
 	}
@@ -140,9 +140,9 @@ func (u *user) AttachSell(sell *trade.Sell, adress []byte) bool {
 	if sell.Offer == 0 || sell.Recieve == 0 {
 		return false
 	}
-	if val, ok := u.Balances[string(adress)]; ok {
+	if val, ok := u.Balances[string(marketAdress)]; ok {
 		if val >= sell.Offer {
-			u.Balances[string(adress)] = val - sell.Offer
+			u.Balances[string(marketAdress)] = val - sell.Offer
 			sell.Adress = u.adress
 			return true
 		}

@@ -55,7 +55,7 @@ func TestAttachUnbounededBuys(t *testing.T) {
 	)
 	mkt := Get(adress)
 	badBuy := trade.Buy{
-		Offer: 100,
+		Offer:   100,
 		Recieve: 100,
 	}
 	attached1 := mkt.AttachBuy(&badBuy)
@@ -69,4 +69,51 @@ func TestAttachUnbounededBuys(t *testing.T) {
 	}
 	data.TestRM(adress)
 	data.TestRM([]byte(dummyName))
+}
+
+func TestAttachAndOperateBuy(t *testing.T) {
+	marketAdress := calc.Rand()
+	dummyName := string(calc.Rand()[0:16])
+	Create(
+		marketAdress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	mkt := Get(marketAdress)
+	sellerAdress := calc.Rand()
+	sellerName := string(calc.Rand()[0:8])
+	user.Create(
+		sellerAdress,
+		dummyMessageKey,
+		sellerName,
+	)
+	seller := user.Get(sellerAdress)
+	seller.Balances[string(marketAdress)] = 100
+	buyerAdress := calc.Rand()
+	buyerName := string(calc.Rand()[0:8])
+	user.Create(
+		buyerAdress,
+		dummyMessageKey,
+		buyerName,
+	)
+	buyer := user.Get(buyerAdress)
+	buyer.Balance = 100
+	sell := trade.Sell{
+		Offer:   100,
+		Recieve: 100,
+	}
+	buy := trade.Buy{
+		Offer:   100,
+		Recieve: 100,
+	}
+	buyer.AttachBuy(&buy)
+	seller.AttachSell(&sell, marketAdress)
+	mkt.AttachSell(&sell)
+	mkt.AttachBuy(&buy)
 }
