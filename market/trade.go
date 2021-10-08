@@ -6,22 +6,6 @@ import (
 	"sync_tree/user"
 )
 
-// keka
-type market struct {
-	adress    []byte
-	Name      string
-	MesKey    []byte
-	Descr     string
-	Img       string
-	OpCount   uint64
-	Pool      trade.TradePool
-	InputFee  uint64
-	OutputFee uint64
-	WorkTime  string
-	Delimiter uint64
-	Users     [][]byte
-}
-
 // This function is operating output for some trade and market adress
 func operateOutput(t trade.Output, marketAdress []byte) {
 	u := user.Get(t.Adress)
