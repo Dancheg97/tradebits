@@ -1,7 +1,6 @@
 package market
 
 import (
-	"reflect"
 	"sync_tree/calc"
 	"sync_tree/data"
 	"sync_tree/trade"
@@ -17,7 +16,6 @@ var dummyInputFee = uint64(100)
 var dummyOutputFee = uint64(100)
 var dummyWorkTime = "+3GMT 9:00 - 21:00"
 var dummyDelimiter = uint64(2)
-
 
 func TestAttachUnboundedTrades(t *testing.T) {
 	var adress = calc.Rand()

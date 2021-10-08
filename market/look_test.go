@@ -23,7 +23,7 @@ func TestMarketLook(t *testing.T) {
 	)
 	mkt := Look(adress)
 	if !reflect.DeepEqual(mkt.MesKey, dummyMessageKey) {
-		t.Error("keys are not the same, look asset error")
+		t.Error("keys are not the same, look market error")
 	}
 	data.TestRM([]byte(dummyName))
 	data.TestRM(adress)

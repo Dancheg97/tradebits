@@ -1,11 +1,7 @@
 package market
 
 import (
-	"bytes"
-	"encoding/gob"
 	"reflect"
-	"sync_tree/data"
-	"sync_tree/lock"
 	"sync_tree/trade"
 	"sync_tree/user"
 )
@@ -24,19 +20,6 @@ type market struct {
 	Delimiter uint64
 	Users     [][]byte
 }
-
-
-// This function is saving changes to the market in database and removes ability
-// to make a double save by removing adress from class struct.
-func (m *market) Save() {
-	saveAdress := m.adress
-	m.adress = nil
-	cache := new(bytes.Buffer)
-	gob.NewEncoder(cache).Encode(m)
-	data.Change(saveAdress, cache.Bytes())
-	lock.Unlock(saveAdress)
-}
-
 
 // This function is operating output for some trade and market adress
 func operateOutput(t trade.Output, adress []byte) {
