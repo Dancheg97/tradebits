@@ -1,13 +1,11 @@
 package calc
 
 import (
-	"crypto"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha512"
 	"crypto/x509"
 	"encoding/binary"
-	"errors"
 )
 
 // take hash from that byte array
@@ -52,40 +50,4 @@ func Rand() []byte {
 	randomBytes := make([]byte, 64)
 	rand.Read(randomBytes)
 	return randomBytes
-}
-
-// sign message with private key (message is taken by 2d ar, and will be
-// cncatenated to single one before signing)
-func Sign(message [][]byte, privateKey []byte) ([]byte, error) {
-	private, privateKeyErr := x509.ParsePKCS1PrivateKey(privateKey)
-	if privateKeyErr != nil {
-		return nil, errors.New("parse private key error")
-	}
-	msgHashSum := Hash(concatenateMessage(message))
-	signatureBytes, _ := rsa.SignPKCS1v15(
-		rand.Reader,
-		private,
-		crypto.SHA512,
-		msgHashSum,
-	)
-	return signatureBytes, nil
-}
-
-// check some sign with some public key for some and message, message
-// will be concatenated to 1d byte slice
-func Verify(message [][]byte, keyBytes []byte, sign []byte) error {
-	publicKey, publicKeyError := x509.ParsePKCS1PublicKey(keyBytes)
-	if publicKeyError != nil {
-		return errors.New("error parsing public key")
-	}
-	hash := Hash(concatenateMessage(message))
-	return rsa.VerifyPKCS1v15(publicKey, crypto.SHA512, hash, sign)
-}
-
-func concatenateMessage(message [][]byte) []byte {
-	concatenated := []byte{}
-	for i := 0; i < len(message); i++ {
-		concatenated = append(concatenated, message[i]...)
-	}
-	return concatenated
 }
