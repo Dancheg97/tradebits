@@ -1,7 +1,6 @@
 package market
 
 import (
-	"reflect"
 	"sync_tree/trade"
 	"sync_tree/user"
 )
@@ -46,48 +45,4 @@ func (m *market) AttachSell(s *trade.Sell) bool {
 	s.Adress = nil
 	s.Offer = 0
 	return true
-}
-
-// making a check, wether some user has trades on that market
-func (m *market) HasTrades(adress []byte) bool {
-	for _, trade := range m.Pool.Buys {
-		if reflect.DeepEqual(trade.Adress, adress) {
-			return true
-		}
-	}
-	for _, trade := range m.Pool.Sells {
-		if reflect.DeepEqual(trade.Adress, adress) {
-			return true
-		}
-	}
-	return false
-}
-
-func cancelBuy(userAdress []byte, offer uint64) {
-	usr := user.Get(userAdress)
-	usr.Balance = usr.Balance + offer
-	usr.Save()
-}
-
-func cancelSell(userAdress []byte, marketAdress []byte, offer uint64) {
-	usr := user.Get(userAdress)
-	mktAdress := string(marketAdress)
-	usr.Balances[mktAdress] = usr.Balances[mktAdress] + offer
-	usr.Save()
-}
-
-// this function cancelles trades
-func (m *market) CancelTrades(adress []byte) {
-	for idx, trade := range m.Pool.Buys {
-		if reflect.DeepEqual(trade.Adress, adress) {
-			go cancelBuy(adress, trade.Offer)
-			m.Pool.Buys = append(m.Pool.Buys[:idx], m.Pool.Buys[idx+1:]...)
-		}
-	}
-	for idx, trade := range m.Pool.Sells {
-		if reflect.DeepEqual(trade.Adress, adress) {
-			go cancelSell(adress, m.adress, trade.Offer)
-			m.Pool.Sells = append(m.Pool.Sells[:idx], m.Pool.Sells[idx+1:]...)
-		}
-	}
 }
