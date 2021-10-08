@@ -23,11 +23,6 @@ func TestLockID(t *testing.T) {
 	}
 }
 
-func HelperDefferedUnlock(IDtoUnlock []byte) {
-	time.Sleep(time.Second)
-	Unlock(IDtoUnlock)
-}
-
 func TestTryToLockLocked(t *testing.T) {
 	timeout := time.After(4 * time.Second)
 	done := make(chan bool)
@@ -36,7 +31,10 @@ func TestTryToLockLocked(t *testing.T) {
 		lockBytes[0] = 65
 		lockBytes[1] = 66
 		Lock(lockBytes)
-		go HelperDefferedUnlock(lockBytes)
+		go func() {
+			time.Sleep(time.Second)
+			Unlock(lockBytes)
+		}()
 		Lock(lockBytes)
 		Unlock(lockBytes)
 		done <- true
