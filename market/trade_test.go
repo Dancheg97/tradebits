@@ -1,5 +1,12 @@
 package market
 
+import (
+	"sync_tree/calc"
+	"sync_tree/data"
+	"sync_tree/trade"
+	"testing"
+)
+
 var dummyMessageKey = []byte{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2}
 var dummyImageLink = "test.imagelink/thereisnoimagebythislink"
 var dummyDescription = `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrbled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets ctaining Lorem Ipsum pages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`
@@ -8,37 +15,37 @@ var dummyOutputFee = uint64(100)
 var dummyWorkTime = "+3GMT 9:00 - 21:00"
 var dummyDelimiter = uint64(2)
 
-// func TestAttachUnboundedTrades(t *testing.T) {
-// 	var adress = calc.Rand()
-// 	dummyName := string(calc.Rand()[0:16])
-// 	Create(
-// 		adress,
-// 		dummyName,
-// 		dummyMessageKey,
-// 		dummyDescription,
-// 		dummyImageLink,
-// 		dummyInputFee,
-// 		dummyOutputFee,
-// 		dummyWorkTime,
-// 		dummyDelimiter,
-// 	)
-// 	mkt := Get(adress)
-// 	sell := trade.Sell{
-// 		Offer:   100,
-// 		Recieve: 100,
-// 	}
-// 	buy := trade.Buy{
-// 		Offer:   100,
-// 		Recieve: 100,
-// 	}
-// 	buyAttached := mkt.AttachBuy(&buy)
-// 	sellAttached := mkt.AttachSell(&sell)
-// 	if buyAttached || sellAttached {
-// 		t.Error("those trades should not be attached cuz they are unbounded")
-// 	}
-// 	data.TestRM([]byte(dummyName))
-// 	data.TestRM(adress)
-// }
+func TestAttachUnboundedTrades(t *testing.T) {
+	var adress = calc.Rand()
+	dummyName := string(calc.Rand()[0:16])
+	Create(
+		adress,
+		dummyName,
+		dummyMessageKey,
+		dummyDescription,
+		dummyImageLink,
+		dummyInputFee,
+		dummyOutputFee,
+		dummyWorkTime,
+		dummyDelimiter,
+	)
+	mkt := Get(adress)
+	sell := trade.Sell{
+		Offer:   100,
+		Recieve: 100,
+	}
+	buy := trade.Buy{
+		Offer:   100,
+		Recieve: 100,
+	}
+	buyAttached := mkt.AttachBuy(&buy)
+	sellAttached := mkt.AttachSell(&sell)
+	if buyAttached || sellAttached {
+		t.Error("those trades should not be attached cuz they are unbounded")
+	}
+	data.TestRM([]byte(dummyName))
+	data.TestRM(adress)
+}
 
 // func TestAttachToLookedMarket(t *testing.T) {
 // 	var adress = calc.Rand()
