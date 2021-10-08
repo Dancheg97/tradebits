@@ -6,6 +6,7 @@ import (
 	"sync_tree/user"
 )
 
+// keka
 type market struct {
 	adress    []byte
 	Name      string
@@ -22,10 +23,10 @@ type market struct {
 }
 
 // This function is operating output for some trade and market adress
-func operateOutput(t trade.Output, adress []byte) {
+func operateOutput(t trade.Output, marketAdress []byte) {
 	u := user.Get(t.Adress)
 	u.Balance = u.Balance + t.Main
-	u.Balances[string(adress)] = u.Balances[string(adress)] + t.Market
+	u.Balances[string(marketAdress)] = u.Balances[string(marketAdress)] + t.Market
 	u.Save()
 }
 
