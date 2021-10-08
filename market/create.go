@@ -12,20 +12,6 @@ import (
 	"github.com/AccelByte/profanity-filter-go"
 )
 
-type market struct {
-	adress    []byte
-	Name      string
-	MesKey    []byte
-	Descr     string
-	Img       string
-	OpCount   uint64
-	Pool      trade.TradePool
-	InputFee  uint64
-	OutputFee uint64
-	WorkTime  string
-	Delimiter uint64
-	Users     [][]byte
-}
 
 // Create new market by passed values. Checks wether market with passed adress
 // exists and creates new one. Here is field description:

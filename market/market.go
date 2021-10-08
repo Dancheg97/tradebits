@@ -10,20 +10,21 @@ import (
 	"sync_tree/user"
 )
 
-// This function is blocking, it gives an instance of market, so that the
-// values of that market can be modified. To save changes made in market call
-// Save() method of returned instance.
-func Get(adress []byte) *market {
-	if !data.Check(adress) {
-		return nil
-	}
-	lock.Lock(adress)
-	m := market{adress: adress}
-	marketBytes := data.Get(adress)
-	cache := bytes.NewBuffer(marketBytes)
-	gob.NewDecoder(cache).Decode(&m)
-	return &m
+type market struct {
+	adress    []byte
+	Name      string
+	MesKey    []byte
+	Descr     string
+	Img       string
+	OpCount   uint64
+	Pool      trade.TradePool
+	InputFee  uint64
+	OutputFee uint64
+	WorkTime  string
+	Delimiter uint64
+	Users     [][]byte
 }
+
 
 // This function is saving changes to the market in database and removes ability
 // to make a double save by removing adress from class struct.
