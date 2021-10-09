@@ -136,7 +136,7 @@ func TestAttachAndOperateOutputs(t *testing.T) {
 		sellerName2,
 	)
 	seller2 := user.Get(sellerAdress2)
-	seller.Balances[string(marketAdress)] = 100
+	seller2.Balances[string(marketAdress)] = 100
 	buyerAdress := calc.Rand()
 	buyerName := string(calc.Rand()[0:8])
 	user.Create(
@@ -164,5 +164,30 @@ func TestAttachAndOperateOutputs(t *testing.T) {
 	mkt.AttachSell(&sell)
 	mkt.AttachBuy(&buy)
 	mkt.AttachSell(&sell2)
-	time.Sleep(time.Second)
+	mkt.Save()
+	buyer.Save()
+	seller.Save()
+	seller2.Save()
+	time.Sleep(time.Microsecond * 300)
+	checkMkt := Look(marketAdress)
+	checkBuyer := user.Look(buyerAdress)
+	checkSeller := user.Look(sellerAdress)
+	checkSeller2 := user.Look(sellerAdress2)
+	if len(checkMkt.Pool.Buys) != 0 || len(checkMkt.Pool.Sells) != 0 {
+		t.Error("all market trades should be operated")
+	}
+	if checkBuyer.Balance != 0 {
+		t.Error("buyer did not recieve market deal output")
+	}
+	if checkBuyer.Balances[string(marketAdress)] != 200 {
+		t.Error("buyer main balance is not reduced")
+	}
+	if checkSeller.Balance != 100 || checkSeller2.Balance != 100 {
+		t.Error("sellers did not recieve market deal output")
+	}
+	if checkSeller.Balances[string(marketAdress)] != 0 ||
+		checkSeller2.Balances[string(marketAdress)] != 0 {
+		t.Error("sellers did not recieve market deal output")
+	}
+
 }
