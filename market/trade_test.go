@@ -168,7 +168,7 @@ func TestAttachAndOperateOutputs(t *testing.T) {
 	buyer.Save()
 	seller.Save()
 	seller2.Save()
-	time.Sleep(time.Microsecond * 300)
+	time.Sleep(time.Millisecond * 300)
 	checkMkt := Look(marketAdress)
 	checkBuyer := user.Look(buyerAdress)
 	checkSeller := user.Look(sellerAdress)
