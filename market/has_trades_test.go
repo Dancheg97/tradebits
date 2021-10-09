@@ -33,11 +33,11 @@ func TestHasNoTrades(t *testing.T) {
 }
 
 func TestHasBuy(t *testing.T) {
-	dummyAdress := calc.Rand()
-	dummyName := string(calc.Rand()[0:16])
+	marketAdress := calc.Rand()
+	marketName := string(calc.Rand()[0:16])
 	Create(
-		dummyAdress,
-		dummyName,
+		marketAdress,
+		marketName,
 		dummyMessageKey,
 		dummyDescription,
 		dummyImageLink,
@@ -46,7 +46,7 @@ func TestHasBuy(t *testing.T) {
 		dummyWorkTime,
 		dummyDelimiter,
 	)
-	mkt := Get(dummyAdress)
+	mkt := Get(marketAdress)
 	userAdress := calc.Rand()
 	userName := string(calc.Rand()[0:8])
 	user.Create(
@@ -54,28 +54,31 @@ func TestHasBuy(t *testing.T) {
 		dummyMessageKey,
 		userName,
 	)
-	user := user.Get(userAdress)
+	usr := user.Get(userAdress)
+	usr.Balance = 1
 	trade := trade.Buy{
 		Offer:   1,
 		Recieve: 1,
 		Adress:  userAdress,
 	}
-	user.AttachBuy(&trade)
+	usr.AttachBuy(&trade)
 	mkt.AttachBuy(&trade)
 	hasTrades := mkt.HasTrades(userAdress)
 	if !hasTrades {
 		t.Error("There should be a trade for that user")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(dummyAdress)
+	data.TestRM([]byte(marketName))
+	data.TestRM(marketAdress)
+	data.TestRM([]byte(userName))
+	data.TestRM(userAdress)
 }
 
 func TestHasSell(t *testing.T) {
-	dummyAdress := calc.Rand()
-	dummyName := string(calc.Rand()[0:16])
+	marketAdress := calc.Rand()
+	marketName := string(calc.Rand()[0:16])
 	Create(
-		dummyAdress,
-		dummyName,
+		marketAdress,
+		marketName,
 		dummyMessageKey,
 		dummyDescription,
 		dummyImageLink,
@@ -84,12 +87,29 @@ func TestHasSell(t *testing.T) {
 		dummyWorkTime,
 		dummyDelimiter,
 	)
-	mkt := Get(dummyAdress)
-	dummyUserAdress := calc.Rand()
-	hasTrades := mkt.HasTrades(dummyUserAdress)
-	if hasTrades {
-		t.Error("new market should not have any trades")
+	mkt := Get(marketAdress)
+	userAdress := calc.Rand()
+	userName := string(calc.Rand()[0:8])
+	user.Create(
+		userAdress,
+		dummyMessageKey,
+		userName,
+	)
+	usr := user.Get(userAdress)
+	usr.Balances[string(marketAdress)] = 1
+	trade := trade.Sell{
+		Offer:   1,
+		Recieve: 1,
+		Adress:  userAdress,
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(dummyAdress)
+	usr.AttachSell(&trade, marketAdress)
+	mkt.AttachSell(&trade)
+	hasTrades := mkt.HasTrades(userAdress)
+	if !hasTrades {
+		t.Error("There should be a trade for that user")
+	}
+	data.TestRM([]byte(marketName))
+	data.TestRM(marketAdress)
+	data.TestRM([]byte(userName))
+	data.TestRM(userAdress)
 }
