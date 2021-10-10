@@ -8,7 +8,7 @@ import (
 )
 
 func TestGetFreeMarket(t *testing.T) {
-	var adress = calc.Rand()
+	adress := calc.Rand()
 	dummyName := string(calc.Rand()[0:16])
 	Create(
 		adress,
@@ -31,7 +31,7 @@ func TestGetFreeMarket(t *testing.T) {
 }
 
 func TestGetMarketThatDontExist(t *testing.T) {
-	var adress = calc.Rand()
+	adress := calc.Rand()
 	mkt := Get(adress)
 	if mkt != nil {
 		t.Error("that test should not return anything")

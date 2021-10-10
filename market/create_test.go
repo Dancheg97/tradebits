@@ -7,7 +7,7 @@ import (
 )
 
 func TestCreateNewMarket(t *testing.T) {
-	var dummyAdress = calc.Rand()
+	dummyAdress := calc.Rand()
 	dummyName := string(calc.Rand()[0:16])
 	err := Create(
 		dummyAdress,
@@ -49,7 +49,7 @@ func TestCreateMarketBadAdress(t *testing.T) {
 }
 
 func TestCreateMarketBadName(t *testing.T) {
-	var dummyAdress = calc.Rand()
+	dummyAdress := calc.Rand()
 	err := Create(
 		dummyAdress,
 		"ola",
@@ -69,7 +69,7 @@ func TestCreateMarketBadName(t *testing.T) {
 }
 
 func TestCreateMarketBadDescription(t *testing.T) {
-	var dummyAdress = calc.Rand()
+	dummyAdress := calc.Rand()
 	dummyName := string(calc.Rand()[0:16])
 	err := Create(
 		dummyAdress,
@@ -90,7 +90,7 @@ func TestCreateMarketBadDescription(t *testing.T) {
 }
 
 func TestCreateMarketBadFee(t *testing.T) {
-	var dummyAdress = calc.Rand()
+	dummyAdress := calc.Rand()
 	dummyName := string(calc.Rand()[0:16])
 	err := Create(
 		dummyAdress,
@@ -111,7 +111,7 @@ func TestCreateMarketBadFee(t *testing.T) {
 }
 
 func TestCreateMarketBadWorkTime(t *testing.T) {
-	var dummyAdress = calc.Rand()
+	dummyAdress := calc.Rand()
 	dummyName := string(calc.Rand()[0:16])
 	err := Create(
 		dummyAdress,
@@ -132,7 +132,7 @@ func TestCreateMarketBadWorkTime(t *testing.T) {
 }
 
 func TestCreateMarketBadDelimited(t *testing.T) {
-	var dummyAdress = calc.Rand()
+	dummyAdress := calc.Rand()
 	dummyName := string(calc.Rand()[0:16])
 	err := Create(
 		dummyAdress,
@@ -218,7 +218,7 @@ func TestCreateBadNameMarket(t *testing.T) {
 }
 
 func TestCreateMarketBadMessageKey(t *testing.T) {
-	var dummyAdress = calc.Rand()
+	dummyAdress := calc.Rand()
 	dummyName := string(calc.Rand()[0:16])
 	err := Create(
 		dummyAdress,
@@ -239,7 +239,7 @@ func TestCreateMarketBadMessageKey(t *testing.T) {
 }
 
 func TestCreateExistingMarket(t *testing.T) {
-	var adress = calc.Rand()
+	adress := calc.Rand()
 	dummyName := string(calc.Rand()[0:16])
 	Create(
 		adress,

@@ -1,17 +1,16 @@
 package market
 
 import (
-	"reflect"
 	"sync_tree/calc"
 	"sync_tree/data"
 	"testing"
 )
 
-func TestMarketLook(t *testing.T) {
-	adress := calc.Rand()
+func TestCancelBuy(t *testing.T) {
+	dummyAdress := calc.Rand()
 	dummyName := string(calc.Rand()[0:16])
 	Create(
-		adress,
+		dummyAdress,
 		dummyName,
 		dummyMessageKey,
 		dummyDescription,
@@ -21,10 +20,8 @@ func TestMarketLook(t *testing.T) {
 		dummyWorkTime,
 		dummyDelimiter,
 	)
-	mkt := Look(adress)
-	if !reflect.DeepEqual(mkt.MesKey, dummyMessageKey) {
-		t.Error("keys are not the same, look market error")
-	}
+	mkt := Get(dummyAdress)
+	
 	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	data.TestRM(dummyAdress)
 }
