@@ -1,6 +1,7 @@
 package trade2
 
 import (
+	"reflect"
 	"sync_tree/calc"
 	"testing"
 )
@@ -20,11 +21,33 @@ func TestCreateTradeError(t *testing.T) {
 }
 
 func TestTradeFirstWontCloseSecond(t *testing.T) {
-	firstTrade := CreateTrade(calc.Rand(), 119, 181)
-	secondTrade := CreateTrade(calc.Rand(), 120, 182)
+	firstTrade := CreateTrade(calc.Rand(), 7, 10)
+	secondTrade := CreateTrade(calc.Rand(), 8, 6)
 	firstOutput, secondOutput := firstTrade.close(secondTrade)
 	if firstOutput != nil && secondOutput != nil {
-		t.Error("coca cola", firstOutput, secondOutput)
+		t.Error("Those trades should not be operated, ", firstOutput, secondOutput)
 	}
 }
 
+func TestTradeFirstWillCloseSecond(t *testing.T) {
+	firstAdress := calc.Rand()
+	secondAdress := calc.Rand()
+	firstTrade := CreateTrade(firstAdress, 7, 10)
+	secondTrade := CreateTrade(secondAdress, 9, 5)
+	firstOutput, secondOutput := firstTrade.close(secondTrade)
+	if firstOutput == nil || secondOutput == nil {
+		t.Error("Those trades should be operated")
+	}
+	if !reflect.DeepEqual(firstOutput.Adress, firstAdress) {
+		t.Error("first adress is not matching")
+	}
+	if !reflect.DeepEqual(secondOutput.Adress, secondAdress) {
+		t.Error("second adress is not matching")
+	}
+	if firstOutput.Amount != 9 {
+		t.Error("first output should be 9")
+	}
+	if secondOutput.Amount != 5 {
+		t.Error("")
+	}
+}

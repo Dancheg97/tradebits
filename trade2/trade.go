@@ -13,15 +13,15 @@ type output struct {
 
 func CreateTrade(
 	adress []byte,
-	revieve uint64,
 	offer uint64,
+	recieve uint64,
 ) *trade {
-	if offer == 0 || revieve == 0 || adress == nil {
+	if offer == 0 || recieve == 0 || adress == nil {
 		return nil
 	}
 	return &trade{
 		Offer:   offer,
-		Recieve: revieve,
+		Recieve: recieve,
 		Adress:  adress,
 	}
 }
