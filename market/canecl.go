@@ -18,7 +18,6 @@ func cancelSell(userAdress []byte, marketAdress []byte, offer uint64) {
 	usr.Save()
 }
 
-// this function cancelles trades
 func (m *market) CancelTrades(adress []byte) {
 	for idx, trade := range m.Pool.Buys {
 		if reflect.DeepEqual(trade.Adress, adress) {
