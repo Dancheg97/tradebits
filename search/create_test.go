@@ -9,10 +9,11 @@ import (
 )
 
 func TestRecreateSearcher(t *testing.T) {
-	time.Sleep(time.Second * 8)
+	time.Sleep(time.Millisecond*620)
 	searcher.Close()
 	_, filename, _, _ := runtime.Caller(0)
 	searchPath := path.Dir(filename) + "/bleve"
 	os.RemoveAll(searchPath)
-	openSearch()
+	searcher = openSearch()
+	time.Sleep(time.Millisecond*620)
 }

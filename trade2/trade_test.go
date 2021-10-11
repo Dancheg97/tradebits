@@ -18,3 +18,13 @@ func TestCreateTradeError(t *testing.T) {
 		t.Error("this trade cannot be created")
 	}
 }
+
+func TestTradeFirstWontCloseSecond(t *testing.T) {
+	firstTrade := CreateTrade(calc.Rand(), 119, 181)
+	secondTrade := CreateTrade(calc.Rand(), 120, 182)
+	firstOutput, secondOutput := firstTrade.close(secondTrade)
+	if firstOutput != nil && secondOutput != nil {
+		t.Error("coca cola", firstOutput, secondOutput)
+	}
+}
+
