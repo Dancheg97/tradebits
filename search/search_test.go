@@ -1,21 +1,11 @@
 package search
 
 import (
-	"os"
-	"path"
 	"reflect"
-	"runtime"
 	"sync_tree/calc"
 	"testing"
 	"time"
 )
-
-func TestSearchAdd(t *testing.T) {
-	name := "name22"
-	adr := calc.Rand()
-	Add(name, adr)
-	searcher.Delete(string(adr))
-}
 
 func TestSearchSearch(t *testing.T) {
 	name := "name122"
@@ -73,13 +63,4 @@ func TestSearchOver30requests(t *testing.T) {
 	for _, adr := range adresses {
 		searcher.Delete(string(adr))
 	}
-}
-
-func TestRecreateSearcher(t *testing.T) {
-	time.Sleep(time.Second * 8)
-	searcher.Close()
-	_, filename, _, _ := runtime.Caller(0)
-	searchPath := path.Dir(filename) + "/bleve"
-	os.RemoveAll(searchPath)
-	openSearch()
 }
