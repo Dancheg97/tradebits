@@ -27,7 +27,7 @@ func CreateTrade(
 }
 
 // first trade is closing second trade
-func (first trade) close(second *trade) (*output, *output) {
+func (first *trade) close(second *trade) (*output, *output) {
 	if first.Offer >= second.Recieve && first.Recieve >= second.Offer {
 		firstRatio := float64(first.Offer) / float64(first.Recieve)
 		newFirstOffer := first.Offer - second.Recieve
