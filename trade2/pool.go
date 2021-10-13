@@ -30,6 +30,12 @@ func (pool *tradePool) insertSell(sell *trade) {
 	pool.Sells = append(pool.Sells, *sell)
 }
 
+func (pool *tradePool) ejectFirstBuy() *trade {
+	buy := pool.Buys[0]
+	pool.Buys = pool.Buys[1:]
+	return &buy
+}
+
 func (pool *tradePool) OperateSell(sell *trade) {
 	if len(pool.Buys) == 0 {
 		pool.insertSell(sell)
@@ -37,12 +43,21 @@ func (pool *tradePool) OperateSell(sell *trade) {
 	}
 	firstOutput, secondOutput := sell.close(&pool.Buys[0])
 	if firstOutput == nil || secondOutput == nil {
-		pool.insertSell(sell)
+		buy := pool.ejectFirstBuy()
+		firstOutput, secondOutput := buy.close(sell)
+		if firstOutput == nil || secondOutput == nil {
+			pool.insertSell(sell)
+			pool.insertBuy(buy)
+			return
+		}
+		pool.MainOutputs = append(pool.MainOutputs, *secondOutput)
+		pool.MarketOutputs = append(pool.MarketOutputs, *firstOutput)
+		pool.OperateBuy(buy)
 		return
 	}
 	pool.MainOutputs = append(pool.MainOutputs, *firstOutput)
 	pool.MarketOutputs = append(pool.MarketOutputs, *secondOutput)
-	
+	pool.OperateSell(sell)
 }
 
 func (pool *tradePool) insertBuy(buy *trade) {
@@ -59,4 +74,34 @@ func (pool *tradePool) insertBuy(buy *trade) {
 		}
 	}
 	pool.Buys = append(pool.Buys, *buy)
+}
+
+func (pool *tradePool) ejectFirstSell() *trade {
+	sell := pool.Sells[0]
+	pool.Sells = pool.Sells[1:]
+	return &sell
+}
+
+func (pool *tradePool) OperateBuy(buy *trade) {
+	if len(pool.Buys) == 0 {
+		pool.insertBuy(buy)
+		return
+	}
+	firstOutput, secondOutput := buy.close(&pool.Sells[0])
+	if firstOutput == nil || secondOutput == nil {
+		sell := pool.ejectFirstSell()
+		firstOutput, secondOutput := sell.close(buy)
+		if firstOutput == nil || secondOutput == nil {
+			pool.insertSell(sell)
+			pool.insertBuy(buy)
+			return
+		}
+		pool.MainOutputs = append(pool.MainOutputs, *firstOutput)
+		pool.MarketOutputs = append(pool.MarketOutputs, *secondOutput)
+		pool.OperateSell(sell)
+		return
+	}
+	pool.MainOutputs = append(pool.MainOutputs, *secondOutput)
+	pool.MarketOutputs = append(pool.MarketOutputs, *firstOutput)
+	pool.OperateBuy(buy)
 }
