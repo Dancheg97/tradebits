@@ -26,8 +26,20 @@ func CreateTrade(
 	}
 }
 
-// This function is main in this module. It is central funciton for each trade 
-// operation. 
+// This function is used to operate first trade over second. This function
+// checks if first trade can 'close' second one. After 'closing' the ratio in 
+// first function should only become better for initiator.
+//
+// This function is not bidirectional. If first trade can't close second, it 
+// doesn't mean that second can't close first.
+//
+// Function has following return values:
+//
+// - First trade output related to closing trade
+//
+// - Second trade output related to closed trade
+//
+// - Both out's are <nil> if trades are not operated
 func (first *trade) close(second *trade) (*output, *output) {
 	if first.Offer >= second.Recieve && first.Recieve >= second.Offer {
 		firstRatio := float64(first.Offer) / float64(first.Recieve)

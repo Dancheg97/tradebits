@@ -34,6 +34,11 @@ func TestTradeFirstWillCloseSecond(t *testing.T) {
 	secondAdress := calc.Rand()
 	firstTrade := CreateTrade(firstAdress, 7, 10)
 	secondTrade := CreateTrade(secondAdress, 9, 5)
+	firstNanOut, secondNanOut := secondTrade.close(firstTrade)
+	if firstNanOut != nil || secondNanOut != nil {
+		t.Error("second trade should be unable to return pointer value")
+	}
+	t.Error(firstNanOut, secondNanOut)
 	firstOutput, secondOutput := firstTrade.close(secondTrade)
 	if firstOutput == nil || secondOutput == nil {
 		t.Error("Those trades should be operated")
@@ -48,6 +53,6 @@ func TestTradeFirstWillCloseSecond(t *testing.T) {
 		t.Error("first output should be 9")
 	}
 	if secondOutput.Amount != 5 {
-		t.Error("")
+		t.Error("second output should be 5")
 	}
 }
