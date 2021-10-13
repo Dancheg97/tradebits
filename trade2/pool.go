@@ -1,8 +1,10 @@
 package trade2
 
 type tradePool struct {
-	Buys  []trade
-	Sells []trade
+	Buys          []trade
+	MainOutputs   []output
+	Sells         []trade
+	MarketOutputs []output
 }
 
 func CreatePool() *tradePool {
@@ -12,28 +14,49 @@ func CreatePool() *tradePool {
 	}
 }
 
-func (tp *tradePool) insertSell(sell *trade) {
+func (pool *tradePool) insertSell(sell *trade) {
 	currentRatio := float64(sell.Offer) / float64(sell.Recieve)
-	for addIndex, checkSell := range tp.Sells {
+	for addIndex, checkSell := range pool.Sells {
 		checkRatio := float64(checkSell.Offer) / float64(checkSell.Recieve)
 		if currentRatio > checkRatio {
-			tp.Sells = append(tp.Sells[:addIndex+1], tp.Sells[addIndex:]...)
-			tp.Sells[addIndex] = *sell
+			pool.Sells = append(
+				pool.Sells[:addIndex+1],
+				pool.Sells[addIndex:]...,
+			)
+			pool.Sells[addIndex] = *sell
 			return
 		}
 	}
-	tp.Sells = append(tp.Sells, *sell)
+	pool.Sells = append(pool.Sells, *sell)
 }
 
-func (tp *tradePool) insertBuy(buy *trade) {
+func (pool *tradePool) OperateSell(sell *trade) {
+	if len(pool.Buys) == 0 {
+		pool.insertSell(sell)
+		return
+	}
+	firstOutput, secondOutput := sell.close(&pool.Buys[0])
+	if firstOutput == nil || secondOutput == nil {
+		pool.insertSell(sell)
+		return
+	}
+	pool.MainOutputs = append(pool.MainOutputs, *firstOutput)
+	pool.MarketOutputs = append(pool.MarketOutputs, *secondOutput)
+	
+}
+
+func (pool *tradePool) insertBuy(buy *trade) {
 	currentRatio := float64(buy.Offer) / float64(buy.Recieve)
-	for addIndex, checkBuy := range tp.Buys {
+	for addIndex, checkBuy := range pool.Buys {
 		checkRatio := float64(checkBuy.Offer) / float64(checkBuy.Recieve)
 		if currentRatio > checkRatio {
-			tp.Buys = append(tp.Buys[:addIndex+1], tp.Buys[addIndex:]...)
-			tp.Buys[addIndex] = *buy
+			pool.Buys = append(
+				pool.Buys[:addIndex+1],
+				pool.Buys[addIndex:]...,
+			)
+			pool.Buys[addIndex] = *buy
 			return
 		}
 	}
-	tp.Buys = append(tp.Buys, *buy)
+	pool.Buys = append(pool.Buys, *buy)
 }
