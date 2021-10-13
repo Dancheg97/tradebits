@@ -41,7 +41,8 @@ func TestTradeFirstWillCloseSecond(t *testing.T) {
 	t.Error(firstNanOut, secondNanOut)
 	firstOutput, secondOutput := firstTrade.close(secondTrade)
 	if firstOutput == nil || secondOutput == nil {
-		t.Error("Those trades should be operated")
+		t.Error("Those trades should be operated, nil should not appear")
+		return
 	}
 	if !reflect.DeepEqual(firstOutput.Adress, firstAdress) {
 		t.Error("first adress is not matching")
