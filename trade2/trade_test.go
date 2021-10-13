@@ -38,7 +38,6 @@ func TestTradeFirstWillCloseSecond(t *testing.T) {
 	if firstNanOut != nil || secondNanOut != nil {
 		t.Error("second trade should be unable to return pointer value")
 	}
-	t.Error(firstNanOut, secondNanOut)
 	firstOutput, secondOutput := firstTrade.close(secondTrade)
 	if firstOutput == nil || secondOutput == nil {
 		t.Error("Those trades should be operated, nil should not appear")

@@ -1,16 +1,16 @@
 package trade2
 
 type tradePool struct {
-	Buys          []trade
-	MainOutputs   []output
-	Sells         []trade
-	MarketOutputs []output
+	Buys          []*trade
+	MainOutputs   []*output
+	Sells         []*trade
+	MarketOutputs []*output
 }
 
 func CreatePool() *tradePool {
 	return &tradePool{
-		Buys:  []trade{},
-		Sells: []trade{},
+		Buys:  []*trade{},
+		Sells: []*trade{},
 	}
 }
 
@@ -23,17 +23,17 @@ func (pool *tradePool) insertSell(sell *trade) {
 				pool.Sells[:addIndex+1],
 				pool.Sells[addIndex:]...,
 			)
-			pool.Sells[addIndex] = *sell
+			pool.Sells[addIndex] = sell
 			return
 		}
 	}
-	pool.Sells = append(pool.Sells, *sell)
+	pool.Sells = append(pool.Sells, sell)
 }
 
 func (pool *tradePool) ejectFirstBuy() *trade {
 	buy := pool.Buys[0]
 	pool.Buys = pool.Buys[1:]
-	return &buy
+	return buy
 }
 
 func (pool *tradePool) OperateSell(sell *trade) {
@@ -41,7 +41,7 @@ func (pool *tradePool) OperateSell(sell *trade) {
 		pool.insertSell(sell)
 		return
 	}
-	firstOutput, secondOutput := sell.close(&pool.Buys[0])
+	firstOutput, secondOutput := sell.close(pool.Buys[0])
 	if firstOutput == nil || secondOutput == nil {
 		buy := pool.ejectFirstBuy()
 		firstOutput, secondOutput := buy.close(sell)
@@ -50,13 +50,13 @@ func (pool *tradePool) OperateSell(sell *trade) {
 			pool.insertBuy(buy)
 			return
 		}
-		pool.MainOutputs = append(pool.MainOutputs, *secondOutput)
-		pool.MarketOutputs = append(pool.MarketOutputs, *firstOutput)
+		pool.MainOutputs = append(pool.MainOutputs, secondOutput)
+		pool.MarketOutputs = append(pool.MarketOutputs, firstOutput)
 		pool.OperateBuy(buy)
 		return
 	}
-	pool.MainOutputs = append(pool.MainOutputs, *firstOutput)
-	pool.MarketOutputs = append(pool.MarketOutputs, *secondOutput)
+	pool.MainOutputs = append(pool.MainOutputs, firstOutput)
+	pool.MarketOutputs = append(pool.MarketOutputs, secondOutput)
 	pool.OperateSell(sell)
 }
 
@@ -69,17 +69,17 @@ func (pool *tradePool) insertBuy(buy *trade) {
 				pool.Buys[:addIndex+1],
 				pool.Buys[addIndex:]...,
 			)
-			pool.Buys[addIndex] = *buy
+			pool.Buys[addIndex] = buy
 			return
 		}
 	}
-	pool.Buys = append(pool.Buys, *buy)
+	pool.Buys = append(pool.Buys, buy)
 }
 
 func (pool *tradePool) ejectFirstSell() *trade {
 	sell := pool.Sells[0]
 	pool.Sells = pool.Sells[1:]
-	return &sell
+	return sell
 }
 
 func (pool *tradePool) OperateBuy(buy *trade) {
@@ -87,7 +87,7 @@ func (pool *tradePool) OperateBuy(buy *trade) {
 		pool.insertBuy(buy)
 		return
 	}
-	firstOutput, secondOutput := buy.close(&pool.Sells[0])
+	firstOutput, secondOutput := buy.close(pool.Sells[0])
 	if firstOutput == nil || secondOutput == nil {
 		sell := pool.ejectFirstSell()
 		firstOutput, secondOutput := sell.close(buy)
@@ -96,12 +96,12 @@ func (pool *tradePool) OperateBuy(buy *trade) {
 			pool.insertBuy(buy)
 			return
 		}
-		pool.MainOutputs = append(pool.MainOutputs, *firstOutput)
-		pool.MarketOutputs = append(pool.MarketOutputs, *secondOutput)
+		pool.MainOutputs = append(pool.MainOutputs, firstOutput)
+		pool.MarketOutputs = append(pool.MarketOutputs, secondOutput)
 		pool.OperateSell(sell)
 		return
 	}
-	pool.MainOutputs = append(pool.MainOutputs, *secondOutput)
-	pool.MarketOutputs = append(pool.MarketOutputs, *firstOutput)
+	pool.MainOutputs = append(pool.MainOutputs, secondOutput)
+	pool.MarketOutputs = append(pool.MarketOutputs, firstOutput)
 	pool.OperateBuy(buy)
 }
