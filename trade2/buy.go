@@ -23,7 +23,7 @@ func (pool *tradePool) insertBuy(buy *trade) {
 }
 
 func (pool *tradePool) OperateBuy(buy *trade) {
-	if len(pool.Buys) == 0 {
+	if len(pool.Sells) == 0 {
 		pool.insertBuy(buy)
 		return
 	}

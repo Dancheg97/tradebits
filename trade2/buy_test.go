@@ -43,15 +43,3 @@ func TestEjectFirstBuy(t *testing.T) {
 		t.Error("trade was ejected incorrectly,", ejected)
 	}
 }
-
-func TestOperateBuyInEmptyPool(t *testing.T) {
-	newPool := CreatePool()
-	buy := CreateTrade(calc.Rand(), 10, 10)
-	newPool.OperateBuy(buy)
-	if len(newPool.Buys) != 1 {
-		t.Error("Trade should be added")
-	}
-	if !reflect.DeepEqual(&newPool.Buys[0], &buy) {
-		t.Error("Buy was added incorrectly")
-	}
-}

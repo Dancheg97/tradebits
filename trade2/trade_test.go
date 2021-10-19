@@ -56,3 +56,9 @@ func TestTradeFirstWillCloseSecond(t *testing.T) {
 		t.Error("second output should be 5")
 	}
 }
+
+func TestCloseEqualTrades(t *testing.T) {
+	firstAdress := calc.Rand()
+	secondAdress := calc.Rand()
+	
+}
