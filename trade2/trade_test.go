@@ -60,5 +60,7 @@ func TestTradeFirstWillCloseSecond(t *testing.T) {
 func TestCloseEqualTrades(t *testing.T) {
 	firstAdress := calc.Rand()
 	secondAdress := calc.Rand()
-	
+	firstTrade := CreateTrade(firstAdress, 7, 10)
+	secondTrade := CreateTrade(secondAdress, 9, 5)
+
 }
