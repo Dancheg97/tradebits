@@ -9,6 +9,16 @@ import (
 	filter "github.com/AccelByte/profanity-filter-go"
 )
 
+type user struct {
+	adress   []byte
+	Balance  uint64
+	MesKey   []byte
+	Name     string
+	Balances map[string]uint64
+	Messages map[string][][]byte
+	Arch     map[string]string
+}
+
 /*
 Create new user, in case there is already user with same adress
 the error will be logged

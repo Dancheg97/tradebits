@@ -4,16 +4,6 @@ import (
 	"sync_tree/trade"
 )
 
-type user struct {
-	adress   []byte
-	Balance  uint64
-	MesKey   []byte
-	Name     string
-	Balances map[string]uint64
-	Messages map[string][][]byte
-	Arch     map[string]string
-}
-
 // This function is bounding specific sell function to user, if its not
 // possible, returns false, if operated successully, returns true
 func (u *user) AttachSell(sell *trade.Sell, marketAdress []byte) bool {
