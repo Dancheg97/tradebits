@@ -7,7 +7,7 @@ import (
 
 func TestCreateTrade(t *testing.T) {
 	trd := CreateTrade([]byte{0}, 1, 2)
-	if reflect.DeepEqual(trd.Adress, []byte{0}) {
+	if !reflect.DeepEqual(trd.Adress, []byte{0}) {
 		t.Error("wrong adress has been passed")
 	}
 	if trd.Offer != 1 {
