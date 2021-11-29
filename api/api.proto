@@ -186,7 +186,7 @@ message MarketRequests{
 
 
 service Connection{
-    rpc Connect(ConnectionRequests.In) returns (ConnectionRequests.Out);
+    rpc Connect(ConnectionRequests.In) returns (stream ConnectionRequests.Out);
 }
 
 message ConnectionRequests{
@@ -197,6 +197,5 @@ message ConnectionRequests{
     }
     message Out{
         bool Accepted = 1;
-        repeated bytes Data = 2;
     }
 }
