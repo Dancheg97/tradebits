@@ -196,6 +196,7 @@ message ConnectionRequests{
         bytes Sign = 3;
     }
     message Out{
-        bool Accepted = 1;
+        bytes Key = 1;
+        bytes Value = 2;
     }
 }
