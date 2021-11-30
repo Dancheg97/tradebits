@@ -11,7 +11,7 @@ type dataObject struct {
 }
 
 var reserveNodeConnected = false
-var DataQue = []dataObject{}
+var dataQue = []dataObject{}
 
 func GetIterator() (iterator.Iterator, *leveldb.DB) {
 	reserveNodeConnected = true
@@ -24,10 +24,14 @@ func GetIterator() (iterator.Iterator, *leveldb.DB) {
 func ReOpenBase(db *leveldb.DB) []dataObject {
 	db.Close()
 	base = openDB()
-	return DataQue
+	return dataQue
 }
 
 func CloseConnection() {
-	DataQue = []dataObject{}
+	dataQue = []dataObject{}
 	reserveNodeConnected = false
+}
+
+func PopFromDataQue() dataObject {
+
 }

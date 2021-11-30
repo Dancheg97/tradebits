@@ -13,6 +13,6 @@ func Put(key []byte, value []byte) {
 			key:   key,
 			value: value,
 		}
-		DataQue = append(DataQue, obj)
+		dataQue = append(dataQue, obj)
 	}
 }
