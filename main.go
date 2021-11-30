@@ -30,6 +30,7 @@ func main() {
 	pb.RegisterInfoServer(serv, &server{})
 	pb.RegisterUserServer(serv, &server{})
 	pb.RegisterMarketServer(serv, &server{})
+	pb.RegisterConnectionServer(serv, &server{})
 	if err := serv.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

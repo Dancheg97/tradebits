@@ -192,7 +192,7 @@ service Connection{
 message ConnectionRequests{
     message In{
         bytes PublicKey = 1;
-        bytes Adress = 2;
+        string WebAdress = 2;
         bytes Sign = 3;
     }
     message Out{
