@@ -8,4 +8,11 @@ func Put(key []byte, value []byte) {
 		return
 	}
 	base.Put(key, value, nil)
+	if reserveNodeConnected {
+		obj := dataObject{
+			key:   key,
+			value: value,
+		}
+		DataQue = append(DataQue, obj)
+	}
 }

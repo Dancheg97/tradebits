@@ -6,6 +6,7 @@ import (
 	pb "sync_tree/api"
 	"sync_tree/calc"
 	"sync_tree/data"
+	"time"
 )
 
 func (s *server) Connect(
@@ -30,9 +31,15 @@ func (s *server) Connect(
 		}
 		err := stream.Send(&kvPair)
 		if err != nil {
+			data.CloseConnection()
 			fmt.Println("[ConnectMessage] - Connection error")
 			return errors.New("connection refused by client")
 		}
+	}
+	data.ReOpenBase(base)
+	for {
+		time.Sleep(time.Millisecond)
+		
 	}
 	return nil
 }
