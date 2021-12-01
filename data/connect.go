@@ -31,7 +31,3 @@ func CloseConnection() {
 	dataQue = []dataObject{}
 	reserveNodeConnected = false
 }
-
-func PopFromDataQue() dataObject {
-
-}
