@@ -14,16 +14,9 @@ type KvPair struct {
 
 func Create() *queue {
 	queue := queue{
-		mu:     sync.Mutex{},
-		values: make([]KvPair, 1000),
+		values: make([]KvPair, 10000),
 	}
 	return &queue
-}
-
-func (qu *queue) Put(kvpair KvPair) {
-	qu.mu.Lock()
-	qu.values = append(qu.values, kvpair)
-	qu.mu.Unlock()
 }
 
 func (qu *queue) Take() KvPair {
