@@ -14,7 +14,7 @@ type KvPair struct {
 
 func Create() *queue {
 	queue := queue{
-		values: make([]KvPair, 10000),
+		values: []KvPair{},
 	}
 	return &queue
 }

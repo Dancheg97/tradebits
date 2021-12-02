@@ -1,6 +1,9 @@
 package queue
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestPutSomeMessages(t *testing.T) {
 	newque := Create()
@@ -14,5 +17,10 @@ func TestPutSomeMessages(t *testing.T) {
 	}
 	newque.Put(firstVal)
 	newque.Put(secondVal)
-	
+	if !reflect.DeepEqual(newque.values[0], firstVal) {
+		t.Error("first value in queue is not matching", newque.values[0])
+	}
+	if !reflect.DeepEqual(newque.values[1], secondVal) {
+		t.Error("second value in queue is not matching")
+	}
 }
