@@ -211,6 +211,44 @@ func (*MarketRequests) Descriptor() ([]byte, []int) {
 	return file_api_api_proto_rawDescGZIP(), []int{4}
 }
 
+type ConnectionRequests struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *ConnectionRequests) Reset() {
+	*x = ConnectionRequests{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_api_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ConnectionRequests) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConnectionRequests) ProtoMessage() {}
+
+func (x *ConnectionRequests) ProtoReflect() protoreflect.Message {
+	mi := &file_api_api_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConnectionRequests.ProtoReflect.Descriptor instead.
+func (*ConnectionRequests) Descriptor() ([]byte, []int) {
+	return file_api_api_proto_rawDescGZIP(), []int{5}
+}
+
 type InfIn_Adress struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -222,7 +260,7 @@ type InfIn_Adress struct {
 func (x *InfIn_Adress) Reset() {
 	*x = InfIn_Adress{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[5]
+		mi := &file_api_api_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -235,7 +273,7 @@ func (x *InfIn_Adress) String() string {
 func (*InfIn_Adress) ProtoMessage() {}
 
 func (x *InfIn_Adress) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[5]
+	mi := &file_api_api_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -269,7 +307,7 @@ type InfIn_Text struct {
 func (x *InfIn_Text) Reset() {
 	*x = InfIn_Text{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[6]
+		mi := &file_api_api_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -282,7 +320,7 @@ func (x *InfIn_Text) String() string {
 func (*InfIn_Text) ProtoMessage() {}
 
 func (x *InfIn_Text) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[6]
+	mi := &file_api_api_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -317,7 +355,7 @@ type InfIn_UserMarketAdresses struct {
 func (x *InfIn_UserMarketAdresses) Reset() {
 	*x = InfIn_UserMarketAdresses{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[7]
+		mi := &file_api_api_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -330,7 +368,7 @@ func (x *InfIn_UserMarketAdresses) String() string {
 func (*InfIn_UserMarketAdresses) ProtoMessage() {}
 
 func (x *InfIn_UserMarketAdresses) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[7]
+	mi := &file_api_api_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -375,7 +413,7 @@ type InfOut_User struct {
 func (x *InfOut_User) Reset() {
 	*x = InfOut_User{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[8]
+		mi := &file_api_api_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -388,7 +426,7 @@ func (x *InfOut_User) String() string {
 func (*InfOut_User) ProtoMessage() {}
 
 func (x *InfOut_User) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[8]
+	mi := &file_api_api_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -462,7 +500,7 @@ type InfOut_MarketInfo struct {
 func (x *InfOut_MarketInfo) Reset() {
 	*x = InfOut_MarketInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[9]
+		mi := &file_api_api_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -475,7 +513,7 @@ func (x *InfOut_MarketInfo) String() string {
 func (*InfOut_MarketInfo) ProtoMessage() {}
 
 func (x *InfOut_MarketInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[9]
+	mi := &file_api_api_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -593,7 +631,7 @@ type InfOut_Adresses struct {
 func (x *InfOut_Adresses) Reset() {
 	*x = InfOut_Adresses{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[10]
+		mi := &file_api_api_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -606,7 +644,7 @@ func (x *InfOut_Adresses) String() string {
 func (*InfOut_Adresses) ProtoMessage() {}
 
 func (x *InfOut_Adresses) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[10]
+	mi := &file_api_api_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -640,7 +678,7 @@ type InfOut_Messages struct {
 func (x *InfOut_Messages) Reset() {
 	*x = InfOut_Messages{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[11]
+		mi := &file_api_api_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -653,7 +691,7 @@ func (x *InfOut_Messages) String() string {
 func (*InfOut_Messages) ProtoMessage() {}
 
 func (x *InfOut_Messages) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[11]
+	mi := &file_api_api_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -687,7 +725,7 @@ type InfOut_Bool struct {
 func (x *InfOut_Bool) Reset() {
 	*x = InfOut_Bool{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[12]
+		mi := &file_api_api_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -700,7 +738,7 @@ func (x *InfOut_Bool) String() string {
 func (*InfOut_Bool) ProtoMessage() {}
 
 func (x *InfOut_Bool) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[12]
+	mi := &file_api_api_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -735,7 +773,7 @@ type InfOut_Trade struct {
 func (x *InfOut_Trade) Reset() {
 	*x = InfOut_Trade{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[13]
+		mi := &file_api_api_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -748,7 +786,7 @@ func (x *InfOut_Trade) String() string {
 func (*InfOut_Trade) ProtoMessage() {}
 
 func (x *InfOut_Trade) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[13]
+	mi := &file_api_api_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -792,7 +830,7 @@ type UserRequests_Create struct {
 func (x *UserRequests_Create) Reset() {
 	*x = UserRequests_Create{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[14]
+		mi := &file_api_api_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -805,7 +843,7 @@ func (x *UserRequests_Create) String() string {
 func (*UserRequests_Create) ProtoMessage() {}
 
 func (x *UserRequests_Create) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[14]
+	mi := &file_api_api_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -863,7 +901,7 @@ type UserRequests_Send struct {
 func (x *UserRequests_Send) Reset() {
 	*x = UserRequests_Send{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[15]
+		mi := &file_api_api_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -876,7 +914,7 @@ func (x *UserRequests_Send) String() string {
 func (*UserRequests_Send) ProtoMessage() {}
 
 func (x *UserRequests_Send) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[15]
+	mi := &file_api_api_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -934,7 +972,7 @@ type UserRequests_Message struct {
 func (x *UserRequests_Message) Reset() {
 	*x = UserRequests_Message{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[16]
+		mi := &file_api_api_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -947,7 +985,7 @@ func (x *UserRequests_Message) String() string {
 func (*UserRequests_Message) ProtoMessage() {}
 
 func (x *UserRequests_Message) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[16]
+	mi := &file_api_api_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1006,7 +1044,7 @@ type UserRequests_Buy struct {
 func (x *UserRequests_Buy) Reset() {
 	*x = UserRequests_Buy{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[17]
+		mi := &file_api_api_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1019,7 +1057,7 @@ func (x *UserRequests_Buy) String() string {
 func (*UserRequests_Buy) ProtoMessage() {}
 
 func (x *UserRequests_Buy) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[17]
+	mi := &file_api_api_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1085,7 +1123,7 @@ type UserRequests_Sell struct {
 func (x *UserRequests_Sell) Reset() {
 	*x = UserRequests_Sell{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[18]
+		mi := &file_api_api_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1098,7 +1136,7 @@ func (x *UserRequests_Sell) String() string {
 func (*UserRequests_Sell) ProtoMessage() {}
 
 func (x *UserRequests_Sell) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[18]
+	mi := &file_api_api_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1162,7 +1200,7 @@ type UserRequests_CancelTrade struct {
 func (x *UserRequests_CancelTrade) Reset() {
 	*x = UserRequests_CancelTrade{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[19]
+		mi := &file_api_api_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1175,7 +1213,7 @@ func (x *UserRequests_CancelTrade) String() string {
 func (*UserRequests_CancelTrade) ProtoMessage() {}
 
 func (x *UserRequests_CancelTrade) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[19]
+	mi := &file_api_api_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1232,7 +1270,7 @@ type MarketRequests_Create struct {
 func (x *MarketRequests_Create) Reset() {
 	*x = MarketRequests_Create{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[20]
+		mi := &file_api_api_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1245,7 +1283,7 @@ func (x *MarketRequests_Create) String() string {
 func (*MarketRequests_Create) ProtoMessage() {}
 
 func (x *MarketRequests_Create) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[20]
+	mi := &file_api_api_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1348,7 +1386,7 @@ type MarketRequests_Update struct {
 func (x *MarketRequests_Update) Reset() {
 	*x = MarketRequests_Update{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[21]
+		mi := &file_api_api_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1361,7 +1399,7 @@ func (x *MarketRequests_Update) String() string {
 func (*MarketRequests_Update) ProtoMessage() {}
 
 func (x *MarketRequests_Update) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[21]
+	mi := &file_api_api_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1440,7 +1478,7 @@ type MarketRequests_Deposit struct {
 func (x *MarketRequests_Deposit) Reset() {
 	*x = MarketRequests_Deposit{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[22]
+		mi := &file_api_api_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1453,7 +1491,7 @@ func (x *MarketRequests_Deposit) String() string {
 func (*MarketRequests_Deposit) ProtoMessage() {}
 
 func (x *MarketRequests_Deposit) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[22]
+	mi := &file_api_api_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1511,7 +1549,7 @@ type MarketRequests_Withdrawal struct {
 func (x *MarketRequests_Withdrawal) Reset() {
 	*x = MarketRequests_Withdrawal{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[23]
+		mi := &file_api_api_proto_msgTypes[24]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1524,7 +1562,7 @@ func (x *MarketRequests_Withdrawal) String() string {
 func (*MarketRequests_Withdrawal) ProtoMessage() {}
 
 func (x *MarketRequests_Withdrawal) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[23]
+	mi := &file_api_api_proto_msgTypes[24]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1568,7 +1606,7 @@ func (x *MarketRequests_Withdrawal) GetSign() []byte {
 	return nil
 }
 
-type MarketRequests_Reply struct {
+type MarketRequests_Message struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -1579,23 +1617,23 @@ type MarketRequests_Reply struct {
 	Sign      []byte `protobuf:"bytes,4,opt,name=Sign,proto3" json:"Sign,omitempty"`
 }
 
-func (x *MarketRequests_Reply) Reset() {
-	*x = MarketRequests_Reply{}
+func (x *MarketRequests_Message) Reset() {
+	*x = MarketRequests_Message{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[24]
+		mi := &file_api_api_proto_msgTypes[25]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *MarketRequests_Reply) String() string {
+func (x *MarketRequests_Message) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MarketRequests_Reply) ProtoMessage() {}
+func (*MarketRequests_Message) ProtoMessage() {}
 
-func (x *MarketRequests_Reply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[24]
+func (x *MarketRequests_Message) ProtoReflect() protoreflect.Message {
+	mi := &file_api_api_proto_msgTypes[25]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1606,35 +1644,153 @@ func (x *MarketRequests_Reply) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use MarketRequests_Reply.ProtoReflect.Descriptor instead.
-func (*MarketRequests_Reply) Descriptor() ([]byte, []int) {
+// Deprecated: Use MarketRequests_Message.ProtoReflect.Descriptor instead.
+func (*MarketRequests_Message) Descriptor() ([]byte, []int) {
 	return file_api_api_proto_rawDescGZIP(), []int{4, 4}
 }
 
-func (x *MarketRequests_Reply) GetPublicKey() []byte {
+func (x *MarketRequests_Message) GetPublicKey() []byte {
 	if x != nil {
 		return x.PublicKey
 	}
 	return nil
 }
 
-func (x *MarketRequests_Reply) GetAdress() []byte {
+func (x *MarketRequests_Message) GetAdress() []byte {
 	if x != nil {
 		return x.Adress
 	}
 	return nil
 }
 
-func (x *MarketRequests_Reply) GetMessage() []byte {
+func (x *MarketRequests_Message) GetMessage() []byte {
 	if x != nil {
 		return x.Message
 	}
 	return nil
 }
 
-func (x *MarketRequests_Reply) GetSign() []byte {
+func (x *MarketRequests_Message) GetSign() []byte {
 	if x != nil {
 		return x.Sign
+	}
+	return nil
+}
+
+type ConnectionRequests_In struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	PublicKey []byte `protobuf:"bytes,1,opt,name=PublicKey,proto3" json:"PublicKey,omitempty"`
+	WebAdress string `protobuf:"bytes,2,opt,name=WebAdress,proto3" json:"WebAdress,omitempty"`
+	Sign      []byte `protobuf:"bytes,3,opt,name=Sign,proto3" json:"Sign,omitempty"`
+}
+
+func (x *ConnectionRequests_In) Reset() {
+	*x = ConnectionRequests_In{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_api_proto_msgTypes[26]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ConnectionRequests_In) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConnectionRequests_In) ProtoMessage() {}
+
+func (x *ConnectionRequests_In) ProtoReflect() protoreflect.Message {
+	mi := &file_api_api_proto_msgTypes[26]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConnectionRequests_In.ProtoReflect.Descriptor instead.
+func (*ConnectionRequests_In) Descriptor() ([]byte, []int) {
+	return file_api_api_proto_rawDescGZIP(), []int{5, 0}
+}
+
+func (x *ConnectionRequests_In) GetPublicKey() []byte {
+	if x != nil {
+		return x.PublicKey
+	}
+	return nil
+}
+
+func (x *ConnectionRequests_In) GetWebAdress() string {
+	if x != nil {
+		return x.WebAdress
+	}
+	return ""
+}
+
+func (x *ConnectionRequests_In) GetSign() []byte {
+	if x != nil {
+		return x.Sign
+	}
+	return nil
+}
+
+type ConnectionRequests_Out struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Key   []byte `protobuf:"bytes,1,opt,name=Key,proto3" json:"Key,omitempty"`
+	Value []byte `protobuf:"bytes,2,opt,name=Value,proto3" json:"Value,omitempty"`
+}
+
+func (x *ConnectionRequests_Out) Reset() {
+	*x = ConnectionRequests_Out{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_api_proto_msgTypes[27]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ConnectionRequests_Out) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConnectionRequests_Out) ProtoMessage() {}
+
+func (x *ConnectionRequests_Out) ProtoReflect() protoreflect.Message {
+	mi := &file_api_api_proto_msgTypes[27]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConnectionRequests_Out.ProtoReflect.Descriptor instead.
+func (*ConnectionRequests_Out) Descriptor() ([]byte, []int) {
+	return file_api_api_proto_rawDescGZIP(), []int{5, 1}
+}
+
+func (x *ConnectionRequests_Out) GetKey() []byte {
+	if x != nil {
+		return x.Key
+	}
+	return nil
+}
+
+func (x *ConnectionRequests_Out) GetValue() []byte {
+	if x != nil {
+		return x.Value
 	}
 	return nil
 }
@@ -1751,7 +1907,7 @@ var file_api_api_proto_rawDesc = []byte{
 	0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x41, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x02, 0x20, 0x01,
 	0x28, 0x0c, 0x52, 0x0c, 0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x41, 0x64, 0x72, 0x65, 0x73, 0x73,
 	0x12, 0x12, 0x0a, 0x04, 0x53, 0x69, 0x67, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04,
-	0x53, 0x69, 0x67, 0x6e, 0x22, 0xb4, 0x06, 0x0a, 0x0e, 0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x52,
+	0x53, 0x69, 0x67, 0x6e, 0x22, 0xb6, 0x06, 0x0a, 0x0e, 0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x52,
 	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x1a, 0x8c, 0x02, 0x0a, 0x06, 0x43, 0x72, 0x65, 0x61,
 	0x74, 0x65, 0x12, 0x1c, 0x0a, 0x09, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x4b, 0x65, 0x79, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x4b, 0x65, 0x79,
@@ -1795,73 +1951,88 @@ var file_api_api_proto_rawDesc = []byte{
 	0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0a, 0x55, 0x73, 0x65, 0x72, 0x41, 0x64, 0x72, 0x65,
 	0x73, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01,
 	0x28, 0x04, 0x52, 0x06, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x53, 0x69,
-	0x67, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x53, 0x69, 0x67, 0x6e, 0x1a, 0x6b,
-	0x0a, 0x05, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x1c, 0x0a, 0x09, 0x50, 0x75, 0x62, 0x6c, 0x69,
-	0x63, 0x4b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x50, 0x75, 0x62, 0x6c,
-	0x69, 0x63, 0x4b, 0x65, 0x79, 0x12, 0x16, 0x0a, 0x06, 0x41, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x06, 0x41, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x18, 0x0a,
-	0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x07,
-	0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x53, 0x69, 0x67, 0x6e, 0x18,
-	0x04, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x53, 0x69, 0x67, 0x6e, 0x32, 0xc8, 0x02, 0x0a, 0x04,
-	0x49, 0x6e, 0x66, 0x6f, 0x12, 0x2b, 0x0a, 0x04, 0x55, 0x73, 0x65, 0x72, 0x12, 0x11, 0x2e, 0x61,
-	0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x49, 0x6e, 0x2e, 0x41, 0x64, 0x72, 0x65, 0x73, 0x73, 0x1a,
-	0x10, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x4f, 0x75, 0x74, 0x2e, 0x55, 0x73, 0x65,
-	0x72, 0x12, 0x3c, 0x0a, 0x09, 0x48, 0x61, 0x73, 0x54, 0x72, 0x61, 0x64, 0x65, 0x73, 0x12, 0x1d,
-	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x49, 0x6e, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x4d,
-	0x61, 0x72, 0x6b, 0x65, 0x74, 0x41, 0x64, 0x72, 0x65, 0x73, 0x73, 0x65, 0x73, 0x1a, 0x10, 0x2e,
-	0x61, 0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x4f, 0x75, 0x74, 0x2e, 0x42, 0x6f, 0x6f, 0x6c, 0x12,
-	0x33, 0x0a, 0x06, 0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x12, 0x11, 0x2e, 0x61, 0x70, 0x69, 0x2e,
-	0x49, 0x6e, 0x66, 0x49, 0x6e, 0x2e, 0x41, 0x64, 0x72, 0x65, 0x73, 0x73, 0x1a, 0x16, 0x2e, 0x61,
-	0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x4f, 0x75, 0x74, 0x2e, 0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74,
-	0x49, 0x6e, 0x66, 0x6f, 0x12, 0x2f, 0x0a, 0x06, 0x53, 0x65, 0x61, 0x72, 0x63, 0x68, 0x12, 0x0f,
-	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x49, 0x6e, 0x2e, 0x54, 0x65, 0x78, 0x74, 0x1a,
-	0x14, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x4f, 0x75, 0x74, 0x2e, 0x41, 0x64, 0x72,
-	0x65, 0x73, 0x73, 0x65, 0x73, 0x12, 0x3f, 0x0a, 0x08, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
-	0x73, 0x12, 0x1d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x49, 0x6e, 0x2e, 0x55, 0x73,
-	0x65, 0x72, 0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x41, 0x64, 0x72, 0x65, 0x73, 0x73, 0x65, 0x73,
-	0x1a, 0x14, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x4f, 0x75, 0x74, 0x2e, 0x4d, 0x65,
-	0x73, 0x73, 0x61, 0x67, 0x65, 0x73, 0x12, 0x2e, 0x0a, 0x09, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x4e,
-	0x61, 0x6d, 0x65, 0x12, 0x0f, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x49, 0x6e, 0x2e,
-	0x54, 0x65, 0x78, 0x74, 0x1a, 0x10, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x4f, 0x75,
-	0x74, 0x2e, 0x42, 0x6f, 0x6f, 0x6c, 0x32, 0xb6, 0x02, 0x0a, 0x04, 0x55, 0x73, 0x65, 0x72, 0x12,
-	0x31, 0x0a, 0x06, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x12, 0x18, 0x2e, 0x61, 0x70, 0x69, 0x2e,
-	0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x43, 0x72, 0x65,
-	0x61, 0x74, 0x65, 0x1a, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x2d, 0x0a, 0x04, 0x53, 0x65, 0x6e, 0x64, 0x12, 0x16, 0x2e, 0x61, 0x70, 0x69,
-	0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x53, 0x65,
-	0x6e, 0x64, 0x1a, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x33, 0x0a, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x19, 0x2e, 0x61,
-	0x70, 0x69, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e,
-	0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x1a, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2b, 0x0a, 0x03, 0x42, 0x75, 0x79, 0x12, 0x15, 0x2e,
-	0x61, 0x70, 0x69, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73,
-	0x2e, 0x42, 0x75, 0x79, 0x1a, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x12, 0x2d, 0x0a, 0x04, 0x53, 0x65, 0x6c, 0x6c, 0x12, 0x16, 0x2e, 0x61, 0x70,
-	0x69, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x53,
-	0x65, 0x6c, 0x6c, 0x1a, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x3b, 0x0a, 0x0b, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x54, 0x72, 0x61, 0x64,
-	0x65, 0x12, 0x1d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x73, 0x2e, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x54, 0x72, 0x61, 0x64, 0x65,
-	0x1a, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32,
-	0x98, 0x02, 0x0a, 0x06, 0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x12, 0x32, 0x0a, 0x05, 0x53, 0x70,
-	0x61, 0x77, 0x6e, 0x12, 0x1a, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x1a,
-	0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x33,
-	0x0a, 0x06, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x12, 0x1a, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x4d,
-	0x61, 0x72, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x55, 0x70,
-	0x64, 0x61, 0x74, 0x65, 0x1a, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x12, 0x35, 0x0a, 0x07, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x12, 0x1b,
+	0x67, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x53, 0x69, 0x67, 0x6e, 0x1a, 0x6d,
+	0x0a, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x1c, 0x0a, 0x09, 0x50, 0x75, 0x62,
+	0x6c, 0x69, 0x63, 0x4b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x50, 0x75,
+	0x62, 0x6c, 0x69, 0x63, 0x4b, 0x65, 0x79, 0x12, 0x16, 0x0a, 0x06, 0x41, 0x64, 0x72, 0x65, 0x73,
+	0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x06, 0x41, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12,
+	0x18, 0x0a, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c,
+	0x52, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x53, 0x69, 0x67,
+	0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x53, 0x69, 0x67, 0x6e, 0x22, 0x99, 0x01,
+	0x0a, 0x12, 0x43, 0x6f, 0x6e, 0x6e, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x73, 0x1a, 0x54, 0x0a, 0x02, 0x49, 0x6e, 0x12, 0x1c, 0x0a, 0x09, 0x50, 0x75,
+	0x62, 0x6c, 0x69, 0x63, 0x4b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x09, 0x50,
+	0x75, 0x62, 0x6c, 0x69, 0x63, 0x4b, 0x65, 0x79, 0x12, 0x1c, 0x0a, 0x09, 0x57, 0x65, 0x62, 0x41,
+	0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x57, 0x65, 0x62,
+	0x41, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x12, 0x0a, 0x04, 0x53, 0x69, 0x67, 0x6e, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x53, 0x69, 0x67, 0x6e, 0x1a, 0x2d, 0x0a, 0x03, 0x4f, 0x75,
+	0x74, 0x12, 0x10, 0x0a, 0x03, 0x4b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x03,
+	0x4b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x0c, 0x52, 0x05, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x32, 0xc8, 0x02, 0x0a, 0x04, 0x49, 0x6e,
+	0x66, 0x6f, 0x12, 0x2b, 0x0a, 0x04, 0x55, 0x73, 0x65, 0x72, 0x12, 0x11, 0x2e, 0x61, 0x70, 0x69,
+	0x2e, 0x49, 0x6e, 0x66, 0x49, 0x6e, 0x2e, 0x41, 0x64, 0x72, 0x65, 0x73, 0x73, 0x1a, 0x10, 0x2e,
+	0x61, 0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x4f, 0x75, 0x74, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x12,
+	0x3c, 0x0a, 0x09, 0x48, 0x61, 0x73, 0x54, 0x72, 0x61, 0x64, 0x65, 0x73, 0x12, 0x1d, 0x2e, 0x61,
+	0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x49, 0x6e, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x4d, 0x61, 0x72,
+	0x6b, 0x65, 0x74, 0x41, 0x64, 0x72, 0x65, 0x73, 0x73, 0x65, 0x73, 0x1a, 0x10, 0x2e, 0x61, 0x70,
+	0x69, 0x2e, 0x49, 0x6e, 0x66, 0x4f, 0x75, 0x74, 0x2e, 0x42, 0x6f, 0x6f, 0x6c, 0x12, 0x33, 0x0a,
+	0x06, 0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x12, 0x11, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x6e,
+	0x66, 0x49, 0x6e, 0x2e, 0x41, 0x64, 0x72, 0x65, 0x73, 0x73, 0x1a, 0x16, 0x2e, 0x61, 0x70, 0x69,
+	0x2e, 0x49, 0x6e, 0x66, 0x4f, 0x75, 0x74, 0x2e, 0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x49, 0x6e,
+	0x66, 0x6f, 0x12, 0x2f, 0x0a, 0x06, 0x53, 0x65, 0x61, 0x72, 0x63, 0x68, 0x12, 0x0f, 0x2e, 0x61,
+	0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x49, 0x6e, 0x2e, 0x54, 0x65, 0x78, 0x74, 0x1a, 0x14, 0x2e,
+	0x61, 0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x4f, 0x75, 0x74, 0x2e, 0x41, 0x64, 0x72, 0x65, 0x73,
+	0x73, 0x65, 0x73, 0x12, 0x3f, 0x0a, 0x08, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x73, 0x12,
+	0x1d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x49, 0x6e, 0x2e, 0x55, 0x73, 0x65, 0x72,
+	0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x41, 0x64, 0x72, 0x65, 0x73, 0x73, 0x65, 0x73, 0x1a, 0x14,
+	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x4f, 0x75, 0x74, 0x2e, 0x4d, 0x65, 0x73, 0x73,
+	0x61, 0x67, 0x65, 0x73, 0x12, 0x2e, 0x0a, 0x09, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x4e, 0x61, 0x6d,
+	0x65, 0x12, 0x0f, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x49, 0x6e, 0x2e, 0x54, 0x65,
+	0x78, 0x74, 0x1a, 0x10, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x6e, 0x66, 0x4f, 0x75, 0x74, 0x2e,
+	0x42, 0x6f, 0x6f, 0x6c, 0x32, 0xb6, 0x02, 0x0a, 0x04, 0x55, 0x73, 0x65, 0x72, 0x12, 0x31, 0x0a,
+	0x06, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x12, 0x18, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x55, 0x73,
+	0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x1a, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x2d, 0x0a, 0x04, 0x53, 0x65, 0x6e, 0x64, 0x12, 0x16, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x55,
+	0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x53, 0x65, 0x6e, 0x64,
+	0x1a, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x33, 0x0a, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x19, 0x2e, 0x61, 0x70, 0x69,
+	0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x4d, 0x65,
+	0x73, 0x73, 0x61, 0x67, 0x65, 0x1a, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2b, 0x0a, 0x03, 0x42, 0x75, 0x79, 0x12, 0x15, 0x2e, 0x61, 0x70,
+	0x69, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x42,
+	0x75, 0x79, 0x1a, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x2d, 0x0a, 0x04, 0x53, 0x65, 0x6c, 0x6c, 0x12, 0x16, 0x2e, 0x61, 0x70, 0x69, 0x2e,
+	0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x53, 0x65, 0x6c,
+	0x6c, 0x1a, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x3b, 0x0a, 0x0b, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x54, 0x72, 0x61, 0x64, 0x65, 0x12,
+	0x1d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x73, 0x2e, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x54, 0x72, 0x61, 0x64, 0x65, 0x1a, 0x0d,
+	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0x9a, 0x02,
+	0x0a, 0x06, 0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x12, 0x32, 0x0a, 0x05, 0x53, 0x70, 0x61, 0x77,
+	0x6e, 0x12, 0x1a, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x1a, 0x0d, 0x2e,
+	0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x33, 0x0a, 0x06,
+	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x12, 0x1a, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x4d, 0x61, 0x72,
+	0x6b, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x55, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x1a, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x35, 0x0a, 0x07, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x12, 0x1b, 0x2e, 0x61,
+	0x70, 0x69, 0x2e, 0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x73, 0x2e, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x1a, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3b, 0x0a, 0x0a, 0x57, 0x69, 0x74, 0x68,
+	0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x12, 0x1e, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x4d, 0x61, 0x72,
+	0x6b, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x57, 0x69, 0x74, 0x68,
+	0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x1a, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x33, 0x0a, 0x05, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x1b,
 	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x73, 0x2e, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x1a, 0x0d, 0x2e, 0x61, 0x70,
-	0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3b, 0x0a, 0x0a, 0x57, 0x69,
-	0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x12, 0x1e, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x4d,
-	0x61, 0x72, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x57, 0x69,
-	0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x1a, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x31, 0x0a, 0x05, 0x52, 0x65, 0x70, 0x6c, 0x79,
-	0x12, 0x19, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x1a, 0x0d, 0x2e, 0x61, 0x70,
-	0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x07, 0x5a, 0x05, 0x2e, 0x2f,
-	0x61, 0x70, 0x69, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x73, 0x74, 0x73, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x1a, 0x0d, 0x2e, 0x61, 0x70,
+	0x69, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0x52, 0x0a, 0x0a, 0x43, 0x6f,
+	0x6e, 0x6e, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x44, 0x0a, 0x07, 0x43, 0x6f, 0x6e, 0x6e,
+	0x65, 0x63, 0x74, 0x12, 0x1a, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x43, 0x6f, 0x6e, 0x6e, 0x65, 0x63,
+	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x49, 0x6e, 0x1a,
+	0x1b, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x43, 0x6f, 0x6e, 0x6e, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x4f, 0x75, 0x74, 0x30, 0x01, 0x42, 0x07,
+	0x5a, 0x05, 0x2e, 0x2f, 0x61, 0x70, 0x69, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1876,73 +2047,78 @@ func file_api_api_proto_rawDescGZIP() []byte {
 	return file_api_api_proto_rawDescData
 }
 
-var file_api_api_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
+var file_api_api_proto_msgTypes = make([]protoimpl.MessageInfo, 28)
 var file_api_api_proto_goTypes = []interface{}{
 	(*Response)(nil),                  // 0: api.Response
 	(*InfIn)(nil),                     // 1: api.InfIn
 	(*InfOut)(nil),                    // 2: api.InfOut
 	(*UserRequests)(nil),              // 3: api.UserRequests
 	(*MarketRequests)(nil),            // 4: api.MarketRequests
-	(*InfIn_Adress)(nil),              // 5: api.InfIn.Adress
-	(*InfIn_Text)(nil),                // 6: api.InfIn.Text
-	(*InfIn_UserMarketAdresses)(nil),  // 7: api.InfIn.UserMarketAdresses
-	(*InfOut_User)(nil),               // 8: api.InfOut.User
-	(*InfOut_MarketInfo)(nil),         // 9: api.InfOut.MarketInfo
-	(*InfOut_Adresses)(nil),           // 10: api.InfOut.Adresses
-	(*InfOut_Messages)(nil),           // 11: api.InfOut.Messages
-	(*InfOut_Bool)(nil),               // 12: api.InfOut.Bool
-	(*InfOut_Trade)(nil),              // 13: api.InfOut.Trade
-	(*UserRequests_Create)(nil),       // 14: api.UserRequests.Create
-	(*UserRequests_Send)(nil),         // 15: api.UserRequests.Send
-	(*UserRequests_Message)(nil),      // 16: api.UserRequests.Message
-	(*UserRequests_Buy)(nil),          // 17: api.UserRequests.Buy
-	(*UserRequests_Sell)(nil),         // 18: api.UserRequests.Sell
-	(*UserRequests_CancelTrade)(nil),  // 19: api.UserRequests.CancelTrade
-	(*MarketRequests_Create)(nil),     // 20: api.MarketRequests.Create
-	(*MarketRequests_Update)(nil),     // 21: api.MarketRequests.Update
-	(*MarketRequests_Deposit)(nil),    // 22: api.MarketRequests.Deposit
-	(*MarketRequests_Withdrawal)(nil), // 23: api.MarketRequests.Withdrawal
-	(*MarketRequests_Reply)(nil),      // 24: api.MarketRequests.Reply
+	(*ConnectionRequests)(nil),        // 5: api.ConnectionRequests
+	(*InfIn_Adress)(nil),              // 6: api.InfIn.Adress
+	(*InfIn_Text)(nil),                // 7: api.InfIn.Text
+	(*InfIn_UserMarketAdresses)(nil),  // 8: api.InfIn.UserMarketAdresses
+	(*InfOut_User)(nil),               // 9: api.InfOut.User
+	(*InfOut_MarketInfo)(nil),         // 10: api.InfOut.MarketInfo
+	(*InfOut_Adresses)(nil),           // 11: api.InfOut.Adresses
+	(*InfOut_Messages)(nil),           // 12: api.InfOut.Messages
+	(*InfOut_Bool)(nil),               // 13: api.InfOut.Bool
+	(*InfOut_Trade)(nil),              // 14: api.InfOut.Trade
+	(*UserRequests_Create)(nil),       // 15: api.UserRequests.Create
+	(*UserRequests_Send)(nil),         // 16: api.UserRequests.Send
+	(*UserRequests_Message)(nil),      // 17: api.UserRequests.Message
+	(*UserRequests_Buy)(nil),          // 18: api.UserRequests.Buy
+	(*UserRequests_Sell)(nil),         // 19: api.UserRequests.Sell
+	(*UserRequests_CancelTrade)(nil),  // 20: api.UserRequests.CancelTrade
+	(*MarketRequests_Create)(nil),     // 21: api.MarketRequests.Create
+	(*MarketRequests_Update)(nil),     // 22: api.MarketRequests.Update
+	(*MarketRequests_Deposit)(nil),    // 23: api.MarketRequests.Deposit
+	(*MarketRequests_Withdrawal)(nil), // 24: api.MarketRequests.Withdrawal
+	(*MarketRequests_Message)(nil),    // 25: api.MarketRequests.Message
+	(*ConnectionRequests_In)(nil),     // 26: api.ConnectionRequests.In
+	(*ConnectionRequests_Out)(nil),    // 27: api.ConnectionRequests.Out
 }
 var file_api_api_proto_depIdxs = []int32{
-	13, // 0: api.InfOut.MarketInfo.buys:type_name -> api.InfOut.Trade
-	13, // 1: api.InfOut.MarketInfo.sells:type_name -> api.InfOut.Trade
-	5,  // 2: api.Info.User:input_type -> api.InfIn.Adress
-	7,  // 3: api.Info.HasTrades:input_type -> api.InfIn.UserMarketAdresses
-	5,  // 4: api.Info.Market:input_type -> api.InfIn.Adress
-	6,  // 5: api.Info.Search:input_type -> api.InfIn.Text
-	7,  // 6: api.Info.Messages:input_type -> api.InfIn.UserMarketAdresses
-	6,  // 7: api.Info.CheckName:input_type -> api.InfIn.Text
-	14, // 8: api.User.Create:input_type -> api.UserRequests.Create
-	15, // 9: api.User.Send:input_type -> api.UserRequests.Send
-	16, // 10: api.User.Message:input_type -> api.UserRequests.Message
-	17, // 11: api.User.Buy:input_type -> api.UserRequests.Buy
-	18, // 12: api.User.Sell:input_type -> api.UserRequests.Sell
-	19, // 13: api.User.CancelTrade:input_type -> api.UserRequests.CancelTrade
-	20, // 14: api.Market.Spawn:input_type -> api.MarketRequests.Create
-	21, // 15: api.Market.Update:input_type -> api.MarketRequests.Update
-	22, // 16: api.Market.Deposit:input_type -> api.MarketRequests.Deposit
-	23, // 17: api.Market.Withdrawal:input_type -> api.MarketRequests.Withdrawal
-	24, // 18: api.Market.Reply:input_type -> api.MarketRequests.Reply
-	8,  // 19: api.Info.User:output_type -> api.InfOut.User
-	12, // 20: api.Info.HasTrades:output_type -> api.InfOut.Bool
-	9,  // 21: api.Info.Market:output_type -> api.InfOut.MarketInfo
-	10, // 22: api.Info.Search:output_type -> api.InfOut.Adresses
-	11, // 23: api.Info.Messages:output_type -> api.InfOut.Messages
-	12, // 24: api.Info.CheckName:output_type -> api.InfOut.Bool
-	0,  // 25: api.User.Create:output_type -> api.Response
-	0,  // 26: api.User.Send:output_type -> api.Response
-	0,  // 27: api.User.Message:output_type -> api.Response
-	0,  // 28: api.User.Buy:output_type -> api.Response
-	0,  // 29: api.User.Sell:output_type -> api.Response
-	0,  // 30: api.User.CancelTrade:output_type -> api.Response
-	0,  // 31: api.Market.Spawn:output_type -> api.Response
-	0,  // 32: api.Market.Update:output_type -> api.Response
-	0,  // 33: api.Market.Deposit:output_type -> api.Response
-	0,  // 34: api.Market.Withdrawal:output_type -> api.Response
-	0,  // 35: api.Market.Reply:output_type -> api.Response
-	19, // [19:36] is the sub-list for method output_type
-	2,  // [2:19] is the sub-list for method input_type
+	14, // 0: api.InfOut.MarketInfo.buys:type_name -> api.InfOut.Trade
+	14, // 1: api.InfOut.MarketInfo.sells:type_name -> api.InfOut.Trade
+	6,  // 2: api.Info.User:input_type -> api.InfIn.Adress
+	8,  // 3: api.Info.HasTrades:input_type -> api.InfIn.UserMarketAdresses
+	6,  // 4: api.Info.Market:input_type -> api.InfIn.Adress
+	7,  // 5: api.Info.Search:input_type -> api.InfIn.Text
+	8,  // 6: api.Info.Messages:input_type -> api.InfIn.UserMarketAdresses
+	7,  // 7: api.Info.CheckName:input_type -> api.InfIn.Text
+	15, // 8: api.User.Create:input_type -> api.UserRequests.Create
+	16, // 9: api.User.Send:input_type -> api.UserRequests.Send
+	17, // 10: api.User.Message:input_type -> api.UserRequests.Message
+	18, // 11: api.User.Buy:input_type -> api.UserRequests.Buy
+	19, // 12: api.User.Sell:input_type -> api.UserRequests.Sell
+	20, // 13: api.User.CancelTrade:input_type -> api.UserRequests.CancelTrade
+	21, // 14: api.Market.Spawn:input_type -> api.MarketRequests.Create
+	22, // 15: api.Market.Update:input_type -> api.MarketRequests.Update
+	23, // 16: api.Market.Deposit:input_type -> api.MarketRequests.Deposit
+	24, // 17: api.Market.Withdrawal:input_type -> api.MarketRequests.Withdrawal
+	25, // 18: api.Market.Reply:input_type -> api.MarketRequests.Message
+	26, // 19: api.Connection.Connect:input_type -> api.ConnectionRequests.In
+	9,  // 20: api.Info.User:output_type -> api.InfOut.User
+	13, // 21: api.Info.HasTrades:output_type -> api.InfOut.Bool
+	10, // 22: api.Info.Market:output_type -> api.InfOut.MarketInfo
+	11, // 23: api.Info.Search:output_type -> api.InfOut.Adresses
+	12, // 24: api.Info.Messages:output_type -> api.InfOut.Messages
+	13, // 25: api.Info.CheckName:output_type -> api.InfOut.Bool
+	0,  // 26: api.User.Create:output_type -> api.Response
+	0,  // 27: api.User.Send:output_type -> api.Response
+	0,  // 28: api.User.Message:output_type -> api.Response
+	0,  // 29: api.User.Buy:output_type -> api.Response
+	0,  // 30: api.User.Sell:output_type -> api.Response
+	0,  // 31: api.User.CancelTrade:output_type -> api.Response
+	0,  // 32: api.Market.Spawn:output_type -> api.Response
+	0,  // 33: api.Market.Update:output_type -> api.Response
+	0,  // 34: api.Market.Deposit:output_type -> api.Response
+	0,  // 35: api.Market.Withdrawal:output_type -> api.Response
+	0,  // 36: api.Market.Reply:output_type -> api.Response
+	27, // 37: api.Connection.Connect:output_type -> api.ConnectionRequests.Out
+	20, // [20:38] is the sub-list for method output_type
+	2,  // [2:20] is the sub-list for method input_type
 	2,  // [2:2] is the sub-list for extension type_name
 	2,  // [2:2] is the sub-list for extension extendee
 	0,  // [0:2] is the sub-list for field type_name
@@ -2015,7 +2191,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*InfIn_Adress); i {
+			switch v := v.(*ConnectionRequests); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2027,7 +2203,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*InfIn_Text); i {
+			switch v := v.(*InfIn_Adress); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2039,7 +2215,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*InfIn_UserMarketAdresses); i {
+			switch v := v.(*InfIn_Text); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2051,7 +2227,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*InfOut_User); i {
+			switch v := v.(*InfIn_UserMarketAdresses); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2063,7 +2239,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*InfOut_MarketInfo); i {
+			switch v := v.(*InfOut_User); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2075,7 +2251,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*InfOut_Adresses); i {
+			switch v := v.(*InfOut_MarketInfo); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2087,7 +2263,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*InfOut_Messages); i {
+			switch v := v.(*InfOut_Adresses); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2099,7 +2275,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*InfOut_Bool); i {
+			switch v := v.(*InfOut_Messages); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2111,7 +2287,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*InfOut_Trade); i {
+			switch v := v.(*InfOut_Bool); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2123,7 +2299,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UserRequests_Create); i {
+			switch v := v.(*InfOut_Trade); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2135,7 +2311,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UserRequests_Send); i {
+			switch v := v.(*UserRequests_Create); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2147,7 +2323,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UserRequests_Message); i {
+			switch v := v.(*UserRequests_Send); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2159,7 +2335,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UserRequests_Buy); i {
+			switch v := v.(*UserRequests_Message); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2171,7 +2347,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UserRequests_Sell); i {
+			switch v := v.(*UserRequests_Buy); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2183,7 +2359,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UserRequests_CancelTrade); i {
+			switch v := v.(*UserRequests_Sell); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2195,7 +2371,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MarketRequests_Create); i {
+			switch v := v.(*UserRequests_CancelTrade); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2207,7 +2383,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MarketRequests_Update); i {
+			switch v := v.(*MarketRequests_Create); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2219,7 +2395,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MarketRequests_Deposit); i {
+			switch v := v.(*MarketRequests_Update); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2231,7 +2407,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MarketRequests_Withdrawal); i {
+			switch v := v.(*MarketRequests_Deposit); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2243,7 +2419,43 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MarketRequests_Reply); i {
+			switch v := v.(*MarketRequests_Withdrawal); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_api_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MarketRequests_Message); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_api_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ConnectionRequests_In); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_api_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ConnectionRequests_Out); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2261,9 +2473,9 @@ func file_api_api_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_api_api_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   25,
+			NumMessages:   28,
 			NumExtensions: 0,
-			NumServices:   3,
+			NumServices:   4,
 		},
 		GoTypes:           file_api_api_proto_goTypes,
 		DependencyIndexes: file_api_api_proto_depIdxs,

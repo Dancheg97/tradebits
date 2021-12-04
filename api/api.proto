@@ -139,7 +139,7 @@ service Market{
     rpc Update(MarketRequests.Update) returns (Response);
     rpc Deposit(MarketRequests.Deposit) returns (Response);
     rpc Withdrawal(MarketRequests.Withdrawal) returns (Response);
-    rpc Reply(MarketRequests.Reply) returns (Response);
+    rpc Reply(MarketRequests.Message) returns (Response);
 }
 
 message MarketRequests{
@@ -176,10 +176,27 @@ message MarketRequests{
         uint64 Amount = 3;
         bytes Sign = 4;
     }
-    message Reply{
+    message Message{
         bytes PublicKey = 1;
         bytes Adress = 2;
         bytes Message = 3;
         bytes Sign = 4;
+    }
+}
+
+
+service Connection{
+    rpc Connect(ConnectionRequests.In) returns (stream ConnectionRequests.Out);
+}
+
+message ConnectionRequests{
+    message In{
+        bytes PublicKey = 1;
+        string WebAdress = 2;
+        bytes Sign = 3;
+    }
+    message Out{
+        bytes Key = 1;
+        bytes Value = 2;
     }
 }

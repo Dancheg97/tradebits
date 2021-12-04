@@ -17,7 +17,11 @@ def countlines(start, lines=0, header=True, begin_start=None):
                     else:
                         reldir_of_thing = '.' + file.replace(start, '')
                     print('{:>10} |{:>10} | {:<20}'.format(
-                            newlines, lines, reldir_of_thing))
+                            newlines, 
+                            lines, 
+                            reldir_of_thing,
+                        )
+                    )
     for file in os.listdir(start):
         file = os.path.join(start, file)
         if os.path.isdir(file):

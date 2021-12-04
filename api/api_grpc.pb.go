@@ -554,7 +554,7 @@ type MarketClient interface {
 	Update(ctx context.Context, in *MarketRequests_Update, opts ...grpc.CallOption) (*Response, error)
 	Deposit(ctx context.Context, in *MarketRequests_Deposit, opts ...grpc.CallOption) (*Response, error)
 	Withdrawal(ctx context.Context, in *MarketRequests_Withdrawal, opts ...grpc.CallOption) (*Response, error)
-	Reply(ctx context.Context, in *MarketRequests_Reply, opts ...grpc.CallOption) (*Response, error)
+	Reply(ctx context.Context, in *MarketRequests_Message, opts ...grpc.CallOption) (*Response, error)
 }
 
 type marketClient struct {
@@ -601,7 +601,7 @@ func (c *marketClient) Withdrawal(ctx context.Context, in *MarketRequests_Withdr
 	return out, nil
 }
 
-func (c *marketClient) Reply(ctx context.Context, in *MarketRequests_Reply, opts ...grpc.CallOption) (*Response, error) {
+func (c *marketClient) Reply(ctx context.Context, in *MarketRequests_Message, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
 	err := c.cc.Invoke(ctx, "/api.Market/Reply", in, out, opts...)
 	if err != nil {
@@ -618,7 +618,7 @@ type MarketServer interface {
 	Update(context.Context, *MarketRequests_Update) (*Response, error)
 	Deposit(context.Context, *MarketRequests_Deposit) (*Response, error)
 	Withdrawal(context.Context, *MarketRequests_Withdrawal) (*Response, error)
-	Reply(context.Context, *MarketRequests_Reply) (*Response, error)
+	Reply(context.Context, *MarketRequests_Message) (*Response, error)
 	mustEmbedUnimplementedMarketServer()
 }
 
@@ -638,7 +638,7 @@ func (UnimplementedMarketServer) Deposit(context.Context, *MarketRequests_Deposi
 func (UnimplementedMarketServer) Withdrawal(context.Context, *MarketRequests_Withdrawal) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Withdrawal not implemented")
 }
-func (UnimplementedMarketServer) Reply(context.Context, *MarketRequests_Reply) (*Response, error) {
+func (UnimplementedMarketServer) Reply(context.Context, *MarketRequests_Message) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Reply not implemented")
 }
 func (UnimplementedMarketServer) mustEmbedUnimplementedMarketServer() {}
@@ -727,7 +727,7 @@ func _Market_Withdrawal_Handler(srv interface{}, ctx context.Context, dec func(i
 }
 
 func _Market_Reply_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MarketRequests_Reply)
+	in := new(MarketRequests_Message)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -739,7 +739,7 @@ func _Market_Reply_Handler(srv interface{}, ctx context.Context, dec func(interf
 		FullMethod: "/api.Market/Reply",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MarketServer).Reply(ctx, req.(*MarketRequests_Reply))
+		return srv.(MarketServer).Reply(ctx, req.(*MarketRequests_Message))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -773,5 +773,118 @@ var Market_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
+	Metadata: "api/api.proto",
+}
+
+// ConnectionClient is the client API for Connection service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type ConnectionClient interface {
+	Connect(ctx context.Context, in *ConnectionRequests_In, opts ...grpc.CallOption) (Connection_ConnectClient, error)
+}
+
+type connectionClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewConnectionClient(cc grpc.ClientConnInterface) ConnectionClient {
+	return &connectionClient{cc}
+}
+
+func (c *connectionClient) Connect(ctx context.Context, in *ConnectionRequests_In, opts ...grpc.CallOption) (Connection_ConnectClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Connection_ServiceDesc.Streams[0], "/api.Connection/Connect", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &connectionConnectClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Connection_ConnectClient interface {
+	Recv() (*ConnectionRequests_Out, error)
+	grpc.ClientStream
+}
+
+type connectionConnectClient struct {
+	grpc.ClientStream
+}
+
+func (x *connectionConnectClient) Recv() (*ConnectionRequests_Out, error) {
+	m := new(ConnectionRequests_Out)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// ConnectionServer is the server API for Connection service.
+// All implementations must embed UnimplementedConnectionServer
+// for forward compatibility
+type ConnectionServer interface {
+	Connect(*ConnectionRequests_In, Connection_ConnectServer) error
+	mustEmbedUnimplementedConnectionServer()
+}
+
+// UnimplementedConnectionServer must be embedded to have forward compatible implementations.
+type UnimplementedConnectionServer struct {
+}
+
+func (UnimplementedConnectionServer) Connect(*ConnectionRequests_In, Connection_ConnectServer) error {
+	return status.Errorf(codes.Unimplemented, "method Connect not implemented")
+}
+func (UnimplementedConnectionServer) mustEmbedUnimplementedConnectionServer() {}
+
+// UnsafeConnectionServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ConnectionServer will
+// result in compilation errors.
+type UnsafeConnectionServer interface {
+	mustEmbedUnimplementedConnectionServer()
+}
+
+func RegisterConnectionServer(s grpc.ServiceRegistrar, srv ConnectionServer) {
+	s.RegisterService(&Connection_ServiceDesc, srv)
+}
+
+func _Connection_Connect_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(ConnectionRequests_In)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(ConnectionServer).Connect(m, &connectionConnectServer{stream})
+}
+
+type Connection_ConnectServer interface {
+	Send(*ConnectionRequests_Out) error
+	grpc.ServerStream
+}
+
+type connectionConnectServer struct {
+	grpc.ServerStream
+}
+
+func (x *connectionConnectServer) Send(m *ConnectionRequests_Out) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+// Connection_ServiceDesc is the grpc.ServiceDesc for Connection service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var Connection_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.Connection",
+	HandlerType: (*ConnectionServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Connect",
+			Handler:       _Connection_Connect_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "api/api.proto",
 }

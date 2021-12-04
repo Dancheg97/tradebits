@@ -17,7 +17,7 @@ func TestMatchCloseBuy(t *testing.T) {
 		Recieve: 100,
 	}
 
-	outputs := buy.match(&sell)
+	outputs := match(&buy, &sell)
 
 	expectedBuyerOutput := Output{
 		Adress: []byte{0},
@@ -62,7 +62,7 @@ func TestMatchCloseSell(t *testing.T) {
 		Offer:   60,
 		Recieve: 40,
 	}
-	outputs := buy.match(&sell)
+	outputs := match(&buy, &sell)
 
 	expectedBuyerOutput := Output{
 		Adress: []byte{0},
@@ -108,7 +108,7 @@ func TestMatchBothOfferTooMuch(t *testing.T) {
 		Recieve: 90,
 	}
 
-	outputs := buy.match(&sell)
+	outputs := match(&buy, &sell)
 
 	expectedBuyerOutput := Output{
 		Adress: []byte{0},
@@ -152,7 +152,7 @@ func TestMatchBuyOffersMuchOnSameAmountOfSellRecieve(t *testing.T) {
 		Offer:   100,
 		Recieve: 100,
 	}
-	outputs := buy.match(&sell)
+	outputs := match(&buy, &sell)
 	expectedBuyerOutput := Output{
 		Adress: []byte{0},
 		Market: 100,
@@ -196,7 +196,7 @@ func TestMatchSellOffersMuchOnSameAmountOfBuyRecieve(t *testing.T) {
 		Offer:   200,
 		Recieve: 100,
 	}
-	outputs := buy.match(&sell)
+	outputs := match(&buy, &sell)
 
 	expectedBuyerOutput := Output{
 		Adress: []byte{0},
@@ -242,7 +242,7 @@ func TestMatchCloseBoth(t *testing.T) {
 		Recieve: 100,
 	}
 
-	outputs := buy.match(&sell)
+	outputs := match(&buy, &sell)
 
 	expectedBuyerOutput := Output{
 		Adress: []byte{0},
@@ -288,7 +288,7 @@ func TestNotMatch(t *testing.T) {
 		Recieve: 100,
 	}
 
-	outputs := buy.match(&sell)
+	outputs := match(&buy, &sell)
 
 	expectedBuy := Buy{
 		Adress:  []byte{0},

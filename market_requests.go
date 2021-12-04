@@ -112,7 +112,7 @@ func (s *server) Deposit(
 
 func (s *server) Reply(
 	ctx context.Context,
-	in *pb.MarketRequests_Reply,
+	in *pb.MarketRequests_Message,
 ) (*pb.Response, error) {
 	concMes := [][]byte{
 		in.PublicKey,
