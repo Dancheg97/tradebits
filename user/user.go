@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"errors"
+	"fmt"
 	"strings"
 	"sync_tree/data"
 	"sync_tree/lock"
@@ -42,7 +43,7 @@ func Create(adress []byte, mesKey []byte, name string) error {
 	if data.Check([]byte(name)) {
 		return errors.New("user with that name exists")
 	}
-	if name!= strings.Trim(name, " ") {
+	if name != strings.Trim(name, " ") {
 		return errors.New("too many spaces")
 	}
 	isBadName, _, _ := filter.Filter.ProfanityCheck(name)
@@ -58,6 +59,7 @@ func Create(adress []byte, mesKey []byte, name string) error {
 		Messages: make(map[string][][]byte),
 		Arch:     map[string]string{},
 	}
+	fmt.Println(u.Name)
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(u)
 	data.Put(adress, cache.Bytes())
