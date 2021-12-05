@@ -1,0 +1,36 @@
+=============== Dec 5, 2021 (MSK) ===============
+19:37:36.945584 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+19:37:36.971315 db@open opening
+19:37:36.972343 version@stat F·[] S·0B[] Sc·[]
+19:37:36.974386 db@janitor F·2 G·0
+19:37:36.974386 db@open done T·3.071ms
+=============== Dec 5, 2021 (MSK) ===============
+19:40:19.100245 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+19:40:19.117260 version@stat F·[] S·0B[] Sc·[]
+19:40:19.117260 db@open opening
+19:40:19.117260 journal@recovery F·1
+19:40:19.118261 journal@recovery recovering @1
+19:40:19.121264 memdb@flush created L0@2 N·3 S·139B "\x00,v1":"\x02,v3"
+19:40:19.121264 version@stat F·[1] S·139B[139B] Sc·[0.25]
+19:40:19.127269 db@janitor F·3 G·0
+19:40:19.127269 db@open done T·10.0088ms
+=============== Dec 5, 2021 (MSK) ===============
+19:40:44.558593 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+19:40:44.576609 version@stat F·[1] S·139B[139B] Sc·[0.25]
+19:40:44.576609 db@open opening
+19:40:44.576609 journal@recovery F·1
+19:40:44.576609 journal@recovery recovering @3
+19:40:44.579612 memdb@flush created L0@5 N·3 S·139B "\x00,v5":"\x02,v7"
+19:40:44.580613 version@stat F·[2] S·278B[278B] Sc·[0.50]
+19:40:44.586618 db@janitor F·4 G·0
+19:40:44.586618 db@open done T·10.0091ms
+=============== Dec 5, 2021 (MSK) ===============
+19:40:58.373888 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+19:40:58.391360 version@stat F·[2] S·278B[278B] Sc·[0.50]
+19:40:58.391360 db@open opening
+19:40:58.391360 journal@recovery F·1
+19:40:58.391876 journal@recovery recovering @6
+19:40:58.394948 memdb@flush created L0@8 N·3 S·139B "\x00,v9":"\x02,v11"
+19:40:58.395459 version@stat F·[3] S·417B[417B] Sc·[0.75]
+19:40:58.402008 db@janitor F·5 G·0
+19:40:58.402008 db@open done T·10.6489ms
