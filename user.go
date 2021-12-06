@@ -38,7 +38,7 @@ func (s *server) Create(
 		in.PublicName,
 	)
 	if create_err != nil {
-		fmt.Println("[UserCreate] - Create error")
+		fmt.Println("[UserCreate] - Create error", create_err)
 		return nil, create_err
 
 	}
