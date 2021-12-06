@@ -2,9 +2,17 @@ package queue
 
 import "sync"
 
-type queue struct {
+type keyValueQueue struct {
 	mu     sync.Mutex
 	values []KvPair
+}
+
+type requestQueue struct {
+	mu     sync.Mutex
+	values []Request
+}
+
+type Request struct {
 }
 
 type KvPair struct {
@@ -12,9 +20,16 @@ type KvPair struct {
 	Value []byte
 }
 
-func Create() *queue {
-	queue := queue{
+func CreateKV() *keyValueQueue {
+	queue := keyValueQueue{
 		values: []KvPair{},
 	}
 	return &queue
+}
+
+func CreateREQ() *requestQueue {
+	requestQueue := requestQueue{
+		values: []Request{},
+	}
+	return &requestQueue
 }
