@@ -25,16 +25,22 @@ func TestTake(t *testing.T) {
 	firstTaken := que.Take()
 	secondTaken := que.Take()
 	thirdTaken := que.Take()
-	if !reflect.DeepEqual(que.values[0], firstTaken) {
-		t.Error("first message is not in queue/not in right position")
+	if !reflect.DeepEqual(first, firstTaken) {
+		t.Error("first taken message is incorrect", firstTaken)
 	}
-	if !reflect.DeepEqual(que.values[1], secondTaken) {
-		t.Error("second message is not in queue/not in right position")
+	if !reflect.DeepEqual(second, secondTaken) {
+		t.Error("first taken message is incorrect", secondTaken)
 	}
-	if !reflect.DeepEqual(que.values[2], thirdTaken) {
-		t.Error("third message is not in queue/not in right position")
+	if !reflect.DeepEqual(third, thirdTaken) {
+		t.Error("first taken message is incorrect", thirdTaken)
 	}
 	if len(que.values) != 0 {
 		t.Error("something is left in que")
 	}
+}
+
+func TestTryToTakeFromEmptyQueue(t *testing.T) {
+	que := Create()
+	que.Take()
+	
 }
