@@ -6,7 +6,7 @@ import (
 )
 
 func TestTake(t *testing.T) {
-	que := Create()
+	que := CreateKV()
 	first := KvPair{
 		Key:   []byte{0},
 		Value: []byte{0},
@@ -40,7 +40,7 @@ func TestTake(t *testing.T) {
 }
 
 func TestTryToTakeFromEmptyQueue(t *testing.T) {
-	que := Create()
+	que := CreateKV()
 	que.Take()
 	
 }

@@ -6,7 +6,7 @@ import (
 )
 
 func TestPutSomeMessages(t *testing.T) {
-	newque := Create()
+	newque := CreateKV()
 	firstVal := KvPair{
 		Key:   []byte{0, 1, 2},
 		Value: []byte{1, 2, 3},

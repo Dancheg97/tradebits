@@ -3,7 +3,7 @@ package queue
 import "testing"
 
 func TestCreateQueue(t *testing.T) {
-	newque := Create()
+	newque := CreateKV()
 	if newque == nil {
 		t.Error("queue should not be returned as nil")
 		return
