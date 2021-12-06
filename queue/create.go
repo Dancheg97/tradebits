@@ -13,6 +13,18 @@ type requestQueue struct {
 }
 
 type Request struct {
+	Type           string
+	PublicKey      []byte
+	MessageKey     []byte
+	PublicName     string
+	SendAmount     uint64
+	RecieverAdress []byte
+	Adress         []byte
+	Message        string
+	Recieve        []byte
+	Offer          uint64
+	MarketAdress   []byte
+	Sign           []byte
 }
 
 type KvPair struct {

@@ -86,8 +86,8 @@ service User{
     rpc Create(UserRequests.Create) returns (Response);
     rpc Send(UserRequests.Send) returns (Response);
     rpc Message(UserRequests.Message) returns (Response);
-    rpc Buy(UserRequests.Buy) returns (Response);
-    rpc Sell(UserRequests.Sell) returns (Response);
+    rpc Buy(UserRequests.Trade) returns (Response);
+    rpc Sell(UserRequests.Trade) returns (Response);
     rpc CancelTrade(UserRequests.CancelTrade) returns (Response);
 }
 
@@ -110,14 +110,7 @@ message UserRequests{
         bytes Message = 3;
         bytes Sign = 4;
     }
-    message Buy{
-        bytes PublicKey = 1;
-        bytes Adress = 2;
-        uint64 Recieve = 3;
-        uint64 Offer = 4;
-        bytes Sign = 5;
-    }
-    message Sell{
+    message Trade{
         bytes PublicKey = 1;
         bytes Adress = 2;
         uint64 Recieve = 3;
