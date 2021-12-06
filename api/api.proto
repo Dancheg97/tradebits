@@ -187,6 +187,7 @@ message MarketRequests{
 
 service Connection{
     rpc Connect(ConnectionRequests.In) returns (stream ConnectionRequests.Out);
+    rpc Pool(ConnectionRequests.Pool) returns (ConnectionRequests.Pool);
 }
 
 message ConnectionRequests{
@@ -198,5 +199,8 @@ message ConnectionRequests{
     message Out{
         bytes Key = 1;
         bytes Value = 2;
+    }
+    message Pool{
+        repeated string Values = 1;
     }
 }
