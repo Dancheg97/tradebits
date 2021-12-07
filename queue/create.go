@@ -7,6 +7,18 @@ type keyValueQueue struct {
 	values []KvPair
 }
 
+type KvPair struct {
+	Key   []byte
+	Value []byte
+}
+
+func CreateKV() *keyValueQueue {
+	queue := keyValueQueue{
+		values: []KvPair{},
+	}
+	return &queue
+}
+
 type requestQueue struct {
 	mu     sync.Mutex
 	values []Request
@@ -25,18 +37,6 @@ type Request struct {
 	Offer          uint64
 	MarketAdress   []byte
 	Sign           []byte
-}
-
-type KvPair struct {
-	Key   []byte
-	Value []byte
-}
-
-func CreateKV() *keyValueQueue {
-	queue := keyValueQueue{
-		values: []KvPair{},
-	}
-	return &queue
 }
 
 func CreateREQ() *requestQueue {
