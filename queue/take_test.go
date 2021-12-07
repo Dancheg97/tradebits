@@ -41,6 +41,8 @@ func TestTake(t *testing.T) {
 
 func TestTryToTakeFromEmptyQueue(t *testing.T) {
 	que := CreateKV()
-	que.Take()
-	
+	rez := que.Take()
+	if !reflect.DeepEqual(rez, KvPair{}) {
+		t.Error("rez is not empty")
+	}
 }
