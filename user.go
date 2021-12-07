@@ -121,7 +121,7 @@ func (s *server) Message(
 
 func (s *server) Buy(
 	ctx context.Context,
-	in *pb.UserRequests_Buy,
+	in *pb.UserRequests_Trade,
 ) (*pb.Response, error) {
 	fmt.Println("[UserBuy] - start")
 	buyerAdress := calc.Hash(in.PublicKey)
@@ -172,7 +172,7 @@ func (s *server) Buy(
 
 func (s *server) Sell(
 	ctx context.Context,
-	in *pb.UserRequests_Sell,
+	in *pb.UserRequests_Trade,
 ) (*pb.Response, error) {
 	fmt.Println("[UserSell] - start")
 	sellerAdress := calc.Hash(in.PublicKey)

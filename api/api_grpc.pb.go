@@ -287,8 +287,8 @@ type UserClient interface {
 	Create(ctx context.Context, in *UserRequests_Create, opts ...grpc.CallOption) (*Response, error)
 	Send(ctx context.Context, in *UserRequests_Send, opts ...grpc.CallOption) (*Response, error)
 	Message(ctx context.Context, in *UserRequests_Message, opts ...grpc.CallOption) (*Response, error)
-	Buy(ctx context.Context, in *UserRequests_Buy, opts ...grpc.CallOption) (*Response, error)
-	Sell(ctx context.Context, in *UserRequests_Sell, opts ...grpc.CallOption) (*Response, error)
+	Buy(ctx context.Context, in *UserRequests_Trade, opts ...grpc.CallOption) (*Response, error)
+	Sell(ctx context.Context, in *UserRequests_Trade, opts ...grpc.CallOption) (*Response, error)
 	CancelTrade(ctx context.Context, in *UserRequests_CancelTrade, opts ...grpc.CallOption) (*Response, error)
 }
 
@@ -327,7 +327,7 @@ func (c *userClient) Message(ctx context.Context, in *UserRequests_Message, opts
 	return out, nil
 }
 
-func (c *userClient) Buy(ctx context.Context, in *UserRequests_Buy, opts ...grpc.CallOption) (*Response, error) {
+func (c *userClient) Buy(ctx context.Context, in *UserRequests_Trade, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
 	err := c.cc.Invoke(ctx, "/api.User/Buy", in, out, opts...)
 	if err != nil {
@@ -336,7 +336,7 @@ func (c *userClient) Buy(ctx context.Context, in *UserRequests_Buy, opts ...grpc
 	return out, nil
 }
 
-func (c *userClient) Sell(ctx context.Context, in *UserRequests_Sell, opts ...grpc.CallOption) (*Response, error) {
+func (c *userClient) Sell(ctx context.Context, in *UserRequests_Trade, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
 	err := c.cc.Invoke(ctx, "/api.User/Sell", in, out, opts...)
 	if err != nil {
@@ -361,8 +361,8 @@ type UserServer interface {
 	Create(context.Context, *UserRequests_Create) (*Response, error)
 	Send(context.Context, *UserRequests_Send) (*Response, error)
 	Message(context.Context, *UserRequests_Message) (*Response, error)
-	Buy(context.Context, *UserRequests_Buy) (*Response, error)
-	Sell(context.Context, *UserRequests_Sell) (*Response, error)
+	Buy(context.Context, *UserRequests_Trade) (*Response, error)
+	Sell(context.Context, *UserRequests_Trade) (*Response, error)
 	CancelTrade(context.Context, *UserRequests_CancelTrade) (*Response, error)
 	mustEmbedUnimplementedUserServer()
 }
@@ -380,10 +380,10 @@ func (UnimplementedUserServer) Send(context.Context, *UserRequests_Send) (*Respo
 func (UnimplementedUserServer) Message(context.Context, *UserRequests_Message) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Message not implemented")
 }
-func (UnimplementedUserServer) Buy(context.Context, *UserRequests_Buy) (*Response, error) {
+func (UnimplementedUserServer) Buy(context.Context, *UserRequests_Trade) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Buy not implemented")
 }
-func (UnimplementedUserServer) Sell(context.Context, *UserRequests_Sell) (*Response, error) {
+func (UnimplementedUserServer) Sell(context.Context, *UserRequests_Trade) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Sell not implemented")
 }
 func (UnimplementedUserServer) CancelTrade(context.Context, *UserRequests_CancelTrade) (*Response, error) {
@@ -457,7 +457,7 @@ func _User_Message_Handler(srv interface{}, ctx context.Context, dec func(interf
 }
 
 func _User_Buy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserRequests_Buy)
+	in := new(UserRequests_Trade)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -469,13 +469,13 @@ func _User_Buy_Handler(srv interface{}, ctx context.Context, dec func(interface{
 		FullMethod: "/api.User/Buy",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).Buy(ctx, req.(*UserRequests_Buy))
+		return srv.(UserServer).Buy(ctx, req.(*UserRequests_Trade))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _User_Sell_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserRequests_Sell)
+	in := new(UserRequests_Trade)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -487,7 +487,7 @@ func _User_Sell_Handler(srv interface{}, ctx context.Context, dec func(interface
 		FullMethod: "/api.User/Sell",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).Sell(ctx, req.(*UserRequests_Sell))
+		return srv.(UserServer).Sell(ctx, req.(*UserRequests_Trade))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -781,6 +781,7 @@ var Market_ServiceDesc = grpc.ServiceDesc{
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ConnectionClient interface {
 	Connect(ctx context.Context, in *ConnectionRequests_In, opts ...grpc.CallOption) (Connection_ConnectClient, error)
+	Pool(ctx context.Context, in *ConnectionRequests_Pool, opts ...grpc.CallOption) (*ConnectionRequests_Pool, error)
 }
 
 type connectionClient struct {
@@ -823,11 +824,21 @@ func (x *connectionConnectClient) Recv() (*ConnectionRequests_Out, error) {
 	return m, nil
 }
 
+func (c *connectionClient) Pool(ctx context.Context, in *ConnectionRequests_Pool, opts ...grpc.CallOption) (*ConnectionRequests_Pool, error) {
+	out := new(ConnectionRequests_Pool)
+	err := c.cc.Invoke(ctx, "/api.Connection/Pool", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ConnectionServer is the server API for Connection service.
 // All implementations must embed UnimplementedConnectionServer
 // for forward compatibility
 type ConnectionServer interface {
 	Connect(*ConnectionRequests_In, Connection_ConnectServer) error
+	Pool(context.Context, *ConnectionRequests_Pool) (*ConnectionRequests_Pool, error)
 	mustEmbedUnimplementedConnectionServer()
 }
 
@@ -837,6 +848,9 @@ type UnimplementedConnectionServer struct {
 
 func (UnimplementedConnectionServer) Connect(*ConnectionRequests_In, Connection_ConnectServer) error {
 	return status.Errorf(codes.Unimplemented, "method Connect not implemented")
+}
+func (UnimplementedConnectionServer) Pool(context.Context, *ConnectionRequests_Pool) (*ConnectionRequests_Pool, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Pool not implemented")
 }
 func (UnimplementedConnectionServer) mustEmbedUnimplementedConnectionServer() {}
 
@@ -872,13 +886,36 @@ func (x *connectionConnectServer) Send(m *ConnectionRequests_Out) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _Connection_Pool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ConnectionRequests_Pool)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConnectionServer).Pool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.Connection/Pool",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConnectionServer).Pool(ctx, req.(*ConnectionRequests_Pool))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Connection_ServiceDesc is the grpc.ServiceDesc for Connection service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Connection_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "api.Connection",
 	HandlerType: (*ConnectionServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Pool",
+			Handler:    _Connection_Pool_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "Connect",
