@@ -1,4 +1,4 @@
-private_pem: "-----BEGIN RSA PRIVATE KEY-----
+PrivatePem: "-----BEGIN RSA PRIVATE KEY-----
 MIIJKgIBAAKCAgEAjdgFBLDvmGQvl3o87UZAxUCuGwKqym92Iv4FGujlcr95oPxk
 IoXtLYnZUNXBAPdDRqeag8dhTbftCuywd99xJybV4uoqlOSghd2lu5nrtixrcIF/
 x3KH+5brTzLjGaTV5WsK9hLXgnEBdPDJ6FadCo1Se8/6D5oAvKQYoqNNgZqiJBYs
@@ -49,7 +49,7 @@ CFyzGm/6Lz7pFe8XDLuxtaxLscC00HmeBM8QrnLZjfVQnZEf6TS4Zv6IqQTf1NRt
 HTU1kxGzAd1bTJNr0V1xkqcMc2EGjIoDOCgXxfLJf1tAYt/b0cooqFOc4XVq1pYq
 NXENNyn3UtWXR+4ni6jmpud2Xn2xeJKEiI1MtMz7DfOa/yolB8AomFa6Zhvc/A==
 -----END RSA PRIVATE KEY-----"
-public_pem: "-----BEGIN RSA PUBLIC KEY-----
+PublicPem: "-----BEGIN RSA PUBLIC KEY-----
 MIICCgKCAgEAjdgFBLDvmGQvl3o87UZAxUCuGwKqym92Iv4FGujlcr95oPxkIoXt
 LYnZUNXBAPdDRqeag8dhTbftCuywd99xJybV4uoqlOSghd2lu5nrtixrcIF/x3KH
 +5brTzLjGaTV5WsK9hLXgnEBdPDJ6FadCo1Se8/6D5oAvKQYoqNNgZqiJBYsf9rO
@@ -62,4 +62,4 @@ C72EsXnxV5F3ZX626t1YUKMpfmkr9H4yicSjHYtZDVInF1VeNOW3eMUUgiw0kyEZ
 ZZLQigUd1IuLkKEvoW9R1gtXKXy9e3xv8v0uhvdLL7UCEA8bDCAmzJ8fOTQLIfxe
 Ad3bM7JcmnzdglKgGTQU16tIzhizQHOKGM3gNf2W1f3TJyGU8lseA50CAwEAAQ==
 -----END RSA PUBLIC KEY-----"
-connection_adress: null
+ConnectionAdress: ""
