@@ -1,13 +1,15 @@
-# Sync tree server
+# ORB project - overkill cryptocurrency
 
-Server software to run single sync tree unit.
+Our goal is to provide the best user expirience with cryptocurrency and blockchain systems.
 
-This readme contains following information:
+Our cryptocurrency is based on those principals:
+- open
+- fast
+- free
+- secure
+- smart
 
-- Server setup&startup guide
-- Project API description
-- Project structure description
+## Open
 
-## Server setup&startup
-
-Before setting up a server, you should try to get 
+Project is fully open, in a variaty of different ways. 
+Source code is open-source, community is always welcome for frontend/backend side improvements.
