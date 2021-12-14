@@ -1,15 +1,15 @@
-# ORB project - overkill cryptocurrency
+# ORB - overkill cryptocurrency
 
 [![Website](https://img.shields.io/website?label=codeSTACKr.com&style=for-the-badge&url=https%3A%2F%2Fcodestackr.com)](https://webpage.com)
 
 Our goal is to provide the best user expirience with cryptocurrency and blockchain systems.
 
-Our cryptocurrency is based on those principals:
+Our project is based on those ideas:
 - open
 - fast
 - free
 - secure
-- smart
+- improving
 
 <br />
 
@@ -53,8 +53,9 @@ Our cryptocurrency is based on those principals:
 
 ## Open
 
-Project is fully open, in a variaty of different ways. 
-Source code is open-source, community is always welcome for frontend/backend side improvements.
+Project is open, in a variaty of different ways...
+
+Source code is open, community is always welcome for frontend/backend side improvements.
 You can access the token network within:
 - Android
 - IOS
@@ -84,7 +85,7 @@ Most of cryptocurrecies are built using POS/POF mechanism to solve security prob
 
 In this project we were able to combine the pros of system distribution over network with rapid fast speed, and we were first to achieve that relation.
 
-## Smart
+## Improving
 
 The biggest problem of most cryptocurrecnies is versioning. It is really challenging when it comes to providing good verioning system in distributed system. This system is connected to GIT aswell, and has voting system, which allows modifications across multiple users to occure.
 
