@@ -1,4 +1,4 @@
-# ORB - overkill cryptocurrency
+# ORB - all in one cryptocurrency solution
 
 [![Website](https://img.shields.io/website?label=codeSTACKr.com&style=for-the-badge&url=https%3A%2F%2Fcodestackr.com)](https://webpage.com)
 
@@ -26,9 +26,6 @@ Our project is based on those ideas:
 <img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png" />
 <img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://stickker.net/wp-content/uploads/2018/11/flutter.png-578x578.png" />
 <img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://cdn.freebiesupply.com/logos/large/2x/leveldb-logo-png-transparent.png" />
-
-
-<br /><br /><br /><br />
 <img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px" height="51px" src="https://i1.wp.com/techxposer.com/wp-content/uploads/2019/12/grpc-icon.png?fit=626%2C664" />
 <img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://avatars.githubusercontent.com/u/8562608?s=280&v=4" />
 <img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://10015.io/assets/tools/list/sha512-encrypt-decrypt.svg" />
@@ -77,7 +74,3 @@ In this project we were able to combine the pros of system distribution over net
 
 The biggest problem of most cryptocurrecnies is versioning. It is really challenging when it comes to providing good verioning system in distributed system. This system is connected to GIT aswell, and has voting system, which allows modifications across multiple users to occure.
 
-
-# Project structure
-
-Project has flat structure for ease of navigation in code editors/ IDE's. Root folder contains 
