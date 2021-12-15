@@ -1,17 +1,17 @@
-package database
+package data
 
 import (
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/iterator"
 )
 
-type databaseObject struct {
+type dataObject struct {
 	key   []byte
 	value []byte
 }
 
 var reserveNodeConnected = false
-var databaseQue = []databaseObject{}
+var dataQue = []dataObject{}
 
 func GetIterator() (iterator.Iterator, *leveldb.DB) {
 	reserveNodeConnected = true
@@ -21,13 +21,13 @@ func GetIterator() (iterator.Iterator, *leveldb.DB) {
 	return iterator, db
 }
 
-func ReOpenBase(db *leveldb.DB) []databaseObject {
+func ReOpenBase(db *leveldb.DB) []dataObject {
 	db.Close()
 	base = openDB()
-	return databaseQue
+	return dataQue
 }
 
 func CloseConnection() {
-	databaseQue = []databaseObject{}
+	dataQue = []dataObject{}
 	reserveNodeConnected = false
 }

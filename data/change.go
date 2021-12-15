@@ -1,15 +1,15 @@
-package database
+package data
 
-// change existing value in databasebase by key
+// change existing value in database by key
 func Change(key []byte, value []byte) {
 	if Check(key) {
 		base.Put(key, value, nil)
 	}
 	if reserveNodeConnected {
-		obj := databaseObject{
+		obj := dataObject{
 			key:   key,
 			value: value,
 		}
-		databaseQue = append(databaseQue, obj)
+		dataQue = append(dataQue, obj)
 	}
 }

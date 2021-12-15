@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"orb/database"
+	"orb/data"
 	"orb/market"
 	"orb/search"
 	"orb/user"
@@ -94,7 +94,7 @@ func (s *server) CheckName(
 	ctx context.Context,
 	in *pb.InfIn_Text,
 ) (*pb.InfOut_Bool, error) {
-	rez := database.Check([]byte(in.Text))
+	rez := data.Check([]byte(in.Text))
 	fmt.Println("[CheckName] - Name:", in.Text, ", rez:", rez)
 	return &pb.InfOut_Bool{Value: rez}, nil
 }

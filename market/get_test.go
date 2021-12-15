@@ -2,7 +2,7 @@ package market
 
 import (
 	"orb/calc"
-	"orb/database"
+	"orb/data"
 	"reflect"
 	"testing"
 )
@@ -26,8 +26,8 @@ func TestGetFreeMarket(t *testing.T) {
 		t.Error("keys are not the same, get asset error")
 	}
 	market.Save()
-	database.TestRM([]byte(dummyName))
-	database.TestRM(adress)
+	data.TestRM([]byte(dummyName))
+	data.TestRM(adress)
 }
 
 func TestGetMarketThatDontExist(t *testing.T) {

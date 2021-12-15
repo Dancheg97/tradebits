@@ -3,16 +3,16 @@ package user
 import (
 	"bytes"
 	"encoding/gob"
-	"orb/database"
+	"orb/data"
 )
 
 /*
 Non blocking function to look for user contents, it's impossible to save
-instance of that user to databasebase.
+instance of that user to database.
 */
 func Look(adress []byte) *user {
 	u := user{}
-	userBytes := database.Get(adress)
+	userBytes := data.Get(adress)
 	cache := bytes.NewBuffer(userBytes)
 	gob.NewDecoder(cache).Decode(&u)
 	return &u

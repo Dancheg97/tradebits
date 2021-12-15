@@ -1,4 +1,4 @@
-package database
+package data
 
 import (
 	"path"
@@ -20,7 +20,7 @@ func openDB() *leveldb.DB {
 }
 
 // function is made only to remove values after generating some
-// test database, dont call it in any other case
+// test data, dont call it in any other case
 func TestRM(key []byte) {
 	base.Delete(key, nil)
 }

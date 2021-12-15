@@ -3,7 +3,7 @@ package user
 import (
 	"bytes"
 	"orb/calc"
-	"orb/database"
+	"orb/data"
 	"testing"
 )
 
@@ -22,8 +22,8 @@ func TestPutUserMessage(t *testing.T) {
 	if bytes.Compare(mes, []byte{1, 2, 3}) == 3 {
 		t.Error("the message should be '[]byte{1, 2, 3}' - ", mes)
 	}
-	database.TestRM([]byte(dummyName))
-	database.TestRM(adress)
+	data.TestRM([]byte(dummyName))
+	data.TestRM(adress)
 }
 
 func TestNewUserNonNullableMessageMap(t *testing.T) {
@@ -39,6 +39,6 @@ func TestNewUserNonNullableMessageMap(t *testing.T) {
 		t.Error("user messages should never be null")
 	}
 	usr.Save()
-	database.TestRM([]byte(dummyName))
-	database.TestRM(adress)
+	data.TestRM([]byte(dummyName))
+	data.TestRM(adress)
 }

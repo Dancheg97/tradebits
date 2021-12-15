@@ -3,7 +3,7 @@ package market
 import (
 	"bytes"
 	"encoding/gob"
-	"orb/database"
+	"orb/data"
 	"orb/lock"
 )
 
@@ -11,12 +11,12 @@ import (
 // values of that market can be modified. To save changes made in market call
 // Save() method of returned instance.
 func Get(adress []byte) *market {
-	if !database.Check(adress) {
+	if !data.Check(adress) {
 		return nil
 	}
 	lock.Lock(adress)
 	m := market{adress: adress}
-	marketBytes := database.Get(adress)
+	marketBytes := data.Get(adress)
 	cache := bytes.NewBuffer(marketBytes)
 	gob.NewDecoder(cache).Decode(&m)
 	return &m

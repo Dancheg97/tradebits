@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"errors"
-	"orb/database"
+	"orb/data"
 
 	filter "github.com/AccelByte/profanity-filter-go"
 )
@@ -33,10 +33,10 @@ func Create(adress []byte, mesKey []byte, name string) error {
 	if len(mesKey) < 240 || len(mesKey) > 320 {
 		return errors.New("invalid message key length")
 	}
-	if database.Check(adress) {
+	if data.Check(adress) {
 		return errors.New("possibly user already exists")
 	}
-	if database.Check([]byte(name)) {
+	if data.Check([]byte(name)) {
 		return errors.New("user with that name exists")
 	}
 	if name[0] == " "[0] || name[len(name)-1] == " "[0] {
@@ -46,7 +46,7 @@ func Create(adress []byte, mesKey []byte, name string) error {
 	if isBadName {
 		return errors.New("name contains bad words")
 	}
-	database.Put([]byte(name), []byte{})
+	data.Put([]byte(name), []byte{})
 	u := user{
 		Balance:  0,
 		MesKey:   mesKey,
@@ -57,6 +57,6 @@ func Create(adress []byte, mesKey []byte, name string) error {
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(u)
-	database.Put(adress, cache.Bytes())
+	data.Put(adress, cache.Bytes())
 	return nil
 }

@@ -2,7 +2,7 @@ package user
 
 import (
 	"orb/calc"
-	"orb/database"
+	"orb/data"
 	"testing"
 )
 
@@ -19,8 +19,8 @@ func TestCreateNewUser(t *testing.T) {
 	if err != nil {
 		t.Error("attemt to create new user failed", err)
 	}
-	database.TestRM([]byte(dummyName))
-	database.TestRM(adress)
+	data.TestRM([]byte(dummyName))
+	data.TestRM(adress)
 }
 
 func TestCreateExisting(t *testing.T) {
@@ -39,6 +39,6 @@ func TestCreateExisting(t *testing.T) {
 	if err == nil {
 		t.Error("attemt to create existing user succeded, that is bad error")
 	}
-	database.TestRM([]byte(dummyName))
-	database.TestRM(adress)
+	data.TestRM([]byte(dummyName))
+	data.TestRM(adress)
 }

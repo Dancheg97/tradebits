@@ -1,4 +1,4 @@
-package config
+package main
 
 import (
 	"io/ioutil"
@@ -14,15 +14,16 @@ type configuration struct {
 }
 
 func GetConfiguration() *configuration {
-	yfile, err := ioutil.ReadFile("config2.yaml")
+	privBytes, err := ioutil.ReadFile(".private.pem")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("private key file not found")
 	}
-	database := map[string]string{}
-	yaml.Unmarshal(yfile, &database)
-	return &configuration{
-		PrivatePem:       database["PrivatePem"],
-		PublicPem:        database["PublicPem"],
-		ConnectionAdress: database["ConnectionAdress"],
+	publicBytes, err := ioutil.ReadFile(".public.pem")
+	if err != nil {
+		log.Fatal("public key file not found")
+	}
+	connectionBytes, err := ioutil.ReadFile(".connect.cfg")
+	if err != nil {
+		log.Fatal("connection file not found")
 	}
 }
