@@ -1,29 +1,50 @@
 package main
 
 import (
+	"crypto/x509"
+	"encoding/pem"
 	"io/ioutil"
 	"log"
-
-	"gopkg.in/yaml.v2"
+	"strings"
 )
 
 type configuration struct {
-	PrivatePem       string
-	PublicPem        string
+	PrivatePem       []byte
+	PublicPem        []byte
 	ConnectionAdress string
 }
 
-func GetConfiguration() *configuration {
-	privBytes, err := ioutil.ReadFile(".private.pem")
-	if err != nil {
-		log.Fatal("private key file not found")
+func readKeyBytes(filename string) []byte {
+	privBytes, fileErr := ioutil.ReadFile(filename)
+	if fileErr != nil {
+		log.Fatal("key file not found")
 	}
-	publicBytes, err := ioutil.ReadFile(".public.pem")
-	if err != nil {
-		log.Fatal("public key file not found")
+	block, _ := pem.Decode(privBytes)
+	_, privErr := x509.ParsePKCS1PrivateKey(block.Bytes)
+	_, pubErr := x509.ParsePKCS1PublicKey(block.Bytes)
+	if pubErr != nil && privErr != nil {
+		log.Fatal(privErr, pubErr)
 	}
-	connectionBytes, err := ioutil.ReadFile(".connect.cfg")
-	if err != nil {
+	return block.Bytes
+}
+
+func readConnecitonAdress(filename string) string {
+	adressBytes, fileErr := ioutil.ReadFile(filename)
+	if fileErr != nil {
 		log.Fatal("connection file not found")
+	}
+	if !strings.Contains(string(adressBytes), ".") {
+		log.Fatal("adress has errors")
+	}
+	return string(adressBytes)
+}
+
+// this function is made to read configuration file, if something is missing
+// will raise fatal error
+func ReadConfiguration() *configuration {
+	return &configuration{
+		PrivatePem:       readKeyBytes(".private.pem"),
+		PublicPem:        readKeyBytes(".public.pem"),
+		ConnectionAdress: readConnecitonAdress(".connect.cfg"),
 	}
 }
