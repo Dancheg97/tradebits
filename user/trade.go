@@ -1,7 +1,7 @@
 package user
 
 import (
-	"sync_tree/trade"
+	"orb/trade"
 )
 
 // This function is bounding specific sell function to user, if its not

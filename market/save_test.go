@@ -1,8 +1,8 @@
 package market
 
 import (
-	"sync_tree/calc"
-	"sync_tree/data"
+	"orb/calc"
+	"orb/database"
 	"testing"
 )
 
@@ -27,6 +27,6 @@ func TestMarketSave(t *testing.T) {
 	if lookedMkt.Descr != "some new stuff" {
 		t.Error("Market have been saved but info have not been updated")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress)
 }

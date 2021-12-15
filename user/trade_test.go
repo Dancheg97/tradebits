@@ -1,10 +1,10 @@
 package user
 
 import (
+	"orb/calc"
+	"orb/database"
+	"orb/trade"
 	"reflect"
-	"sync_tree/calc"
-	"sync_tree/data"
-	"sync_tree/trade"
 	"testing"
 )
 
@@ -27,8 +27,8 @@ func TestAttachToLookedUser(t *testing.T) {
 	if sellAttached {
 		t.Error("sell trade should not be attached, cuz user can never be saved")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress)
 }
 
 func TestAttachTradesWithZeroOffer(t *testing.T) {
@@ -56,8 +56,8 @@ func TestAttachTradesWithZeroOffer(t *testing.T) {
 	if sellAttached {
 		t.Error("this sell should never be attached cuz 0 offer")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress)
 }
 
 func TestAttachTradeWithBigBalance(t *testing.T) {
@@ -86,8 +86,8 @@ func TestAttachTradeWithBigBalance(t *testing.T) {
 	if sellAttached {
 		t.Error("this sell should not be attached cuz its over users balance")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress)
 }
 
 func TestAttachNormalTrades(t *testing.T) {
@@ -123,8 +123,8 @@ func TestAttachNormalTrades(t *testing.T) {
 	if !reflect.DeepEqual(sell.Adress, usr.adress) {
 		t.Error("sell adress after bounding should be equal to users")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress)
 }
 
 func TestAttachSellNonExistingMarket(t *testing.T) {
@@ -144,8 +144,8 @@ func TestAttachSellNonExistingMarket(t *testing.T) {
 	if sellAttached {
 		t.Error("this sell should not be attached, cuz user dont have such market")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress)
 }
 
 func TestAttchBoundedTrades(t *testing.T) {
@@ -174,6 +174,6 @@ func TestAttchBoundedTrades(t *testing.T) {
 	if buyAttached || sellAttached {
 		t.Error("those trades are already bounded and should not be attached")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress)
 }

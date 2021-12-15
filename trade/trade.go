@@ -1,6 +1,6 @@
 package trade
 
-// this struct is used only to transfer data about market outputs for some user
+// this struct is used only to transfer database about market outputs for some user
 type Output struct {
 	Adress []byte
 	Main   uint64

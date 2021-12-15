@@ -1,10 +1,10 @@
 package market
 
 import (
-	"sync_tree/calc"
-	"sync_tree/data"
-	"sync_tree/trade"
-	"sync_tree/user"
+	"orb/calc"
+	"orb/database"
+	"orb/trade"
+	"orb/user"
 	"testing"
 	"time"
 )
@@ -36,8 +36,8 @@ func TestOperateOutput(t *testing.T) {
 	if u.Balance != 100 || u.Balances[string(dummyMarketAdress)] != 50 {
 		t.Error("output was operated incorrectly")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(dummyUserAdress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(dummyUserAdress)
 }
 
 func TestAttachUnbounededBuys(t *testing.T) {
@@ -68,8 +68,8 @@ func TestAttachUnbounededBuys(t *testing.T) {
 	if attached2 {
 		t.Error("trade should not be attached to looked market")
 	}
-	data.TestRM(adress)
-	data.TestRM([]byte(dummyName))
+	database.TestRM(adress)
+	database.TestRM([]byte(dummyName))
 }
 
 func TestAttachUnbounededSells(t *testing.T) {
@@ -100,8 +100,8 @@ func TestAttachUnbounededSells(t *testing.T) {
 	if attached2 {
 		t.Error("trade should not be attached to looked market")
 	}
-	data.TestRM(adress)
-	data.TestRM([]byte(dummyName))
+	database.TestRM(adress)
+	database.TestRM([]byte(dummyName))
 }
 
 func TestAttachAndOperateOutputs(t *testing.T) {

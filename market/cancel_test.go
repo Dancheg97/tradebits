@@ -1,10 +1,10 @@
 package market
 
 import (
-	"sync_tree/calc"
-	"sync_tree/data"
-	"sync_tree/trade"
-	"sync_tree/user"
+	"orb/calc"
+	"orb/database"
+	"orb/trade"
+	"orb/user"
 	"testing"
 	"time"
 )
@@ -51,10 +51,10 @@ func TestCancelSell(t *testing.T) {
 	if checkUsr.Balances[string(marketAdress)] != 100 {
 		t.Error("user mkt balance should be 100")
 	}
-	data.TestRM([]byte(userName))
-	data.TestRM(userAdress)
-	data.TestRM([]byte(marketName))
-	data.TestRM(marketAdress)
+	database.TestRM([]byte(userName))
+	database.TestRM(userAdress)
+	database.TestRM([]byte(marketName))
+	database.TestRM(marketAdress)
 }
 
 func TestCancelBuy(t *testing.T) {
@@ -99,8 +99,8 @@ func TestCancelBuy(t *testing.T) {
 	if checkUsr.Balance != 100 {
 		t.Error("user mkt balance should be 100")
 	}
-	data.TestRM([]byte(userName))
-	data.TestRM(userAdress)
-	data.TestRM([]byte(marketName))
-	data.TestRM(marketAdress)
+	database.TestRM([]byte(userName))
+	database.TestRM(userAdress)
+	database.TestRM([]byte(marketName))
+	database.TestRM(marketAdress)
 }

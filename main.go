@@ -5,7 +5,7 @@ import (
 	"log"
 	"net"
 
-	pb "sync_tree/api"
+	pb "orb/api"
 
 	"google.golang.org/grpc"
 )

@@ -18,11 +18,11 @@ func GetConfiguration() *configuration {
 	if err != nil {
 		log.Fatal(err)
 	}
-	data := map[string]string{}
-	yaml.Unmarshal(yfile, &data)
+	database := map[string]string{}
+	yaml.Unmarshal(yfile, &database)
 	return &configuration{
-		PrivatePem:       data["PrivatePem"],
-		PublicPem:        data["PublicPem"],
-		ConnectionAdress: data["ConnectionAdress"],
+		PrivatePem:       database["PrivatePem"],
+		PublicPem:        database["PublicPem"],
+		ConnectionAdress: database["ConnectionAdress"],
 	}
 }

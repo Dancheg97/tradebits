@@ -1,9 +1,9 @@
 package market
 
 import (
+	"orb/calc"
+	"orb/database"
 	"reflect"
-	"sync_tree/calc"
-	"sync_tree/data"
 	"testing"
 )
 
@@ -25,6 +25,6 @@ func TestMarketLook(t *testing.T) {
 	if !reflect.DeepEqual(mkt.MesKey, dummyMessageKey) {
 		t.Error("keys are not the same, look market error")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress)
 }

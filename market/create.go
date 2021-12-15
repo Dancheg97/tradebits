@@ -5,9 +5,9 @@ import (
 	"encoding/gob"
 	"errors"
 	"fmt"
-	"sync_tree/data"
-	"sync_tree/search"
-	"sync_tree/trade"
+	"orb/database"
+	"orb/search"
+	"orb/trade"
 
 	profanityfilter "github.com/AccelByte/profanity-filter-go"
 )
@@ -80,10 +80,10 @@ func Create(
 	if delimiter > 10 {
 		return errors.New("delimiter length is too long")
 	}
-	if data.Check(adress) {
+	if database.Check(adress) {
 		return errors.New("possibly market already exists")
 	}
-	if data.Check([]byte(name)) {
+	if database.Check([]byte(name)) {
 		return errors.New("market with that name exists")
 	}
 	if name[0] == " "[0] || name[len(name)-1] == " "[0] {
@@ -98,7 +98,7 @@ func Create(
 		errStr := fmt.Sprint("description contains profane words", words)
 		return errors.New(errStr)
 	}
-	data.Put([]byte(name), []byte{})
+	database.Put([]byte(name), []byte{})
 	pool := trade.TradePool{
 		Buys:    []trade.Buy{},
 		Sells:   []trade.Sell{},
@@ -120,7 +120,7 @@ func Create(
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(newMarket)
-	data.Put(adress, cache.Bytes())
+	database.Put(adress, cache.Bytes())
 	search.Add(name, adress)
 	return nil
 }

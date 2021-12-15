@@ -1,6 +1,6 @@
-package data
+package database
 
-// put key by some value to database (if value exists use Change()
+// put key by some value to databasebase (if value exists use Change()
 // func instead)
 func Put(key []byte, value []byte) {
 	valueExists, _ := base.Has(key, nil)

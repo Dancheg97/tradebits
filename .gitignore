@@ -6,7 +6,7 @@
 *.dylib
 *.ldb
 *.DS_store
-data/leveldb/*
+database/leveldb/*
 search/bleve/*
 start.cmd
 *.pem

@@ -1,9 +1,9 @@
 package user
 
 import (
+	"orb/calc"
+	"orb/database"
 	"reflect"
-	"sync_tree/calc"
-	"sync_tree/data"
 	"testing"
 	"time"
 )
@@ -21,8 +21,8 @@ func TestGetFreeUser(t *testing.T) {
 	if reflect.DeepEqual(adress, freeUser.adress) {
 		t.Error("get free user error")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress)
 }
 
 var usr2 *user
@@ -47,6 +47,6 @@ func TestGetBusyUser(t *testing.T) {
 	if !reflect.DeepEqual(usr2.adress, adress) {
 		t.Error("adress of second user should be the same")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress)
 }

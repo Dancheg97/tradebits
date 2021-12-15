@@ -1,8 +1,8 @@
 package market
 
 import (
-	"sync_tree/calc"
-	"sync_tree/data"
+	"orb/calc"
+	"orb/database"
 	"testing"
 )
 
@@ -23,8 +23,8 @@ func TestCreateNewMarket(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(dummyAdress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(dummyAdress)
 }
 
 func TestCreateMarketBadAdress(t *testing.T) {
@@ -44,8 +44,8 @@ func TestCreateMarketBadAdress(t *testing.T) {
 	if err == nil {
 		t.Error("market with bad adress should not be created")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(badAdress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(badAdress)
 }
 
 func TestCreateMarketBadName(t *testing.T) {
@@ -64,8 +64,8 @@ func TestCreateMarketBadName(t *testing.T) {
 	if err == nil {
 		t.Error("market with name that small should not be created")
 	}
-	data.TestRM([]byte("ola"))
-	data.TestRM(dummyAdress)
+	database.TestRM([]byte("ola"))
+	database.TestRM(dummyAdress)
 }
 
 func TestCreateMarketBadDescription(t *testing.T) {
@@ -85,8 +85,8 @@ func TestCreateMarketBadDescription(t *testing.T) {
 	if err == nil {
 		t.Error("market with description that small should not be created")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(dummyAdress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(dummyAdress)
 }
 
 func TestCreateMarketBadFee(t *testing.T) {
@@ -106,8 +106,8 @@ func TestCreateMarketBadFee(t *testing.T) {
 	if err == nil {
 		t.Error("market with fee that big should not be created")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(dummyAdress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(dummyAdress)
 }
 
 func TestCreateMarketBadWorkTime(t *testing.T) {
@@ -127,8 +127,8 @@ func TestCreateMarketBadWorkTime(t *testing.T) {
 	if err == nil {
 		t.Error("market with work time that small should not be created")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(dummyAdress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(dummyAdress)
 }
 
 func TestCreateMarketBadDelimited(t *testing.T) {
@@ -148,8 +148,8 @@ func TestCreateMarketBadDelimited(t *testing.T) {
 	if err == nil {
 		t.Error("market with delimiter that big should not be created")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(dummyAdress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(dummyAdress)
 }
 
 func TestCreateUntrimmedMarket(t *testing.T) {
@@ -169,10 +169,9 @@ func TestCreateUntrimmedMarket(t *testing.T) {
 	if err == nil {
 		t.Error("market with same name should not be created")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress1)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress1)
 }
-
 
 func TestCreateBadDescription(t *testing.T) {
 	var adress1 = calc.Rand()
@@ -189,8 +188,8 @@ func TestCreateBadDescription(t *testing.T) {
 		dummyWorkTime,
 		dummyDelimiter,
 	)
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress1)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress1)
 	if err == nil {
 		t.Error("market with bad description should not be created")
 	}
@@ -213,8 +212,8 @@ func TestCreateBadNameMarket(t *testing.T) {
 	if err == nil {
 		t.Error("market with same name should not be created")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress1)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress1)
 }
 
 func TestCreateMarketBadMessageKey(t *testing.T) {
@@ -234,8 +233,8 @@ func TestCreateMarketBadMessageKey(t *testing.T) {
 	if err == nil {
 		t.Error("market with mes key that small should not be created")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(dummyAdress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(dummyAdress)
 }
 
 func TestCreateExistingMarket(t *testing.T) {
@@ -266,8 +265,8 @@ func TestCreateExistingMarket(t *testing.T) {
 	if err == nil {
 		t.Error("new market should not be craeted")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress)
 }
 
 func TestCreateMarketsWithSameName(t *testing.T) {
@@ -299,6 +298,6 @@ func TestCreateMarketsWithSameName(t *testing.T) {
 	if err == nil {
 		t.Error("market with same name should not be created")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress1)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress1)
 }

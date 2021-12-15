@@ -1,9 +1,9 @@
 package user
 
 import (
+	"orb/calc"
+	"orb/database"
 	"reflect"
-	"sync_tree/calc"
-	"sync_tree/data"
 	"testing"
 )
 
@@ -22,6 +22,6 @@ func TestUserLook(t *testing.T) {
 	if reflect.DeepEqual(adress, usr.adress) {
 		t.Error("user info is incorrect")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress)
 }

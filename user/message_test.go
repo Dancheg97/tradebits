@@ -2,8 +2,8 @@ package user
 
 import (
 	"bytes"
-	"sync_tree/calc"
-	"sync_tree/data"
+	"orb/calc"
+	"orb/database"
 	"testing"
 )
 
@@ -22,8 +22,8 @@ func TestPutUserMessage(t *testing.T) {
 	if bytes.Compare(mes, []byte{1, 2, 3}) == 3 {
 		t.Error("the message should be '[]byte{1, 2, 3}' - ", mes)
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress)
 }
 
 func TestNewUserNonNullableMessageMap(t *testing.T) {
@@ -39,6 +39,6 @@ func TestNewUserNonNullableMessageMap(t *testing.T) {
 		t.Error("user messages should never be null")
 	}
 	usr.Save()
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress)
 }

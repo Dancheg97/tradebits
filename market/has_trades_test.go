@@ -1,10 +1,10 @@
 package market
 
 import (
-	"sync_tree/calc"
-	"sync_tree/data"
-	"sync_tree/trade"
-	"sync_tree/user"
+	"orb/calc"
+	"orb/database"
+	"orb/trade"
+	"orb/user"
 	"testing"
 )
 
@@ -28,8 +28,8 @@ func TestHasNoTrades(t *testing.T) {
 	if hasTrades {
 		t.Error("new market should not have any trades")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(dummyAdress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(dummyAdress)
 }
 
 func TestHasBuy(t *testing.T) {
@@ -67,10 +67,10 @@ func TestHasBuy(t *testing.T) {
 	if !hasTrades {
 		t.Error("There should be a trade for that user")
 	}
-	data.TestRM([]byte(marketName))
-	data.TestRM(marketAdress)
-	data.TestRM([]byte(userName))
-	data.TestRM(userAdress)
+	database.TestRM([]byte(marketName))
+	database.TestRM(marketAdress)
+	database.TestRM([]byte(userName))
+	database.TestRM(userAdress)
 }
 
 func TestHasSell(t *testing.T) {
@@ -108,8 +108,8 @@ func TestHasSell(t *testing.T) {
 	if !hasTrades {
 		t.Error("There should be a trade for that user")
 	}
-	data.TestRM([]byte(marketName))
-	data.TestRM(marketAdress)
-	data.TestRM([]byte(userName))
-	data.TestRM(userAdress)
+	database.TestRM([]byte(marketName))
+	database.TestRM(marketAdress)
+	database.TestRM([]byte(userName))
+	database.TestRM(userAdress)
 }

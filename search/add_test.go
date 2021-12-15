@@ -1,7 +1,7 @@
 package search
 
 import (
-	"sync_tree/calc"
+	"orb/calc"
 	"testing"
 )
 

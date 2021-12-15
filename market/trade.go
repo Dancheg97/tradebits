@@ -1,8 +1,8 @@
 package market
 
 import (
-	"sync_tree/trade"
-	"sync_tree/user"
+	"orb/trade"
+	"orb/user"
 )
 
 // This function is operating output for some trade and market adress

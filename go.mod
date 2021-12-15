@@ -1,15 +1,12 @@
-module sync_tree
+module orb
 
 go 1.16
 
 require (
 	github.com/AccelByte/profanity-filter-go v0.0.0-20200430061814-cf243c67e673
-	github.com/blevesearch/bleve/v2 v2.0.6
-	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/blevesearch/bleve/v2 v2.2.2
 	github.com/syndtr/goleveldb v1.0.0
-	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
-	google.golang.org/genproto v0.0.0-20200806141610-86f49bd18e98 // indirect
-	google.golang.org/grpc v1.38.0
+	google.golang.org/grpc v1.43.0
 	google.golang.org/protobuf v1.27.1
-	gopkg.in/yaml.v2 v2.2.2
+	gopkg.in/yaml.v2 v2.4.0
 )

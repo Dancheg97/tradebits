@@ -1,8 +1,8 @@
 package user
 
 import (
-	"sync_tree/calc"
-	"sync_tree/data"
+	"orb/calc"
+	"orb/database"
 	"testing"
 )
 
@@ -19,8 +19,8 @@ func TestCreateNewUser(t *testing.T) {
 	if err != nil {
 		t.Error("attemt to create new user failed", err)
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress)
 }
 
 func TestCreateExisting(t *testing.T) {
@@ -39,6 +39,6 @@ func TestCreateExisting(t *testing.T) {
 	if err == nil {
 		t.Error("attemt to create existing user succeded, that is bad error")
 	}
-	data.TestRM([]byte(dummyName))
-	data.TestRM(adress)
+	database.TestRM([]byte(dummyName))
+	database.TestRM(adress)
 }
