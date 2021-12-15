@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"crypto/x509"
@@ -41,7 +41,7 @@ func readConnecitonAdress(filename string) string {
 
 // this function is made to read configuration file, if something is missing
 // will raise fatal error
-func ReadConfiguration() *configuration {
+func Read() *configuration {
 	return &configuration{
 		PrivatePem:       readKeyBytes(".private.pem"),
 		PublicPem:        readKeyBytes(".public.pem"),
