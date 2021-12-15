@@ -5,7 +5,6 @@ import (
 	"encoding/pem"
 	"io/ioutil"
 	"log"
-	"strings"
 )
 
 type configuration struct {
@@ -32,9 +31,6 @@ func readConnecitonAdress(filename string) string {
 	adressBytes, fileErr := ioutil.ReadFile(filename)
 	if fileErr != nil {
 		log.Fatal("connection file not found")
-	}
-	if !strings.Contains(string(adressBytes), ".") {
-		log.Fatal("adress has errors")
 	}
 	return string(adressBytes)
 }
