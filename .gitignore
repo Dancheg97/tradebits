@@ -9,7 +9,8 @@
 data/leveldb/*
 search/bleve/*
 start.cmd
-config.yaml
+*.pem
+*.cfg
 
 # Test binary, built with `go test -c`
 *.test
