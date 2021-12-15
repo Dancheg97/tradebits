@@ -32,9 +32,8 @@ Our project is based on those ideas:
 <img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png" />
 
 
-<br /><br />
+<br /><br /><br /><br /><br />
 
-# 
 
 ## Open
 
@@ -53,9 +52,9 @@ You can access the token network within:
 
 ## Fast
 
-Project is built using the rapid fast gRPC protocol, which allows users to get instant information loaded directly from the blockchain network. Also this protocol solves serialization and API versioning problems.
+Project is built using the rapid fast `gRPC` protocol, which allows users to get instant information loaded directly from the blockchain network. Also this protocol solves serialization and API versioning problems.
 
-Go language in combination with gRPC makes network stable and prevents servers from overloading.
+Go language in combination with `gRPC` makes network stable and prevents servers from overloading.
 
 ## Free
 
@@ -72,5 +71,17 @@ In this project we were able to combine the pros of system distribution over net
 
 ## Improving
 
-The biggest problem of most cryptocurrecnies is versioning. It is really challenging when it comes to providing good verioning system in distributed system. This system is connected to GIT aswell, and has voting system, which allows modifications across multiple users to occure.
+The biggest problem of most cryptocurrecnies is versioning. It is really challenging when it comes to providing good verioning system in distributed system. This system is connected to `GIT` aswell, and has voting system, which allows modifications across multiple users to occure.
 
+#
+
+# Structure
+
+Project has 1-layer structure, all packages are stored in root directory.
+Rules for creating new package, or modifying existing once:
+- Provide doc for package use and purpose
+- Provide doc for every exported field 
+- Achieve 100% test coverage
+- Make code readable/replacable/modifiable
+
+Root folder contains all calls for `gRPC API` calls and base money distribution operations. Works as orchestrator for other project elements.
