@@ -15,36 +15,38 @@ Our project is based on those ideas:
 
 ## Our tools:
 
-<img align="left" alt="Visual Studio Code" width="51px" height="51px" src="https://juststickers.in/wp-content/uploads/2016/07/go-programming-language.png" />
-<img align="left" alt="Visual Studio Code" width="2.1px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
+<img align="left" width="51px" height="51px" src="https://juststickers.in/wp-content/uploads/2016/07/go-programming-language.png" />
+<img align="left" width="6px" height="6px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
 
 
-<img align="left" alt="Visual Studio Code" width="51px"  height="51px" src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png" />
-<img align="left" alt="Visual Studio Code" width="2.1px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
+<img align="left" width="51px"  height="51px" src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png" />
+<img align="left" width="6px" height="6px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
 
 
-<img align="left" alt="Visual Studio Code" width="51px"  height="51px" src="https://stickker.net/wp-content/uploads/2018/11/flutter.png-578x578.png" />
-<img align="left" alt="Visual Studio Code" width="2.1px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
+<img align="left" width="51px"  height="51px" src="https://stickker.net/wp-content/uploads/2018/11/flutter.png-578x578.png" />
+<img align="left" width="6px" height="6px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
 
 
-<img align="left" alt="Visual Studio Code" width="51px"  height="51px" src="https://cdn.freebiesupply.com/logos/large/2x/leveldb-logo-png-transparent.png" />
-<img align="left" alt="Visual Studio Code" width="2.1px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
+<img align="left" width="51px"  height="51px" src="https://cdn.freebiesupply.com/logos/large/2x/leveldb-logo-png-transparent.png" />
+
+<br /><br /><br /><br />
 
 
-<img align="left" alt="Visual Studio Code" width="51px"  height="51px" src="https://i1.wp.com/techxposer.com/wp-content/uploads/2019/12/grpc-icon.png?fit=626%2C664" />
-<img align="left" alt="Visual Studio Code" width="2.1px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
+<img align="left" width="51px"  height="51px" src="https://i1.wp.com/techxposer.com/wp-content/uploads/2019/12/grpc-icon.png?fit=626%2C664" />
+<img align="left" width="6px" height="6px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
 
 
-<img align="left" alt="Visual Studio Code" width="51px"  height="51px" src="https://avatars.githubusercontent.com/u/8562608?s=280&v=4" />
-<img align="left" alt="Visual Studio Code" width="2.1px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
+<img align="left" width="51px"  height="51px" src="https://avatars.githubusercontent.com/u/8562608?s=280&v=4" />
+<img align="left" width="6px" height="6px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
 
 
-<img align="left" alt="Visual Studio Code" width="51px"  height="51px" src="https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png" />
+<img align="left" width="51px"  height="51px" src="https://10015.io/assets/tools/list/sha512-encrypt-decrypt.svg" />
+<img align="left" width="6px" height="6px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
 
-<br /><br />
 
+<img align="left" width="51px"  height="51px" src="https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png" />
 
-<br />
+<br /><br /><br /><br />
 
 
 ## Open
@@ -84,4 +86,7 @@ In this project we were able to combine the pros of system distribution over net
 ## Improving
 
 The biggest problem of most cryptocurrecnies is versioning. It is really challenging when it comes to providing good verioning system in distributed system. This system is connected to GIT aswell, and has voting system, which allows modifications across multiple users to occure.
+
+
+# Project structure
 
