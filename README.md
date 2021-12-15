@@ -2,6 +2,12 @@
 
 [![Website](https://img.shields.io/website?label=codeSTACKr.com&style=for-the-badge&url=https%3A%2F%2Fcodestackr.com)](https://webpage.com)
 
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Dancheg97/ORB/master/icon.png" alt="Sublime's custom image"/>
+</p>
+
+
 Our goal is to provide the best user expirience with cryptocurrency and blockchain systems.
 
 Our project is based on those ideas:
