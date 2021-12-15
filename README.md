@@ -39,10 +39,6 @@ Our project is based on those ideas:
 <img align="left" alt="Visual Studio Code" width="2.1px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
 
 
-<img align="left" alt="Visual Studio Code" width="51px"  height="51px" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/visual-studio-code/visual-studio-code.png" />
-<img align="left" alt="Visual Studio Code" width="2.1px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
-
-
 <img align="left" alt="Visual Studio Code" width="51px"  height="51px" src="https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png" />
 
 <br /><br />
