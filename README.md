@@ -19,41 +19,25 @@ Our project is based on those ideas:
 
 <br />
 
-## Our tools:
-
-<img align="left" width="51px" height="51px" src="https://juststickers.in/wp-content/uploads/2016/07/go-programming-language.png" />
-<img align="left" width="6px" height="6px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
+# Our tools:
 
 
-<img align="left" width="51px"  height="51px" src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png" />
-<img align="left" width="6px" height="6px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
+<img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px" height="51px" src="https://juststickers.in/wp-content/uploads/2016/07/go-programming-language.png" />
+<img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png" />
+<img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://stickker.net/wp-content/uploads/2018/11/flutter.png-578x578.png" />
+<img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://cdn.freebiesupply.com/logos/large/2x/leveldb-logo-png-transparent.png" />
 
-
-<img align="left" width="51px"  height="51px" src="https://stickker.net/wp-content/uploads/2018/11/flutter.png-578x578.png" />
-<img align="left" width="6px" height="6px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
-
-
-<img align="left" width="51px"  height="51px" src="https://cdn.freebiesupply.com/logos/large/2x/leveldb-logo-png-transparent.png" />
 
 <br /><br /><br /><br />
+<img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px" height="51px" src="https://i1.wp.com/techxposer.com/wp-content/uploads/2019/12/grpc-icon.png?fit=626%2C664" />
+<img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://avatars.githubusercontent.com/u/8562608?s=280&v=4" />
+<img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://10015.io/assets/tools/list/sha512-encrypt-decrypt.svg" />
+<img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png" />
 
 
-<img align="left" width="51px"  height="51px" src="https://i1.wp.com/techxposer.com/wp-content/uploads/2019/12/grpc-icon.png?fit=626%2C664" />
-<img align="left" width="6px" height="6px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
+<br /><br />
 
-
-<img align="left" width="51px"  height="51px" src="https://avatars.githubusercontent.com/u/8562608?s=280&v=4" />
-<img align="left" width="6px" height="6px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
-
-
-<img align="left" width="51px"  height="51px" src="https://10015.io/assets/tools/list/sha512-encrypt-decrypt.svg" />
-<img align="left" width="6px" height="6px" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" />
-
-
-<img align="left" width="51px"  height="51px" src="https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png" />
-
-<br /><br /><br /><br />
-
+# 
 
 ## Open
 
@@ -96,3 +80,4 @@ The biggest problem of most cryptocurrecnies is versioning. It is really challen
 
 # Project structure
 
+Project has flat structure for ease of navigation in code editors/ IDE's. Root folder contains 
