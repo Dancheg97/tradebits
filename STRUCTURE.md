@@ -8,7 +8,3 @@ Rules for creating new package, or modifying existing once:
 - Make code readable/replacable/modifiable
 
 Root folder contains all calls for `gRPC API` calls and base money distribution operations. Works as orchestrator for other project elements.
-
-# Process
-
-The process 
