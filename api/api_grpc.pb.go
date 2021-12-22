@@ -18,12 +18,26 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type InfoClient interface {
+	// Call that gives information about user
 	User(ctx context.Context, in *InfIn_Adress, opts ...grpc.CallOption) (*InfOut_User, error)
-	HasTrades(ctx context.Context, in *InfIn_UserMarketAdresses, opts ...grpc.CallOption) (*InfOut_Bool, error)
+	// Call that creates subscription for on user information updates
+	UserSubscribe(ctx context.Context, in *InfIn_Adress, opts ...grpc.CallOption) (Info_UserSubscribeClient, error)
+	// Call that checks wether some user has acive trades
+	HasTrades(ctx context.Context, in *InfIn_UserMarketAdr, opts ...grpc.CallOption) (*InfOut_Bool, error)
+	// Call that gives information about market
 	Market(ctx context.Context, in *InfIn_Adress, opts ...grpc.CallOption) (*InfOut_MarketInfo, error)
+	// Call that creates subsription on market information updates
+	MarketSubscribe(ctx context.Context, in *InfIn_Adress, opts ...grpc.CallOption) (Info_MarketSubscribeClient, error)
+	// Call makes search throw registered markets
 	Search(ctx context.Context, in *InfIn_Text, opts ...grpc.CallOption) (*InfOut_Adresses, error)
-	Messages(ctx context.Context, in *InfIn_UserMarketAdresses, opts ...grpc.CallOption) (*InfOut_Messages, error)
+	// Call that gives messages related to pair of user and market by adresses
+	Messages(ctx context.Context, in *InfIn_UserMarketAdr, opts ...grpc.CallOption) (*InfOut_Messages, error)
+	// Creates a subscription on updates for user/market message pair
+	MessagesSubscribe(ctx context.Context, in *InfIn_UserMarketAdr, opts ...grpc.CallOption) (Info_MessagesSubscribeClient, error)
+	// Checks wether user name is viable
 	CheckName(ctx context.Context, in *InfIn_Text, opts ...grpc.CallOption) (*InfOut_Bool, error)
+	// Gives information about ip adresses currently hosting the network
+	NetMembers(ctx context.Context, in *InfIn_Empty, opts ...grpc.CallOption) (*InfOut_IPs, error)
 }
 
 type infoClient struct {
@@ -43,7 +57,39 @@ func (c *infoClient) User(ctx context.Context, in *InfIn_Adress, opts ...grpc.Ca
 	return out, nil
 }
 
-func (c *infoClient) HasTrades(ctx context.Context, in *InfIn_UserMarketAdresses, opts ...grpc.CallOption) (*InfOut_Bool, error) {
+func (c *infoClient) UserSubscribe(ctx context.Context, in *InfIn_Adress, opts ...grpc.CallOption) (Info_UserSubscribeClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Info_ServiceDesc.Streams[0], "/api.Info/UserSubscribe", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &infoUserSubscribeClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Info_UserSubscribeClient interface {
+	Recv() (*InfOut_User, error)
+	grpc.ClientStream
+}
+
+type infoUserSubscribeClient struct {
+	grpc.ClientStream
+}
+
+func (x *infoUserSubscribeClient) Recv() (*InfOut_User, error) {
+	m := new(InfOut_User)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *infoClient) HasTrades(ctx context.Context, in *InfIn_UserMarketAdr, opts ...grpc.CallOption) (*InfOut_Bool, error) {
 	out := new(InfOut_Bool)
 	err := c.cc.Invoke(ctx, "/api.Info/HasTrades", in, out, opts...)
 	if err != nil {
@@ -61,6 +107,38 @@ func (c *infoClient) Market(ctx context.Context, in *InfIn_Adress, opts ...grpc.
 	return out, nil
 }
 
+func (c *infoClient) MarketSubscribe(ctx context.Context, in *InfIn_Adress, opts ...grpc.CallOption) (Info_MarketSubscribeClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Info_ServiceDesc.Streams[1], "/api.Info/MarketSubscribe", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &infoMarketSubscribeClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Info_MarketSubscribeClient interface {
+	Recv() (*InfOut_MarketInfo, error)
+	grpc.ClientStream
+}
+
+type infoMarketSubscribeClient struct {
+	grpc.ClientStream
+}
+
+func (x *infoMarketSubscribeClient) Recv() (*InfOut_MarketInfo, error) {
+	m := new(InfOut_MarketInfo)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (c *infoClient) Search(ctx context.Context, in *InfIn_Text, opts ...grpc.CallOption) (*InfOut_Adresses, error) {
 	out := new(InfOut_Adresses)
 	err := c.cc.Invoke(ctx, "/api.Info/Search", in, out, opts...)
@@ -70,13 +148,45 @@ func (c *infoClient) Search(ctx context.Context, in *InfIn_Text, opts ...grpc.Ca
 	return out, nil
 }
 
-func (c *infoClient) Messages(ctx context.Context, in *InfIn_UserMarketAdresses, opts ...grpc.CallOption) (*InfOut_Messages, error) {
+func (c *infoClient) Messages(ctx context.Context, in *InfIn_UserMarketAdr, opts ...grpc.CallOption) (*InfOut_Messages, error) {
 	out := new(InfOut_Messages)
 	err := c.cc.Invoke(ctx, "/api.Info/Messages", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
+}
+
+func (c *infoClient) MessagesSubscribe(ctx context.Context, in *InfIn_UserMarketAdr, opts ...grpc.CallOption) (Info_MessagesSubscribeClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Info_ServiceDesc.Streams[2], "/api.Info/MessagesSubscribe", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &infoMessagesSubscribeClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Info_MessagesSubscribeClient interface {
+	Recv() (*InfOut_Messages, error)
+	grpc.ClientStream
+}
+
+type infoMessagesSubscribeClient struct {
+	grpc.ClientStream
+}
+
+func (x *infoMessagesSubscribeClient) Recv() (*InfOut_Messages, error) {
+	m := new(InfOut_Messages)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *infoClient) CheckName(ctx context.Context, in *InfIn_Text, opts ...grpc.CallOption) (*InfOut_Bool, error) {
@@ -88,16 +198,39 @@ func (c *infoClient) CheckName(ctx context.Context, in *InfIn_Text, opts ...grpc
 	return out, nil
 }
 
+func (c *infoClient) NetMembers(ctx context.Context, in *InfIn_Empty, opts ...grpc.CallOption) (*InfOut_IPs, error) {
+	out := new(InfOut_IPs)
+	err := c.cc.Invoke(ctx, "/api.Info/NetMembers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // InfoServer is the server API for Info service.
 // All implementations must embed UnimplementedInfoServer
 // for forward compatibility
 type InfoServer interface {
+	// Call that gives information about user
 	User(context.Context, *InfIn_Adress) (*InfOut_User, error)
-	HasTrades(context.Context, *InfIn_UserMarketAdresses) (*InfOut_Bool, error)
+	// Call that creates subscription for on user information updates
+	UserSubscribe(*InfIn_Adress, Info_UserSubscribeServer) error
+	// Call that checks wether some user has acive trades
+	HasTrades(context.Context, *InfIn_UserMarketAdr) (*InfOut_Bool, error)
+	// Call that gives information about market
 	Market(context.Context, *InfIn_Adress) (*InfOut_MarketInfo, error)
+	// Call that creates subsription on market information updates
+	MarketSubscribe(*InfIn_Adress, Info_MarketSubscribeServer) error
+	// Call makes search throw registered markets
 	Search(context.Context, *InfIn_Text) (*InfOut_Adresses, error)
-	Messages(context.Context, *InfIn_UserMarketAdresses) (*InfOut_Messages, error)
+	// Call that gives messages related to pair of user and market by adresses
+	Messages(context.Context, *InfIn_UserMarketAdr) (*InfOut_Messages, error)
+	// Creates a subscription on updates for user/market message pair
+	MessagesSubscribe(*InfIn_UserMarketAdr, Info_MessagesSubscribeServer) error
+	// Checks wether user name is viable
 	CheckName(context.Context, *InfIn_Text) (*InfOut_Bool, error)
+	// Gives information about ip adresses currently hosting the network
+	NetMembers(context.Context, *InfIn_Empty) (*InfOut_IPs, error)
 	mustEmbedUnimplementedInfoServer()
 }
 
@@ -108,20 +241,32 @@ type UnimplementedInfoServer struct {
 func (UnimplementedInfoServer) User(context.Context, *InfIn_Adress) (*InfOut_User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method User not implemented")
 }
-func (UnimplementedInfoServer) HasTrades(context.Context, *InfIn_UserMarketAdresses) (*InfOut_Bool, error) {
+func (UnimplementedInfoServer) UserSubscribe(*InfIn_Adress, Info_UserSubscribeServer) error {
+	return status.Errorf(codes.Unimplemented, "method UserSubscribe not implemented")
+}
+func (UnimplementedInfoServer) HasTrades(context.Context, *InfIn_UserMarketAdr) (*InfOut_Bool, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HasTrades not implemented")
 }
 func (UnimplementedInfoServer) Market(context.Context, *InfIn_Adress) (*InfOut_MarketInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Market not implemented")
 }
+func (UnimplementedInfoServer) MarketSubscribe(*InfIn_Adress, Info_MarketSubscribeServer) error {
+	return status.Errorf(codes.Unimplemented, "method MarketSubscribe not implemented")
+}
 func (UnimplementedInfoServer) Search(context.Context, *InfIn_Text) (*InfOut_Adresses, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
-func (UnimplementedInfoServer) Messages(context.Context, *InfIn_UserMarketAdresses) (*InfOut_Messages, error) {
+func (UnimplementedInfoServer) Messages(context.Context, *InfIn_UserMarketAdr) (*InfOut_Messages, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Messages not implemented")
+}
+func (UnimplementedInfoServer) MessagesSubscribe(*InfIn_UserMarketAdr, Info_MessagesSubscribeServer) error {
+	return status.Errorf(codes.Unimplemented, "method MessagesSubscribe not implemented")
 }
 func (UnimplementedInfoServer) CheckName(context.Context, *InfIn_Text) (*InfOut_Bool, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckName not implemented")
+}
+func (UnimplementedInfoServer) NetMembers(context.Context, *InfIn_Empty) (*InfOut_IPs, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method NetMembers not implemented")
 }
 func (UnimplementedInfoServer) mustEmbedUnimplementedInfoServer() {}
 
@@ -154,8 +299,29 @@ func _Info_User_Handler(srv interface{}, ctx context.Context, dec func(interface
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Info_UserSubscribe_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(InfIn_Adress)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(InfoServer).UserSubscribe(m, &infoUserSubscribeServer{stream})
+}
+
+type Info_UserSubscribeServer interface {
+	Send(*InfOut_User) error
+	grpc.ServerStream
+}
+
+type infoUserSubscribeServer struct {
+	grpc.ServerStream
+}
+
+func (x *infoUserSubscribeServer) Send(m *InfOut_User) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 func _Info_HasTrades_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InfIn_UserMarketAdresses)
+	in := new(InfIn_UserMarketAdr)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -167,7 +333,7 @@ func _Info_HasTrades_Handler(srv interface{}, ctx context.Context, dec func(inte
 		FullMethod: "/api.Info/HasTrades",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfoServer).HasTrades(ctx, req.(*InfIn_UserMarketAdresses))
+		return srv.(InfoServer).HasTrades(ctx, req.(*InfIn_UserMarketAdr))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -190,6 +356,27 @@ func _Info_Market_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Info_MarketSubscribe_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(InfIn_Adress)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(InfoServer).MarketSubscribe(m, &infoMarketSubscribeServer{stream})
+}
+
+type Info_MarketSubscribeServer interface {
+	Send(*InfOut_MarketInfo) error
+	grpc.ServerStream
+}
+
+type infoMarketSubscribeServer struct {
+	grpc.ServerStream
+}
+
+func (x *infoMarketSubscribeServer) Send(m *InfOut_MarketInfo) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 func _Info_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(InfIn_Text)
 	if err := dec(in); err != nil {
@@ -209,7 +396,7 @@ func _Info_Search_Handler(srv interface{}, ctx context.Context, dec func(interfa
 }
 
 func _Info_Messages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InfIn_UserMarketAdresses)
+	in := new(InfIn_UserMarketAdr)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -221,9 +408,30 @@ func _Info_Messages_Handler(srv interface{}, ctx context.Context, dec func(inter
 		FullMethod: "/api.Info/Messages",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfoServer).Messages(ctx, req.(*InfIn_UserMarketAdresses))
+		return srv.(InfoServer).Messages(ctx, req.(*InfIn_UserMarketAdr))
 	}
 	return interceptor(ctx, in, info, handler)
+}
+
+func _Info_MessagesSubscribe_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(InfIn_UserMarketAdr)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(InfoServer).MessagesSubscribe(m, &infoMessagesSubscribeServer{stream})
+}
+
+type Info_MessagesSubscribeServer interface {
+	Send(*InfOut_Messages) error
+	grpc.ServerStream
+}
+
+type infoMessagesSubscribeServer struct {
+	grpc.ServerStream
+}
+
+func (x *infoMessagesSubscribeServer) Send(m *InfOut_Messages) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 func _Info_CheckName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -240,6 +448,24 @@ func _Info_CheckName_Handler(srv interface{}, ctx context.Context, dec func(inte
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InfoServer).CheckName(ctx, req.(*InfIn_Text))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Info_NetMembers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InfIn_Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InfoServer).NetMembers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.Info/NetMembers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InfoServer).NetMembers(ctx, req.(*InfIn_Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -275,8 +501,28 @@ var Info_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "CheckName",
 			Handler:    _Info_CheckName_Handler,
 		},
+		{
+			MethodName: "NetMembers",
+			Handler:    _Info_NetMembers_Handler,
+		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "UserSubscribe",
+			Handler:       _Info_UserSubscribe_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "MarketSubscribe",
+			Handler:       _Info_MarketSubscribe_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "MessagesSubscribe",
+			Handler:       _Info_MessagesSubscribe_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "api/api.proto",
 }
 
@@ -284,11 +530,17 @@ var Info_ServiceDesc = grpc.ServiceDesc{
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserClient interface {
+	// Call that will create new user
 	Create(ctx context.Context, in *UserRequests_Create, opts ...grpc.CallOption) (*Response, error)
+	// Call that will initiate transaction between users (send some ORB)
 	Send(ctx context.Context, in *UserRequests_Send, opts ...grpc.CallOption) (*Response, error)
+	// Call used to send message from user to market
 	Message(ctx context.Context, in *UserRequests_Message, opts ...grpc.CallOption) (*Response, error)
+	// Call used to initiate buy order placement buy user
 	Buy(ctx context.Context, in *UserRequests_Trade, opts ...grpc.CallOption) (*Response, error)
+	// Call used to initiate sell oreder placement by user
 	Sell(ctx context.Context, in *UserRequests_Trade, opts ...grpc.CallOption) (*Response, error)
+	// Call used to initiate cancelling of existing trade order on market
 	CancelTrade(ctx context.Context, in *UserRequests_CancelTrade, opts ...grpc.CallOption) (*Response, error)
 }
 
@@ -358,11 +610,17 @@ func (c *userClient) CancelTrade(ctx context.Context, in *UserRequests_CancelTra
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
 type UserServer interface {
+	// Call that will create new user
 	Create(context.Context, *UserRequests_Create) (*Response, error)
+	// Call that will initiate transaction between users (send some ORB)
 	Send(context.Context, *UserRequests_Send) (*Response, error)
+	// Call used to send message from user to market
 	Message(context.Context, *UserRequests_Message) (*Response, error)
+	// Call used to initiate buy order placement buy user
 	Buy(context.Context, *UserRequests_Trade) (*Response, error)
+	// Call used to initiate sell oreder placement by user
 	Sell(context.Context, *UserRequests_Trade) (*Response, error)
+	// Call used to initiate cancelling of existing trade order on market
 	CancelTrade(context.Context, *UserRequests_CancelTrade) (*Response, error)
 	mustEmbedUnimplementedUserServer()
 }

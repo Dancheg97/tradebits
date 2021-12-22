@@ -4,27 +4,49 @@ option go_package = "./api";
 
 package api;
 
-/*
-CODE GENERATION BASH COMMANDS:
+/* CODEGEN COMMANDS:
 Go:
 protoc api/api.proto --go-grpc_out=. --go_out=.
 Dart:
 protoc lib/api/api.proto --dart_out=grpc:.
-*/
+*/ 
 
-//Response (universal response, when no return value required)
-message Response{}
+// Response (universal response, when no return value required)
+message Response{
+    bool passed = 1;
+}
 
+// Informational service, user to give user information about current system
+// condition.
 service Info{
+    // Call that gives information about user
     rpc User(InfIn.Adress) returns (InfOut.User);
+
+    // Call that creates subscription for on user information updates
     rpc UserSubscribe(InfIn.Adress) returns (stream InfOut.User);
+
+    // Call that checks wether some user has acive trades
     rpc HasTrades(InfIn.UserMarketAdr) returns (InfOut.Bool);
+
+    // Call that gives information about market
     rpc Market(InfIn.Adress) returns (InfOut.MarketInfo);
+
+    // Call that creates subsription on market information updates
     rpc MarketSubscribe(InfIn.Adress) returns (stream InfOut.MarketInfo);
+
+    // Call makes search throw registered markets
     rpc Search(InfIn.Text) returns (InfOut.Adresses);
+
+    // Call that gives messages related to pair of user and market by adresses
     rpc Messages(InfIn.UserMarketAdr) returns (InfOut.Messages);
+
+    // Creates a subscription on updates for user/market message pair
     rpc MessagesSubscribe(InfIn.UserMarketAdr) returns (stream InfOut.Messages);
+
+    // Checks wether user name is viable
     rpc CheckName(InfIn.Text) returns (InfOut.Bool);
+
+    // Gives information about ip adresses currently hosting the network
     rpc NetMembers(InfIn.Empty) returns (InfOut.IPs);
 }
 
@@ -45,38 +67,38 @@ message InfIn{
 message InfOut{
     message User{
         string public_name = 1;
-        double balance = 2;
+        uint64 balance = 2;
         bytes message_key = 3;
         repeated bytes market_adresses = 4;
-        repeated double market_balances = 5;
+        repeated uint64 market_balances = 5;
     }
     message MarketInfo{
         string name = 1;
         bytes messageKey = 2;
         string imageLink = 3;
         string description = 4;
-        double operationCount = 5;
+        uint64 operationCount = 5;
         repeated Trade buys = 6;
         repeated Trade sells = 7;
-        double activeBuys = 8;
-        double activeSells = 9;
-        double inputFee = 10;
-        double outputFee = 11;
+        uint64 activeBuys = 8;
+        uint64 activeSells = 9;
+        uint64 inputFee = 10;
+        uint64 outputFee = 11;
         string workTime = 12;
-        double delimiter = 14;
+        uint64 delimiter = 14;
     }
     message Adresses{
         repeated bytes marketAdresses = 1;
     }
     message Messages{
-        repeated bytes messages = 1;
+        repeated string messages = 1;
     }
     message Bool{
         bool value = 1;
     }
     message Trade{
-        double offer = 1;
-        double recieve = 2;
+        uint64 offer = 1;
+        uint64 recieve = 2;
     }
     message IPs{
         repeated string adresses = 1;
@@ -85,13 +107,25 @@ message InfOut{
 
 
 
-
+// User service, that is making changes in user data. 
+// Always requires verification.
 service User{
+    // Call that will create new user
     rpc Create(UserRequests.Create) returns (Response);
+
+    // Call that will initiate transaction between users (send some ORB)
     rpc Send(UserRequests.Send) returns (Response);
+
+    // Call used to send message from user to market
     rpc Message(UserRequests.Message) returns (Response);
+
+    // Call used to initiate buy order placement buy user
     rpc Buy(UserRequests.Trade) returns (Response);
+
+    // Call used to initiate sell oreder placement by user
     rpc Sell(UserRequests.Trade) returns (Response);
+
+    // Call used to initiate cancelling of existing trade order on market
     rpc CancelTrade(UserRequests.CancelTrade) returns (Response);
 }
 
@@ -104,21 +138,21 @@ message UserRequests{
     }
     message Send{
         bytes PublicKey = 1;
-        double SendAmount = 2;
+        uint64 SendAmount = 2;
         bytes RecieverAdress = 3;
         bytes Sign = 4;
     }
     message Message{
         bytes PublicKey = 1;
         bytes Adress = 2;
-        bytes Message = 3;
+        string Message = 3;
         bytes Sign = 4;
     }
     message Trade{
         bytes PublicKey = 1;
         bytes Adress = 2;
-        double Recieve = 3;
-        double Offer = 4;
+        uint64 Recieve = 3;
+        uint64 Offer = 4;
         bytes Sign = 5;
     }
     message CancelTrade{
@@ -146,31 +180,31 @@ message MarketRequests{
         string Name = 3;
         string Img = 4;
         string Descr = 5;
-        double inputFee = 6;
-        double outputFee = 7;
+        uint64 inputFee = 6;
+        uint64 outputFee = 7;
         string workTime = 8;
-        double delimiter = 9;
+        uint64 delimiter = 9;
         bytes Sign = 10;
     }
     message Update{
         bytes PublicKey = 1;
         string Img = 2;
         string Descr = 3;
-        double inputFee = 4;
-        double outputFee = 5;
+        uint64 inputFee = 4;
+        uint64 outputFee = 5;
         string workTime = 6;
         bytes Sign = 7;
     }
     message Deposit{
         bytes PublicKey = 1;
         bytes UserAdress = 2;
-        double Amount = 3;
+        uint64 Amount = 3;
         bytes Sign = 4;
     }
     message Withdrawal{
         bytes PublicKey = 1;
         bytes UserAdress = 2;
-        double Amount = 3;
+        uint64 Amount = 3;
         bytes Sign = 4;
     }
     message Message{
