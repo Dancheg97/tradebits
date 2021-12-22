@@ -14,7 +14,7 @@ import (
 
 func (s *server) HasTrades(
 	ctx context.Context,
-	in *pb.InfIn_UserMarketAdresses,
+	in *pb.InfIn_UserMarketAdr,
 ) (*pb.InfOut_Bool, error) {
 	fmt.Println("[InfoHasTrades] - start")
 	user := user.Look(in.UserAdress)
@@ -127,7 +127,7 @@ func (s *server) User(
 
 func (s *server) Messages(
 	ctx context.Context,
-	in *pb.InfIn_UserMarketAdresses,
+	in *pb.InfIn_UserMarketAdr,
 ) (*pb.InfOut_Messages, error) {
 	fmt.Println("[InfoMessages] - start")
 	usr := user.Look(in.UserAdress)
