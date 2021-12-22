@@ -7,8 +7,15 @@ import (
 	"orb/data"
 )
 
+type Message struct {
+	message  string
+	fromUser bool
+}
+
 type chat struct {
-	Messages []string
+	Messages        []Message
+	checkedByUser   bool
+	checkedByMarket bool
 }
 
 func createChat(marketAdress []byte, userAdress []byte) error {
@@ -26,7 +33,7 @@ func createChat(marketAdress []byte, userAdress []byte) error {
 		return errors.New("chat already exists")
 	}
 	cht := chat{
-		Messages: []string{},
+		Messages: []Message{},
 	}
 	cache := new(bytes.Buffer)
 	gob.NewEncoder(cache).Encode(cht)
