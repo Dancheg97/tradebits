@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/rand"
 	"fmt"
-	"time"
 
 	"github.com/go-redis/redis/v8"
 )
@@ -23,7 +22,7 @@ func connectToRedis() *redis.Client {
 }
 
 func tryToSetVal(inp string, ch chan<- bool) {
-	rez := firstRedisClient.SetNX(ctx, inp, inp, time.Millisecond)
+	rez := firstRedisClient.SetNX(ctx, inp, true, 0)
 	written, _ := rez.Result()
 	ch <- written
 }
@@ -31,13 +30,14 @@ func tryToSetVal(inp string, ch chan<- bool) {
 func main() {
 	for i := 0; i < 1000000; i++ {
 		trueflasechan := make(chan bool)
-		someBytes := make([]byte, 8)
-		rand_val, _ := rand.Reader.Read(someBytes)
-		go tryToSetVal(string(rand_val), trueflasechan)
-		go tryToSetVal(string(rand_val), trueflasechan)
-		first <- trueflasechan
-		second <- trueflasechan
-		
+		someBytes := make([]byte, 6)
+		rand.Reader.Read(someBytes)
+		go tryToSetVal(string(someBytes), trueflasechan)
+		go tryToSetVal(string(someBytes), trueflasechan)
+		first := <-trueflasechan
+		second := <-trueflasechan
+		if first == second {
+			fmt.Println("ERROR", first, second)
+		}
 	}
-
 }
