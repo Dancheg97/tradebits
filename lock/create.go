@@ -1,23 +1,22 @@
 package lock
 
 import (
+	"context"
 	"sync"
+
+	"github.com/go-redis/redis/v8"
 )
 
-type blockedMap struct {
-	mutex  sync.Mutex
-	userId map[[64]byte]bool
-}
+var ctx = context.Background()
+var redisClient = connectToRedis()
 
-func generateBlockers() map[byte]*blockedMap {
-	var blockers = make(map[byte]*blockedMap)
-	for i := 0; i < 256; i++ {
-		var blockedMap = blockedMap{
-			userId: make(map[[64]byte]bool),
-		}
-		blockers[byte(i)] = &blockedMap
-	}
-	return blockers
-}
 
-var blockers = generateBlockers()
+func connectToRedis() *redis.Client {
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "",
+		DB:       0,
+	})
+	var noopmap = sync.Map{};
+	return rdb
+}

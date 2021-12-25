@@ -8,7 +8,8 @@ import (
 )
 
 type Message struct {
-	message string
+	message  string
+	fromUser bool
 }
 
 type chat struct {
