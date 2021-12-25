@@ -1,12 +1,13 @@
 package lock
 
-import "time"
-
 func Lock(ID []byte) bool {
-	strId := string(ID)
-	blcmd := redisClient.SetNX(ctx, strId, true, time.Second)
-	if blcmd.Err() == nil {
+	blcmd := redisClient.SetNX(ctx, string(ID), true, 0)
+	wasSet, connErr := blcmd.Result()
+	if wasSet {
+		return true
+	}
+	if connErr != nil {
 		return false
 	}
-	return true
+	return false
 }
