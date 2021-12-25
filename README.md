@@ -1,21 +1,20 @@
-# ORB - all in one cryptocurrency solution
+# ORB - distributed trading system
 
 [![Website](https://img.shields.io/website?label=codeSTACKr.com&style=for-the-badge&url=https%3A%2F%2Fcodestackr.com)](https://webpage.com)
 
 
 <p align="center">
-  <img width="320px" height="320px" src="https://raw.githubusercontent.com/Dancheg97/ORB/master/icon.png" alt="logo"/>
+  <img width="320px" height="320px" src="https://raw.githubusercontent.com/Dancheg97/orb_cloud_mobile/main/assets/logo-r.png" alt="logo"/>
 </p>
 
 
-Our goal is to provide the best user expirience with cryptocurrency and blockchain systems.
+Our goal is to rework the approach to create cryptocurrency means. That is no longer a piece of software, but an interface and agreement between multiple users.
 
 Our project is based on those ideas:
 - open
 - fast
 - free
 - secure
-- improving
 
 <br />
 
@@ -68,7 +67,3 @@ ORB is built in such a way, that noone of the users will be charged for inner tr
 Most of cryptocurrecies are built using POS/POF mechanism to solve security problems. Some cryptocurrencies has centered node, which is breaking the concept of `secure by distribution`.
 
 In this project we were able to combine the pros of system distribution over network with rapid fast speed, and we were first to achieve that relation.
-
-## Improving
-
-The biggest problem of most cryptocurrecnies is versioning. It is really challenging when it comes to providing good verioning system in distributed system. This system is connected to `GIT` aswell, and has voting system, which allows modifications across multiple users to occure.
