@@ -1,24 +1,14 @@
-version: "3.9"
+version: "3.2"
 services:
   redis:
     image: redis:latest
     ports:
       - 7379:7379
-  zero:
-    image: dgraph/dgraph:latest
-    volumes:
-      - /tmp/data:/dgraph
+  dgraph-standalone:
+    image: dgraph/standalone:latest
     ports:
-      - 5080:5080
-      - 6080:6080
-    restart: on-failure
-    command: dgraph zero --my=zero:5080
-  alpha:
-    image: dgraph/dgraph:latest
-    volumes:
-      - /tmp/data:/dgraph
-    ports:
+      - 7080:7080
       - 8080:8080
       - 9080:9080
-    restart: on-failure
-    command: dgraph alpha --my=alpha:7080 --zero=zero:5080
+      - 8000:8000
+    command: dgraph zero & dgraph alpha
