@@ -1,5 +1,5 @@
 
-<font size="5"> <p align="center" style="font-family:courier;" size=90px> ORB - distributed trading system </p> </font>
+<font size="8"> <p align="center" style="font-family:courier;" size=90px> ORB - distributed trading system </p> </font>
 
 <p align="center">
   <img width="320px" height="320px" src="https://raw.githubusercontent.com/Dancheg97/orb_cloud_mobile/main/assets/logo-r.png" alt="logo"/>
