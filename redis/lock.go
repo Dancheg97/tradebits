@@ -1,4 +1,4 @@
-package lock
+package redis
 
 func Lock(ID []byte) bool {
 	blcmd := redisClient.SetNX(ctx, string(ID), true, 0)

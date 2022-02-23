@@ -1,69 +1,25 @@
-# ORB - distributed trading system
 
-[![Website](https://img.shields.io/website?label=codeSTACKr.com&style=for-the-badge&url=https%3A%2F%2Fcodestackr.com)](https://webpage.com)
-
+<font size="5"> <p align="center" style="font-family:courier;" size=90px> ORB - distributed trading system </p> </font>
 
 <p align="center">
   <img width="320px" height="320px" src="https://raw.githubusercontent.com/Dancheg97/orb_cloud_mobile/main/assets/logo-r.png" alt="logo"/>
 </p>
 
+This project main goal is to increase avalability of digital assets, and push distrubuted from of exchange.
+ORB is a system invented 
 
-Our goal is to rework the approach to create cryptocurrency means. That is no longer a piece of software, but an interface and agreement between multiple users.
-
-Our project is based on those ideas:
-- open
-- fast
-- free
-- secure
-
-<br />
 
 # Our tools:
 
 
-<img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px" height="51px" src="https://juststickers.in/wp-content/uploads/2016/07/go-programming-language.png" />
-<img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png" />
-<img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://stickker.net/wp-content/uploads/2018/11/flutter.png-578x578.png" />
-<img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://cdn.freebiesupply.com/logos/large/2x/leveldb-logo-png-transparent.png" />
-<img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px" height="51px" src="https://i1.wp.com/techxposer.com/wp-content/uploads/2019/12/grpc-icon.png?fit=626%2C664" />
-<img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://avatars.githubusercontent.com/u/8562608?s=280&v=4" />
-<img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://10015.io/assets/tools/list/sha512-encrypt-decrypt.svg" />
-<img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" alt="Visual Studio Code" width="51px"  height="51px" src="https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png" />
+<img style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="82px" height="82px" src="https://juststickers.in/wp-content/uploads/2016/07/go-programming-language.png" />
+<img style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="82px" height="82px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/GraphQL_Logo.svg/2048px-GraphQL_Logo.svg.png" />
+<img style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="82px" height="82px" src="https://camo.githubusercontent.com/e6c89a3654756437bd520290bdbe8062bea43e97d38ef2a95d1873d0edd0e014/68747470733a2f2f63646e2e66726565626965737570706c792e636f6d2f6c6f676f732f6c617267652f32782f677261796c6f672d6c6f676f2d706e672d7472616e73706172656e742e706e67" />
+<img style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="82px" height="82px" src="https://camo.githubusercontent.com/2c530b38cb14e74d785ebe8d7bf1a649fb44d3e9f43a8dbc103dc01d1fbfce0e/68747470733a2f2f7777772e646f636b65722e636f6d2f73697465732f64656661756c742f66696c65732f64382f323031392d30372f766572746963616c2d6c6f676f2d6d6f6e6f6368726f6d617469632e706e67" />
+<img style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="82px" height="82px" src="https://camo.githubusercontent.com/5d442673be6109d82be8dd19f0a2ed6844044bbb58d3e938e9fce7cd346a7946/68747470733a2f2f69312e77702e636f6d2f7465636878706f7365722e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031392f31322f677270632d69636f6e2e706e673f6669743d363236253243363634" />
+<img style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="82px" height="82px" src="https://camo.githubusercontent.com/296247907281a8a54eebff1e3af9c89d6d28b6cc531c83befb810c57181d51d8/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f302f30302f4b756265726e657465735f253238636f6e7461696e65725f656e67696e652532392e706e67" />
+<img style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="82px" height="82px" src="https://is3-ssl.mzstatic.com/image/thumb/Purple124/v4/17/cd/a2/17cda2a0-b641-c3d0-3d22-141704a40eef/Icon.png/1200x630bb.png" />
 
 
-<br /><br /><br /><br /><br />
 
-
-## Open
-
-Project is open, in a variaty of different ways...
-
-Source code is open, community is always welcome for frontend/backend side improvements.
-You can access the token network within:
-- Android
-- IOS
-- WEB
-- Windows
-- MacOS
-- Linux
-- API
-- python/go/dart SDK's
-
-## Fast
-
-Project is built using the rapid fast `gRPC` protocol, which allows users to get instant information loaded directly from the blockchain network. Also this protocol solves serialization and API versioning problems.
-
-Go language in combination with `gRPC` makes network stable and prevents servers from overloading.
-
-## Free
-
-The core economical concept of a project is that user do not have to pay for any operation happening inside blockchain. This means that all of ORB transfering/trading operations are always covered with 0 fee.
-
-Money cost more, when they are being used, and that is fundamental reason why we think that charging people using cryptocurrencies with fee is unacceptable.
-ORB is built in such a way, that noone of the users will be charged for inner transactions.
-
-## Secure
-
-Most of cryptocurrecies are built using POS/POF mechanism to solve security problems. Some cryptocurrencies has centered node, which is breaking the concept of `secure by distribution`.
-
-In this project we were able to combine the pros of system distribution over network with rapid fast speed, and we were first to achieve that relation.
+<br/>

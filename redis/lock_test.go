@@ -1,22 +1,17 @@
-package lock
+package redis
 
 import (
 	"testing"
 	"time"
 )
 
-func TestTryToLockLocked(t *testing.T) {
-	timeout := time.After(4 * time.Second)
+func TestLockID(t *testing.T) {
+	timeout := time.After(3 * time.Second)
 	done := make(chan bool)
 	go func() {
 		lockBytes := make([]byte, 64)
 		lockBytes[0] = 65
-		lockBytes[1] = 66
-		Lock(lockBytes)
-		go func() {
-			time.Sleep(time.Second)
-			Unlock(lockBytes)
-		}()
+		lockBytes[1] = 69
 		Lock(lockBytes)
 		Unlock(lockBytes)
 		done <- true
