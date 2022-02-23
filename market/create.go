@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"orb/data"
-	"orb/search"
 	"orb/trade"
 
 	profanityfilter "github.com/AccelByte/profanity-filter-go"

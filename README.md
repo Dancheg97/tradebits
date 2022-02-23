@@ -20,6 +20,4 @@ ORB is a system invented
 <img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="82px" height="82px" src="https://camo.githubusercontent.com/296247907281a8a54eebff1e3af9c89d6d28b6cc531c83befb810c57181d51d8/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f302f30302f4b756265726e657465735f253238636f6e7461696e65725f656e67696e652532392e706e67" />
 <img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="82px" height="82px" src="https://is3-ssl.mzstatic.com/image/thumb/Purple124/v4/17/cd/a2/17cda2a0-b641-c3d0-3d22-141704a40eef/Icon.png/1200x630bb.png" />
 
-
-
 <br/>
