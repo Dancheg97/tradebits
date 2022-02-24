@@ -6,8 +6,9 @@
 </p>
 
 This project main goal is to increase avalability of digital assets, and push distrubuted from of exchange.
-ORB is a system invented 
-
+ORB is a system invented with those purposes:
+- Make it easy for users to change different forms of digital assets
+- 
 
 # Our tools:
 
@@ -20,4 +21,114 @@ ORB is a system invented
 <img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="82px" height="82px" src="https://camo.githubusercontent.com/296247907281a8a54eebff1e3af9c89d6d28b6cc531c83befb810c57181d51d8/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f302f30302f4b756265726e657465735f253238636f6e7461696e65725f656e67696e652532392e706e67" />
 <img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="82px" height="82px" src="https://is3-ssl.mzstatic.com/image/thumb/Purple124/v4/17/cd/a2/17cda2a0-b641-c3d0-3d22-141704a40eef/Icon.png/1200x630bb.png" />
 
-<br/>
+<br/><br/><br/><br/><br/><br/><br/>
+
+
+# Description
+
+Dgraph is used to store persistant data. Due to native support of graph structure of dgraph database, it is the most suitable solution for this currency ecosystem.
+
+Different implementations of dgraph are supported for data storage. In development process classic dgraph/standalone docker image may be the best solution. In production the most appropriate choice - is a full dgraph cluster.
+
+# Tech Stack
+
+Here is listing of technologies used for backend side of token implementation:
+- Go
+- Dgraph
+- gRPC
+- Redis
+- GrayLog
+
+# 
+
+
+# Data model
+
+Here is a brief description of data types, that may be stored in dgraph.
+
+### User
+
+- Adress - bytes
+- MesKey - bytes
+- Name - string
+- Balances - bytes - uint64
+- Chats - [links]
+
+
+### Market
+
+- adress - bytes
+- Name - string
+- MesKey - bytes
+- Descr - string
+- Img - string
+- InputFee - int
+- OutputFee - int
+- WorkTime - string
+- Chats - [links]
+- Buys - [links]
+- Sells - [links]
+
+### Chat
+
+- Adress1 - bytes
+- Adress2 - bytes
+- Messages - [strings]
+- Count - int
+
+### Trade
+
+- Adress - bytes
+- Offer- int
+- Recieve - int
+
+# Transactions
+
+### Mine
+
+- Adress - bytes
+- Amount - int
+
+### Send
+
+- From - bytes
+- To - bytes
+- Amount - int
+
+### Trade-open
+
+- User - bytes
+- Market - bytes
+- Offer - int
+- Recieve - int
+- Buy - bool
+
+### Trade-close
+
+- User - bytes
+- Market - bytes
+- Recieved - int
+- Left - int
+
+### Cancel
+
+- User - bytes
+- Market - bytes
+- Recieved - int
+- Base - bool
+
+### Update
+
+- User - bytes
+- Info - string
+
+### Deposit
+
+- User - bytes
+- Market - bytes
+- 
+
+### Withdrawal
+
+- User - bytes
+- Info - string
