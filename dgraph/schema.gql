@@ -1,11 +1,11 @@
 type User {
     id: ID!
     name: String! @id @search(by: [fulltext])
-    adress: String! @id
-    meskey: String! @id
+    pubkey: String! @id @search(by: [hash])
     balances: [Balance]
     chats: [Chat]
-    trades: [Trade] @hasInverse(field: "owner")
+    buys: [Trade] @hasInverse(field: "user")
+    sells: [Trade] @hasInverse(field: "user")
 }
 
 type Balance {
@@ -18,13 +18,28 @@ type Chat {
 }
 
 type Market {
-    
+    id: ID!
+    name: String! @id @search(by: [fulltext])
+    pubkey: String! @id @search(by: [hash])
+    descr: String!
+    img: String!
+    inputfee: int!
+    outputfee: int!
+    worktime: String!
+    buys: [Trade] @hasInverse(field: "market")
+    sells: [Trade] @hasInverse(field: "market")
 }
 
-type Trade {
+type Buy {
     offer: int!
     recieve: int!
-    user: [User] @hasInverse(field: "trades")
-    market: [Market] @hasInverse(field: "trades")
+    user: [User] @hasInverse(field: "buys")
+    market: [Market] @hasInverse(field: "buys")
 }
 
+type Sell {
+    offer: int!
+    recieve: int!
+    user: [User] @hasInverse(field: "sells")
+    market: [Market] @hasInverse(field: "sells")
+}
