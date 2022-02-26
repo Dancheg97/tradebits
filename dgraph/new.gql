@@ -5,6 +5,15 @@ type Person {
   age: Int @search
   friends: [Person] @hasInverse(field: "friends")
   ownsPets: [Animal] @hasInverse(field: "owner")
+  employers: [Company] @hasInverse(field: "employees")
+  manages: [Person] @hasInverse(field: "manager")
+  manager: Person @hasInverse(field: "manages")
+}
+
+type Company {
+  name: String!
+  industry: String @search(by: [term])
+  employees: [Person] @hasInverse(field: "employers")
 }
 
 type Animal {
@@ -13,4 +22,3 @@ type Animal {
   name: String!
   owner: Person @hasInverse(field: "ownsPets")
 }
-
