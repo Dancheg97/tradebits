@@ -4,7 +4,8 @@ type User {
     adress: String! @id
     meskey: String! @id
     balances: [Balance]
-    chats: [Chat] @hasInverse(field: "members")
+    chats: [Chat]
+    trades: [Trade] @hasInverse(field: "owner")
 }
 
 type Balance {
@@ -12,4 +13,18 @@ type Balance {
     balance: int!
 }
 
-type 
+type Chat {
+    messages: [String]
+}
+
+type Market {
+    
+}
+
+type Trade {
+    offer: int!
+    recieve: int!
+    user: [User] @hasInverse(field: "trades")
+    market: [Market] @hasInverse(field: "trades")
+}
+
