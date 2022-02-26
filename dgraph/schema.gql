@@ -13,3 +13,4 @@ type Animal {
   name: String!
   owner: Person @hasInverse(field: "ownsPets")
 }
+
