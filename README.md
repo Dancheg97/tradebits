@@ -2,7 +2,7 @@
 # <p  align="center" style="font-family:courier;font-size:530%" size=210px> SETGRAPH - distributed trading system </p> 
 
 <p align="center">
-  <img width="320px" height="320px" src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Hey_Machine_Learning_Logo.png" alt="logo"/>
+  <img width="380px" height="380px" src="https://wiznet.pro/wp-content/uploads/wiznetr_Network-component.png" alt="logo"/>
 </p>
 
 # What is setgraph?
