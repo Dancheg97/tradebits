@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+
+  dgraph:
+    image: "dgraph/standalone:v21.12.0"
+    ports:
+      - "8080:8080"
+      - "9080:9080"
+      - "8000:8000"
+    volumes:
+      - ~/dgraph:/dgraph
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6397"
