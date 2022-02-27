@@ -4,200 +4,110 @@ option go_package = "./api";
 
 package api;
 
-/* CODEGEN COMMANDS:
-Go:
-protoc api/api.proto --go-grpc_out=. --go_out=.
-Dart:
-protoc lib/api/api.proto --dart_out=grpc:.
-*/ 
-
-// Response (universal response, when no return value required)
-message Response{
-    bool passed = 1;
+service Info {
+    rpc UserBalance(PublicKey) returns (Balance);
+    rpc HasTrades(PublicKey) returns (Bool);
+    rpc MarketInfo(Empty) returns (InfoMarket);
+    rpc NetInfo(Offset) returns (Links);
+    rpc GetMessages(Offset) returns (Messages);
 }
 
-service Info{
-    rpc User(InfIn.Adress) returns (InfOut.User);
-    rpc UserSubscribe(InfIn.Adress) returns (stream InfOut.User);
-    rpc HasTrades(InfIn.UserMarketAdr) returns (InfOut.Bool);
-    rpc Market(InfIn.Adress) returns (InfOut.MarketInfo);
-    rpc MarketSubscribe(InfIn.Adress) returns (stream InfOut.MarketInfo);
-    rpc Search(InfIn.Text) returns (InfOut.Adresses);
-    rpc Messages(InfIn.UserMarketAdr) returns (InfOut.Messages);
-    rpc MessagesSubscribe(InfIn.UserMarketAdr) returns (stream InfOut.Messages);
-    rpc CheckName(InfIn.Text) returns (InfOut.Bool);
-    rpc NetMembers(InfIn.Empty) returns (InfOut.IPs);
+message PublicKey {
+    string key = 1;
 }
 
-message InfIn{
-    message Adress{
-        bytes adress = 1;
-    }
-    message Text{
-        string text = 1;
-    }
-    message UserMarketAdr{
-        bytes market_adress = 1;
-        bytes user_adress = 2;
-    }
-    message Empty{}
+message Balance {
+    int32 balance = 1;
 }
 
-message InfOut{
-    message User{
-        string public_name = 1;
-        uint64 balance = 2;
-        bytes message_key = 3;
-        repeated bytes market_adresses = 4;
-        repeated uint64 market_balances = 5;
-    }
-    message MarketInfo{
-        string name = 1;
-        bytes messageKey = 2;
-        string imageLink = 3;
-        string description = 4;
-        uint64 operationCount = 5;
-        repeated Trade buys = 6;
-        repeated Trade sells = 7;
-        uint64 activeBuys = 8;
-        uint64 activeSells = 9;
-        uint64 inputFee = 10;
-        uint64 outputFee = 11;
-        string workTime = 12;
-        uint64 delimiter = 14;
-    }
-    message Adresses{
-        repeated bytes marketAdresses = 1;
-    }
-    message Messages{
-        repeated string messages = 1;
-    }
-    message Bool{
-        bool value = 1;
-    }
-    message Trade{
-        uint64 offer = 1;
-        uint64 recieve = 2;
-    }
-    message IPs{
-        repeated string adresses = 1;
-    }
+message Bool {
+    bool bool = 1;
 }
 
+message Empty { }
 
+message InfoMarket {
+    string name = 1;
+    string pubkey = 2;
+    string descr = 3;
+    string img = 4;
+    string worktime = 5;
+    int32 fee = 6;
+    repeated Trade buys = 7;   
+    repeated Trade sells = 8;
+}
 
-// User service, that is making changes in user data. 
-// Always requires verification.
+message Trade {
+    int32 offer = 1;
+    int32 recieve = 2;
+}
+
+message Offset {
+    int32 offset = 1;
+}
+
+message Links {
+    repeated string links = 1;
+}
+
+message Messages {
+    repeated string messages = 1;
+}
+
 service User {
-    rpc Create(UserRequests.Create) returns (Response);
-    rpc Send(UserRequests.Send) returns (Response);
-    rpc Message(UserRequests.Message) returns (Response);
-    rpc Buy(UserRequests.Trade) returns (Response);
-    rpc Sell(UserRequests.Trade) returns (Response);
-    rpc CancelTrade(UserRequests.CancelTrade) returns (Response);
+    rpc Message(MessageRequest) returns (Bool);
+    rpc Remmittance(RemmittanceRequest) returns (Bool);
+    rpc PlaceOrder(PlaceOrderRequest) returns (Bool);
+    rpc CancelOrder(CancelOrderRequest) returns (Bool);
 }
 
-message UserRequests {
-    message Create {
-        string sender = 1;
-        string name = 2;
-        string sign = 3;
-    }
-    message Send {
-        string pubkey = 1;
-        string reciever = 2;
-        string market = 3;
-        int32 amount = 4;
-        string sign = 5;
-    }
-    message Message {
-        bytes PublicKey = 1;
-        bytes Adress = 2;
-        string Message = 3;
-        bytes Sign = 4;
-    }
-    message Trade {
-        bytes PublicKey = 1;
-        bytes Adress = 2;
-        uint64 Recieve = 3;
-        uint64 Offer = 4;
-        bytes Sign = 5;
-    }
-    message CancelTrade {
-        bytes PublicKey = 1;
-        bytes MarketAdress = 2;
-        bytes Sign = 3;
-    }
+message MessageRequest {
+    string operationid = 1;
+    string userkey = 2;
+    string message = 3;
+    string sign = 4;
 }
 
-service Market{
-    rpc New(MarketRequests.Create) returns (Response);
-    rpc Update(MarketRequests.Update) returns (Response);
-    rpc Deposit(MarketRequests.Deposit) returns (Response);
-    rpc Withdrawal(MarketRequests.Withdrawal) returns (Response);
-    rpc Reply(MarketRequests.Message) returns (Response);
+message RemmittanceRequest {
+    string operationid = 1;
+    string senderkey = 2;
+    string recieverkey = 3;
+    int32 amount = 4;
+    string sign = 5;
 }
 
-message MarketRequests{
-    message Create{
-        bytes PublicKey = 1;
-        bytes MesssageKey = 2;
-        string Name = 3;
-        string Img = 4;
-        string Descr = 5;
-        uint64 inputFee = 6;
-        uint64 outputFee = 7;
-        string workTime = 8;
-        uint64 delimiter = 9;
-        bytes Sign = 10;
-    }
-    message Update{
-        bytes PublicKey = 1;
-        string Img = 2;
-        string Descr = 3;
-        uint64 inputFee = 4;
-        uint64 outputFee = 5;
-        string workTime = 6;
-        bytes Sign = 7;
-    }
-    message Deposit{
-        bytes PublicKey = 1;
-        bytes UserAdress = 2;
-        uint64 Amount = 3;
-        bytes Sign = 4;
-    }
-    message Withdrawal{
-        bytes PublicKey = 1;
-        bytes UserAdress = 2;
-        uint64 Amount = 3;
-        bytes Sign = 4;
-    }
-    message Message{
-        bytes PublicKey = 1;
-        bytes Adress = 2;
-        bytes Message = 3;
-        bytes Sign = 4;
-    }
+message PlaceOrderRequest {
+    string operationid = 1;
+    string userkey = 2;
+    string marketkey = 3;
+    int32 offer = 4;
+    int32 recieve = 5;
+    string sign = 6;
 }
 
-
-service Connection{
-    rpc Connect(ConnectionRequests.In) returns (stream ConnectionRequests.Out);
-    rpc Pool(ConnectionRequests.Pool) returns (ConnectionRequests.Pool);
+message CancelOrderRequest {
+    string operationid = 1;
+    string userkey = 2;
+    string sign = 6;   
 }
 
-message ConnectionRequests{
-    message In{
-        bytes PublicKey = 1;
-        string WebAdress = 2;
-        bytes Sign = 3;
-    }
-    message Out{
-        bytes Key = 1;
-        bytes Value = 2;
-    }
-    message Pool{
-        repeated string Values = 1;
-    }
+service Market {
+    rpc DecreaseOrder(DecreaseOrderRequest) returns (Bool);
+    rpc CloseOrder(CloseOrderRequest) returns (Bool);
 }
 
+message DecreaseOrderRequest {
+    string operationid = 1;
+    string orderid = 2;
+    string marketkey = 3;
+    int32 newoffer = 4;
+    int32 newrecieve = 5;
+    string sign  = 6;
+}
+
+message CloseOrderRequest {
+    string operationid = 1;
+    string orderid = 2;
+    string marketkey = 3;
+    string sign  = 4;
+}
