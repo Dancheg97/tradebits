@@ -19,6 +19,8 @@ type user struct {
 	Arch     map[string]string
 }
 
+type 
+
 /*
 Create new user, in case there is already user with same adress
 the error will be logged
