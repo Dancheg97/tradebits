@@ -1,0 +1,6 @@
+{
+    "serve": ":7090",
+    "dgraph": "localhost:9080",
+    "redis": "localhost:6397",
+    "logstash": "localhost:6397"
+}
