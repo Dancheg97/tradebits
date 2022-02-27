@@ -1,4 +1,5 @@
 # Lock package
+
 Lock is the main abstraction that is helping to prevent any form of double spending in this system.
 
 Before any transaction is processed in system, this package enures that changed object is not being locked yet.
