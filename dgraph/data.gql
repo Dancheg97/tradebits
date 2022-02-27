@@ -1,12 +1,11 @@
 
-# LEAF TYPES
-
 type User {
     id: ID!
     pubkey: String! @id @search(by: [hash])
     balance: Int!
     messages: [String]
     orders: [Orders] @hasInverse(field: "user")
+    operations: [Operation] @hasInverse(field: "user")
 }
 
 type Market {
@@ -20,13 +19,21 @@ type Market {
 }
 
 type Order {
+    id: ID!
     offer: Int!
     recieve: Int!
-    user: [User] @hasInverse(field: "buys")
+    ratio: Float!
+    user: [User] @hasInverse(field: "orders")
     market: String!
 }
 
 type Net {
+    id: ID!
     links: [String]
 }
 
+type Operation {
+    id: ID!
+    desciption: String!
+    user: [User] @hasInverse(field: "operations")
+}

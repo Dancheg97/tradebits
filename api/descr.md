@@ -1,3 +1,13 @@
+# API description
+
+API is description of ways markets communicate with each other and its users.
+
+Each sign of message user send to market is additionally reinforced by market name as indtent to ensure markets will not try to proceed same operations with users on other markets. That is not mention in API, but implemented on server and client sides. 
+
+Each procedure on specific market need to be reinforced by market name in senders message, to prevent mimic behavior by markets collecting data. That will guarantee, that only owner of the private key is able to process transactions on specific market.
+
+
+```protobuf
 syntax = "proto3";
 
 option go_package = "./api";
@@ -111,3 +121,4 @@ message CloseOrderRequest {
     string marketkey = 3;
     string sign  = 4;
 }
+```
