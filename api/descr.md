@@ -122,3 +122,16 @@ message CloseOrderRequest {
     string sign  = 4;
 }
 ```
+
+# Code gen
+
+Commands to generate code from proto file:
+
+Go:
+```bash
+protoc api/api.proto --go-grpc_out=. --go_out=.
+```
+Dart:
+```bash
+protoc lib/api/api.proto --dart_out=grpc:.
+```
