@@ -6,6 +6,7 @@ import (
 )
 
 func TestLockID(t *testing.T) {
+	Setup("")
 	timeout := time.After(3 * time.Second)
 	done := make(chan bool)
 	go func() {
