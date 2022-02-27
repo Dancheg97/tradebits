@@ -4,7 +4,7 @@ type User {
     pubkey: String! @id @search(by: [hash])
     balance: Int!
     messages: [String]
-    orders: [Orders] @hasInverse(field: "user")
+    orders: [Order] @hasInverse(field: "user")
     operations: [Operation] @hasInverse(field: "user")
 }
 
@@ -27,9 +27,11 @@ type Order {
     market: String!
 }
 
-type Net {
+type NetMember {
     id: ID!
-    links: [String]
+    string: String! @id @search(by: [term])
+    pubkey: String!
+    link: String!
 }
 
 type Operation {

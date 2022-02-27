@@ -61,6 +61,7 @@ Redis is used for locking operations, to store information about
 
 - [API description](api/descr.md)
 - [Data model descrtion](dgraph/descr.md)
+- [Redis usage](redis/descr.md)
 - [Setup guide]()
 - [Mobile app repo]()
 
