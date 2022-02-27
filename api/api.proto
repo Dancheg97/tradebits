@@ -88,7 +88,7 @@ message InfOut{
 
 // User service, that is making changes in user data. 
 // Always requires verification.
-service User{
+service User {
     rpc Create(UserRequests.Create) returns (Response);
     rpc Send(UserRequests.Send) returns (Response);
     rpc Message(UserRequests.Message) returns (Response);
@@ -97,33 +97,33 @@ service User{
     rpc CancelTrade(UserRequests.CancelTrade) returns (Response);
 }
 
-message UserRequests{
-    message Create{
-        bytes PublicKey = 1;
-        bytes MesssageKey = 2;
-        string PublicName = 3;
-        bytes Sign = 4;
+message UserRequests {
+    message Create {
+        string sender = 1;
+        string name = 2;
+        string sign = 3;
     }
-    message Send{
-        bytes PublicKey = 1;
-        uint64 SendAmount = 2;
-        bytes RecieverAdress = 3;
-        bytes Sign = 4;
+    message Send {
+        string pubkey = 1;
+        string reciever = 2;
+        string market = 3;
+        int32 amount = 4;
+        string sign = 5;
     }
-    message Message{
+    message Message {
         bytes PublicKey = 1;
         bytes Adress = 2;
         string Message = 3;
         bytes Sign = 4;
     }
-    message Trade{
+    message Trade {
         bytes PublicKey = 1;
         bytes Adress = 2;
         uint64 Recieve = 3;
         uint64 Offer = 4;
         bytes Sign = 5;
     }
-    message CancelTrade{
+    message CancelTrade {
         bytes PublicKey = 1;
         bytes MarketAdress = 2;
         bytes Sign = 3;

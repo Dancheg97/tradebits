@@ -58,7 +58,11 @@ Redis is used for locking operations, to store information about
 
 # Data model
 
-Here is a brief description of data types, that may be stored in dgraph. Graphql (the variation, that is used in dgraph) is used to describe stored data:
+Here is a brief description of data types, that may be stored in dgraph. Graphql (the variation, that is used in dgraph) is used to describe stored data. 
+
+There are two main types of data in the system - branch and leaf. Leafs - are those pieces of data that describe current condition of the network, while branches describe the operations, that led to final condition.
+
+You can think about those entities (they might change with time) as a leafs:
 
 ```graphql
 type User {
@@ -106,16 +110,13 @@ type Sell {
     user: [User] @hasInverse(field: "sells")
     market: [Market] @hasInverse(field: "sells")
 }
-
 ```
 
-### Trade
+And about transaction types, as a branches:
 
-- Adress - bytes
-- Offer- int
-- Recieve - int
+```graphql
 
-# Transaction types
+```
 
 ### Send
 
