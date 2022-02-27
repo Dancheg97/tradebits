@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-var Dgraph = newClient("0.0.0.0:9080")
+var dgraph = newClient("0.0.0.0:9080")
 
 func newClient(adress string) *dgo.Dgraph {
 	d, err := grpc.Dial(adress, grpc.WithInsecure())

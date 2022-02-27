@@ -7,7 +7,7 @@ import (
 func TestOpenDgraphSuccess(t *testing.T) {
 	dgraphClient := newClient("localhost:9080")
 	if dgraphClient == nil {
-		t.Error("error opening dgraph instance")
+		t.Error("Error opening dgraph instance")
 	}
 	dgraphClient.NewTxn()
 }
