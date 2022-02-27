@@ -1,3 +1,6 @@
+
+# LEAF TYPES
+
 type User {
     id: ID!
     name: String! @id @search(by: [fulltext])
@@ -44,4 +47,17 @@ type Sell {
     market: [Market] @hasInverse(field: "sells")
 }
 
-type 
+# BRANCH TYPES
+
+type Send {
+    sender: [User]
+    reciever: [User]
+    market: [Market]
+    amount: Int!
+}
+
+type OpenBuy {
+    user: String!
+    market: String!
+
+}
