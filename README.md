@@ -59,7 +59,121 @@ Redis is used for locking operations, to store information about
 
 API is description of ways different markets communicate with each other and users.
 
+``` proto
+syntax = "proto3";
 
+option go_package = "./api";
+
+package api;
+
+service Info {
+    rpc UserBalance(PublicKey) returns (Balance);
+    rpc HasTrades(PublicKey) returns (Bool);
+    rpc MarketInfo(Empty) returns (InfoMarket);
+    rpc NetInfo(Offset) returns (Links);
+    rpc GetMessages(Offset) returns (Messages);
+}
+
+message PublicKey {
+    string key = 1;
+}
+
+message Balance {
+    int32 balance = 1;
+}
+
+message Bool {
+    bool bool = 1;
+}
+
+message Empty { }
+
+message InfoMarket {
+    string name = 1;
+    string pubkey = 2;
+    string descr = 3;
+    string img = 4;
+    string worktime = 5;
+    int32 fee = 6;
+    repeated Trade buys = 7;   
+    repeated Trade sells = 8;
+}
+
+message Trade {
+    int32 offer = 1;
+    int32 recieve = 2;
+}
+
+message Offset {
+    int32 offset = 1;
+}
+
+message Links {
+    repeated string links = 1;
+}
+
+message Messages {
+    repeated string messages = 1;
+}
+
+service User {
+    rpc Message(MessageRequest) returns (Bool);
+    rpc Remmittance(RemmittanceRequest) returns (Bool);
+    rpc PlaceOrder(PlaceOrderRequest) returns (Bool);
+    rpc CancelOrder(CancelOrderRequest) returns (Bool);
+}
+
+message MessageRequest {
+    string operationid = 1;
+    string userkey = 2;
+    string message = 3;
+    string sign = 4;
+}
+
+message RemmittanceRequest {
+    string operationid = 1;
+    string senderkey = 2;
+    string recieverkey = 3;
+    int32 amount = 4;
+    string sign = 5;
+}
+
+message PlaceOrderRequest {
+    string operationid = 1;
+    string userkey = 2;
+    string marketkey = 3;
+    int32 offer = 4;
+    int32 recieve = 5;
+    string sign = 6;
+}
+
+message CancelOrderRequest {
+    string operationid = 1;
+    string userkey = 2;
+    string sign = 6;   
+}
+
+service Market {
+    rpc DecreaseOrder(DecreaseOrderRequest) returns (Bool);
+    rpc CloseOrder(CloseOrderRequest) returns (Bool);
+}
+
+message DecreaseOrderRequest {
+    string operationid = 1;
+    string orderid = 2;
+    string marketkey = 3;
+    int32 newoffer = 4;
+    int32 newrecieve = 5;
+    string sign  = 6;
+}
+
+message CloseOrderRequest {
+    string operationid = 1;
+    string orderid = 2;
+    string marketkey = 3;
+    string sign  = 4;
+}
+```
 
 
 # Data model
@@ -75,19 +189,10 @@ type User {
     id: ID!
     name: String! @id @search(by: [fulltext])
     pubkey: String! @id @search(by: [hash])
-    balances: [Balance]
-    chats: [Chat]
+    balance: Int!
+    messages: [String]
     buys: [Buy] @hasInverse(field: "user")
     sells: [Sell] @hasInverse(field: "user")
-}
-
-type Balance {
-    market: String!
-    balance: Int!
-}
-
-type Chat {
-    messages: [String]
 }
 
 type Market {
