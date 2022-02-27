@@ -4,13 +4,13 @@ type User {
     pubkey: String! @id @search(by: [hash])
     balances: [Balance]
     chats: [Chat]
-    buys: [Trade] @hasInverse(field: "user")
-    sells: [Trade] @hasInverse(field: "user")
+    buys: [Buy] @hasInverse(field: "user")
+    sells: [Sell] @hasInverse(field: "user")
 }
 
 type Balance {
     market: String!
-    balance: int!
+    balance: Int!
 }
 
 type Chat {
@@ -23,23 +23,25 @@ type Market {
     pubkey: String! @id @search(by: [hash])
     descr: String!
     img: String!
-    inputfee: int!
-    outputfee: int!
+    inputfee: Int!
+    outputfee: Int!
     worktime: String!
-    buys: [Trade] @hasInverse(field: "market")
-    sells: [Trade] @hasInverse(field: "market")
+    buys: [Buy] @hasInverse(field: "market")
+    sells: [Sell] @hasInverse(field: "market")
 }
 
 type Buy {
-    offer: int!
-    recieve: int!
+    offer: Int!
+    recieve: Int!
     user: [User] @hasInverse(field: "buys")
     market: [Market] @hasInverse(field: "buys")
 }
 
 type Sell {
-    offer: int!
-    recieve: int!
+    offer: Int!
+    recieve: Int!
     user: [User] @hasInverse(field: "sells")
     market: [Market] @hasInverse(field: "sells")
 }
+
+type 

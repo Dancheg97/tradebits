@@ -58,34 +58,56 @@ Redis is used for locking operations, to store information about
 
 # Data model
 
-Here is a brief description of data types, that may be stored in dgraph.
+Here is a brief description of data types, that may be stored in dgraph. Graphql (the variation, that is used in dgraph) is used to describe stored data:
 
-### User
+```graphql
+type User {
+    id: ID!
+    name: String! @id @search(by: [fulltext])
+    pubkey: String! @id @search(by: [hash])
+    balances: [Balance]
+    chats: [Chat]
+    buys: [Buy] @hasInverse(field: "user")
+    sells: [Sell] @hasInverse(field: "user")
+}
 
-- name - string
-- adress - base64 - IDX = hash
-- meskey - base64
-- chats - [uid]
+type Balance {
+    market: String!
+    balance: Int!
+}
 
+type Chat {
+    messages: [String]
+}
 
-### Market
+type Market {
+    id: ID!
+    name: String! @id @search(by: [fulltext])
+    pubkey: String! @id @search(by: [hash])
+    descr: String!
+    img: String!
+    inputfee: Int!
+    outputfee: Int!
+    worktime: String!
+    buys: [Buy] @hasInverse(field: "market")
+    sells: [Sell] @hasInverse(field: "market")
+}
 
-- adress - bytes - IDX = hash
-- name - string - IDX = fulltext
-- meskey - bytes
-- descr - string - IDX = term
-- img - string
-- inputfee - int
-- outputfee - int
-- worktime - string
-- chats - [links]
-- buys - [links]
-- sells - [links]
+type Buy {
+    offer: Int!
+    recieve: Int!
+    user: [User] @hasInverse(field: "buys")
+    market: [Market] @hasInverse(field: "buys")
+}
 
-### Chat
+type Sell {
+    offer: Int!
+    recieve: Int!
+    user: [User] @hasInverse(field: "sells")
+    market: [Market] @hasInverse(field: "sells")
+}
 
-- messages - [strings]
-- Count - int
+```
 
 ### Trade
 
