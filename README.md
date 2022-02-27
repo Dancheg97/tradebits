@@ -24,7 +24,7 @@ You can find complete listing of transaciton types below.
 
 # Our tools:
 
-<br>
+
 <img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="82px" height="82px" src="https://juststickers.in/wp-content/uploads/2016/07/go-programming-language.png" />
 <img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="82px" height="82px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/GraphQL_Logo.svg/2048px-GraphQL_Logo.svg.png"/>
 <img align="left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="82px" height="82px" src="https://camo.githubusercontent.com/e6c89a3654756437bd520290bdbe8062bea43e97d38ef2a95d1873d0edd0e014/68747470733a2f2f63646e2e66726565626965737570706c792e636f6d2f6c6f676f732f6c617267652f32782f677261796c6f672d6c6f676f2d706e672d7472616e73706172656e742e706e67" />
@@ -59,7 +59,7 @@ Redis is used for locking operations, to store information about
 
 API is description of ways different markets communicate with each other and users.
 
-``` proto
+```protobuf
 syntax = "proto3";
 
 option go_package = "./api";
@@ -72,6 +72,7 @@ service Info {
     rpc MarketInfo(Empty) returns (InfoMarket);
     rpc NetInfo(Offset) returns (Links);
     rpc GetMessages(Offset) returns (Messages);
+    rpc OrderInfo(PublicKey) returns (Orders);
 }
 
 message PublicKey {
@@ -95,13 +96,6 @@ message InfoMarket {
     string img = 4;
     string worktime = 5;
     int32 fee = 6;
-    repeated Trade buys = 7;   
-    repeated Trade sells = 8;
-}
-
-message Trade {
-    int32 offer = 1;
-    int32 recieve = 2;
 }
 
 message Offset {
@@ -114,6 +108,16 @@ message Links {
 
 message Messages {
     repeated string messages = 1;
+}
+
+message Orders {
+    repeated Order orders = 1;
+}
+
+message Order {
+    string id = 1;
+    int32 offer = 2;
+    int32 recieve = 3;
 }
 
 service User {

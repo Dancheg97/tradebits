@@ -10,6 +10,7 @@ service Info {
     rpc MarketInfo(Empty) returns (InfoMarket);
     rpc NetInfo(Offset) returns (Links);
     rpc GetMessages(Offset) returns (Messages);
+    rpc TradeInfo(PublicKey) returns (Trades);
 }
 
 message PublicKey {
@@ -33,13 +34,6 @@ message InfoMarket {
     string img = 4;
     string worktime = 5;
     int32 fee = 6;
-    repeated Trade buys = 7;   
-    repeated Trade sells = 8;
-}
-
-message Trade {
-    int32 offer = 1;
-    int32 recieve = 2;
 }
 
 message Offset {
@@ -52,6 +46,16 @@ message Links {
 
 message Messages {
     repeated string messages = 1;
+}
+
+message Trades {
+    repeated Trade trades = 1;
+}
+
+message Trade {
+    string id = 1;
+    int32 offer = 2;
+    int32 recieve = 3;
 }
 
 service User {
