@@ -53,7 +53,13 @@ Different implementations of dgraph are supported for data storage. In developme
 
 gRPC is used as a method of communication between different nodes and client side. gRPC is fast in transportation and serialization speed, which is making it best option for web communication.
 
-Redis is used for locking operations, to store information about 
+Redis is used for locking operations, to store information about
+
+# API description
+
+API is description of ways different markets communicate with each other and users.
+
+
 
 
 # Data model
@@ -109,13 +115,6 @@ type Sell {
 
 ```
 
-### Trade
-
-- Adress - bytes
-- Offer- int
-- Recieve - int
-
-# Transaction types
 
 ### Send
 

@@ -130,9 +130,6 @@ message UserRequests{
     }
 }
 
-
-
-
 service Market{
     rpc New(MarketRequests.Create) returns (Response);
     rpc Update(MarketRequests.Update) returns (Response);
