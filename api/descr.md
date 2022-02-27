@@ -129,7 +129,7 @@ Commands to generate code from proto file:
 
 Go:
 ```bash
-protoc api/api.proto --go-grpc_out=. --go_out=.
+protoc api.proto --go-grpc_out=. --go_out=.
 ```
 Dart:
 ```bash

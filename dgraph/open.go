@@ -1,6 +1,7 @@
 package dgraph
 
 import (
+	"context"
 	"log"
 
 	"github.com/dgraph-io/dgo"
@@ -8,14 +9,24 @@ import (
 	"google.golang.org/grpc"
 )
 
-var dgraph = newClient("0.0.0.0:9080")
+var Dgraph = newClient("0.0.0.0:9080")
 
 func newClient(adress string) *dgo.Dgraph {
 	d, err := grpc.Dial(adress, grpc.WithInsecure())
 	if err != nil {
 		log.Fatal(err)
 	}
-	return dgo.NewDgraphClient(
+	dgraph := dgo.NewDgraphClient(
 		api.NewDgraphClient(d),
 	)
+	dgraph.Alter(
+		context.Background(),
+		&api.Operation{
+			Schema: `
+				name: string @index(term) .
+				balance: int .
+			`,
+		},
+	)
+	return dgraph
 }
