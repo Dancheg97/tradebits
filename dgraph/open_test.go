@@ -5,7 +5,7 @@ import (
 )
 
 func TestOpenDgraphSuccess(t *testing.T) {
-	dgraphClient := newClient("localhost:9080")
+	dgraphClient := GetClient("localhost:9080")
 	if dgraphClient == nil {
 		t.Error("Error opening dgraph instance")
 	}
@@ -18,5 +18,5 @@ func TestOpenDgraphError(t *testing.T) {
 			t.Errorf("The code did not panic")
 		}
 	}()
-	newClient("")
+	GetClient("")
 }

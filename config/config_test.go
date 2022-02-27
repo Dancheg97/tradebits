@@ -3,7 +3,7 @@ package config
 import "testing"
 
 func TestReadConfig(t *testing.T) {
-	test_config := readConfig("config.json")
+	test_config := GetConfig("config.json")
 	if test_config.Dgraph != "localhost:9080" {
 		t.Error("config was read badly")
 	}
@@ -15,7 +15,7 @@ func TestReadUnexistingConfig(t *testing.T) {
 			t.Errorf("The code did not panic")
 		}
 	}()
-	readConfig(".s")
+	GetConfig(".s")
 }
 
 func TestReadBadConig(t *testing.T) {
@@ -24,5 +24,5 @@ func TestReadBadConig(t *testing.T) {
 			t.Errorf("The code did not panic")
 		}
 	}()
-	readConfig("config.go")
+	GetConfig("config.go")
 }

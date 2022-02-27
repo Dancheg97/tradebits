@@ -9,12 +9,10 @@ import (
 type config struct {
 	Serve  string `json:"serve"`
 	Dgraph string `json:"dgraph"`
-	Redis  string    `json:"redis"`
+	Redis  string `json:"redis"`
 }
 
-var Config = readConfig("config.json")
-
-func readConfig(location string) config {
+func GetConfig(location string) config {
 	file, fileErr := ioutil.ReadFile(location)
 	if fileErr != nil {
 		log.Panic("Config not found")
