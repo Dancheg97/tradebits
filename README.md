@@ -28,10 +28,10 @@ Users have to verify markets and process operations on their own risk.
 
 
 <p align="center">
-<img go align="center" style="padding-left: 12px; padding-right: 12px; padding-bottom: 12px;" width="74px" height="74px" src="https://juststickers.in/wp-content/uploads/2016/07/go-programming-language.png" />
+<img go align="center" style="padding-left: 12px; padding-right: 12px; padding-bottom: 12px;" width="74px" height="74px" src="https://plugins.jetbrains.com/files/12496/154352/icon/pluginIcon.png" />
 <img mongo align="center" style="padding-left: 12px; padding-right: 12px; padding-bottom: 12px;" width="74px" height="74px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Antu_mongodb.svg/2048px-Antu_mongodb.svg.png"/>
 <img graylog align="center" style="padding-left: 12px; padding-right: 12px; padding-bottom: 12px;" width="74px" height="74px" src="https://camo.githubusercontent.com/e6c89a3654756437bd520290bdbe8062bea43e97d38ef2a95d1873d0edd0e014/68747470733a2f2f63646e2e66726565626965737570706c792e636f6d2f6c6f676f732f6c617267652f32782f677261796c6f672d6c6f676f2d706e672d7472616e73706172656e742e706e67" />
-<img docker align="center" style="padding-left: 12px; padding-right: 12px; padding-bottom: 12px;" width="74px" height="74px" src="https://camo.githubusercontent.com/2c530b38cb14e74d785ebe8d7bf1a649fb44d3e9f43a8dbc103dc01d1fbfce0e/68747470733a2f2f7777772e646f636b65722e636f6d2f73697465732f64656661756c742f66696c65732f64382f323031392d30372f766572746963616c2d6c6f676f2d6d6f6e6f6368726f6d617469632e706e67" />
+<img docker align="center" style="padding-left: 12px; padding-right: 12px; padding-bottom: 12px;" width="74px" height="74px" src="https://cdn-icons-png.flaticon.com/512/919/919853.png" />
 <img swagger align="center" style="padding-left: 12px; padding-right: 12px; padding-bottom: 12px;" width="74px" height="74px" src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Swagger-logo.png" />
 <img redis align="center" style="padding-left: 12px; padding-right: 12px; padding-bottom: 12px;" width="74px" height="74px" src="https://is3-ssl.mzstatic.com/image/thumb/Purple124/v4/17/cd/a2/17cda2a0-b641-c3d0-3d22-141704a40eef/Icon.png/1200x630bb.png" />
 </p>
