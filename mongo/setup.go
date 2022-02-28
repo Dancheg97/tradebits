@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -18,7 +19,18 @@ type User struct {
 
 var client *mongo.Client
 
-func Setup() {
-	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
-	client, _ := mongo.Connect(ctx, &options.ClientOptions{})
+func Setup(adress string) {
+	ctx, cancel := context.WithTimeout(
+		context.Background(),
+		1*time.Second,
+	)
+	defer cancel()
+	mongoclient, err := mongo.Connect(
+		ctx,
+		options.Client().ApplyURI(adress),
+	)
+	client = mongoclient
+	if err != nil {
+		log.Panic("Unable to connect to mongo")
+	}
 }
