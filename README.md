@@ -2,7 +2,7 @@
 # <p  align="center" style="font-family:courier;font-size:130%" size=210px> TradeBits - interface for trading communications </p> 
 
 <p align="center">
-  <img height="330px" src="https://www.pngkey.com/png/full/437-4379380_networking-networking-png-portable-network-graphics.png" alt="logo"/>
+  <img height="309px" src="https://www.downloadclipart.net/large/network-png-hd.png" alt="logo"/>
 </p>
 
 # What is TradeBits?
