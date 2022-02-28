@@ -1,5 +1,15 @@
 {
     "serve": ":7090",
     "dgraph": "localhost:9080",
-    "redis": "localhost:6397"
+    "redis": "localhost:6397",
+    "name": "BitcoinTradeSet",
+    "pubkey": "189hsjha712",
+    "descr": "Best ever exhange to process bitcon operaitons",
+    "img": "",
+    "worktime": "",
+    "fee": "",
+    "locked": {
+        "links": [],
+        "names": []
+    }
 }

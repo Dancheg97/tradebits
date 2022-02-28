@@ -1,0 +1,63 @@
+<Market.descr>: string .
+<Market.fee>: string .
+<Market.img>: string .
+<Market.name>: string .
+<Market.pubkey>: string .
+<Market.worktime>: string .
+<NetMember.link>: string .
+<NetMember.pubkey>: string .
+<NetMember.string>: string @index(hash, term) @upsert .
+<Operation.desciption>: string .
+<Operation.user>: uid .
+<Order.market>: uid .
+<Order.offer>: int .
+<Order.ratio>: float .
+<Order.recieve>: int .
+<Order.user>: uid .
+<User.balance>: int .
+<User.messages>: [string] .
+<User.operations>: [uid] .
+<User.orders>: [uid] .
+<User.pubkey>: string @index(hash) @upsert .
+<dgraph.drop.op>: string .
+<dgraph.graphql.p_query>: string @index(sha256) .
+<dgraph.graphql.schema>: string .
+<dgraph.graphql.xid>: string @index(exact) @upsert .
+type <Market> {
+	Market.name
+	Market.pubkey
+	Market.descr
+	Market.img
+	Market.worktime
+	Market.fee
+}
+type <NetMember> {
+	NetMember.string
+	NetMember.pubkey
+	NetMember.link
+}
+type <Operation> {
+	Operation.desciption
+	Operation.user
+}
+type <Order> {
+	Order.offer
+	Order.recieve
+	Order.ratio
+	Order.user
+	Order.market
+}
+type <User> {
+	User.pubkey
+	User.balance
+	User.messages
+	User.orders
+	User.operations
+}
+type <dgraph.graphql> {
+	dgraph.graphql.schema
+	dgraph.graphql.xid
+}
+type <dgraph.graphql.persisted_query> {
+	dgraph.graphql.p_query
+}

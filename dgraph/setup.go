@@ -16,14 +16,14 @@ var dgraph *dgo.Dgraph
 func Setup(adress string, schema string) {
 	d, dialErr := grpc.Dial(adress, grpc.WithInsecure())
 	if dialErr != nil {
-		log.Panic("unable to open dgraph")
+		log.Panic(dialErr)
 	}
 	dgraph := dgo.NewDgraphClient(
 		api.NewDgraphClient(d),
 	)
 	bytes, err := ioutil.ReadFile(schema)
 	if err != nil {
-		log.Panic("unable to find schema.gql")
+		log.Panic(err)
 	}
 	schemaErr := dgraph.Alter(
 		context.Background(),
@@ -32,6 +32,6 @@ func Setup(adress string, schema string) {
 		},
 	)
 	if schemaErr != nil {
-		log.Panic("unable to set dgraph schema", schemaErr)
+		log.Panic(schemaErr)
 	}
 }
