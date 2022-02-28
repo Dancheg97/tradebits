@@ -1,8 +1,0 @@
-mutation {
-    users: addUser(
-        input: [
-            {pubkey: "12345", balance: 123}
-            {pubkey: "12332", balance: 342}
-        ]
-    )
-}

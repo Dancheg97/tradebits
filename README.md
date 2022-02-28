@@ -5,16 +5,16 @@
   <img height="330px" src="https://www.pngkey.com/png/full/437-4379380_networking-networking-png-portable-network-graphics.png" alt="logo"/>
 </p>
 
-# What is setgraph?
+# What is TradeBits?
 
-Setgraph - is a software, that allows markets to process operations in a distributed network and communicate with each other. Each node in system is it's market, together they provide system's security and stability.
+TradeBits - is a software, that allows markets to process operations in a distributed network and communicate with each other. Each node in system is it's market, together they provide system's security and stability.
 
-Users can connect directly to setgraph network markets, to process input, output and trading operations. Users and markets are allowed to process operations using their cryptographic keys.
+Users can connect directly to TradeBits network markets, to process input, output and trading operations. Users and markets are allowed to process operations using their cryptographic keys.
 
 # How does it work?
 
 To understand how it works, lets start with covering local terms:
-- Node - single instance of working market, unary element in setgraph network
+- Node - single instance of working market, unary element in TradeBits network
 - User - individual, that can process transaction in network
 - Transaction - single operation in network, that is changing actual data
 
