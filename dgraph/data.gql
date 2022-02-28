@@ -1,4 +1,3 @@
-
 type User {
     id: ID!
     pubkey: String! @id @search(by: [hash])
@@ -8,28 +7,18 @@ type User {
     operations: [Operation] @hasInverse(field: "user")
 }
 
-type Market {
-    id: ID!
-    name: String!
-    pubkey: String!
-    descr: String!
-    img: String!
-    worktime: String!
-    fee: String!
-}
-
 type Order {
     id: ID!
     offer: Int!
     recieve: Int!
     ratio: Float!
-    user: [User] @hasInverse(field: "orders")
-    market: String!
+    user: User @hasInverse(field: "orders")
+    market: NetMember
 }
 
 type NetMember {
     id: ID!
-    string: String! @id @search(by: [term])
+    name: String! @id @search(by: [term])
     pubkey: String!
     link: String!
 }
@@ -37,5 +26,5 @@ type NetMember {
 type Operation {
     id: ID!
     desciption: String!
-    user: [User] @hasInverse(field: "operations")
+    user: User @hasInverse(field: "operations")
 }

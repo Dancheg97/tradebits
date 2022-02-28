@@ -1,7 +1,7 @@
 package redis
 
 func Lock(ID []byte) bool {
-	blcmd := redisClient.SetNX(ctx, string(ID), true, 0)
+	blcmd := rds.SetNX(ctx, string(ID), true, 0)
 	wasSet, connErr := blcmd.Result()
 	if wasSet {
 		return true

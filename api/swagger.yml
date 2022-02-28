@@ -1,0 +1,534 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "TradeBits"
+  description: "In this API description you can find description of ways markets communicate with each other and users.\n\n Each sign of message user send to market is additionally reinforced by market name as indtent to ensure markets will not try to proceed same operations with users on other markets. That is not mention in API, but implemented on server and client sides.\n\n Each procedure on specific market need to be reinforced by market name in senders message, to prevent mimic behavior by markets collecting data. That will guarantee, that only owner of the private key is able to process transactions on specific market."
+paths:
+#  ###############
+#   INFO REQUESTS
+#  ###############
+  /info/market:
+    get:
+      tags:
+      - "information"
+      summary: "get information about market"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            type: string
+            properties:
+              name:
+                type: string
+              pubkey:
+                type: string
+              descr:
+                type: string
+              img:
+                type: string
+              worktime:
+                type: string
+              fee:
+                type: integer
+              delimiter:
+                type: integer
+            example:
+              name: "Best Market"
+              pubkey: "base64content"
+              descr: "Best ever made"
+              img: "http://image.link/img123"
+              worktime: "9:00 - 23:00"
+              fee: 86
+              delimiter: 2
+  /info/net:
+    get:
+      tags:
+      - "information"
+      summary: "get information about cuurent network members"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            type: string
+            properties:
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  pubkey:
+                    type: string
+                  link:
+                    type: string
+            example:
+                - name: "Market name"
+                  pubkey: "mktadress"
+                  link: "http://someadr.ru/helo"
+                - name: "Market name"
+                  pubkey: "mktadress"
+                  link: "http://someadr.ru/helo"
+
+#  ###############
+#   USER REQUESTS
+#  ###############
+  /user/create:
+    put:
+      tags:
+      - "user"
+      summary: "creates new user in market"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: string
+          properties:
+            publickey:
+              type: string
+            sign:
+              type: string
+          example:
+            publickey: "putbase64contents"
+            sign: "putbase64contents"
+      responses:
+        "201":
+          description: "Created"
+        "401":
+          description: "Sign verification error"
+        "403":
+          description: "User exists"
+        "405":
+          description: "Invalid input"
+  /user/balance:
+    get:
+      tags:
+      - "user"
+      summary: "get user balance"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: string
+          properties:
+            publickey:
+              type: string
+          example:
+            publickey: "putbase64contents"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            type: string
+            properties:
+              balance:
+                type: integer
+            example:
+              balance: 3872
+        "404":
+          description: "User not found"
+        "405":
+          description: "Invalid input"
+  /user/messages:
+    get:
+      tags:
+      - "user"
+      summary: "get messages related to user"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: string
+          properties:
+            publickey:
+              type: string
+            offset:
+              type: integer
+          example:
+            publickey: "putbase64contents"
+            offset: 87
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            type: string
+            properties:
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  pubkey:
+                    type: string
+                  link:
+                    type: string
+            example:
+                - name: "Market name"
+                  pubkey: "mktadress"
+                  link: "http://someadr.ru/helo"
+                - name: "Market name"
+                  pubkey: "mktadress"
+                  link: "http://someadr.ru/helo"
+  /user/trades:
+    get:
+      tags:
+      - "user"
+      summary: "get user active trades"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: string
+          properties:
+            publickey:
+              type: string
+          example:
+            publickey: "putbase64contents"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            type: string
+            properties:
+              items:
+                type: object
+                properties:
+                  offer:
+                    type: integer
+                  recieve:
+                    type: integer
+                  market:
+                    type: string
+            example:
+                - offer: 12
+                  recieve: 25
+                  market: "mktadress"
+                - offer: 42
+                  recieve: 15
+                  market: "anothermktadress"
+        "404":
+          description: "User not found"
+        "405":
+          description: "Invalid input"
+  /user/message:
+    post:
+      tags:
+      - "user"
+      summary: "sends message from user to exchange"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: string
+          properties:
+            publickey:
+              type: string
+            message:
+              type: string
+            sign:
+              type: string
+          example:
+            publickey: "putbase64contents"
+            message: "encrypted_message"
+            sign: "putbase64contents"
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Sign verification error"
+        "404":
+          description: "User not found"
+        "405":
+          description: "Invalid input"
+        "423":
+          description: "Locked"
+  /user/remmittance:
+    post:
+      tags:
+      - "user"
+      summary: "operation for sending currecy from one user to another"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: string
+          properties:
+            publickey:
+              type: string
+            recieverkey:
+              type: string
+            amount:
+              type: integer
+            sign:
+              type: string
+          example:
+            publickey: "putbase64contents"
+            recieverkey: "putbase64contents"
+            amount: 46582
+            sign: "putbase64contents"
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Sign verification error"
+        "404":
+          description: "User not found"
+        "405":
+          description: "Invalid input"
+        "423":
+          description: "Locked"
+        "456":
+          description: "Bad balance"
+  /user/order:
+    post:
+      tags:
+      - "user"
+      summary: "make buy order for currency in different exchange"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: string
+          properties:
+            publickey:
+              type: string
+            marketkey:
+              type: string
+            offer:
+              type: integer
+            recieve:
+              type: integer
+            sign:
+              type: string
+          example:
+            publickey: "putbase64contents"
+            marketkey: "putbase64contents"
+            offer: 46582
+            recieve: 3652
+            sign: "putbase64contents"
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Sign verification error"
+        "404":
+          description: "User not found"
+        "405":
+          description: "Invalid input"
+        "423":
+          description: "Locked"
+        "456":
+          description: "Bad balance"
+  /user/cancelorders:
+    post:
+      tags:
+      - "user"
+      summary: "cancel orders from user"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: string
+          properties:
+            publickey:
+              type: string
+            sign:
+              type: string
+          example:
+            publickey: "putbase64contents"
+            sign: "putbase64contents"
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Sign verification error"
+        "404":
+          description: "User not found"
+        "423":
+          description: "Locked"
+        "457":
+          description: "No active trades"
+
+
+#  #################
+#   MARKET REQUESTS
+#  #################
+  /market/create:
+    put:
+      tags:
+      - "market"
+      summary: "add market to network members"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: string
+          properties:
+            marketkey:
+              type: string
+            marketname:
+              type: string
+            marketlink:
+              type: string
+            sign:
+              type: string
+          example:
+            marketkey: "putbase64contents"
+            userkey: "putbase64contents"
+            newoffer: 56
+            newrecieve: 98
+            sign: "signbase64"
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Sign verification error"
+        "404":
+          description: "Trade not found"
+        "423":
+          description: "Locked"
+        "457":
+          description: "No active trades"
+  /market/decrease:
+    post:
+      tags:
+      - "market"
+      summary: "decreases order from specific user"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: string
+          properties:
+            marketkey:
+              type: string
+            userkey:
+              type: string
+            newoffer:
+              type: integer
+            newrecieve:
+              type: integer
+            sign:
+              type: string
+          example:
+            marketkey: "putbase64contents"
+            userkey: "putbase64contents"
+            newoffer: 56
+            newrecieve: 98
+            sign: "signbase64"
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Sign verification error"
+        "404":
+          description: "Trade not found"
+        "405":
+          description: "Invalid input"
+        "423":
+          description: "Locked"
+        "457":
+          description: "No active trades"
+  /market/related:
+    get:
+      tags:
+      - "market"
+      summary: "get best related trade from market"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: string
+          properties:
+            marketkey:
+              type: string
+          example:
+            marketkey: "putbase64contents"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            type: string
+            properties:
+              publickey:
+                type: string
+              offer:
+                type: integer
+              recieve:
+                type: integer
+            example:
+                publickey: "base64adress"
+                offer: 54
+                recieve: 87
+        "404":
+          description: "Market not found"
+        "405":
+          description: "Invalid input"
+  /market/close:
+    delete:
+      tags:
+      - "market"
+      summary: "closes order from specific user"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: string
+          properties:
+            marketkey:
+              type: string
+            userkey:
+              type: string
+            sign:
+              type: string
+          example:
+            marketkey: "putbase64contents"
+            userkey: "putbase64contents"
+            sign: "signbase64"
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Sign verification error"
+        "404":
+          description: "Trade not found"
+        "405":
+          description: "Invalid input"
+        "423":
+          description: "Locked"
+        "457":
+          description: "No active trades"
