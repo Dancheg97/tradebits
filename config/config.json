@@ -7,7 +7,8 @@
     "descr": "Best ever exhange to process bitcon operaitons",
     "img": "",
     "worktime": "",
-    "fee": "",
+    "fee": 86,
+    "delimiter": 2,
     "locked": {
         "links": [],
         "names": []

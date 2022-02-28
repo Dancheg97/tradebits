@@ -6,7 +6,7 @@ package api;
 
 service Info {
     rpc UserBalance(PublicKey) returns (Balance);
-    rpc HasTrades(PublicKey) returns (Bool);
+    rpc GetTrades(PublicKey) returns (Bool);
     rpc MarketInfo(Empty) returns (InfoMarket);
     rpc NetInfo(Offset) returns (Links);
     rpc GetMessages(Offset) returns (Messages);

@@ -18,7 +18,7 @@ type Order {
 
 type NetMember {
     id: ID!
-    string: String! @id @search(by: [term])
+    name: String! @id @search(by: [term])
     pubkey: String!
     link: String!
 }
