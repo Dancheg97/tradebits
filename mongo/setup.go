@@ -5,19 +5,9 @@ import (
 	"log"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
-type User struct {
-	ID       primitive.ObjectID `json:"_id" bson:"_id"`
-	Name     string             `json:"Name" bson:"Name"`
-	Balance  int                `json:"Balance" bson:"Balance"`
-	Messages []string           `json:"Messages" bson:"Messages"`
-}
-
-var client *mongo.Client
 
 func Setup(adress string) {
 	ctx, cancel := context.WithTimeout(
@@ -25,12 +15,15 @@ func Setup(adress string) {
 		1*time.Second,
 	)
 	defer cancel()
-	mongoclient, err := mongo.Connect(
-		ctx,
-		options.Client().ApplyURI(adress),
-	)
-	client = mongoclient
+	credential := options.Credential{
+		Username: "admin",
+		Password: "admin",
+	}
+	opts := options.Client().ApplyURI(adress).SetAuth(credential)
+	client, err := mongo.Connect(ctx, opts)
 	if err != nil {
 		log.Panic("Unable to connect to mongo")
 	}
+	db := client.Database("db")
+	userdb = db.Collection("user")
 }
