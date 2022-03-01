@@ -1,49 +1,32 @@
 package mongo
 
-import (
-	"context"
-	"time"
-
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-)
-
 type User struct {
 	PubKey   string   `json:"PubKey" bson:"PubKey"`
 	Balance  int      `json:"Balance" bson:"Balance"`
 	Messages []string `json:"Messages" bson:"Messages"`
 }
 
-var userdb *mongo.Collection
-
-func UserCheck(adress string) (bool, error) {
-	ctx, cancel := context.WithTimeout(
-		context.Background(),
-		1*time.Second,
-	)
-	defer cancel()
-	rez, err := userdb.Find(ctx, bson.M{
-		"PubKey": adress,
-	})
-	if err != nil {
-		return false, err
-	}
-	rezElems, err := rez.Current.Elements()
-	if err != nil {
-		return false, err
-	}
-	if len(rezElems) == 0 {
-		return false, nil
-	}
+// checks wether user exists in mongo
+func UserCheck(pubkey string) (bool, error) {
 	return true, nil
 }
 
-func UserNew(u User) error {
-	ctx, cancel := context.WithTimeout(
-		context.Background(),
-		1*time.Second,
-	)
-	defer cancel()
-	_, err := userdb.InsertOne(ctx, u)
-	return err
+// creates new user in mongo
+func UserCreate(pubkey string) error {
+	return nil
+}
+
+// put new message to related to user
+func UserPutMessage(pubkey string, message string) error {
+	return nil
+}
+
+// increases user balance by some amount
+func UserIncreaseBalance(pubkey string, increase int) error {
+	return nil
+}
+
+// decrease user balance by some amount
+func UserDecreateBalance(pubkey string, decrease int) error {
+	return nil
 }

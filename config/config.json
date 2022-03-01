@@ -1,6 +1,6 @@
 {
     "serve": ":7090",
-    "dgraph": "localhost:9080",
+    "mongo": "localhost:9080",
     "redis": "localhost:6397",
     "name": "Softdigger Bitcoin exchange",
     "privatekey": "",
