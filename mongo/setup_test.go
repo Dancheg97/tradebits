@@ -1,27 +1,37 @@
 package mongo
 
-import "testing"
+import (
+	"context"
+	"testing"
+)
 
-func TestOpenMongoSuccess(t *testing.T) {
+func TestOpenMongo(t *testing.T) {
+	err := openMongo("mongodb://localhost:27017")
+	if err != nil {
+		t.Error("failed to open mongo")
+	}
+}
+
+func TestCreateCollection(t *testing.T) {
 	openMongo("mongodb://localhost:27017")
+	err := createCollection("testcol")
+	if err != nil {
+		t.Error("failed to create collection")
+	}
+	database.Collection("testcol").Drop(context.Background())
 }
 
-func TestOpenMongoFail(t *testing.T) {
-	
+func TestCreateIndex(t *testing.T) {
+	openMongo("mongodb://localhost:27017")
+	createCollection("testcol2")
+	err := createIndex("testcol2", "Pubkey", "hashed")
+	if err != nil {
+		t.Error("failed to create collection")
+	}
+	database.Collection("testcol2").Drop(context.Background())
 }
 
-func TestCreateCollectionSuccess(t *testing.T) {
+func TestSetup(t *testing.T) {
 	Setup("mongodb://localhost:27017")
-}
-
-func TestCreateCollectionFail(t *testing.T) {
-
-}
-
-func TestCreateIndexSuccess(t *testing.T) {
-
-}
-
-func TestCreateIndexFail(t *testing.T) {
-
+	database.Collection("user").Drop(context.Background())
 }

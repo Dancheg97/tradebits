@@ -11,7 +11,6 @@ import (
 )
 
 var database *mongo.Database
-var userCollection *mongo.Collection
 
 func openMongo(adress string) error {
 	ctx, cancel := context.WithTimeout(
@@ -32,25 +31,26 @@ func openMongo(adress string) error {
 	return nil
 }
 
-func createCollection(db *mongo.Database, name string) error {
+func createCollection(name string) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		1*time.Second,
 	)
 	defer cancel()
-	err := db.CreateCollection(ctx, name)
+	err := database.CreateCollection(ctx, name)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func createIndex(coll *mongo.Collection, key string, value string) error {
+func createIndex(col string, key string, value string) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		1*time.Second,
 	)
 	defer cancel()
+	coll := database.Collection(col)
 	idx := mongo.IndexModel{
 		Keys:    bson.M{key: value},
 		Options: nil,
@@ -67,12 +67,12 @@ func Setup(adress string) {
 	if dbOpenError != nil {
 		log.Panic("Unable to open mongo", dbOpenError)
 	}
-	userCollectionError := createCollection(database, "user")
+	userCollectionError := createCollection("user")
 	if userCollectionError != nil {
 		log.Panic("Unable to create user collection", userCollectionError)
 	}
 	userCollection = database.Collection("user")
-	userIndexError := createIndex(userCollection, "PubKey", "hashed")
+	userIndexError := createIndex("user", "PubKey", "hashed")
 	if userIndexError != nil {
 		log.Panic("Unable to create user hash PubKey index", userIndexError)
 	}
