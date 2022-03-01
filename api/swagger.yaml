@@ -1,46 +1,40 @@
----
 swagger: "2.0"
 info:
-  description: "In this API description you can find description of ways markets communicate\
-    \ with each other and users.\n\n Each sign of message user send to market is additionally\
-    \ reinforced by market name as indtent to ensure markets will not try to proceed\
-    \ same operations with users on other markets. That is not mention in API, but\
-    \ implemented on server and client sides.\n\n Each procedure on specific market\
-    \ need to be reinforced by market name in senders message, to prevent mimic behavior\
-    \ by markets collecting data. That will guarantee, that only owner of the private\
-    \ key is able to process transactions on specific market."
   version: "1.0.0"
   title: "TradeBits"
+  description: "In this API description you can find description of ways markets communicate with each other and users.\n\n Each sign of message user send to market is additionally reinforced by market name as indtent to ensure markets will not try to proceed same operations with users on other markets. That is not mention in API, but implemented on server and client sides.\n\n Each procedure on specific market need to be reinforced by market name in senders message, to prevent mimic behavior by markets collecting data. That will guarantee, that only owner of the private key is able to process transactions on specific market."
 paths:
+#  ###############
+#   INFO REQUESTS
+#  ###############
   /info/market:
     get:
       tags:
       - "information"
       summary: "get information about market"
-      parameters: []
       responses:
         "200":
           description: "OK"
           schema:
-            type: "string"
+            type: string
             properties:
               name:
-                type: "string"
-              pubkey:
-                type: "string"
+                type: string
+              userkey:
+                type: string
               descr:
-                type: "string"
+                type: string
               img:
-                type: "string"
+                type: string
               worktime:
-                type: "string"
+                type: string
               fee:
-                type: "integer"
+                type: integer
               delimiter:
-                type: "integer"
+                type: integer
             example:
               name: "Best Market"
-              pubkey: "base64content"
+              userkey: "base64content"
               descr: "Best ever made"
               img: "http://image.link/img123"
               worktime: "9:00 - 23:00"
@@ -51,29 +45,32 @@ paths:
       tags:
       - "information"
       summary: "get information about cuurent network members"
-      parameters: []
       responses:
         "200":
           description: "OK"
           schema:
-            type: "string"
+            type: string
             properties:
               items:
-                type: "object"
+                type: object
                 properties:
                   name:
-                    type: "string"
-                  pubkey:
-                    type: "string"
+                    type: string
+                  userkey:
+                    type: string
                   link:
-                    type: "string"
+                    type: string
             example:
-            - name: "Market name"
-              pubkey: "mktadress"
-              link: "http://someadr.ru/helo"
-            - name: "Market name"
-              pubkey: "mktadress"
-              link: "http://someadr.ru/helo"
+                - name: "Market name"
+                  userkey: "mktadress"
+                  link: "http://someadr.ru/helo"
+                - name: "Market name"
+                  userkey: "mktadress"
+                  link: "http://someadr.ru/helo"
+
+#  ###############
+#   USER REQUESTS
+#  ###############
   /user/create:
     put:
       tags:
@@ -86,16 +83,15 @@ paths:
         name: "body"
         required: true
         schema:
-          type: "string"
+          type: string
           properties:
-            publickey:
-              type: "string"
+            userkey:
+              type: string
             sign:
-              type: "string"
+              type: string
           example:
-            publickey: "putbase64contents"
+            userkey: "putbase64contents"
             sign: "putbase64contents"
-        x-exportParamName: "Body"
       responses:
         "201":
           description: "Created"
@@ -117,21 +113,20 @@ paths:
         name: "body"
         required: true
         schema:
-          type: "string"
+          type: string
           properties:
-            publickey:
-              type: "string"
+            userkey:
+              type: string
           example:
-            publickey: "putbase64contents"
-        x-exportParamName: "Body"
+            userkey: "putbase64contents"
       responses:
         "200":
           description: "OK"
           schema:
-            type: "string"
+            type: string
             properties:
               balance:
-                type: "integer"
+                type: integer
             example:
               balance: 3872
         "404":
@@ -150,38 +145,37 @@ paths:
         name: "body"
         required: true
         schema:
-          type: "string"
+          type: string
           properties:
-            publickey:
-              type: "string"
+            userkey:
+              type: string
             offset:
-              type: "integer"
+              type: integer
           example:
-            publickey: "putbase64contents"
+            userkey: "putbase64contents"
             offset: 87
-        x-exportParamName: "Body"
       responses:
         "200":
           description: "OK"
           schema:
-            type: "string"
+            type: string
             properties:
               items:
-                type: "object"
+                type: object
                 properties:
                   name:
-                    type: "string"
-                  pubkey:
-                    type: "string"
+                    type: string
+                  userkey:
+                    type: string
                   link:
-                    type: "string"
+                    type: string
             example:
-            - name: "Market name"
-              pubkey: "mktadress"
-              link: "http://someadr.ru/helo"
-            - name: "Market name"
-              pubkey: "mktadress"
-              link: "http://someadr.ru/helo"
+                - name: "Market name"
+                  userkey: "mktadress"
+                  link: "http://someadr.ru/helo"
+                - name: "Market name"
+                  userkey: "mktadress"
+                  link: "http://someadr.ru/helo"
   /user/trades:
     get:
       tags:
@@ -194,41 +188,40 @@ paths:
         name: "body"
         required: true
         schema:
-          type: "string"
+          type: string
           properties:
-            publickey:
-              type: "string"
+            userkey:
+              type: string
           example:
-            publickey: "putbase64contents"
-        x-exportParamName: "Body"
+            userkey: "putbase64contents"
       responses:
         "200":
           description: "OK"
           schema:
-            type: "string"
+            type: string
             properties:
               items:
-                type: "object"
+                type: object
                 properties:
                   offer:
-                    type: "integer"
+                    type: integer
                   recieve:
-                    type: "integer"
+                    type: integer
                   market:
-                    type: "string"
+                    type: string
             example:
-            - offer: 12
-              recieve: 25
-              market: "mktadress"
-            - offer: 42
-              recieve: 15
-              market: "anothermktadress"
+                - offer: 12
+                  recieve: 25
+                  market: "mktadress"
+                - offer: 42
+                  recieve: 15
+                  market: "anothermktadress"
         "404":
           description: "User not found"
         "405":
           description: "Invalid input"
   /user/message:
-    post:
+    put:
       tags:
       - "user"
       summary: "sends message from user to exchange"
@@ -239,19 +232,18 @@ paths:
         name: "body"
         required: true
         schema:
-          type: "string"
+          type: string
           properties:
-            publickey:
-              type: "string"
+            userkey:
+              type: string
             message:
-              type: "string"
+              type: string
             sign:
-              type: "string"
+              type: string
           example:
-            publickey: "putbase64contents"
+            userkey: "putbase64contents"
             message: "encrypted_message"
             sign: "putbase64contents"
-        x-exportParamName: "Body"
       responses:
         "200":
           description: "OK"
@@ -275,22 +267,21 @@ paths:
         name: "body"
         required: true
         schema:
-          type: "string"
+          type: string
           properties:
-            publickey:
-              type: "string"
+            userkey:
+              type: string
             recieverkey:
-              type: "string"
+              type: string
             amount:
-              type: "integer"
+              type: integer
             sign:
-              type: "string"
+              type: string
           example:
-            publickey: "putbase64contents"
+            userkey: "putbase64contents"
             recieverkey: "putbase64contents"
             amount: 46582
             sign: "putbase64contents"
-        x-exportParamName: "Body"
       responses:
         "200":
           description: "OK"
@@ -316,25 +307,24 @@ paths:
         name: "body"
         required: true
         schema:
-          type: "string"
+          type: string
           properties:
-            publickey:
-              type: "string"
+            userkey:
+              type: string
             marketkey:
-              type: "string"
+              type: string
             offer:
-              type: "integer"
+              type: integer
             recieve:
-              type: "integer"
+              type: integer
             sign:
-              type: "string"
+              type: string
           example:
-            publickey: "putbase64contents"
+            userkey: "putbase64contents"
             marketkey: "putbase64contents"
             offer: 46582
             recieve: 3652
             sign: "putbase64contents"
-        x-exportParamName: "Body"
       responses:
         "200":
           description: "OK"
@@ -360,16 +350,15 @@ paths:
         name: "body"
         required: true
         schema:
-          type: "string"
+          type: string
           properties:
-            publickey:
-              type: "string"
+            userkey:
+              type: string
             sign:
-              type: "string"
+              type: string
           example:
-            publickey: "putbase64contents"
+            userkey: "putbase64contents"
             sign: "putbase64contents"
-        x-exportParamName: "Body"
       responses:
         "200":
           description: "OK"
@@ -381,6 +370,9 @@ paths:
           description: "Locked"
         "457":
           description: "No active trades"
+#  #################
+#   MARKET REQUESTS
+#  #################
   /market/create:
     put:
       tags:
@@ -393,31 +385,33 @@ paths:
         name: "body"
         required: true
         schema:
-          type: "string"
+          type: string
           properties:
             marketkey:
-              type: "string"
+              type: string
             marketname:
-              type: "string"
+              type: string
             marketlink:
-              type: "string"
+              type: string
             sign:
-              type: "string"
+              type: string
           example:
             marketkey: "putbase64contents"
-            marketname: "Dope shit"
-            marketlink: "dope-change.com"
+            userkey: "putbase64contents"
+            newoffer: 56
+            newrecieve: 98
             sign: "signbase64"
-        x-exportParamName: "Body"
       responses:
-        "201":
-          description: "Created"
+        "200":
+          description: "OK"
         "401":
           description: "Sign verification error"
-        "403":
-          description: "Market exists"
-        "405":
-          description: "Invalid input"
+        "404":
+          description: "Trade not found"
+        "423":
+          description: "Locked"
+        "457":
+          description: "No active trades"
   /market/decrease:
     post:
       tags:
@@ -430,25 +424,24 @@ paths:
         name: "body"
         required: true
         schema:
-          type: "string"
+          type: string
           properties:
             marketkey:
-              type: "string"
+              type: string
             userkey:
-              type: "string"
+              type: string
             newoffer:
-              type: "integer"
+              type: integer
             newrecieve:
-              type: "integer"
+              type: integer
             sign:
-              type: "string"
+              type: string
           example:
             marketkey: "putbase64contents"
             userkey: "putbase64contents"
             newoffer: 56
             newrecieve: 98
             sign: "signbase64"
-        x-exportParamName: "Body"
       responses:
         "200":
           description: "OK"
@@ -466,7 +459,7 @@ paths:
     get:
       tags:
       - "market"
-      summary: "get best related trade for market"
+      summary: "get best related trade from market"
       consumes:
       - "application/json"
       parameters:
@@ -474,29 +467,28 @@ paths:
         name: "body"
         required: true
         schema:
-          type: "string"
+          type: string
           properties:
             marketkey:
-              type: "string"
+              type: string
           example:
             marketkey: "putbase64contents"
-        x-exportParamName: "Body"
       responses:
         "200":
           description: "OK"
           schema:
-            type: "string"
+            type: string
             properties:
-              publickey:
-                type: "string"
+              userkey:
+                type: string
               offer:
-                type: "integer"
+                type: integer
               recieve:
-                type: "integer"
+                type: integer
             example:
-              publickey: "base64adress"
-              offer: 54
-              recieve: 87
+                userkey: "base64adress"
+                offer: 54
+                recieve: 87
         "404":
           description: "Market not found"
         "405":
@@ -513,19 +505,18 @@ paths:
         name: "body"
         required: true
         schema:
-          type: "string"
+          type: string
           properties:
             marketkey:
-              type: "string"
+              type: string
             userkey:
-              type: "string"
+              type: string
             sign:
-              type: "string"
+              type: string
           example:
             marketkey: "putbase64contents"
             userkey: "putbase64contents"
             sign: "signbase64"
-        x-exportParamName: "Body"
       responses:
         "200":
           description: "OK"
@@ -539,3 +530,111 @@ paths:
           description: "Locked"
         "457":
           description: "No active trades"
+#  ###################
+#   OPERATOR REQUESTS
+#  ###################
+  /operator/message:
+    put:
+      tags:
+      - "operator"
+      summary: "sends message to user"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: string
+          properties:
+            userkey:
+              type: string
+            message:
+              type: string
+            sign:
+              type: string
+          example:
+            userkey: "putbase64contents"
+            message: "putbase64contents"
+            sign: "signbase64"
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Sign verification error"
+        "404":
+          description: "User not found"
+        "405":
+          description: "Invalid input"
+  /operator/deposit:
+    post:
+      tags:
+      - "operator"
+      summary: "increase user balance by some amount"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: string
+          properties:
+            userkey:
+              type: string
+            increase:
+              type: integer
+            sign:
+              type: string
+          example:
+            userkey: "putbase64contents"
+            increase: 673
+            sign: "signbase64"
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Sign verification error"
+        "404":
+          description: "User not found"
+        "405":
+          description: "Invalid input"
+        "423":
+          description: "Locked"
+  /operator/withdrawal:
+    post:
+      tags:
+      - "operator"
+      summary: "decrease user balance by some amount"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: string
+          properties:
+            userkey:
+              type: string
+            decrease:
+              type: integer
+            sign:
+              type: string
+          example:
+            userkey: "putbase64contents"
+            decrease: "putbase64contents"
+            sign: "signbase64"
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Sign verification error"
+        "404":
+          description: "User not found"
+        "405":
+          description: "Invalid input"
+        "423":
+          description: "Locked"
+        "456":
+          description: "Bad balance"
