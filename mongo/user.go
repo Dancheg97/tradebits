@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -15,7 +16,29 @@ type User struct {
 
 var userdb *mongo.Collection
 
-func NewUser(u User) error {
+func UserCheck(adress string) (bool, error) {
+	ctx, cancel := context.WithTimeout(
+		context.Background(),
+		1*time.Second,
+	)
+	defer cancel()
+	rez, err := userdb.Find(ctx, bson.M{
+		"PubKey": adress,
+	})
+	if err != nil {
+		return false, err
+	}
+	rezElems, err := rez.Current.Elements()
+	if err != nil {
+		return false, err
+	}
+	if len(rezElems) == 0 {
+		return false, nil
+	}
+	return true, nil
+}
+
+func UserNew(u User) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		1*time.Second,

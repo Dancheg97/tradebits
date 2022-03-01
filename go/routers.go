@@ -98,6 +98,27 @@ var routes = Routes{
 	},
 
 	Route{
+		"OperatorDepositPost",
+		strings.ToUpper("Post"),
+		"/operator/deposit",
+		OperatorDepositPost,
+	},
+
+	Route{
+		"OperatorMessagePut",
+		strings.ToUpper("Put"),
+		"/operator/message",
+		OperatorMessagePut,
+	},
+
+	Route{
+		"OperatorWithdrawalPost",
+		strings.ToUpper("Post"),
+		"/operator/withdrawal",
+		OperatorWithdrawalPost,
+	},
+
+	Route{
 		"UserBalanceGet",
 		strings.ToUpper("Get"),
 		"/user/balance",
@@ -119,10 +140,10 @@ var routes = Routes{
 	},
 
 	Route{
-		"UserMessagePost",
-		strings.ToUpper("Post"),
+		"UserMessagePut",
+		strings.ToUpper("Put"),
 		"/user/message",
-		UserMessagePost,
+		UserMessagePut,
 	},
 
 	Route{

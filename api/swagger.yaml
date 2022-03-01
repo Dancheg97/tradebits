@@ -10,7 +10,7 @@ paths:
   /info/market:
     get:
       tags:
-      - "information"
+      - "info"
       summary: "get information about market"
       responses:
         "200":
@@ -43,7 +43,7 @@ paths:
   /info/net:
     get:
       tags:
-      - "information"
+      - "info"
       summary: "get information about cuurent network members"
       responses:
         "200":
