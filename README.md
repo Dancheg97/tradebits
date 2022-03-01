@@ -24,7 +24,7 @@ Markets, own their private and public keys, and process trading operation placed
 
 Users have to verify markets and process operations on their own risk.
 
-# Our tools:
+# Our tools
 
 
 <p align="center">
