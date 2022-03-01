@@ -2,7 +2,6 @@ package mongo
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -12,7 +11,7 @@ import (
 
 var database *mongo.Database
 
-func openMongo(adress string) error {
+func OpenMongo(adress string) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		1*time.Second,
@@ -31,7 +30,7 @@ func openMongo(adress string) error {
 	return nil
 }
 
-func createCollection(name string) error {
+func CreateCollection(name string) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		1*time.Second,
@@ -44,7 +43,7 @@ func createCollection(name string) error {
 	return nil
 }
 
-func createIndex(col string, key string, value string) error {
+func CreateIndex(col string, key string, value string) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		1*time.Second,
@@ -60,20 +59,4 @@ func createIndex(col string, key string, value string) error {
 		return err
 	}
 	return nil
-}
-
-func Setup(adress string) {
-	dbOpenError := openMongo(adress)
-	if dbOpenError != nil {
-		log.Panic("Unable to open mongo", dbOpenError)
-	}
-	userCollectionError := createCollection("user")
-	if userCollectionError != nil {
-		log.Panic("Unable to create user collection", userCollectionError)
-	}
-	userCollection = database.Collection("user")
-	userIndexError := createIndex("user", "PubKey", "hashed")
-	if userIndexError != nil {
-		log.Panic("Unable to create user hash PubKey index", userIndexError)
-	}
 }

@@ -6,15 +6,15 @@ import (
 )
 
 func TestOpenMongo(t *testing.T) {
-	err := openMongo("mongodb://localhost:27017")
+	err := OpenMongo("mongodb://localhost:27017")
 	if err != nil {
 		t.Error("failed to open mongo")
 	}
 }
 
 func TestCreateCollection(t *testing.T) {
-	openMongo("mongodb://localhost:27017")
-	err := createCollection("testcol")
+	OpenMongo("mongodb://localhost:27017")
+	err := CreateCollection("testcol")
 	if err != nil {
 		t.Error("failed to create collection")
 	}
@@ -22,16 +22,11 @@ func TestCreateCollection(t *testing.T) {
 }
 
 func TestCreateIndex(t *testing.T) {
-	openMongo("mongodb://localhost:27017")
-	createCollection("testcol2")
-	err := createIndex("testcol2", "Pubkey", "hashed")
+	OpenMongo("mongodb://localhost:27017")
+	CreateCollection("testcol2")
+	err := CreateIndex("testcol2", "Pubkey", "hashed")
 	if err != nil {
 		t.Error("failed to create collection")
 	}
 	database.Collection("testcol2").Drop(context.Background())
-}
-
-func TestSetup(t *testing.T) {
-	Setup("mongodb://localhost:27017")
-	database.Collection("user").Drop(context.Background())
 }
