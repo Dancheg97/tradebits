@@ -15,6 +15,15 @@ import (
 
 func InfoMarketGet(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	rerponseMap := map[string]string{
+		name: Conig.MARKET_NAME,
+		userkey: 
+		descr: Conig.MARKET_DESCR,
+		img: Config.MARKET_IMG,
+		worktime: Conig.MARKET_WORKTIME,
+		fee: Config.MARKET_FEE,
+		delimiter: Config.MARKET_WORKTIME,
+	}
 	w.WriteHeader(http.StatusOK)
 }
 

@@ -1,5 +1,5 @@
 
-# <p  align="center" style="font-family:courier;font-size:130%" size=212px> TradeBits - interface for trading communications </p> 
+# <p  align="center" style="font-family:courier;font-size:130%" size=212px> TradeBits - interface for trading systems communication </p> 
 
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-orange.svg)](LICENSE)
 [![Generic badge](https://img.shields.io/badge/DOCKER-HUB-blue.svg)](https://hub.docker.com/repository/docker/dangdancheg/tradebits)

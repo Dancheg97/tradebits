@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  version: "1.0.0"
+  version: "1.0.1"
   title: "TradeBits"
   description: "In this API description you can find description of ways markets communicate with each other and users.\n\n Each sign of message user send to market is additionally reinforced by market name as indtent to ensure markets will not try to proceed same operations with users on other markets. That is not mention in API, but implemented on server and client sides.\n\n Each procedure on specific market need to be reinforced by market name in senders message, to prevent mimic behavior by markets collecting data. That will guarantee, that only owner of the private key is able to process transactions on specific market."
 paths:
@@ -20,7 +20,7 @@ paths:
             properties:
               name:
                 type: string
-              userkey:
+              mkey:
                 type: string
               descr:
                 type: string
@@ -34,7 +34,7 @@ paths:
                 type: integer
             example:
               name: "Best Market"
-              userkey: "base64content"
+              mkey: "base64content"
               descr: "Best ever made"
               img: "http://image.link/img123"
               worktime: "9:00 - 23:00"
@@ -56,16 +56,16 @@ paths:
                 properties:
                   name:
                     type: string
-                  userkey:
+                  mkey:
                     type: string
                   link:
                     type: string
             example:
               - name: "Market name"
-                userkey: "mktadress"
+                mkey: "mktadress"
                 link: "http://someadr.ru/helo"
               - name: "Market name"
-                userkey: "mktadress"
+                mkey: "mktadress"
                 link: "http://someadr.ru/helo"
   #  ###############
   #   USER REQUESTS
@@ -84,12 +84,12 @@ paths:
           schema:
             type: string
             properties:
-              userkey:
+              ukey:
                 type: string
               sign:
                 type: string
             example:
-              userkey: "putbase64contents"
+              ukey: "putbase64contents"
               sign: "putbase64contents"
       responses:
         "201":
@@ -114,10 +114,10 @@ paths:
           schema:
             type: string
             properties:
-              userkey:
+              ukey:
                 type: string
             example:
-              userkey: "putbase64contents"
+              ukey: "putbase64contents"
       responses:
         "200":
           description: "OK"
@@ -146,12 +146,12 @@ paths:
           schema:
             type: string
             properties:
-              userkey:
+              ukey:
                 type: string
               offset:
                 type: integer
             example:
-              userkey: "putbase64contents"
+              ukey: "putbase64contents"
               offset: 87
       responses:
         "200":
@@ -164,16 +164,16 @@ paths:
                 properties:
                   name:
                     type: string
-                  userkey:
+                  key:
                     type: string
                   link:
                     type: string
             example:
               - name: "Market name"
-                userkey: "mktadress"
+                key: "mktadress"
                 link: "http://someadr.ru/helo"
               - name: "Market name"
-                userkey: "mktadress"
+                key: "mktadress"
                 link: "http://someadr.ru/helo"
   /user/trades:
     get:
@@ -189,10 +189,10 @@ paths:
           schema:
             type: string
             properties:
-              userkey:
+              ukey:
                 type: string
             example:
-              userkey: "putbase64contents"
+              ukey: "putbase64contents"
       responses:
         "200":
           description: "OK"
@@ -206,15 +206,15 @@ paths:
                     type: integer
                   recieve:
                     type: integer
-                  market:
+                  mkey:
                     type: string
             example:
               - offer: 12
                 recieve: 25
-                market: "mktadress"
+                mkey: "mktadress"
               - offer: 42
                 recieve: 15
-                market: "anothermktadress"
+                mkey: "anothermktadress"
         "404":
           description: "User not found"
         "405":
@@ -233,14 +233,14 @@ paths:
           schema:
             type: string
             properties:
-              userkey:
+              ukey:
                 type: string
               message:
                 type: string
               sign:
                 type: string
             example:
-              userkey: "putbase64contents"
+              ukey: "putbase64contents"
               message: "encrypted_message"
               sign: "putbase64contents"
       responses:
@@ -268,7 +268,7 @@ paths:
           schema:
             type: string
             properties:
-              userkey:
+              ukey:
                 type: string
               recieverkey:
                 type: string
@@ -277,7 +277,7 @@ paths:
               sign:
                 type: string
             example:
-              userkey: "putbase64contents"
+              ukey: "putbase64contents"
               recieverkey: "putbase64contents"
               amount: 46582
               sign: "putbase64contents"
@@ -308,7 +308,7 @@ paths:
           schema:
             type: string
             properties:
-              userkey:
+              ukey:
                 type: string
               marketkey:
                 type: string
@@ -319,7 +319,7 @@ paths:
               sign:
                 type: string
             example:
-              userkey: "putbase64contents"
+              ukey: "putbase64contents"
               marketkey: "putbase64contents"
               offer: 46582
               recieve: 3652
@@ -351,12 +351,12 @@ paths:
           schema:
             type: string
             properties:
-              userkey:
+              ukey:
                 type: string
               sign:
                 type: string
             example:
-              userkey: "putbase64contents"
+              ukey: "putbase64contents"
               sign: "putbase64contents"
       responses:
         "200":
@@ -386,7 +386,7 @@ paths:
           schema:
             type: string
             properties:
-              marketkey:
+              mkey:
                 type: string
               marketname:
                 type: string
@@ -395,22 +395,17 @@ paths:
               sign:
                 type: string
             example:
-              marketkey: "putbase64contents"
-              userkey: "putbase64contents"
-              newoffer: 56
-              newrecieve: 98
+              mkey: "putbase64contents"
+              marketname: "putbase64contents"
+              marketlink: "http://link.example"
               sign: "signbase64"
       responses:
         "200":
           description: "OK"
         "401":
           description: "Sign verification error"
-        "404":
-          description: "Trade not found"
-        "423":
-          description: "Locked"
-        "457":
-          description: "No active trades"
+        "405":
+          description: "Invalid input"
   /market/decrease:
     post:
       tags:
@@ -425,9 +420,9 @@ paths:
           schema:
             type: string
             properties:
-              marketkey:
+              mkey:
                 type: string
-              userkey:
+              ukey:
                 type: string
               newoffer:
                 type: integer
@@ -436,8 +431,8 @@ paths:
               sign:
                 type: string
             example:
-              marketkey: "putbase64contents"
-              userkey: "putbase64contents"
+              mkey: "putbase64contents"
+              ukey: "putbase64contents"
               newoffer: 56
               newrecieve: 98
               sign: "signbase64"
@@ -468,24 +463,24 @@ paths:
           schema:
             type: string
             properties:
-              marketkey:
+              mkey:
                 type: string
             example:
-              marketkey: "putbase64contents"
+              mkey: "putbase64contents"
       responses:
         "200":
           description: "OK"
           schema:
             type: string
             properties:
-              userkey:
+              mkey:
                 type: string
               offer:
                 type: integer
               recieve:
                 type: integer
             example:
-              userkey: "base64adress"
+              mkey: "base64adress"
               offer: 54
               recieve: 87
         "404":
@@ -506,15 +501,15 @@ paths:
           schema:
             type: string
             properties:
-              marketkey:
+              mkey:
                 type: string
-              userkey:
+              ukey:
                 type: string
               sign:
                 type: string
             example:
-              marketkey: "putbase64contents"
-              userkey: "putbase64contents"
+              mkey: "putbase64contents"
+              ukey: "putbase64contents"
               sign: "signbase64"
       responses:
         "200":
@@ -546,14 +541,14 @@ paths:
           schema:
             type: string
             properties:
-              userkey:
+              ukey:
                 type: string
               message:
                 type: string
               sign:
                 type: string
             example:
-              userkey: "putbase64contents"
+              ukey: "putbase64contents"
               message: "putbase64contents"
               sign: "signbase64"
       responses:
@@ -579,14 +574,14 @@ paths:
           schema:
             type: string
             properties:
-              userkey:
+              ukey:
                 type: string
               increase:
                 type: integer
               sign:
                 type: string
             example:
-              userkey: "putbase64contents"
+              ukey: "putbase64contents"
               increase: 673
               sign: "signbase64"
       responses:
@@ -614,15 +609,15 @@ paths:
           schema:
             type: string
             properties:
-              userkey:
+              ukey:
                 type: string
               decrease:
                 type: integer
               sign:
                 type: string
             example:
-              userkey: "putbase64contents"
-              decrease: "putbase64contents"
+              ukey: "putbase64contents"
+              decrease: 12345
               sign: "signbase64"
       responses:
         "200":
