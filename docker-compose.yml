@@ -40,6 +40,4 @@ services:
     image: "redis:alpine"
     restart: always
     ports:
-      - 6379:6397
-    environment:
-      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - 6379:6379

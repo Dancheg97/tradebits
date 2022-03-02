@@ -4,13 +4,13 @@ info:
   title: "TradeBits"
   description: "In this API description you can find description of ways markets communicate with each other and users.\n\n Each sign of message user send to market is additionally reinforced by market name as indtent to ensure markets will not try to proceed same operations with users on other markets. That is not mention in API, but implemented on server and client sides.\n\n Each procedure on specific market need to be reinforced by market name in senders message, to prevent mimic behavior by markets collecting data. That will guarantee, that only owner of the private key is able to process transactions on specific market."
 paths:
-#  ###############
-#   INFO REQUESTS
-#  ###############
+  #  ###############
+  #   INFO REQUESTS
+  #  ###############
   /info/market:
     get:
       tags:
-      - "info"
+        - "info"
       summary: "get information about market"
       responses:
         "200":
@@ -43,7 +43,7 @@ paths:
   /info/net:
     get:
       tags:
-      - "info"
+        - "info"
       summary: "get information about cuurent network members"
       responses:
         "200":
@@ -61,37 +61,36 @@ paths:
                   link:
                     type: string
             example:
-                - name: "Market name"
-                  userkey: "mktadress"
-                  link: "http://someadr.ru/helo"
-                - name: "Market name"
-                  userkey: "mktadress"
-                  link: "http://someadr.ru/helo"
-
-#  ###############
-#   USER REQUESTS
-#  ###############
+              - name: "Market name"
+                userkey: "mktadress"
+                link: "http://someadr.ru/helo"
+              - name: "Market name"
+                userkey: "mktadress"
+                link: "http://someadr.ru/helo"
+  #  ###############
+  #   USER REQUESTS
+  #  ###############
   /user/create:
     put:
       tags:
-      - "user"
+        - "user"
       summary: "creates new user in market"
       consumes:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: string
-          properties:
-            userkey:
-              type: string
-            sign:
-              type: string
-          example:
-            userkey: "putbase64contents"
-            sign: "putbase64contents"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: string
+            properties:
+              userkey:
+                type: string
+              sign:
+                type: string
+            example:
+              userkey: "putbase64contents"
+              sign: "putbase64contents"
       responses:
         "201":
           description: "Created"
@@ -104,21 +103,21 @@ paths:
   /user/balance:
     get:
       tags:
-      - "user"
+        - "user"
       summary: "get user balance"
       consumes:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: string
-          properties:
-            userkey:
-              type: string
-          example:
-            userkey: "putbase64contents"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: string
+            properties:
+              userkey:
+                type: string
+            example:
+              userkey: "putbase64contents"
       responses:
         "200":
           description: "OK"
@@ -136,24 +135,24 @@ paths:
   /user/messages:
     get:
       tags:
-      - "user"
+        - "user"
       summary: "get messages related to user"
       consumes:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: string
-          properties:
-            userkey:
-              type: string
-            offset:
-              type: integer
-          example:
-            userkey: "putbase64contents"
-            offset: 87
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: string
+            properties:
+              userkey:
+                type: string
+              offset:
+                type: integer
+            example:
+              userkey: "putbase64contents"
+              offset: 87
       responses:
         "200":
           description: "OK"
@@ -170,30 +169,30 @@ paths:
                   link:
                     type: string
             example:
-                - name: "Market name"
-                  userkey: "mktadress"
-                  link: "http://someadr.ru/helo"
-                - name: "Market name"
-                  userkey: "mktadress"
-                  link: "http://someadr.ru/helo"
+              - name: "Market name"
+                userkey: "mktadress"
+                link: "http://someadr.ru/helo"
+              - name: "Market name"
+                userkey: "mktadress"
+                link: "http://someadr.ru/helo"
   /user/trades:
     get:
       tags:
-      - "user"
+        - "user"
       summary: "get user active trades"
       consumes:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: string
-          properties:
-            userkey:
-              type: string
-          example:
-            userkey: "putbase64contents"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: string
+            properties:
+              userkey:
+                type: string
+            example:
+              userkey: "putbase64contents"
       responses:
         "200":
           description: "OK"
@@ -210,12 +209,12 @@ paths:
                   market:
                     type: string
             example:
-                - offer: 12
-                  recieve: 25
-                  market: "mktadress"
-                - offer: 42
-                  recieve: 15
-                  market: "anothermktadress"
+              - offer: 12
+                recieve: 25
+                market: "mktadress"
+              - offer: 42
+                recieve: 15
+                market: "anothermktadress"
         "404":
           description: "User not found"
         "405":
@@ -223,27 +222,27 @@ paths:
   /user/message:
     put:
       tags:
-      - "user"
+        - "user"
       summary: "sends message from user to exchange"
       consumes:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: string
-          properties:
-            userkey:
-              type: string
-            message:
-              type: string
-            sign:
-              type: string
-          example:
-            userkey: "putbase64contents"
-            message: "encrypted_message"
-            sign: "putbase64contents"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: string
+            properties:
+              userkey:
+                type: string
+              message:
+                type: string
+              sign:
+                type: string
+            example:
+              userkey: "putbase64contents"
+              message: "encrypted_message"
+              sign: "putbase64contents"
       responses:
         "200":
           description: "OK"
@@ -258,30 +257,30 @@ paths:
   /user/remmittance:
     post:
       tags:
-      - "user"
+        - "user"
       summary: "operation for sending currecy from one user to another"
       consumes:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: string
-          properties:
-            userkey:
-              type: string
-            recieverkey:
-              type: string
-            amount:
-              type: integer
-            sign:
-              type: string
-          example:
-            userkey: "putbase64contents"
-            recieverkey: "putbase64contents"
-            amount: 46582
-            sign: "putbase64contents"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: string
+            properties:
+              userkey:
+                type: string
+              recieverkey:
+                type: string
+              amount:
+                type: integer
+              sign:
+                type: string
+            example:
+              userkey: "putbase64contents"
+              recieverkey: "putbase64contents"
+              amount: 46582
+              sign: "putbase64contents"
       responses:
         "200":
           description: "OK"
@@ -298,33 +297,33 @@ paths:
   /user/order:
     post:
       tags:
-      - "user"
+        - "user"
       summary: "make buy order for currency in different exchange"
       consumes:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: string
-          properties:
-            userkey:
-              type: string
-            marketkey:
-              type: string
-            offer:
-              type: integer
-            recieve:
-              type: integer
-            sign:
-              type: string
-          example:
-            userkey: "putbase64contents"
-            marketkey: "putbase64contents"
-            offer: 46582
-            recieve: 3652
-            sign: "putbase64contents"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: string
+            properties:
+              userkey:
+                type: string
+              marketkey:
+                type: string
+              offer:
+                type: integer
+              recieve:
+                type: integer
+              sign:
+                type: string
+            example:
+              userkey: "putbase64contents"
+              marketkey: "putbase64contents"
+              offer: 46582
+              recieve: 3652
+              sign: "putbase64contents"
       responses:
         "200":
           description: "OK"
@@ -341,24 +340,24 @@ paths:
   /user/cancelorders:
     post:
       tags:
-      - "user"
+        - "user"
       summary: "cancel orders from user"
       consumes:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: string
-          properties:
-            userkey:
-              type: string
-            sign:
-              type: string
-          example:
-            userkey: "putbase64contents"
-            sign: "putbase64contents"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: string
+            properties:
+              userkey:
+                type: string
+              sign:
+                type: string
+            example:
+              userkey: "putbase64contents"
+              sign: "putbase64contents"
       responses:
         "200":
           description: "OK"
@@ -370,37 +369,37 @@ paths:
           description: "Locked"
         "457":
           description: "No active trades"
-#  #################
-#   MARKET REQUESTS
-#  #################
+  #  #################
+  #   MARKET REQUESTS
+  #  #################
   /market/create:
     put:
       tags:
-      - "market"
+        - "market"
       summary: "add market to network members"
       consumes:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: string
-          properties:
-            marketkey:
-              type: string
-            marketname:
-              type: string
-            marketlink:
-              type: string
-            sign:
-              type: string
-          example:
-            marketkey: "putbase64contents"
-            userkey: "putbase64contents"
-            newoffer: 56
-            newrecieve: 98
-            sign: "signbase64"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: string
+            properties:
+              marketkey:
+                type: string
+              marketname:
+                type: string
+              marketlink:
+                type: string
+              sign:
+                type: string
+            example:
+              marketkey: "putbase64contents"
+              userkey: "putbase64contents"
+              newoffer: 56
+              newrecieve: 98
+              sign: "signbase64"
       responses:
         "200":
           description: "OK"
@@ -415,33 +414,33 @@ paths:
   /market/decrease:
     post:
       tags:
-      - "market"
+        - "market"
       summary: "decreases order from specific user"
       consumes:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: string
-          properties:
-            marketkey:
-              type: string
-            userkey:
-              type: string
-            newoffer:
-              type: integer
-            newrecieve:
-              type: integer
-            sign:
-              type: string
-          example:
-            marketkey: "putbase64contents"
-            userkey: "putbase64contents"
-            newoffer: 56
-            newrecieve: 98
-            sign: "signbase64"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: string
+            properties:
+              marketkey:
+                type: string
+              userkey:
+                type: string
+              newoffer:
+                type: integer
+              newrecieve:
+                type: integer
+              sign:
+                type: string
+            example:
+              marketkey: "putbase64contents"
+              userkey: "putbase64contents"
+              newoffer: 56
+              newrecieve: 98
+              sign: "signbase64"
       responses:
         "200":
           description: "OK"
@@ -458,21 +457,21 @@ paths:
   /market/related:
     get:
       tags:
-      - "market"
+        - "market"
       summary: "get best related trade from market"
       consumes:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: string
-          properties:
-            marketkey:
-              type: string
-          example:
-            marketkey: "putbase64contents"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: string
+            properties:
+              marketkey:
+                type: string
+            example:
+              marketkey: "putbase64contents"
       responses:
         "200":
           description: "OK"
@@ -486,9 +485,9 @@ paths:
               recieve:
                 type: integer
             example:
-                userkey: "base64adress"
-                offer: 54
-                recieve: 87
+              userkey: "base64adress"
+              offer: 54
+              recieve: 87
         "404":
           description: "Market not found"
         "405":
@@ -496,27 +495,27 @@ paths:
   /market/close:
     delete:
       tags:
-      - "market"
+        - "market"
       summary: "closes order from specific user"
       consumes:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: string
-          properties:
-            marketkey:
-              type: string
-            userkey:
-              type: string
-            sign:
-              type: string
-          example:
-            marketkey: "putbase64contents"
-            userkey: "putbase64contents"
-            sign: "signbase64"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: string
+            properties:
+              marketkey:
+                type: string
+              userkey:
+                type: string
+              sign:
+                type: string
+            example:
+              marketkey: "putbase64contents"
+              userkey: "putbase64contents"
+              sign: "signbase64"
       responses:
         "200":
           description: "OK"
@@ -530,33 +529,33 @@ paths:
           description: "Locked"
         "457":
           description: "No active trades"
-#  ###################
-#   OPERATOR REQUESTS
-#  ###################
+  #  ###################
+  #   OPERATOR REQUESTS
+  #  ###################
   /operator/message:
     put:
       tags:
-      - "operator"
+        - "operator"
       summary: "sends message to user"
       consumes:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: string
-          properties:
-            userkey:
-              type: string
-            message:
-              type: string
-            sign:
-              type: string
-          example:
-            userkey: "putbase64contents"
-            message: "putbase64contents"
-            sign: "signbase64"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: string
+            properties:
+              userkey:
+                type: string
+              message:
+                type: string
+              sign:
+                type: string
+            example:
+              userkey: "putbase64contents"
+              message: "putbase64contents"
+              sign: "signbase64"
       responses:
         "200":
           description: "OK"
@@ -569,27 +568,27 @@ paths:
   /operator/deposit:
     post:
       tags:
-      - "operator"
+        - "operator"
       summary: "increase user balance by some amount"
       consumes:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: string
-          properties:
-            userkey:
-              type: string
-            increase:
-              type: integer
-            sign:
-              type: string
-          example:
-            userkey: "putbase64contents"
-            increase: 673
-            sign: "signbase64"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: string
+            properties:
+              userkey:
+                type: string
+              increase:
+                type: integer
+              sign:
+                type: string
+            example:
+              userkey: "putbase64contents"
+              increase: 673
+              sign: "signbase64"
       responses:
         "200":
           description: "OK"
@@ -604,27 +603,27 @@ paths:
   /operator/withdrawal:
     post:
       tags:
-      - "operator"
+        - "operator"
       summary: "decrease user balance by some amount"
       consumes:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: string
-          properties:
-            userkey:
-              type: string
-            decrease:
-              type: integer
-            sign:
-              type: string
-          example:
-            userkey: "putbase64contents"
-            decrease: "putbase64contents"
-            sign: "signbase64"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: string
+            properties:
+              userkey:
+                type: string
+              decrease:
+                type: integer
+              sign:
+                type: string
+            example:
+              userkey: "putbase64contents"
+              decrease: "putbase64contents"
+              sign: "signbase64"
       responses:
         "200":
           description: "OK"

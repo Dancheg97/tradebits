@@ -6,10 +6,9 @@ import (
 
 var rds *redis.Client
 
-func Setup(host string, pass string) {
+func Setup(host string) {
 	rds = redis.NewClient(&redis.Options{
-		Addr:     host,
-		Password: pass,
-		DB:       0,
+		Addr: host,
+		DB:   0,
 	})
 }
