@@ -7,7 +7,7 @@ import (
 )
 
 func SetupTestEnv(collectioname string) {
-	OpenMongo("mongodb://localhost:27017")
+	openMongoFromEnv()
 	CreateCollection(collectioname)
 	CreateIndex(collectioname, "key", "hashed")
 	go func() {
