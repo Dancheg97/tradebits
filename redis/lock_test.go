@@ -4,13 +4,19 @@ import (
 	"testing"
 )
 
-func TestLockID(t *testing.T) {
-	rez1 := Lock("locktest")
-	if !rez1 {
+func TestLock(t *testing.T) {
+	testSetup()
+	rez := Lock("locktest1")
+	if !rez {
 		t.Error("value should be locked on first iteration")
 	}
-	rez2 := Lock("locktest")
-	if rez2 {
+	Unlock("locktest1")
+}
+
+func TestLockLocked(t *testing.T) {
+	Lock("locktest2")
+	rez := Lock("locktest2")
+	if rez {
 		t.Error("value should be unlocked on first iteration")
 	}
 	Unlock("locktest")
