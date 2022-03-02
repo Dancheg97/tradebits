@@ -10,10 +10,10 @@ import (
 
 func openMongoFromEnv() error {
 	godotenv.Load("../.env")
-	mongo_host, _ := os.LookupEnv("mongo_host")
-	mongo_name, _ := os.LookupEnv("mongo_name")
-	mongo_password, _ := os.LookupEnv("mongo_password")
-	mongo_db, _ := os.LookupEnv("mongo_db")
+	mongo_host, _ := os.LookupEnv("MONGO_HOST")
+	mongo_name, _ := os.LookupEnv("MONGO_NAME")
+	mongo_password, _ := os.LookupEnv("MONGO_PASSWORD")
+	mongo_db, _ := os.LookupEnv("MONGO_DB")
 	return OpenMongo(
 		mongo_host,
 		mongo_name,

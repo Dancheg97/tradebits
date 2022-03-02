@@ -11,8 +11,8 @@ import (
 
 func TestSetup(t *testing.T) {
 	godotenv.Load("../.env")
-	redis_host, _ := os.LookupEnv("redis_host")
-	redis_name, _ := os.LookupEnv("redis_name")
+	redis_host, _ := os.LookupEnv("REDIS_HOST")
+	redis_name, _ := os.LookupEnv("REDIS_NAME")
 	Setup(redis_host, redis_name)
 	resp := rds.SetNX(context.Background(), "x", "x", time.Millisecond)
 	err := resp.Err()
