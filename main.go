@@ -14,7 +14,15 @@ import (
 	"net/http"
 
 	"tradebits/swagger"
+
+	"github.com/joho/godotenv"
 )
+
+func init() {
+	if err := godotenv.Load(); err != nil {
+		log.Panic("No .env file found")
+	}
+}
 
 func main() {
 	log.Printf("Server started")
