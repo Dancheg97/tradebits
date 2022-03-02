@@ -1,13 +1,20 @@
 package redis
 
 import (
+	"context"
+	"os"
 	"testing"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
-func TestGenerateLockers(t *testing.T) {
-	Setup("localhost:6397")
-	resp := rds.SetNX(ctx, "x", "x", time.Millisecond)
+func TestSetup(t *testing.T) {
+	godotenv.Load("../.env")
+	redis_host, _ := os.LookupEnv("redis_host")
+	redis_name, _ := os.LookupEnv("redis_name")
+	Setup(redis_host, redis_name)
+	resp := rds.SetNX(context.Background(), "x", "x", time.Millisecond)
 	err := resp.Err()
 	if err != nil {
 		t.Error(err)
