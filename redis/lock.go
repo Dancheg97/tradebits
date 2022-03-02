@@ -1,13 +1,20 @@
 package redis
 
-// func Lock(ID []byte) bool {
-// 	blcmd := rds.SetNX(ctx, string(ID), true, 0)
-// 	wasSet, connErr := blcmd.Result()
-// 	if wasSet {
-// 		return true
-// 	}
-// 	if connErr != nil {
-// 		return false
-// 	}
-// 	return false
-// }
+import (
+	"context"
+	"time"
+)
+
+func Lock(key string) bool {
+	ctx, cancel := context.WithTimeout(
+		context.Background(),
+		15*time.Millisecond,
+	)
+	defer cancel()
+	blcmd := rds.SetNX(ctx, key, true, 0)
+	wasSet, connErr := blcmd.Result()
+	if connErr != nil {
+		return false
+	}
+	return wasSet
+}
