@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func SetupTestEnv(collectioname string) {
+func setupTestEnv(collectioname string) {
 	openMongoFromEnv()
 	CreateCollection(collectioname)
 	CreateIndex(collectioname, "key", "hashed")
@@ -18,7 +18,7 @@ func SetupTestEnv(collectioname string) {
 
 func TestPut(t *testing.T) {
 	collectionname := "testputcol"
-	SetupTestEnv(collectionname)
+	setupTestEnv(collectionname)
 	err := Put(collectionname, &map[string]string{
 		"key": "testputkey",
 	})
@@ -30,7 +30,7 @@ func TestPut(t *testing.T) {
 
 func TestCheck(t *testing.T) {
 	collectionname := "testcheckcol"
-	SetupTestEnv(collectionname)
+	setupTestEnv(collectionname)
 	Put(collectionname, &map[string]string{
 		"key": "testcheckkey",
 	})
@@ -43,7 +43,7 @@ func TestCheck(t *testing.T) {
 
 func TestGet(t *testing.T) {
 	collectionname := "testgetcol"
-	SetupTestEnv(collectionname)
+	setupTestEnv(collectionname)
 	Put(collectionname, &map[string]string{
 		"key":   "testgetkey",
 		"vaval": "tester",
@@ -58,7 +58,7 @@ func TestGet(t *testing.T) {
 
 func TestUpdate(t *testing.T) {
 	collectionname := "testupdatecol"
-	SetupTestEnv(collectionname)
+	setupTestEnv(collectionname)
 	Put(collectionname, &map[string]string{
 		"key":   "testupdatekey",
 		"vaval": "tester",

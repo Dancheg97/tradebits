@@ -4,9 +4,12 @@ import (
 	"context"
 	"os"
 	"testing"
+
+	"github.com/joho/godotenv"
 )
 
 func openMongoFromEnv() error {
+	godotenv.Load("../.env")
 	mongo_host, _ := os.LookupEnv("mongo_host")
 	mongo_name, _ := os.LookupEnv("mongo_name")
 	mongo_password, _ := os.LookupEnv("mongo_password")
