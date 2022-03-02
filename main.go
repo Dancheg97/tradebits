@@ -35,7 +35,7 @@ func init() {
 	if !(c1 && c2 && c3 && c4 && c5 && c7 && c8 && c9 && c10) {
 		log.Panic("unable to read configuration")
 	}
-	swagger.Conig = swagger.Configuration{
+	swagger.Config = swagger.Configuration{
 		MARKET_PORT:       MARKET_PORT,
 		MARKET_NAME:       MARKET_NAME,
 		MARKET_DESCR:      MARKET_DESCR,

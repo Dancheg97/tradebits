@@ -10,10 +10,22 @@
 package swagger
 
 import (
+	"encoding/json"
 	"net/http"
 )
 
 func InfoMarketGet(w http.ResponseWriter, r *http.Request) {
+	respMap := map[string]string{
+		"name":      Config.MARKET_NAME,
+		"mkey":      Config.MARKET_PUBLICKEY,
+		"descr":     Config.MARKET_DESCR,
+		"img":       Config.MARKET_IMG,
+		"worktime":  Config.MARKET_WORKTIME,
+		"fee":       Config.MARKET_FEE,
+		"delimiter": Config.MARKET_DELIMITER,
+	}
+	respbytes, _ := json.Marshal(respMap)
+	w.Write(respbytes)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }

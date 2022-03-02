@@ -12,4 +12,4 @@ type Configuration struct {
 	MARKET_PUBLICKEY  string
 }
 
-var Conig Configuration
+var Config Configuration
