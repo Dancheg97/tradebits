@@ -1,6 +1,12 @@
 
 # <p  align="center" style="font-family:courier;font-size:130%" size=212px> TradeBits - interface for trading communications </p> 
 
+[![Generic badge](https://img.shields.io/badge/LICENSE-MIT-orange.svg)](LICENSE)
+[![Generic badge](https://img.shields.io/badge/DOCKER-HUB-blue.svg)](https://hub.docker.com/repository/docker/dangdancheg/tradebits)
+[![Generic badge](https://img.shields.io/badge/SWAGGER-API-green.svg)](https://app.swaggerhub.com/apis/Dancheg97/tradebits/1.0.0)
+
+
+
 <p align="center">
   <img height="309px" src="https://www.downloadclipart.net/large/network-png-hd.png" alt="logo"/>
 </p>
@@ -41,26 +47,18 @@ Users have to verify markets and process operations on their own risk.
 
 Here is listing of technologies used for backend side of token implementation:
 - Go
-- Dgraph
-- gRPC
-- Redis
+- Mongo
 - GrayLog
+- Docker
+- Swagger
+- Redis
 
-Go - is language we are using achieve blazing speed. Due to it's concurrent support, relyability and speed it is the best choice for building complex systems as ORB.
+Go is language we are using achieve blazing perfomance. Due to it's concurrent support and relyability it is the best choice for building complex systems as tradebits.
 
-Dgraph is used to store persistant data. Due to native support of graph structure of dgraph database, it is the most suitable solution for this currency ecosystem.
+Redis is used for locking operations as a key-value locking mechanism. That is made to achieve ability to scale "bits" docker image, so that we don't rely on language built-in locking structures and scale main functionality horizontally.
 
-Different implementations of dgraph are supported for data storage. In development process classic dgraph/standalone docker image may be the best solution. In production the most appropriate choice - is a full dgraph cluster.
+Mongo is used to store data in document format.
 
-gRPC is used as a method of communication between different nodes and client side. gRPC is fast in transportation and serialization speed, which is making it best option for web communication.
+Swagger is used to save API documentation and generate server-client side code. Swagger link is provided above, aswell as [yaml file](api/swagger.yaml)
 
-Redis is used for locking operations, to store information about
-
-# Links
-
-- [API description](api/descr.md)
-- [Data model descrtion](dgraph/descr.md)
-- [Redis usage](redis/descr.md)
-- [Setup guide]()
-- [Mobile app repo]()
-
+GrayLog is used for log acceleration and analytics of runtime process.

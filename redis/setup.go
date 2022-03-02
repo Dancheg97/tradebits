@@ -1,18 +1,15 @@
 package redis
 
 import (
-	"context"
-
 	"github.com/go-redis/redis/v8"
 )
 
-var ctx = context.Background()
 var rds *redis.Client
 
-func Setup(adress string) {
+func Setup(host string, pass string) {
 	rds = redis.NewClient(&redis.Options{
-		Addr:     adress,
-		Password: "",
+		Addr:     host,
+		Password: pass,
 		DB:       0,
 	})
 }

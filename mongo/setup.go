@@ -11,22 +11,22 @@ import (
 
 var database *mongo.Database
 
-func OpenMongo(adress string) error {
+func OpenMongo(adress string, user string, pass string, db string) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		1*time.Second,
 	)
 	defer cancel()
 	credential := options.Credential{
-		Username: "admin",
-		Password: "admin",
+		Username: user,
+		Password: pass,
 	}
 	opts := options.Client().ApplyURI(adress).SetAuth(credential)
 	client, err := mongo.Connect(ctx, opts)
 	if err != nil {
 		return err
 	}
-	database = client.Database("main")
+	database = client.Database(db)
 	return nil
 }
 

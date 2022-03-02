@@ -39,7 +39,7 @@ func Get(key string, coll string, i interface{}) error {
 }
 
 // puts some value to database
-func Put(key string, coll string, i interface{}) error {
+func Put(coll string, i interface{}) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		1*time.Second,
