@@ -63,5 +63,4 @@ func TestUpdate(t *testing.T) {
 		"key":   "testupdatekey",
 		"vaval": "tester",
 	})
-	
 }
