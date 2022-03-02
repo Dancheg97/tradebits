@@ -19,32 +19,28 @@ import (
 	"github.com/joho/godotenv"
 )
 
+func readConfigField(field string) string {
+	envar, found := os.LookupEnv("MARKET_PORT")
+	if !found {
+		log.Fatal("problem loading .ENV field", found)
+	}
+	return envar
+}
+
 func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Panic("No .env file found")
 	}
-	MARKET_PORT, c1 := os.LookupEnv("MARKET_PORT")
-	MARKET_NAME, c2 := os.LookupEnv("MARKET_NAME")
-	MARKET_DESCR, c3 := os.LookupEnv("MARKET_DESCR")
-	MARKET_IMG, c4 := os.LookupEnv("MARKET_IMG")
-	MARKET_WORKTIME, c5 := os.LookupEnv("MARKET_WORKTIME")
-	MARKET_FEE, c7 := os.LookupEnv("MARKET_FEE")
-	MARKET_DELIMITER, c8 := os.LookupEnv("MARKET_DELIMITER")
-	MARKET_PRIVATEKEY, c9 := os.LookupEnv("MARKET_PRIVATEKEY")
-	MARKET_PUBLICKEY, c10 := os.LookupEnv("MARKET_PUBLICKEY")
-	if !(c1 && c2 && c3 && c4 && c5 && c7 && c8 && c9 && c10) {
-		log.Panic("unable to read configuration")
-	}
 	swagger.Config = swagger.Configuration{
-		MARKET_PORT:       MARKET_PORT,
-		MARKET_NAME:       MARKET_NAME,
-		MARKET_DESCR:      MARKET_DESCR,
-		MARKET_IMG:        MARKET_IMG,
-		MARKET_WORKTIME:   MARKET_WORKTIME,
-		MARKET_FEE:        MARKET_FEE,
-		MARKET_DELIMITER:  MARKET_DELIMITER,
-		MARKET_PRIVATEKEY: MARKET_PRIVATEKEY,
-		MARKET_PUBLICKEY:  MARKET_PUBLICKEY,
+		MARKET_PORT:       readConfigField("MARKET_PORT"),
+		MARKET_NAME:       readConfigField("MARKET_NAME"),
+		MARKET_DESCR:      readConfigField("MARKET_DESCR"),
+		MARKET_IMG:        readConfigField("MARKET_IMG"),
+		MARKET_WORKTIME:   readConfigField("MARKET_WORKTIME"),
+		MARKET_FEE:        readConfigField("MARKET_FEE"),
+		MARKET_DELIMITER:  readConfigField("MARKET_DELIMITER"),
+		MARKET_PRIVATEKEY: readConfigField("MARKET_PRIVATEKEY"),
+		MARKET_PUBLICKEY:  readConfigField("MARKET_PUBLICKEY"),
 	}
 }
 
