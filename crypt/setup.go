@@ -8,10 +8,8 @@ import (
 )
 
 var priv *rsa.PrivateKey
-var pub *rsa.PublicKey
-var settled bool
 
-func setPrivate(private string) error {
+func Setup(private string) error {
 	block, _ := pem.Decode([]byte(private))
 	if block == nil {
 		return errors.New("failed to parse PEM block containing the key")
@@ -23,25 +21,3 @@ func setPrivate(private string) error {
 	priv = privatekey
 	return nil
 }
-
-func setPublic(public string) error {
-	block, _ := pem.Decode([]byte(public))
-	if block == nil {
-		return errors.New("failed to parse PEM block containing the key")
-	}
-	publickey, err := x509.ParsePKCS1PublicKey(block.Bytes)
-	if err != nil {
-		return err
-	}
-	pub = publickey
-	return nil
-}
-
-func Setup(privatePEM string, publicPEM string) error {
-	privErr := setPrivate(privatePEM)
-	if privErr != nil {
-		return privErr
-	}
-	return setPublic(publicPEM)
-}
-ad
