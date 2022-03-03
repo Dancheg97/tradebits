@@ -15,6 +15,9 @@ services:
       MARKET_DELIMITER: ${MARKET_DELIMITER:-}
       MARKET_PRIVATEKEY: ${MARKET_PRIVATEKEY:-}
       MARKET_PUBLICKEY: ${MARKET_PUBLICKEY:-}
+    depends_on:
+      - mongo
+      - redis
 
   mongo:
     image: mongo

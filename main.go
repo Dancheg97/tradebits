@@ -14,6 +14,8 @@ import (
 	"net/http"
 	"os"
 
+	"tradebits/mongo"
+	"tradebits/redis"
 	"tradebits/swagger"
 
 	"github.com/joho/godotenv"
@@ -42,6 +44,16 @@ func init() {
 		MARKET_PRIVATEKEY: readConfigField("MARKET_PRIVATEKEY"),
 		MARKET_PUBLICKEY:  readConfigField("MARKET_PUBLICKEY"),
 	}
+	redis.Setup(readConfigField("REDIS_HOST"))
+	mongo.OpenMongo(
+		readConfigField("MONGO_HOST"),
+		readConfigField("MONGO_NAME"),
+		readConfigField("MONGO_PASSWORD"),
+		readConfigField("MONGO_DB"),
+	)
+	mongo.CreateCollection("user")
+	mongo.CreateCollection("market")
+	mongo.CreateCollection("")
 }
 
 func main() {
