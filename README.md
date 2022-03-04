@@ -4,7 +4,7 @@
 
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-orange.svg)](LICENSE)
 [![Generic badge](https://img.shields.io/badge/DOCKER-HUB-blue.svg)](https://hub.docker.com/repository/docker/dangdancheg/tradebits)
-[![Generic badge](https://img.shields.io/badge/SWAGGER-API-green.svg)](https://app.swaggerhub.com/apis/Dancheg97/tradebits/1.0.0)
+[![Generic badge](https://img.shields.io/badge/SWAGGER-API-green.svg)](https://app.swaggerhub.com/apis/Dancheg97/tradebits)
 
 
 <p align="center">
@@ -42,7 +42,7 @@ Users have to verify markets and process operations on their own risk.
 <img redis align="center" style="padding-left: 12px; padding-right: 12px; padding-bottom: 12px;" width="74px" height="74px" src="https://is3-ssl.mzstatic.com/image/thumb/Purple124/v4/17/cd/a2/17cda2a0-b641-c3d0-3d22-141704a40eef/Icon.png/1200x630bb.png" />
 </p>
 
-Here is listing of technologies used for backend side of token implementation:
+Here is listing of technologies used for backend side implementation:
 - Go
 - Mongo
 - GrayLog

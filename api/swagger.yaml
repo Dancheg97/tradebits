@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  version: "1.0.1"
+  version: "1.0.2"
   title: "TradeBits"
   description: >
    In this API description you can find description of ways markets communicate with each other and users.
@@ -17,9 +17,6 @@ info:
    
    - **hkey** - key of host added for additional security, for message verification. This is the public key of the node accepting the request
 paths:
-  #  ###############
-  #   INFO REQUESTS
-  #  ###############
   /info/market:
     get:
       tags:
@@ -80,9 +77,6 @@ paths:
               - name: "Market name"
                 mkey: "mktadress"
                 link: "http://someadr.ru/helo"
-  #  ###############
-  #   USER REQUESTS
-  #  ###############
   /user/create:
     put:
       tags:
@@ -97,14 +91,14 @@ paths:
           schema:
             type: string
             properties:
-              mkey:
+              hkey:
                 type: string
               ukey:
                 type: string
               sign:
                 type: string
             example:
-              mkey: "putbase64contents"
+              hkey: "putbase64contents"
               ukey: "putbase64contents"
               sign: "putbase64contents"
       responses:
@@ -249,7 +243,7 @@ paths:
           schema:
             type: string
             properties:
-              mkey:
+              hkey:
                 type: string
               ukey:
                 type: string
@@ -258,7 +252,7 @@ paths:
               sign:
                 type: string
             example:
-              mkey: "putbase64contents"
+              hkey: "putbase64contents"
               ukey: "putbase64contents"
               message: "encrypted_message"
               sign: "putbase64contents"
@@ -287,7 +281,7 @@ paths:
           schema:
             type: string
             properties:
-              mkey:
+              hkey:
                 type: string
               ukey:
                 type: string
@@ -298,7 +292,7 @@ paths:
               sign:
                 type: string
             example:
-              mkey: "putbase64contents"
+              hkey: "putbase64contents"
               ukey: "putbase64contents"
               recieverkey: "putbase64contents"
               amount: 46582
@@ -330,7 +324,7 @@ paths:
           schema:
             type: string
             properties:
-              mkey:
+              hkey:
                 type: string
               ukey:
                 type: string
@@ -343,7 +337,7 @@ paths:
               sign:
                 type: string
             example:
-              mkey: "putbase64contents"
+              hkey: "putbase64contents"
               ukey: "putbase64contents"
               marketkey: "putbase64contents"
               offer: 46582
@@ -376,11 +370,14 @@ paths:
           schema:
             type: string
             properties:
+              hkey:
+                type: string
               ukey:
                 type: string
               sign:
                 type: string
             example:
+              hkey: "putbase64contents"
               ukey: "putbase64contents"
               sign: "putbase64contents"
       responses:
@@ -394,9 +391,6 @@ paths:
           description: "Locked"
         "457":
           description: "No active trades"
-  #  #################
-  #   MARKET REQUESTS
-  #  #################
   /market/create:
     put:
       tags:
@@ -411,6 +405,8 @@ paths:
           schema:
             type: string
             properties:
+              hkey:
+                type: string
               mkey:
                 type: string
               marketname:
@@ -420,6 +416,7 @@ paths:
               sign:
                 type: string
             example:
+              hhey: "putbase64contents"
               mkey: "putbase64contents"
               marketname: "putbase64contents"
               marketlink: "http://link.example"
@@ -445,6 +442,8 @@ paths:
           schema:
             type: string
             properties:
+              hkey:
+                type: string
               mkey:
                 type: string
               ukey:
@@ -456,6 +455,7 @@ paths:
               sign:
                 type: string
             example:
+              hkey: "putbase64contents"
               mkey: "putbase64contents"
               ukey: "putbase64contents"
               newoffer: 56
@@ -526,6 +526,8 @@ paths:
           schema:
             type: string
             properties:
+              hkey:
+                type: string
               mkey:
                 type: string
               ukey:
@@ -533,6 +535,7 @@ paths:
               sign:
                 type: string
             example:
+              hkey: "putbase64contents"
               mkey: "putbase64contents"
               ukey: "putbase64contents"
               sign: "signbase64"
@@ -566,7 +569,7 @@ paths:
           schema:
             type: string
             properties:
-              mkey:
+              hkey:
                 type: string
               ukey:
                 type: string
@@ -575,7 +578,7 @@ paths:
               sign:
                 type: string
             example:
-              mkey: "putbase64contents"
+              hkey: "putbase64contents"
               ukey: "putbase64contents"
               message: "putbase64contents"
               sign: "signbase64"
@@ -602,7 +605,7 @@ paths:
           schema:
             type: string
             properties:
-              mkey:
+              hkey:
                 type: string
               ukey:
                 type: string
@@ -611,7 +614,7 @@ paths:
               sign:
                 type: string
             example:
-              mkey: "putbase64contents"
+              hkey: "putbase64contents"
               ukey: "putbase64contents"
               increase: 673
               sign: "signbase64"
@@ -640,7 +643,7 @@ paths:
           schema:
             type: string
             properties:
-              mkey:
+              hkey:
                 type: string
               ukey:
                 type: string
@@ -649,7 +652,7 @@ paths:
               sign:
                 type: string
             example:
-              mkey: "putbase64contents"
+              hkey: "putbase64contents"
               ukey: "putbase64contents"
               decrease: 12345
               sign: "signbase64"
