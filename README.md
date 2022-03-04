@@ -8,7 +8,7 @@
 
 
 <p align="center">
-  <img height="309px" src="https://www.downloadclipart.net/large/network-png-hd.png" alt="logo"/>
+  <img height="309px" src="https://www.pngmart.com/files/21/AI-PNG-Transparent.png" alt="logo"/>
 </p>
 
 # What is TradeBits?
