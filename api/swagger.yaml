@@ -550,6 +550,7 @@ paths:
           schema:
             type: string
             properties:
+              mkey:
               ukey:
                 type: string
               message:
@@ -583,6 +584,8 @@ paths:
           schema:
             type: string
             properties:
+              mkey:
+                type: string
               ukey:
                 type: string
               increase:
@@ -590,6 +593,7 @@ paths:
               sign:
                 type: string
             example:
+              mkey: "putbase64contents"
               ukey: "putbase64contents"
               increase: 673
               sign: "signbase64"
@@ -618,6 +622,8 @@ paths:
           schema:
             type: string
             properties:
+              mkey:
+                type: string
               ukey:
                 type: string
               decrease:
@@ -625,6 +631,7 @@ paths:
               sign:
                 type: string
             example:
+              mkey: "putbase64contents"
               ukey: "putbase64contents"
               decrease: 12345
               sign: "signbase64"

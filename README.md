@@ -1,14 +1,14 @@
 
 # <p  align="center" style="font-family:courier;font-size:130%" size=212px> TradeBits - interface for trading systems communication </p> 
 
+
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-orange.svg)](LICENSE)
 [![Generic badge](https://img.shields.io/badge/DOCKER-HUB-blue.svg)](https://hub.docker.com/repository/docker/dangdancheg/tradebits)
 [![Generic badge](https://img.shields.io/badge/SWAGGER-API-green.svg)](https://app.swaggerhub.com/apis/Dancheg97/tradebits/1.0.0)
 
 
-
 <p align="center">
-  <img height="309px" src="https://www.pngmart.com/files/21/AI-PNG-Transparent.png" alt="logo"/>
+  <img src="https://www.pngkey.com/png/full/398-3981558_igo-mid-winter-conference-network-png.png" alt="logo"/>
 </p>
 
 # What is TradeBits?
