@@ -4,19 +4,15 @@ import (
 	"crypto"
 	"crypto/rand"
 	"crypto/rsa"
-	"crypto/sha256"
+	"crypto/sha512"
 	"encoding/base64"
 )
 
-func Sign(base64str string) (string, error) {
-	bytes, decodeError := base64.StdEncoding.DecodeString(base64str)
-	if decodeError != nil {
-		return "", decodeError
-	}
-	h := sha256.New()
-	h.Write(bytes)
+func Sign(message string) (string, error) {
+	h := sha512.New()
+	h.Write([]byte(message))
 	d := h.Sum(nil)
-	sign, signError := rsa.SignPKCS1v15(rand.Reader, priv, crypto.SHA256, d)
+	sign, signError := rsa.SignPSS(rand.Reader, priv, crypto.SHA512, d, nil)
 	if signError != nil {
 		return "", signError
 	}
