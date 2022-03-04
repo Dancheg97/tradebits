@@ -2,7 +2,20 @@ swagger: "2.0"
 info:
   version: "1.0.1"
   title: "TradeBits"
-  description: "In this API description you can find description of ways markets communicate with each other and users.\n\n Each sign of message user send to market is additionally reinforced by market name as indtent to ensure markets will not try to proceed same operations with users on other markets. That is not mention in API, but implemented on server and client sides.\n\n Each procedure on specific market need to be reinforced by market name in senders message, to prevent mimic behavior by markets collecting data. That will guarantee, that only owner of the private key is able to process transactions on specific market."
+  description: >
+   In this API description you can find description of ways markets communicate with each other and users.
+   
+   Each sign of message user send to market is additionally reinforced by market name as indtent to ensure markets will not try to proceed same operations with users on other markets. That is not mention in API, but implemented on server and client sides.
+   
+   Each procedure on specific market need to be reinforced by market name in senders message, to prevent mimic behavior by markets collecting data. That will guarantee, that only owner of the private key is able to process transactions on specific market. 
+   
+   ## API notions:
+
+   - **ukey** - public key of the user, which is used by user to send messages and process operations on a related market 
+
+   - **mkey** - public key of the market, which can be used to encrypt and verify messages
+   
+   - **hkey** - key of host added for additional security, for message verification. This is the public key of the node accepting the request
 paths:
   #  ###############
   #   INFO REQUESTS
@@ -317,6 +330,8 @@ paths:
           schema:
             type: string
             properties:
+              mkey:
+                type: string
               ukey:
                 type: string
               marketkey:
@@ -328,6 +343,7 @@ paths:
               sign:
                 type: string
             example:
+              mkey: "putbase64contents"
               ukey: "putbase64contents"
               marketkey: "putbase64contents"
               offer: 46582
@@ -551,6 +567,7 @@ paths:
             type: string
             properties:
               mkey:
+                type: string
               ukey:
                 type: string
               message:
@@ -558,6 +575,7 @@ paths:
               sign:
                 type: string
             example:
+              mkey: "putbase64contents"
               ukey: "putbase64contents"
               message: "putbase64contents"
               sign: "signbase64"
