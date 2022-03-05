@@ -19,8 +19,8 @@ func initSwagger() {
 	}
 	respbytes, err := json.Marshal(m)
 	if err != nil {
-		log.Fatal("Setup swagger error: ", err)
+		log.Fatal("Setup api error: ", err)
 	}
 	api.MarketInfoResponse = respbytes
-	log.Println("Setup swagger success")
+	log.Println("Setup api success")
 }

@@ -22,7 +22,7 @@ func initMongo() {
 	e3 := mongo.CreateCollection("market")
 	e4 := mongo.CreateCollection("network")
 	if e1 != nil || e2 != nil || e3 != nil || e4 != nil {
-		log.Fatal("Setup crypt error: ", e1, e2, e3, e4)
+		log.Fatal("Setup mongo error: ", e1, e2, e3, e4)
 	}
 	log.Println("Setup mongo success")
 }

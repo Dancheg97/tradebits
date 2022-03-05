@@ -29,8 +29,8 @@ func UserCreatePut(w http.ResponseWriter, r *http.Request) {
 	hkey, e1 := inp["hkey"]
 	ukey, e2 := inp["ukey"]
 	sign, e3 := inp["sign"]
-	if !e1 || !e2 || !e3 || hkey != crypt.Pub {
-		w.WriteHeader(405)
+	if !(e1 && e2 && e3 && hkey == crypt.Pub) {
+		w.WriteHeader(406)
 		return
 	}
 	verfied := crypt.Verify(hkey+ukey, ukey, sign)
@@ -44,7 +44,6 @@ func UserCreatePut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	mongo.Put("user", User{Key: ukey})
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 

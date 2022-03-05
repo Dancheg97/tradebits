@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -38,6 +39,9 @@ func CreateCollection(name string) error {
 	defer cancel()
 	err := database.CreateCollection(ctx, name)
 	if err != nil {
+		if strings.Contains(err.Error(), "Collection already exists") {
+			return nil
+		}
 		return err
 	}
 	return nil
