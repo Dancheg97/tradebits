@@ -5,10 +5,10 @@
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-orange.svg)](LICENSE)
 [![Generic badge](https://img.shields.io/badge/DOCKER-HUB-blue.svg)](https://hub.docker.com/repository/docker/dangdancheg/tradebits)
 [![Generic badge](https://img.shields.io/badge/SWAGGER-API-green.svg)](https://app.swaggerhub.com/apis/Dancheg97/tradebits)
-
+[![Generic badge](https://img.shields.io/badge/COVERAGE-GO-turquoise.svg)](cover.md)
 
 <p align="center">
-  <img src="https://nuvisonetworks.net/wp-content/uploads/2016/08/NewBanner_Dots-2.png" alt="logo"/>
+  <img src="https://steemitimages.com/DQmYv9bZGTnih13qHKpjchu2rJo6LGMCJbdndgpd9ec9u9K/Blockchain.png" alt="logo"/>
 </p>
 
 # What is TradeBits?

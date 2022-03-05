@@ -24,13 +24,16 @@ func InfoMarketGet(w http.ResponseWriter, r *http.Request) {
 }
 
 func InfoNetGet(w http.ResponseWriter, r *http.Request) {
-	values, errGetCollection := mongo.GetCollection("net")
+	netmembers, errGetCollection := mongo.GetCollection("net")
 	if errGetCollection != nil {
 		w.WriteHeader(400)
 		w.Write([]byte(errGetCollection.Error()))
 		return
 	}
-	respbytes, infoEjectErr := json.Marshal(values)
+	for _, member := range netmembers {
+		delete(member, "_id")
+	}
+	respbytes, infoEjectErr := json.Marshal(netmembers)
 	if infoEjectErr != nil {
 		w.WriteHeader(400)
 		w.Write([]byte(infoEjectErr.Error()))
