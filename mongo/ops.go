@@ -12,7 +12,7 @@ import (
 func Check(key string, coll string) bool {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
-		1*time.Second,
+		45*time.Millisecond,
 	)
 	defer cancel()
 	collection := database.Collection(coll)
@@ -24,7 +24,7 @@ func Check(key string, coll string) bool {
 func Get(key string, coll string, i interface{}) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
-		1*time.Second,
+		45*time.Millisecond,
 	)
 	defer cancel()
 	collection := database.Collection(coll)
@@ -39,7 +39,7 @@ func Get(key string, coll string, i interface{}) error {
 func Put(coll string, i interface{}) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
-		1*time.Second,
+		45*time.Millisecond,
 	)
 	defer cancel()
 	collection := database.Collection(coll)
@@ -51,7 +51,7 @@ func Put(coll string, i interface{}) error {
 func Update(key string, coll string, i interface{}) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
-		1*time.Second,
+		45*time.Millisecond,
 	)
 	defer cancel()
 	collection := database.Collection(coll)
@@ -61,7 +61,7 @@ func Update(key string, coll string, i interface{}) error {
 func GetCollection(coll string) ([]map[string]string, error) {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
-		1*time.Second,
+		45*time.Millisecond,
 	)
 	defer cancel()
 	collection := database.Collection(coll)

@@ -1,10 +1,8 @@
 package redis
 
 import (
-	"context"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/joho/godotenv"
 )
@@ -17,15 +15,6 @@ func testSetup() {
 
 func TestSetup(t *testing.T) {
 	testSetup()
-	resp := rds.SetNX(
-		context.Background(),
-		"setuptest",
-		"setuptest",
-		time.Millisecond,
-	)
-	err := resp.Err()
-	if err != nil {
-		t.Error(err)
-	}
+
 	Unlock("setuptest")
 }

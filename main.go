@@ -23,6 +23,8 @@ func readConfigField(field string) string {
 }
 
 func initMongo() {
+	// TODO check case if mongo was already prepared
+	// in case of container restart
 	mongoErr := mongo.OpenMongo(
 		readConfigField("MONGO_HOST"),
 		readConfigField("MONGO_NAME"),
@@ -59,7 +61,6 @@ func initInfoResponse() {
 	swagger.MarketInfoResponse = respbytes
 	log.Println("info response set success")
 }
-
 
 func init() {
 	if err := godotenv.Load(); err != nil {

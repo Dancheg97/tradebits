@@ -14,7 +14,7 @@ var database *mongo.Database
 func OpenMongo(adress string, user string, pass string, db string) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
-		1*time.Second,
+		45*time.Millisecond,
 	)
 	defer cancel()
 	credential := options.Credential{
@@ -33,7 +33,7 @@ func OpenMongo(adress string, user string, pass string, db string) error {
 func CreateCollection(name string) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
-		1*time.Second,
+		45*time.Millisecond,
 	)
 	defer cancel()
 	err := database.CreateCollection(ctx, name)
@@ -46,7 +46,7 @@ func CreateCollection(name string) error {
 func CreateIndex(col string, key string, value string) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
-		1*time.Second,
+		45*time.Millisecond,
 	)
 	defer cancel()
 	coll := database.Collection(col)
