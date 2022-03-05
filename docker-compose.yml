@@ -19,22 +19,8 @@ services:
       - mongo
       - redis
     deploy:
-      replicas: 3
-
-  elasticsearch:
-    image: elasticsearch
-    environment:
-      - http.host=0.0.0.0
-      - transport.host=localhost
-      - network.host=0.0.0.0
-      - node.max_local_storage_nodes=4
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    mem_limit: 1g
-
+      replicas: 1
+      
   mongo:
     image: mongo
     restart: always

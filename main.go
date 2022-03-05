@@ -23,11 +23,44 @@ import (
 )
 
 func readConfigField(field string) string {
-	envar, found := os.LookupEnv("MARKET_PORT")
+	envar, found := os.LookupEnv(field)
 	if !found {
 		log.Fatal("problem loading .ENV field", found)
 	}
 	return envar
+}
+
+func initMongo() {
+	mongoErr := mongo.OpenMongo(
+		readConfigField("MONGO_HOST"),
+		readConfigField("MONGO_NAME"),
+		readConfigField("MONGO_PASSWORD"),
+		readConfigField("MONGO_DB"),
+	)
+	if mongoErr != nil {
+		log.Fatal(mongoErr)
+	}
+	mongo.CreateCollection("user")
+	mongo.CreateCollection("market")
+	mongo.CreateCollection("trades")
+	mongo.CreateCollection("recover")
+}
+
+func initInfoResponse() {
+	m := map[string]string{
+		"name":      readConfigField("MARKET_NAME"),
+		"mkey":      readConfigField("MARKET_PUBLICKEY"),
+		"descr":     readConfigField("MARKET_DESCR"),
+		"img":       readConfigField("MARKET_IMG"),
+		"worktime":  readConfigField("MARKET_WORKTIME"),
+		"fee":       readConfigField("MARKET_FEE"),
+		"delimiter": readConfigField("MARKET_DELIMITER"),
+	}
+	respbytes, infoEjectErr := json.Marshal(m)
+	if infoEjectErr != nil {
+		log.Panic("failed to marshall info to bytes")
+	}
+	swagger.MarketInfoResponse = respbytes
 }
 
 func init() {
@@ -35,30 +68,8 @@ func init() {
 		log.Panic("No .env file found")
 	}
 	redis.Setup(readConfigField("REDIS_HOST"))
-	mongo.OpenMongo(
-		readConfigField("MONGO_HOST"),
-		readConfigField("MONGO_NAME"),
-		readConfigField("MONGO_PASSWORD"),
-		readConfigField("MONGO_DB"),
-	)
-	mongo.CreateCollection("user")
-	mongo.CreateCollection("market")
-	mongo.CreateCollection("trades")
-	mongo.CreateCollection("recover")
-	info := swagger.MarketResponse{
-		MARKET_NAME:      readConfigField("MARKET_NAME"),
-		MARKET_PUBLICKEY: readConfigField("MARKET_PUBLICKEY"),
-		MARKET_DESCR:     readConfigField("MARKET_DESCR"),
-		MARKET_IMG:       readConfigField("MARKET_IMG"),
-		MARKET_WORKTIME:  readConfigField("MARKET_WORKTIME"),
-		MARKET_FEE:       readConfigField("MARKET_FEE"),
-		MARKET_DELIMITER: readConfigField("MARKET_DELIMITER"),
-	}
-	respbytes, infoEjectErr := json.Marshal(info)
-	if infoEjectErr != nil {
-		log.Panic("failed to marshall info to bytes")
-	}
-	swagger.MarketInfoResponse = respbytes
+	initMongo()
+	initInfoResponse()
 }
 
 func main() {
