@@ -16,7 +16,7 @@ import (
 func readConfigField(field string) string {
 	envar, found := os.LookupEnv(field)
 	if !found {
-		log.Fatal("problem loading .ENV field", found)
+		log.Fatal("problem loading .ENV field: ", envar)
 	}
 	return envar
 }
@@ -34,7 +34,7 @@ func initMongo() {
 	mongo.CreateCollection("user")
 	mongo.CreateCollection("market")
 	mongo.CreateCollection("trades")
-	mongo.CreateCollection("recover")
+	mongo.CreateCollection("network")
 }
 
 func initInfoResponse() {
@@ -56,7 +56,7 @@ func initInfoResponse() {
 
 func init() {
 	if err := godotenv.Load(); err != nil {
-		log.Panic("No .env file found")
+		log.Println("No .env file found")
 	}
 	redis.Setup(readConfigField("REDIS_HOST"))
 	initMongo()

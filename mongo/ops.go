@@ -31,11 +31,7 @@ func Get(key string, coll string, i interface{}) error {
 	if resp.Err() != nil {
 		return resp.Err()
 	}
-	marshalErr := resp.Decode(i)
-	if marshalErr != nil {
-		return marshalErr
-	}
-	return nil
+	return resp.Decode(i)
 }
 
 // puts some value to database
@@ -58,6 +54,31 @@ func Update(key string, coll string, i interface{}) error {
 	)
 	defer cancel()
 	collection := database.Collection(coll)
-	rez := collection.FindOneAndReplace(ctx, bson.M{"key": key}, i)
-	return rez.Err()
+	return collection.FindOneAndReplace(ctx, bson.M{"key": key}, i).Err()
+}
+
+func GetCollection(coll string, i interface{}) error {
+	ctx, cancel := context.WithTimeout(
+		context.Background(),
+		1*time.Second,
+	)
+	defer cancel()
+	collection := database.Collection(coll)
+	idx, err := collection.Indexes().List(ctx)
+	if err != nil {
+		return err
+	}
+
+	for {
+		id := idx.ID()
+		resp := collection.FindOne(ctx, bson.M{"_id": id})
+		if resp.Err() != nil {
+			return resp.Err()
+		}
+		decodeErr := resp.Decode(i)
+		if decodeErr != nil {
+			return decodeErr
+		}
+	}
+
 }

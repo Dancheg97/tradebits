@@ -21,7 +21,14 @@ func InfoMarketGet(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+type NetMember struct {
+	name string `json:"name" bson:"name"`
+	mkey string `json:"name" bson:"name"`
+	link string `json:"name" bson:"name"`
+}
+
 func InfoNetGet(w http.ResponseWriter, r *http.Request) {
+
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
