@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"tradebits/crypt"
 	"tradebits/mongo"
 	"tradebits/redis"
 	"tradebits/swagger"
@@ -40,7 +41,7 @@ func initMongo() {
 func initInfoResponse() {
 	m := map[string]string{
 		"name":      readConfigField("MARKET_NAME"),
-		"mkey":      readConfigField("MARKET_PUBLICKEY"),
+		"mkey":      crypt.Pub,
 		"descr":     readConfigField("MARKET_DESCR"),
 		"img":       readConfigField("MARKET_IMG"),
 		"worktime":  readConfigField("MARKET_WORKTIME"),
@@ -57,6 +58,11 @@ func initInfoResponse() {
 func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found")
+	}
+	privKey := readConfigField("MARKET_PRIVATEKEY")
+	keyErr := crypt.Setup(privKey)
+	if keyErr != nil {
+		log.Fatal(keyErr)
 	}
 	redis.Setup(readConfigField("REDIS_HOST"))
 	initMongo()

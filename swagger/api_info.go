@@ -11,6 +11,7 @@ package swagger
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"tradebits/mongo"
 )
@@ -24,12 +25,14 @@ func InfoMarketGet(w http.ResponseWriter, r *http.Request) {
 }
 
 func InfoNetGet(w http.ResponseWriter, r *http.Request) {
-	values, err := mongo.GetCollection("net")
-	if err != nil {
+	values, errGetCollection := mongo.GetCollection("net")
+	if errGetCollection != nil {
+		log.Println(errGetCollection)
 		return
 	}
 	respbytes, infoEjectErr := json.Marshal(values)
 	if infoEjectErr != nil {
+		log.Println(infoEjectErr)
 		return
 	}
 	w.Write(respbytes)
