@@ -33,17 +33,6 @@ func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Panic("No .env file found")
 	}
-	swagger.Config = swagger.Configuration{
-		MARKET_PORT:       readConfigField("MARKET_PORT"),
-		MARKET_NAME:       readConfigField("MARKET_NAME"),
-		MARKET_DESCR:      readConfigField("MARKET_DESCR"),
-		MARKET_IMG:        readConfigField("MARKET_IMG"),
-		MARKET_WORKTIME:   readConfigField("MARKET_WORKTIME"),
-		MARKET_FEE:        readConfigField("MARKET_FEE"),
-		MARKET_DELIMITER:  readConfigField("MARKET_DELIMITER"),
-		MARKET_PRIVATEKEY: readConfigField("MARKET_PRIVATEKEY"),
-		MARKET_PUBLICKEY:  readConfigField("MARKET_PUBLICKEY"),
-	}
 	redis.Setup(readConfigField("REDIS_HOST"))
 	mongo.OpenMongo(
 		readConfigField("MONGO_HOST"),
@@ -55,10 +44,19 @@ func init() {
 	mongo.CreateCollection("market")
 	mongo.CreateCollection("trades")
 	mongo.CreateCollection("recover")
+	swagger.MarketInfoResponse = swagger.MarketResponse{
+		MARKET_NAME:      readConfigField("MARKET_NAME"),
+		MARKET_PUBLICKEY: readConfigField("MARKET_PUBLICKEY"),
+		MARKET_DESCR:     readConfigField("MARKET_DESCR"),
+		MARKET_IMG:       readConfigField("MARKET_IMG"),
+		MARKET_WORKTIME:  readConfigField("MARKET_WORKTIME"),
+		MARKET_FEE:       readConfigField("MARKET_FEE"),
+		MARKET_DELIMITER: readConfigField("MARKET_DELIMITER"),
+	}
 }
 
 func main() {
-	log.Printf("Server started")
+	log.Printf("Server starting...")
 	router := swagger.NewRouter()
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(readConfigField("MARKET_PORT"), router))
 }

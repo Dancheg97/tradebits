@@ -7,8 +7,8 @@ import (
 func TestVerify(t *testing.T) {
 	setupForTests()
 	sign, _ := Sign("")
-	rez := Verify("", Pub, sign)
-	if !rez {
+	signVerificationSuccess := Verify("", Pub, sign)
+	if !signVerificationSuccess {
 		t.Error("sign was not verified")
 	}
 }
