@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"os"
 
-	"tradebits/crypt"
-	"tradebits/redis"
 	"tradebits/swagger"
 
 	"github.com/joho/godotenv"
@@ -21,10 +19,9 @@ func readConfigField(field string) string {
 }
 
 func init() {
-	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found")
-	}
-	
+	godotenv.Load()
+	initCrypt()
+	initResis()
 	initMongo()
 	initSwagger()
 }
