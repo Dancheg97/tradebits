@@ -10,6 +10,7 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"os"
@@ -44,7 +45,7 @@ func init() {
 	mongo.CreateCollection("market")
 	mongo.CreateCollection("trades")
 	mongo.CreateCollection("recover")
-	swagger.MarketInfoResponse = swagger.MarketResponse{
+	info := swagger.MarketResponse{
 		MARKET_NAME:      readConfigField("MARKET_NAME"),
 		MARKET_PUBLICKEY: readConfigField("MARKET_PUBLICKEY"),
 		MARKET_DESCR:     readConfigField("MARKET_DESCR"),
@@ -53,6 +54,11 @@ func init() {
 		MARKET_FEE:       readConfigField("MARKET_FEE"),
 		MARKET_DELIMITER: readConfigField("MARKET_DELIMITER"),
 	}
+	respbytes, infoEjectErr := json.Marshal(info)
+	if infoEjectErr != nil {
+		log.Panic("failed to marshall info to bytes")
+	}
+	swagger.MarketInfoResponse = respbytes
 }
 
 func main() {

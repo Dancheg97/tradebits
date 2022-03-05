@@ -23,9 +23,11 @@ type MarketResponse struct {
 	MARKET_DELIMITER string `json:"delimiter"`
 }
 
-var MarketInfoResponse MarketResponse
+var MarketInfoResponse []byte
 
 func InfoMarketGet(w http.ResponseWriter, r *http.Request) {
+
+	w.Write(MarketInfoResponse)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
