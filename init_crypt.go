@@ -7,8 +7,9 @@ import (
 
 func initCrypt() {
 	privKey := readConfigField("MARKET_PRIVATEKEY")
-	keyErr := crypt.Setup(privKey)
-	if keyErr != nil {
-		log.Fatal(keyErr)
+	err := crypt.Setup(privKey)
+	if err != nil {
+		log.Fatal("Setup crypt error: ", err)
 	}
+	log.Println("Setup crypt success")
 }

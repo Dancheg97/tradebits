@@ -17,10 +17,10 @@ func initSwagger() {
 		"fee":       readConfigField("MARKET_FEE"),
 		"delimiter": readConfigField("MARKET_DELIMITER"),
 	}
-	respbytes, infoEjectErr := json.Marshal(m)
-	if infoEjectErr != nil {
-		log.Panic("failed to marshall info to bytes")
+	respbytes, err := json.Marshal(m)
+	if err != nil {
+		log.Fatal("Setup swagger error: ", err)
 	}
 	swagger.MarketInfoResponse = respbytes
-	log.Println("info response set success")
+	log.Println("Setup swagger success")
 }
