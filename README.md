@@ -8,7 +8,7 @@
 
 
 <p align="center">
-  <img src="https://www.pngkey.com/png/full/398-3981558_igo-mid-winter-conference-network-png.png" alt="logo"/>
+  <img src="https://nuvisonetworks.net/wp-content/uploads/2016/08/NewBanner_Dots-2.png" alt="logo"/>
 </p>
 
 # What is TradeBits?
