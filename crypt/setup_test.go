@@ -7,10 +7,14 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func TestSetup(t *testing.T) {
+func setupForTests() error {
 	godotenv.Load("../.env")
 	private, _ := os.LookupEnv("MARKET_PRIVATEKEY")
-	err := Setup(private)
+	return Setup(private)
+}
+
+func TestSetup(t *testing.T) {
+	err := setupForTests()
 	if err != nil {
 		t.Error(err)
 	}
@@ -21,4 +25,3 @@ func TestSetup(t *testing.T) {
 		t.Error("Public key should not be equal to default string")
 	}
 }
-

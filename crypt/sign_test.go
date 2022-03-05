@@ -1,21 +1,16 @@
 package crypt
 
 import (
-	"crypto/rand"
-	"crypto/rsa"
-	"crypto/x509"
-	"encoding/pem"
 	"testing"
 )
 
 func TestSign(t *testing.T) {
-	key, _ := rsa.GenerateKey(rand.Reader, 1024)
-	keyPEM := pem.EncodeToMemory(
-		&pem.Block{
-			Type:  "RSA PRIVATE KEY",
-			Bytes: x509.MarshalPKCS1PrivateKey(key),
-		},
-	)
-	Setup(string(keyPEM))
-	Sign("")
+	setupForTests()
+	sign, err := Sign("")
+	if err != nil {
+		t.Error(err)
+	}
+	if len(sign) < 10 {
+		t.Error("bad sign lengt")
+	}
 }

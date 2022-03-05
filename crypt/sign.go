@@ -11,12 +11,11 @@ import (
 func Sign(message string) (string, error) {
 	h := sha512.New()
 	h.Write([]byte(message))
-	sign, err := rsa.SignPSS(
+	sign, err := rsa.SignPKCS1v15(
 		rand.Reader,
 		priv,
 		crypto.SHA512,
 		h.Sum(nil),
-		nil,
 	)
 	if err != nil {
 		return "", err
