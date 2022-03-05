@@ -19,6 +19,10 @@ func Setup(privateBase64 string) error {
 		return parseErr
 	}
 	priv = privatekey
-	
+	pubBytes, marshErr := x509.MarshalPKIXPublicKey(privatekey.PublicKey)
+	if marshErr != nil {
+		return marshErr
+	}
+	Pub = base64.RawStdEncoding.EncodeToString(pubBytes)
 	return nil
 }
