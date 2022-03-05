@@ -2,12 +2,8 @@ package mongo
 
 import (
 	"context"
-	"log"
 	"testing"
 	"time"
-
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func setupTestEnv(collectioname string) {
@@ -90,21 +86,12 @@ func TestGetCollection(t *testing.T) {
 	Put(collectionname, &map[string]string{
 		"vaval": "tester2",
 	})
-	results := []map[string]string{}
-	cur, err := database.Collection(collectionname).Find(
-		context.TODO(), bson.D{{}}, options.Find(),
-	)
+	vals, err := GetCollection(collectionname)
 	if err != nil {
-		log.Fatal(err)
+		t.Error(err)
 	}
-	for cur.Next(context.TODO()) {
-		//Create a value into which the single document can be decoded
-		var elem map[string]string
-		err := cur.Decode(&elem)
-		if err != nil {
-			log.Fatal(err)
-		}
-		results = append(results, elem)
+	if len(vals) < 1 {
+		t.Error("bad length of output collection elements")
 	}
-	t.Error(results)
+	time.Sleep(time.Millisecond * 200)
 }
