@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // checks wether some value exists in database
@@ -57,32 +58,25 @@ func Update(key string, coll string, i interface{}) error {
 	return collection.FindOneAndReplace(ctx, bson.M{"key": key}, i).Err()
 }
 
-func GetCollection(coll string, i interface{}) ([]interface{}, error) {
+func GetCollection(coll string) ([]map[string]string, error) {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		1*time.Second,
 	)
 	defer cancel()
 	collection := database.Collection(coll)
-	idx, err := collection.Indexes().List(ctx)
+	results := []map[string]string{}
+	cur, err := collection.Find(ctx, bson.D{{}}, options.Find())
 	if err != nil {
 		return nil, err
 	}
-	resultList := []interface{}{}
-	for {
-		id := idx.ID()
-		if id == 0 {
-			break
+	for cur.Next(context.TODO()) {
+		var elem map[string]string
+		err := cur.Decode(&elem)
+		if err != nil {
+			return nil, err
 		}
-		resp := collection.FindOne(ctx, bson.M{"_id": id})
-		if resp.Err() != nil {
-			return nil, resp.Err()
-		}
-		decodeErr := resp.Decode(i)
-		if decodeErr != nil {
-			return nil, decodeErr
-		}
-		resultList = append(resultList, &i)
+		results = append(results, elem)
 	}
-	return resultList, nil
+	return results, nil
 }

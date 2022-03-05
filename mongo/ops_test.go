@@ -2,8 +2,12 @@ package mongo
 
 import (
 	"context"
+	"log"
 	"testing"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func setupTestEnv(collectioname string) {
@@ -75,4 +79,32 @@ func TestUpdate(t *testing.T) {
 	if mp["vaval"] != "tester2" {
 		t.Error("mongo did not update value in database")
 	}
+}
+
+func TestGetCollection(t *testing.T) {
+	collectionname := "testgetwholecollection"
+	setupTestEnv(collectionname)
+	Put(collectionname, &map[string]string{
+		"vaval": "tester1",
+	})
+	Put(collectionname, &map[string]string{
+		"vaval": "tester2",
+	})
+	results := []map[string]string{}
+	cur, err := database.Collection(collectionname).Find(
+		context.TODO(), bson.D{{}}, options.Find(),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for cur.Next(context.TODO()) {
+		//Create a value into which the single document can be decoded
+		var elem map[string]string
+		err := cur.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+		results = append(results, elem)
+	}
+	t.Error(results)
 }
