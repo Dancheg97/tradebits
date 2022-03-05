@@ -20,6 +20,6 @@ func Sign(message string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	signBase64 := base64.StdEncoding.EncodeToString(sign)
+	signBase64 := base64.RawStdEncoding.EncodeToString(sign)
 	return signBase64, nil
 }

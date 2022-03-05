@@ -13,4 +13,5 @@ func TestSign(t *testing.T) {
 	if len(sign) < 10 {
 		t.Error("bad sign lengt")
 	}
+	t.Error(sign)
 }
