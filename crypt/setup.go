@@ -3,21 +3,22 @@ package crypt
 import (
 	"crypto/rsa"
 	"crypto/x509"
-	"encoding/pem"
-	"errors"
+	"encoding/base64"
 )
 
 var priv *rsa.PrivateKey
+var Pub string
 
-func Setup(private string) error {
-	block, _ := pem.Decode([]byte(private))
-	if block == nil {
-		return errors.New("failed to parse PEM block containing the key")
+func Setup(privateBase64 string) error {
+	keyBytes, decodeErr := base64.RawStdEncoding.DecodeString(privateBase64)
+	if decodeErr != nil {
+		return decodeErr
 	}
-	privatekey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
-	if err != nil {
-		return err
+	privatekey, parseErr := x509.ParsePKCS1PrivateKey(keyBytes)
+	if parseErr != nil {
+		return parseErr
 	}
 	priv = privatekey
+	
 	return nil
 }

@@ -267,49 +267,6 @@ paths:
           description: "Invalid input"
         "423":
           description: "Locked"
-  /user/remmittance:
-    post:
-      tags:
-        - "user"
-      summary: "operation for sending currecy from one user to another"
-      consumes:
-        - "application/json"
-      parameters:
-        - in: "body"
-          name: "body"
-          required: true
-          schema:
-            type: string
-            properties:
-              hkey:
-                type: string
-              ukey:
-                type: string
-              recieverkey:
-                type: string
-              amount:
-                type: integer
-              sign:
-                type: string
-            example:
-              hkey: "putbase64contents"
-              ukey: "putbase64contents"
-              recieverkey: "putbase64contents"
-              amount: 46582
-              sign: "putbase64contents"
-      responses:
-        "200":
-          description: "OK"
-        "401":
-          description: "Sign verification error"
-        "404":
-          description: "User not found"
-        "405":
-          description: "Invalid input"
-        "423":
-          description: "Locked"
-        "456":
-          description: "Bad balance"
   /user/order:
     post:
       tags:

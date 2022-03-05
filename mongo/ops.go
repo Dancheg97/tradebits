@@ -50,7 +50,7 @@ func Put(coll string, i interface{}) error {
 	return err
 }
 
-// puts some value to database
+// changes some value in database
 func Update(key string, coll string, i interface{}) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),

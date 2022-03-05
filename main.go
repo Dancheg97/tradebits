@@ -53,7 +53,8 @@ func init() {
 	)
 	mongo.CreateCollection("user")
 	mongo.CreateCollection("market")
-	mongo.CreateCollection("")
+	mongo.CreateCollection("trades")
+	mongo.CreateCollection("recover")
 }
 
 func main() {
