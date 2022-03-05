@@ -23,8 +23,6 @@ services:
     depends_on:
       - mongo
       - redis
-    deploy:
-      replicas: 1
 
   mongo:
     image: mongo
@@ -34,8 +32,6 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_NAME:-}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-}
-    deploy:
-      replicas: 1
 
   mongo-express:
     image: mongo-express
@@ -52,5 +48,3 @@ services:
     restart: always
     ports:
       - 6379:6379
-    deploy:
-      replicas: 1

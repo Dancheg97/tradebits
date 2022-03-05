@@ -32,10 +32,14 @@ func initMongo() {
 	if mongoErr != nil {
 		log.Fatal(mongoErr)
 	}
-	mongo.CreateCollection("net")
-	mongo.CreateCollection("user")
-	mongo.CreateCollection("market")
-	mongo.CreateCollection("network")
+	e1 := mongo.CreateCollection("net")
+	e2 := mongo.CreateCollection("user")
+	e3 := mongo.CreateCollection("market")
+	e4 := mongo.CreateCollection("network")
+	if e1 != nil || e2 != nil || e3 != nil || e4 != nil {
+		log.Fatal("Unable to set up Mongo database")
+	}
+	log.Println("mongo database set success")
 }
 
 func initInfoResponse() {
@@ -53,7 +57,9 @@ func initInfoResponse() {
 		log.Panic("failed to marshall info to bytes")
 	}
 	swagger.MarketInfoResponse = respbytes
+	log.Println("info response set success")
 }
+
 
 func init() {
 	if err := godotenv.Load(); err != nil {
