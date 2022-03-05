@@ -5,7 +5,7 @@ import (
 )
 
 func TestLock(t *testing.T) {
-	testSetup()
+	Setup(getRedisHost())
 	rez := Lock("locktest1")
 	if !rez {
 		t.Error("value should be locked on first iteration")
@@ -14,6 +14,7 @@ func TestLock(t *testing.T) {
 }
 
 func TestLockLocked(t *testing.T) {
+	Setup(getRedisHost())
 	Lock("locktest2")
 	rez := Lock("locktest2")
 	if rez {

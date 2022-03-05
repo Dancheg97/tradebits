@@ -7,14 +7,15 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func testSetup() {
+func getRedisHost() string {
 	godotenv.Load("../.env")
 	redis_host, _ := os.LookupEnv("REDIS_HOST")
-	Setup(redis_host)
+	return redis_host
 }
 
 func TestSetup(t *testing.T) {
-	testSetup()
-
-	Unlock("setuptest")
+	err := Setup(getRedisHost())
+	if err != nil {
+		t.Error(err)
+	}
 }

@@ -5,7 +5,7 @@ import (
 )
 
 func TestUnlock(t *testing.T) {
-	testSetup()
+	Setup(getRedisHost())
 	Lock("unlocktest")
 	rez := Unlock("unlocktest")
 	if !rez {
