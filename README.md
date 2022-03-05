@@ -34,12 +34,24 @@ Users have to verify markets and process operations on their own risk.
 
 
 <p align="center">
+<a href='https://go.dev/'>
 <img go align="center" style="padding-left: 12px; padding-right: 12px; padding-bottom: 12px;" width="74px" height="74px" src="https://raw.githubusercontent.com/golangci/awesome-go-linters/master/go.png" />
+</a>
+<a href='https://www.mongodb.com/'>
 <img mongo align="center" style="padding-left: 12px; padding-right: 12px; padding-bottom: 12px;" width="74px" height="74px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Antu_mongodb.svg/2048px-Antu_mongodb.svg.png"/>
+</a>
+<a href='https://www.graylog.org/'>
 <img graylog align="center" style="padding-left: 12px; padding-right: 12px; padding-bottom: 12px;" width="74px" height="74px" src="https://camo.githubusercontent.com/e6c89a3654756437bd520290bdbe8062bea43e97d38ef2a95d1873d0edd0e014/68747470733a2f2f63646e2e66726565626965737570706c792e636f6d2f6c6f676f732f6c617267652f32782f677261796c6f672d6c6f676f2d706e672d7472616e73706172656e742e706e67" />
+</a>
+<a href='https://www.docker.com/'>
 <img docker align="center" style="padding-left: 12px; padding-right: 12px; padding-bottom: 12px;" width="74px" height="74px" src="https://cdn-icons-png.flaticon.com/512/919/919853.png" />
+</a>
+<a href='https://swagger.io/'>
 <img swagger align="center" style="padding-left: 12px; padding-right: 12px; padding-bottom: 12px;" width="74px" height="74px" src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Swagger-logo.png" />
+</a>
+<a href='https://redis.io/'>
 <img redis align="center" style="padding-left: 12px; padding-right: 12px; padding-bottom: 12px;" width="74px" height="74px" src="https://is3-ssl.mzstatic.com/image/thumb/Purple124/v4/17/cd/a2/17cda2a0-b641-c3d0-3d22-141704a40eef/Icon.png/1200x630bb.png" />
+</a>
 </p>
 
 Here is listing of technologies used for backend side implementation:
