@@ -57,7 +57,7 @@ func Update(key string, coll string, i interface{}) error {
 	return collection.FindOneAndReplace(ctx, bson.M{"key": key}, i).Err()
 }
 
-func GetCollection(coll string, i interface{}) error {
+func GetCollection(coll string, i interface{}) ([]interface{}, error) {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		1*time.Second,
@@ -66,19 +66,23 @@ func GetCollection(coll string, i interface{}) error {
 	collection := database.Collection(coll)
 	idx, err := collection.Indexes().List(ctx)
 	if err != nil {
-		return err
+		return nil, err
 	}
-
+	resultList := []interface{}{}
 	for {
 		id := idx.ID()
+		if id == 0 {
+			break
+		}
 		resp := collection.FindOne(ctx, bson.M{"_id": id})
 		if resp.Err() != nil {
-			return resp.Err()
+			return nil, resp.Err()
 		}
 		decodeErr := resp.Decode(i)
 		if decodeErr != nil {
-			return decodeErr
+			return nil, decodeErr
 		}
+		resultList = append(resultList, &i)
 	}
-
+	return resultList, nil
 }
