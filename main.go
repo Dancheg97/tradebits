@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"tradebits/swagger"
+	"tradebits/api"
 
 	"github.com/joho/godotenv"
 )
@@ -28,6 +28,6 @@ func init() {
 
 func main() {
 	log.Printf("Server starting...")
-	router := swagger.NewRouter()
+	router := api.NewRouter()
 	log.Fatal(http.ListenAndServe(readConfigField("MARKET_PORT"), router))
 }

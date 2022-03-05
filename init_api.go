@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"log"
+	"tradebits/api"
 	"tradebits/crypt"
-	"tradebits/swagger"
 )
 
 func initSwagger() {
@@ -21,6 +21,6 @@ func initSwagger() {
 	if err != nil {
 		log.Fatal("Setup swagger error: ", err)
 	}
-	swagger.MarketInfoResponse = respbytes
+	api.MarketInfoResponse = respbytes
 	log.Println("Setup swagger success")
 }

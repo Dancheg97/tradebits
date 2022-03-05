@@ -8,7 +8,7 @@
 [![Generic badge](https://img.shields.io/badge/COVERAGE-GO-turquoise.svg)](cover.md)
 
 <p align="center">
-  <img src="https://steemitimages.com/DQmYv9bZGTnih13qHKpjchu2rJo6LGMCJbdndgpd9ec9u9K/Blockchain.png" alt="logo"/>
+  <img src="https://www.pngkey.com/png/full/398-3981558_igo-mid-winter-conference-network-png.png" alt="logo"/>
 </p>
 
 # What is TradeBits?
