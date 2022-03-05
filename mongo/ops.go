@@ -61,7 +61,7 @@ func Update(key string, coll string, i interface{}) error {
 func GetCollection(coll string) ([]map[string]string, error) {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
-		1*time.Second,
+		4*time.Second,
 	)
 	defer cancel()
 	collection := database.Collection(coll)

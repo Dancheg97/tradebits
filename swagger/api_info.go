@@ -10,7 +10,9 @@
 package swagger
 
 import (
+	"encoding/json"
 	"net/http"
+	"tradebits/mongo"
 )
 
 var MarketInfoResponse []byte
@@ -21,14 +23,16 @@ func InfoMarketGet(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-type NetMember struct {
-	name string `json:"name" bson:"name"`
-	mkey string `json:"name" bson:"name"`
-	link string `json:"name" bson:"name"`
-}
-
 func InfoNetGet(w http.ResponseWriter, r *http.Request) {
-
+	values, err := mongo.GetCollection("net")
+	if err != nil {
+		return
+	}
+	respbytes, infoEjectErr := json.Marshal(values)
+	if infoEjectErr != nil {
+		return
+	}
+	w.Write(respbytes)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }

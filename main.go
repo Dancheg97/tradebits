@@ -31,9 +31,9 @@ func initMongo() {
 	if mongoErr != nil {
 		log.Fatal(mongoErr)
 	}
+	mongo.CreateCollection("net")
 	mongo.CreateCollection("user")
 	mongo.CreateCollection("market")
-	mongo.CreateCollection("trades")
 	mongo.CreateCollection("network")
 }
 
