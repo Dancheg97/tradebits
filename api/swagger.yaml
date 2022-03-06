@@ -9,6 +9,9 @@ info:
    
    Each procedure on specific market need to be reinforced by market name in senders message, to prevent mimic behavior by markets collecting data. That will guarantee, that only owner of the private key is able to process transactions on specific market. 
    
+   
+   ---
+   
    ## API notions:
 
    - **ukey** - public key of the user, which is used by user to send messages and process operations on a related market 
@@ -16,6 +19,24 @@ info:
    - **mkey** - public key of the market, which can be used to encrypt and verify messages
    
    - **hkey** - key of host added for additional security, for message verification. This is the public key of the node accepting the request
+   
+   
+   ---
+   
+   ## Keys format:
+   
+   Each key should be sent in base64 format. Encoded binary form allows not to show PEM keys in 
+   different sources and makes in easier to transform on backend side (requires less operations to get 
+   actual key from) base64 source.
+   
+   
+   --- 
+   
+   ## Messages format:
+   
+   Each message should represent an encoded actual message in utf-8 format. That will make it easier 
+   for client sides to encode/decode messages due format solidarity.
+   
 paths:
   /info/market:
     get:
@@ -43,9 +64,9 @@ paths:
               delimiter:
                 type: integer
             example:
-              name: "Best Market"
+              name: "Example market name"
               mkey: "base64content"
-              descr: "Best ever made"
+              descr: "Best ever example description, kinda cool aswell"
               img: "http://image.link/img123"
               worktime: "9:00 - 23:00"
               fee: 86
