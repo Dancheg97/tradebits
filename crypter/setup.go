@@ -9,6 +9,7 @@ import (
 type ICrypter interface {
 	Sign(message string) (string, error)
 	Verify(message string, pubkey string, sign string) bool
+	Pub() string
 }
 
 type crypter struct {
@@ -32,4 +33,8 @@ func Get(privateBase64 string) (*crypter, error) {
 		pub:  pubBase64,
 	}
 	return &c, nil
+}
+
+func (c *crypter) Pub() string {
+	return c.pub
 }

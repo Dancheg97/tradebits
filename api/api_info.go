@@ -3,13 +3,11 @@ package api
 import (
 	"encoding/json"
 	"net/http"
-	"tradebits/mongo"
 )
 
-var MarketInfoResponse []byte
 
 func InfoMarketGet(w http.ResponseWriter, r *http.Request) {
-	w.Write(MarketInfoResponse)
+	w.Write(info)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(200)
 }

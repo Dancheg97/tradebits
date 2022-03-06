@@ -1,4 +1,4 @@
-package redis
+package rediser
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-type IRedis interface {
+type IRediser interface {
 	Lock(key string) bool
 	Unlock(key string) bool
 }

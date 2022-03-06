@@ -3,8 +3,6 @@ package api
 import (
 	"encoding/json"
 	"net/http"
-	"tradebits/crypt"
-	"tradebits/mongo"
 )
 
 type User struct {
@@ -55,7 +53,7 @@ func UserCreatePut(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(406)
 		return
 	}
-	if hkey != crypt.Pub {
+	if hkey != crypt.Pub() {
 		w.WriteHeader(421)
 		return
 	}
