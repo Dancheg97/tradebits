@@ -10,7 +10,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var database *mongo.Database
+type mongobase struct {
+	database *mongo.Database
+}
 
 func OpenMongo(adress string, user string, pass string, db string) error {
 	ctx, cancel := context.WithTimeout(
