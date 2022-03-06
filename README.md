@@ -76,8 +76,14 @@ GrayLog is used for log acceleration and analytics of runtime process.
 
 ## Commands
 
-- Run tests and update `go_cover.md`
+- Run tests and update `go_cover.md`:
 ```cmd
 go test -v -coverpkg=./... -coverprofile=go_profile.cov ./...
 go tool cover -func go_profile -o go_cover.md
+```
+
+- Update docker image in docker hub:
+```cmd
+docker build -t dangdancheg/tradebits:tagname .
+docker push dangdancheg/tradebits:tagname
 ```
