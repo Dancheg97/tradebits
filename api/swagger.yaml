@@ -105,11 +105,13 @@ paths:
         "201":
           description: "Created"
         "401":
-          description: "Sign verification error"
+          description: "Unauthorized (Sign verification error)"
         "403":
-          description: "User exists"
-        "405":
-          description: "Invalid input"
+          description: "Forbidden (User exists)"
+        "406":
+          description: "Not accepable (Bad input)"
+        "421":
+          description: "Misdirected Request (Wrong host key - hkey)"
   /user/balance:
     get:
       tags:
