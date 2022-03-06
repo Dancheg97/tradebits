@@ -49,7 +49,7 @@ func UserCreatePut(w http.ResponseWriter, r *http.Request) {
 	hkey, exist1 := request["hkey"]
 	ukey, exist2 := request["ukey"]
 	sign, exist3 := request["sign"]
-	if !(exist1 && exist2 && exist3) {
+	if !exist1 || !exist2 || !exist3 {
 		w.WriteHeader(406)
 		return
 	}
@@ -75,6 +75,42 @@ func UserCreatePut(w http.ResponseWriter, r *http.Request) {
 }
 
 func UserMessagePut(w http.ResponseWriter, r *http.Request) {
+	request := map[string]string{}
+	json.NewDecoder(r.Body).Decode(&request)
+	hkey, exist1 := request["hkey"]
+	ukey, exist2 := request["ukey"]
+	mess, exist3 := request["message"]
+	sign, exist4 := request["sign"]
+	if !exist1 || !exist2 || !exist3 || !exist4 {
+		w.WriteHeader(406)
+		return
+	}
+	if hkey != crypt.Pub() {
+		w.WriteHeader(421)
+		return
+	}
+	verfied := crypt.Verify(hkey+ukey+mess, ukey, sign)
+	if !verfied {
+		w.WriteHeader(401)
+		return
+	}
+	if redis.Lock(ukey) {
+		w.WriteHeader(423)
+		return
+	}
+	defer redis.Unlock(ukey)
+	user := User{}
+	notFound := mongo.Get(ukey, "user", &user)
+	if notFound != nil {
+		w.WriteHeader(404)
+		return
+	}
+	user.Messages = append(user.Messages, mess)
+	updateErr := mongo.Update(ukey, "user", user)
+	if updateErr != nil {
+		w.WriteHeader(503)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
@@ -118,6 +154,7 @@ func UserOrderPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func UserTradesGet(w http.ResponseWriter, r *http.Request) {
+
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }

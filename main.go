@@ -43,8 +43,20 @@ func init() {
 		"delimiter": readConfigField("MARKET_DELIMITER"),
 	}
 	respbytes, err4 := json.Marshal(m)
-	if !(err1 != nil && err2 != nil && err3 != nil && err4 != nil) {
+	if err1 != nil || err2 != nil || err3 != nil || err4 != nil {
 		log.Fatal("Setup api error: ", err1, err2, err3, err4)
+	}
+	colErr1 := mongo.CreateCollection("user")
+	colErr2 := mongo.CreateCollection("net")
+	colErr3 := mongo.CreateCollection("trades")
+	if colErr1 != nil || colErr2 != nil || colErr3 != nil {
+		log.Fatal("Setup api error: ", colErr1, colErr2, colErr3)
+	}
+	idxErr1 := mongo.CreateIndex("user", "key", "hashed")
+	idxErr2 := mongo.CreateIndex("trades", "ukey", "hashed")
+	idxErr3 := mongo.CreateIndex("trades", "mkey", "hashed")
+	if idxErr1 != nil || idxErr2 != nil || idxErr3 != nil {
+		log.Fatal("Setup api error: ", idxErr1, idxErr2, idxErr3)
 	}
 	api.Setup(respbytes, mongo, crypt, redis)
 }
