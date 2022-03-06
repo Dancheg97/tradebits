@@ -8,12 +8,12 @@ import (
 	"encoding/base64"
 )
 
-func Sign(message string) (string, error) {
+func (c *crypter) Sign(message string) (string, error) {
 	h := sha512.New()
 	h.Write([]byte(message))
 	sign, err := rsa.SignPKCS1v15(
 		rand.Reader,
-		priv,
+		c.priv,
 		crypto.SHA512,
 		h.Sum(nil),
 	)

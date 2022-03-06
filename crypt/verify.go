@@ -8,7 +8,7 @@ import (
 	"encoding/base64"
 )
 
-func Verify(message string, pubkey string, sign string) bool {
+func (c *crypter) Verify(message string, pubkey string, sign string) bool {
 	pubBytes, decodeKeyErr := base64.RawStdEncoding.DecodeString(pubkey)
 	if decodeKeyErr != nil {
 		return false
