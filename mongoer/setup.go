@@ -24,7 +24,7 @@ type mongoer struct {
 	database *mongo.Database
 }
 
-func Mongo(adr string, user string, pwd string, db string) (*mongoer, error) {
+func Get(adr string, user string, pwd string, db string) (*mongoer, error) {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		45*time.Millisecond,

@@ -16,7 +16,7 @@ type crypter struct {
 	pub  string
 }
 
-func Crypter(privateBase64 string) (*crypter, error) {
+func Get(privateBase64 string) (*crypter, error) {
 	keyBytes, decodeErr := base64.RawStdEncoding.DecodeString(privateBase64)
 	if decodeErr != nil {
 		return nil, decodeErr

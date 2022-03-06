@@ -12,7 +12,7 @@ var testpub string = "MIIECgKCBAEApAqr6+MbKqDAAiU+8XTu55krjllICL1tPS8TheV8xLiWet
 func TestSetup(t *testing.T) {
 	godotenv.Load("../.env")
 	private, _ := os.LookupEnv("MARKET_PRIVATEKEY")
-	crypter, err := Crypter(private)
+	crypter, err := Get(private)
 	if err != nil {
 		t.Error(err)
 	}

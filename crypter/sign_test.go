@@ -13,7 +13,7 @@ var testmes string = "123"
 func TestSign(t *testing.T) {
 	godotenv.Load("../.env")
 	private, _ := os.LookupEnv("MARKET_PRIVATEKEY")
-	crypter, _ := Crypter(private)
+	crypter, _ := Get(private)
 	sign, err := crypter.Sign(testmes)
 	if err != nil {
 		t.Error(err)

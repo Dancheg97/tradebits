@@ -5,13 +5,13 @@ import (
 	"time"
 )
 
-func Lock(key string) bool {
+func (r *rediser) Lock(key string) bool {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		15*time.Millisecond,
 	)
 	defer cancel()
-	blcmd := rds.SetNX(ctx, key, true, 0)
+	blcmd := r.db.SetNX(ctx, key, true, 0)
 	wasSet, connErr := blcmd.Result()
 	if connErr != nil {
 		return false

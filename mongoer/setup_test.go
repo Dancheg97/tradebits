@@ -14,7 +14,7 @@ func getTestMongoer() (*mongoer, error) {
 	mongo_name, _ := os.LookupEnv("MONGO_NAME")
 	mongo_password, _ := os.LookupEnv("MONGO_PASSWORD")
 	mongo_db, _ := os.LookupEnv("MONGO_DB")
-	return Mongo(
+	return Get(
 		mongo_host,
 		mongo_name,
 		mongo_password,

@@ -7,10 +7,17 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-var rds *redis.Client
+type IRedis interface {
+	Lock(key string) bool
+	Unlock(key string) bool
+}
 
-func Setup(host string) error {
-	rds = redis.NewClient(&redis.Options{
+type rediser struct {
+	db *redis.Client
+}
+
+func Get(host string) (*rediser, error) {
+	rds := redis.NewClient(&redis.Options{
 		Addr: host,
 		DB:   0,
 	})
@@ -21,5 +28,8 @@ func Setup(host string) error {
 	defer cancel()
 	rds.SetNX(ctx, "setup", struct{}{}, time.Millisecond)
 	resp := rds.Del(ctx, "setup")
-	return resp.Err()
+	if resp.Err() != nil {
+		return nil, resp.Err()
+	}
+	return &rediser{db: rds}, nil
 }

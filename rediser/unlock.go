@@ -5,12 +5,12 @@ import (
 	"time"
 )
 
-func Unlock(key string) bool {
+func (r *rediser)Unlock(key string) bool {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		15*time.Millisecond,
 	)
 	defer cancel()
-	rez := rds.Del(ctx, string(key))
+	rez := r.db.Del(ctx, string(key))
 	return rez.Err() == nil
 }
