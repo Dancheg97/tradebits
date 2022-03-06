@@ -173,7 +173,7 @@ paths:
     get:
       tags:
         - "user"
-      summary: "get messages related to user"
+      summary: "get messages related to user, place 0 offset to get all messages"
       consumes:
         - "application/json"
       parameters:
@@ -197,21 +197,19 @@ paths:
             type: string
             properties:
               items:
-                type: object
-                properties:
-                  name:
-                    type: string
-                  key:
-                    type: string
-                  link:
-                    type: string
+                type: string
             example:
-              - name: "Market name"
-                key: "mktadress"
-                link: "http://someadr.ru/helo"
-              - name: "Market name"
-                key: "mktadress"
-                link: "http://someadr.ru/helo"
+              - hello market
+              - hello user
+              - how are u?
+              - gut u?
+              - tbh msgs are all encrypted so u won't be able to read them :D
+        "404":
+          description: "Not found (User not found)"
+        "406":
+          description: "Not acceptable (bad input)"
+        "503":
+          description: "Service Unavailable (unable to marshal)"
   /user/trades:
     get:
       tags:

@@ -48,10 +48,10 @@ func UserCancelordersPost(w http.ResponseWriter, r *http.Request) {
 func UserCreatePut(w http.ResponseWriter, r *http.Request) {
 	request := map[string]string{}
 	json.NewDecoder(r.Body).Decode(&request)
-	hkey, e1 := request["hkey"]
-	ukey, e2 := request["ukey"]
-	sign, e3 := request["sign"]
-	if !(e1 && e2 && e3) {
+	hkey, exist1 := request["hkey"]
+	ukey, exist2 := request["ukey"]
+	sign, exist3 := request["sign"]
+	if !(exist1 && exist2 && exist3) {
 		w.WriteHeader(406)
 		return
 	}
@@ -82,6 +82,33 @@ func UserMessagePut(w http.ResponseWriter, r *http.Request) {
 }
 
 func UserMessagesGet(w http.ResponseWriter, r *http.Request) {
+	request := map[string]interface{}{}
+	json.NewDecoder(r.Body).Decode(&request)
+	iukey, exist1 := request["hkey"]
+	ukey, asserted1 := iukey.(string)
+	ioffset, exist2 := request["ukey"]
+	offset, asserted2 := ioffset.(int)
+	if !(exist1 && asserted1 && exist2 && asserted2) {
+		w.WriteHeader(406)
+		return
+	}
+	user := User{}
+	notFound := mongo.Get(ukey, "user", &user)
+	if notFound != nil {
+		w.WriteHeader(404)
+		return
+	}
+	if len(user.Messages) < offset {
+		w.WriteHeader(406)
+		return
+	}
+	response := user.Messages[offset:]
+	respbytes, marshErr := json.Marshal(response)
+	if marshErr != nil {
+		w.WriteHeader(503)
+		return
+	}
+	w.Write(respbytes)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
