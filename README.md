@@ -5,7 +5,7 @@
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-orange.svg)](LICENSE)
 [![Generic badge](https://img.shields.io/badge/DOCKER-HUB-blue.svg)](https://hub.docker.com/repository/docker/dangdancheg/tradebits)
 [![Generic badge](https://img.shields.io/badge/SWAGGER-API-green.svg)](https://app.swaggerhub.com/apis/Dancheg97/tradebits)
-[![Generic badge](https://img.shields.io/badge/COVERAGE-GO-turquoise.svg)](cover.md)
+[![Generic badge](https://img.shields.io/badge/COVERAGE-GO-turquoise.svg)](go_cover.md)
 
 <p align="center">
   <img src="https://www.pngkey.com/png/full/398-3981558_igo-mid-winter-conference-network-png.png" alt="logo"/>
@@ -71,3 +71,13 @@ Mongo is used to store data in document format.
 Swagger is used to save API documentation and generate server-client side code. Swagger link is provided above, aswell as [yaml file](api/swagger.yaml)
 
 GrayLog is used for log acceleration and analytics of runtime process.
+
+---
+
+## Commands
+
+- Run tests and update `go_cover.md`
+```cmd
+go test -v -coverpkg=./... -coverprofile=go_profile.cov ./...
+go tool cover -func go_profile -o go_cover.md
+```
