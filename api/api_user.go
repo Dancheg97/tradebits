@@ -37,7 +37,7 @@ func UserBalanceGet(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Write(respbytes)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(200)
 }
 
 func UserCancelordersPost(w http.ResponseWriter, r *http.Request) {
