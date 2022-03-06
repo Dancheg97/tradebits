@@ -6,9 +6,8 @@ import (
 
 func TestVerify(t *testing.T) {
 	setupForTests()
-	sign, _ := Sign("")
-	signVerificationSuccess := Verify("", Pub, sign)
-	if !signVerificationSuccess {
+	success := Verify(testmes, Pub, testsign)
+	if !success {
 		t.Error("sign was not verified")
 	}
 }
