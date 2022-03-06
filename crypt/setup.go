@@ -6,6 +6,11 @@ import (
 	"encoding/base64"
 )
 
+type ICrypter interface {
+	Sign(message string) (string, error)
+	Verify(message string, pubkey string, sign string) bool
+}
+
 type crypter struct {
 	priv *rsa.PrivateKey
 	pub  string
