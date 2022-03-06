@@ -51,7 +51,7 @@ func UserCreatePut(w http.ResponseWriter, r *http.Request) {
 		Key:      ukey,
 		Messages: []string{},
 	})
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(201)
 }
 
 func UserMessagePut(w http.ResponseWriter, r *http.Request) {
