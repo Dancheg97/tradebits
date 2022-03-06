@@ -1,4 +1,4 @@
-package mongo
+package mongoer
 
 import (
 	"context"
@@ -6,20 +6,21 @@ import (
 	"time"
 )
 
-func setupTestEnv(collectioname string) {
-	openMongoFromEnv()
-	CreateCollection(collectioname)
-	CreateIndex(collectioname, "key", "hashed")
+func setupTestEnv(collectioname string) *mongoer {
+	m, _ := getTestMongoer()
+	m.CreateCollection(collectioname)
+	m.CreateIndex(collectioname, "key", "hashed")
 	go func() {
 		time.Sleep(time.Millisecond * 100)
-		database.Collection(collectioname).Drop(context.Background())
+		m.database.Collection(collectioname).Drop(context.Background())
 	}()
+	return m
 }
 
 func TestPut(t *testing.T) {
 	collectionname := "testputcol"
-	setupTestEnv(collectionname)
-	err := Put(collectionname, &map[string]string{
+	m := setupTestEnv(collectionname)
+	err := m.Put(collectionname, &map[string]string{
 		"key": "testputkey",
 	})
 	if err != nil {
@@ -30,11 +31,11 @@ func TestPut(t *testing.T) {
 
 func TestCheck(t *testing.T) {
 	collectionname := "testcheckcol"
-	setupTestEnv(collectionname)
-	Put(collectionname, &map[string]string{
+	m := setupTestEnv(collectionname)
+	m.Put(collectionname, &map[string]string{
 		"key": "testcheckkey",
 	})
-	found := Check("testcheckkey", collectionname)
+	found := m.Check("testcheckkey", collectionname)
 	if !found {
 		t.Error("not found")
 	}
@@ -43,13 +44,13 @@ func TestCheck(t *testing.T) {
 
 func TestGet(t *testing.T) {
 	collectionname := "testgetcol"
-	setupTestEnv(collectionname)
-	Put(collectionname, &map[string]string{
+	m := setupTestEnv(collectionname)
+	m.Put(collectionname, &map[string]string{
 		"key":   "testgetkey",
 		"vaval": "tester",
 	})
 	mp := map[string]string{}
-	Get("testgetkey", collectionname, &mp)
+	m.Get("testgetkey", collectionname, &mp)
 	if mp["vaval"] != "tester" {
 		t.Error("mongo returned bad value")
 	}
@@ -58,12 +59,12 @@ func TestGet(t *testing.T) {
 
 func TestUpdate(t *testing.T) {
 	collectionname := "testupdatecol"
-	setupTestEnv(collectionname)
-	Put(collectionname, &map[string]string{
+	m := setupTestEnv(collectionname)
+	m.Put(collectionname, &map[string]string{
 		"key":   "testupdatekey",
 		"vaval": "tester",
 	})
-	rez := Update("testupdatekey", collectionname, &map[string]string{
+	rez := m.Update("testupdatekey", collectionname, &map[string]string{
 		"key":   "testupdatekey",
 		"vaval": "tester2",
 	})
@@ -71,7 +72,7 @@ func TestUpdate(t *testing.T) {
 		t.Error("Error with updating")
 	}
 	mp := map[string]string{}
-	Get("testupdatekey", collectionname, &mp)
+	m.Get("testupdatekey", collectionname, &mp)
 	if mp["vaval"] != "tester2" {
 		t.Error("mongo did not update value in database")
 	}
@@ -79,14 +80,14 @@ func TestUpdate(t *testing.T) {
 
 func TestGetCollection(t *testing.T) {
 	collectionname := "testgetwholecollection"
-	setupTestEnv(collectionname)
-	Put(collectionname, &map[string]string{
+	m := setupTestEnv(collectionname)
+	m.Put(collectionname, &map[string]string{
 		"vaval": "tester1",
 	})
-	Put(collectionname, &map[string]string{
+	m.Put(collectionname, &map[string]string{
 		"vaval": "tester2",
 	})
-	vals, err := GetCollection(collectionname)
+	vals, err := m.GetCollection(collectionname)
 	if err != nil {
 		t.Error(err)
 	}

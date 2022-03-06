@@ -1,4 +1,4 @@
-package mongo
+package mongoer
 
 import (
 	"context"
@@ -8,13 +8,13 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func openMongoFromEnv() error {
+func getTestMongoer() (*mongoer, error) {
 	godotenv.Load("../.env")
 	mongo_host, _ := os.LookupEnv("MONGO_HOST")
 	mongo_name, _ := os.LookupEnv("MONGO_NAME")
 	mongo_password, _ := os.LookupEnv("MONGO_PASSWORD")
 	mongo_db, _ := os.LookupEnv("MONGO_DB")
-	return OpenMongo(
+	return Mongo(
 		mongo_host,
 		mongo_name,
 		mongo_password,
@@ -23,27 +23,27 @@ func openMongoFromEnv() error {
 }
 
 func TestOpenMongo(t *testing.T) {
-	err := openMongoFromEnv()
+	_, err := getTestMongoer()
 	if err != nil {
 		t.Error("failed to open mongo")
 	}
 }
 
 func TestCreateCollection(t *testing.T) {
-	openMongoFromEnv()
-	err := CreateCollection("testcol")
+	m, _ := getTestMongoer()
+	err := m.CreateCollection("testcol")
 	if err != nil {
 		t.Error("failed to create collection")
 	}
-	database.Collection("testcol").Drop(context.Background())
+	m.database.Collection("testcol").Drop(context.Background())
 }
 
 func TestCreateIndex(t *testing.T) {
-	openMongoFromEnv()
-	CreateCollection("testcol2")
-	err := CreateIndex("testcol2", "Pubkey", "hashed")
+	m, _ := getTestMongoer()
+	m.CreateCollection("testcol2")
+	err := m.CreateIndex("testcol2", "Pubkey", "hashed")
 	if err != nil {
 		t.Error("failed to create collection")
 	}
-	database.Collection("testcol2").Drop(context.Background())
+	m.database.Collection("testcol2").Drop(context.Background())
 }

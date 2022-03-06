@@ -1,4 +1,4 @@
-package mongo
+package mongoer
 
 import (
 	"context"
@@ -10,11 +10,21 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type mongobase struct {
+type IMongoer interface {
+	CreateCollection(name string) error
+	CreateIndex(col string, key string, value string) error
+	Check(key string, coll string) bool
+	Get(key string, coll string, i interface{}) error
+	Put(coll string, i interface{}) error
+	Update(key string, coll string, i interface{}) error
+	GetCollection(coll string) ([]map[string]string, error)
+}
+
+type mongoer struct {
 	database *mongo.Database
 }
 
-func OpenMongo(adress string, user string, pass string, db string) error {
+func Mongo(adr string, user string, pwd string, db string) (*mongoer, error) {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		45*time.Millisecond,
@@ -22,24 +32,26 @@ func OpenMongo(adress string, user string, pass string, db string) error {
 	defer cancel()
 	credential := options.Credential{
 		Username: user,
-		Password: pass,
+		Password: pwd,
 	}
-	opts := options.Client().ApplyURI(adress).SetAuth(credential)
+	opts := options.Client().ApplyURI(adr).SetAuth(credential)
 	client, err := mongo.Connect(ctx, opts)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	database = client.Database(db)
-	return nil
+	m := mongoer{
+		database: client.Database(db),
+	}
+	return &m, nil
 }
 
-func CreateCollection(name string) error {
+func (m *mongoer) CreateCollection(name string) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		45*time.Millisecond,
 	)
 	defer cancel()
-	err := database.CreateCollection(ctx, name)
+	err := m.database.CreateCollection(ctx, name)
 	if err != nil {
 		if strings.Contains(err.Error(), "Collection already exists") {
 			return nil
@@ -49,13 +61,13 @@ func CreateCollection(name string) error {
 	return nil
 }
 
-func CreateIndex(col string, key string, value string) error {
+func (m *mongoer) CreateIndex(col string, key string, value string) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		45*time.Millisecond,
 	)
 	defer cancel()
-	coll := database.Collection(col)
+	coll := m.database.Collection(col)
 	idx := mongo.IndexModel{
 		Keys:    bson.M{key: value},
 		Options: nil,
