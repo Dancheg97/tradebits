@@ -47,7 +47,10 @@ func UserCreatePut(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(403)
 		return
 	}
-	mongo.Put("user", User{Key: ukey})
+	mongo.Put("user", User{
+		Key:      ukey,
+		Messages: []string{},
+	})
 	w.WriteHeader(http.StatusOK)
 }
 
