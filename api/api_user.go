@@ -29,8 +29,12 @@ func UserCreatePut(w http.ResponseWriter, r *http.Request) {
 	hkey, e1 := inp["hkey"]
 	ukey, e2 := inp["ukey"]
 	sign, e3 := inp["sign"]
-	if !(e1 && e2 && e3 && hkey == crypt.Pub) {
+	if !(e1 && e2 && e3) {
 		w.WriteHeader(406)
+		return
+	}
+	if hkey != crypt.Pub {
+		w.WriteHeader(421)
 		return
 	}
 	verfied := crypt.Verify(hkey+ukey, ukey, sign)
