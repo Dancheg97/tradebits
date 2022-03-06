@@ -19,7 +19,7 @@ func initMongo() {
 	}
 	e1 := mongo.CreateCollection("net")
 	e2 := mongo.CreateCollection("user")
-	e3 := mongo.CreateCollection("market")
+	e3 := mongo.CreateCollection("trades")
 	e4 := mongo.CreateCollection("network")
 	if e1 != nil || e2 != nil || e3 != nil || e4 != nil {
 		log.Fatal("Setup mongo error: ", e1, e2, e3, e4)

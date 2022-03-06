@@ -8,7 +8,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// checks wether some value exists in database
 func Check(key string, coll string) bool {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
@@ -20,7 +19,6 @@ func Check(key string, coll string) bool {
 	return rez.Err() == nil
 }
 
-// put some value from database to interface
 func Get(key string, coll string, i interface{}) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
@@ -35,7 +33,20 @@ func Get(key string, coll string, i interface{}) error {
 	return resp.Decode(i)
 }
 
-// puts some value to database
+func GetMany(key string, coll string, i interface{}) error {
+	ctx, cancel := context.WithTimeout(
+		context.Background(),
+		45*time.Millisecond,
+	)
+	defer cancel()
+	collection := database.Collection(coll)
+	searchresult, err  := collection.Find(ctx, bson.M{"ukey": key})
+	if err != nil {
+		return err
+	}
+
+}
+
 func Put(coll string, i interface{}) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
@@ -47,7 +58,6 @@ func Put(coll string, i interface{}) error {
 	return err
 }
 
-// changes some value in database
 func Update(key string, coll string, i interface{}) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),

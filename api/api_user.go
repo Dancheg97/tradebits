@@ -84,10 +84,11 @@ func UserMessagePut(w http.ResponseWriter, r *http.Request) {
 func UserMessagesGet(w http.ResponseWriter, r *http.Request) {
 	request := map[string]interface{}{}
 	json.NewDecoder(r.Body).Decode(&request)
-	iukey, exist1 := request["hkey"]
+	iukey, exist1 := request["ukey"]
 	ukey, asserted1 := iukey.(string)
-	ioffset, exist2 := request["ukey"]
-	offset, asserted2 := ioffset.(int)
+	ioffset, exist2 := request["offset"]
+	offsetFloat, asserted2 := ioffset.(float64)
+	offset := int(offsetFloat)
 	if !(exist1 && asserted1 && exist2 && asserted2) {
 		w.WriteHeader(406)
 		return
@@ -110,7 +111,7 @@ func UserMessagesGet(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Write(respbytes)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(200)
 }
 
 func UserOrderPost(w http.ResponseWriter, r *http.Request) {
