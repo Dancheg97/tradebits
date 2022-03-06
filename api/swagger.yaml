@@ -98,6 +98,8 @@ paths:
               - name: "Market name"
                 mkey: "mktadress"
                 link: "http://someadr.ru/helo"
+        "503":
+          description: "Service Unavailable (unable to marshal)"
   /user/create:
     put:
       tags:
@@ -162,9 +164,11 @@ paths:
             example:
               balance: 3872
         "404":
-          description: "User not found"
-        "405":
-          description: "Invalid input"
+          description: "Not found (User not found)"
+        "406":
+          description: "Not acceptable (bad input)"
+        "503":
+          description: "Service Unavailable (unable to marshal)"
   /user/messages:
     get:
       tags:

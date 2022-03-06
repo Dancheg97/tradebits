@@ -23,9 +23,9 @@ func InfoNetGet(w http.ResponseWriter, r *http.Request) {
 	for _, member := range netmembers {
 		delete(member, "_id")
 	}
-	respbytes, infoEjectErr := json.Marshal(netmembers)
-	if infoEjectErr != nil {
-		w.WriteHeader(400)
+	respbytes, marshErr := json.Marshal(netmembers)
+	if marshErr != nil {
+		w.WriteHeader(503)
 		return
 	}
 	w.Write(respbytes)

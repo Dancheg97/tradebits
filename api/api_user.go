@@ -14,6 +14,28 @@ type User struct {
 }
 
 func UserBalanceGet(w http.ResponseWriter, r *http.Request) {
+	request := map[string]string{}
+	json.NewDecoder(r.Body).Decode(&request)
+	ukey, exists := request["ukey"]
+	if !exists {
+		w.WriteHeader(406)
+		return
+	}
+	user := User{}
+	notFound := mongo.Get(ukey, "user", &user)
+	if notFound != nil {
+		w.WriteHeader(404)
+		return
+	}
+	response := map[string]int{
+		"balance": user.Balance,
+	}
+	respbytes, marshErr := json.Marshal(response)
+	if marshErr != nil {
+		w.WriteHeader(503)
+		return
+	}
+	w.Write(respbytes)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
@@ -24,11 +46,11 @@ func UserCancelordersPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func UserCreatePut(w http.ResponseWriter, r *http.Request) {
-	inp := map[string]string{}
-	json.NewDecoder(r.Body).Decode(&inp)
-	hkey, e1 := inp["hkey"]
-	ukey, e2 := inp["ukey"]
-	sign, e3 := inp["sign"]
+	request := map[string]string{}
+	json.NewDecoder(r.Body).Decode(&request)
+	hkey, e1 := request["hkey"]
+	ukey, e2 := request["ukey"]
+	sign, e3 := request["sign"]
 	if !(e1 && e2 && e3) {
 		w.WriteHeader(406)
 		return
