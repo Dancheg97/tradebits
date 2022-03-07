@@ -24,23 +24,19 @@ type mongoer struct {
 	database *mongo.Database
 }
 
-func Get(adr string, user string, pwd string, db string) (*mongoer, error) {
+func Get(adr string) (*mongoer, error) {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		45*time.Millisecond,
 	)
 	defer cancel()
-	credential := options.Credential{
-		Username: user,
-		Password: pwd,
-	}
-	opts := options.Client().ApplyURI(adr).SetAuth(credential)
+	opts := options.Client().ApplyURI(adr)
 	client, err := mongo.Connect(ctx, opts)
 	if err != nil {
 		return nil, err
 	}
 	m := mongoer{
-		database: client.Database(db),
+		database: client.Database("main"),
 	}
 	return &m, nil
 }

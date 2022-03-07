@@ -11,15 +11,7 @@ import (
 func getTestMongoer() (*mongoer, error) {
 	godotenv.Load("../.env")
 	mongo_host, _ := os.LookupEnv("MONGO_HOST")
-	mongo_name, _ := os.LookupEnv("MONGO_NAME")
-	mongo_password, _ := os.LookupEnv("MONGO_PASSWORD")
-	mongo_db, _ := os.LookupEnv("MONGO_DB")
-	return Get(
-		mongo_host,
-		mongo_name,
-		mongo_password,
-		mongo_db,
-	)
+	return Get(mongo_host)
 }
 
 func TestOpenMongo(t *testing.T) {

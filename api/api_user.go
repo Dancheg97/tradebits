@@ -94,11 +94,12 @@ func UserMessagePut(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(401)
 		return
 	}
-	if redis.Lock(ukey) {
+	lockedSuccess := redis.Lock(ukey)
+	defer redis.Unlock(ukey)
+	if !lockedSuccess {
 		w.WriteHeader(423)
 		return
 	}
-	defer redis.Unlock(ukey)
 	user := User{}
 	notFound := mongo.Get(ukey, "user", &user)
 	if notFound != nil {
@@ -112,7 +113,7 @@ func UserMessagePut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(200)
 }
 
 func UserMessagesGet(w http.ResponseWriter, r *http.Request) {

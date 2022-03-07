@@ -1,39 +1,32 @@
 version: "3.9"
 services:
 
-  bits:
-    build: .
-    ports:
-      - 8080:8080
-    environment:
-      REDIS_HOST: ${REDIS_HOST:-}
-      MONGO_HOST: ${MONGO_HOST:-}
-      MONGO_NAME: ${MONGO_NAME:-}
-      MONGO_PASSWORD: ${MONGO_PASSWORD:-}
-      MONGO_DB: ${MONGO_DB:-}
-      MARKET_PORT: ${MARKET_PORT:-}
-      MARKET_NAME: ${MARKET_NAME:-}
-      MARKET_DESCR: ${MARKET_DESCR:-}
-      MARKET_IMG: ${MARKET_IMG:-}
-      MARKET_WORKTIME: ${MARKET_WORKTIME:-}
-      MARKET_FEE: ${MARKET_FEE:-}
-      MARKET_DELIMITER: ${MARKET_DELIMITER:-}
-      MARKET_PRIVATEKEY: ${MARKET_PRIVATEKEY:-}
-      MARKET_PUBLICKEY: ${MARKET_PUBLICKEY:-}
-    depends_on:
-      - mongo
-      - redis
-    extra_hosts:
-    - "host.docker.internal:host-gateway"
+  # bits:
+  #   build: .
+  #   ports:
+  #     - 8080:8080
+  #   environment:
+  #     REDIS_HOST: ${REDIS_HOST:-}
+  #     MONGO_HOST: ${MONGO_HOST:-}
+  #     MONGO_NAME: ${MONGO_NAME:-}
+  #     MONGO_PASSWORD: ${MONGO_PASSWORD:-}
+  #     MONGO_DB: ${MONGO_DB:-}
+  #     MARKET_PORT: ${MARKET_PORT:-}
+  #     MARKET_NAME: ${MARKET_NAME:-}
+  #     MARKET_DESCR: ${MARKET_DESCR:-}
+  #     MARKET_IMG: ${MARKET_IMG:-}
+  #     MARKET_WORKTIME: ${MARKET_WORKTIME:-}
+  #     MARKET_FEE: ${MARKET_FEE:-}
+  #     MARKET_DELIMITER: ${MARKET_DELIMITER:-}
+  #     MARKET_PRIVATEKEY: ${MARKET_PRIVATEKEY:-}
+  #     MARKET_PUBLICKEY: ${MARKET_PUBLICKEY:-}
+  #   depends_on:
+  #     - mongo
+  #     - redis
+    
     
   mongo:
-    image: mongo
-    restart: always
-    ports:
-      - 27017:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_NAME:-}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-}
+    image: mongo:4.2
     extra_hosts:
     - "host.docker.internal:host-gateway"
 
@@ -43,16 +36,56 @@ services:
     ports:
       - 8081:8081
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_NAME:-}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD:-}
-      ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongo:27017/
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
     extra_hosts:
     - "host.docker.internal:host-gateway"
 
   redis:
-    image: "redis:alpine"
+    image: redis:alpine
     restart: always
     ports:
       - 6379:6379
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+      - "ES_JAVA_OPTS=-Dlog4j2.formatMsgNoLookups=true -Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
+
+  graylog:
+    image: graylog/graylog:4.2
+    environment:
+      GRAYLOG_PASSWORD_SECRET: somepasswordpepper
+      GRAYLOG_ROOT_PASSWORD_SHA2: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+      GRAYLOG_HTTP_EXTERNAL_URI: http://127.0.0.1:9000/
+    entrypoint: /usr/bin/tini -- wait-for-it elasticsearch:9200 --  /docker-entrypoint.sh
+    links:
+      - mongo
+      - elasticsearch
+    restart: always
+    depends_on:
+      - mongo
+      - elasticsearch
+    ports:
+      - 9000:9000
+      - 1514:1514
+      - 1514:1514/udp
+      - 12201:12201
+      - 12201:12201/udp
     extra_hosts:
     - "host.docker.internal:host-gateway"
