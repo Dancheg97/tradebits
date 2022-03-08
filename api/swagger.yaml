@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  version: "1.0.2"
+  version: "1.0.7"
   title: "TradeBits"
   description: >
    In this API description you can find description of ways markets communicate with each other and users.
@@ -168,7 +168,7 @@ paths:
         "406":
           description: "Not acceptable (bad input)"
         "503":
-          description: "Service Unavailable (unable to marshal)"
+          description: "Service Unavailable (server error)"
   /user/messages:
     get:
       tags:
@@ -209,7 +209,7 @@ paths:
         "406":
           description: "Not acceptable (bad input)"
         "503":
-          description: "Service Unavailable (unable to marshal)"
+          description: "Service Unavailable (server error)"
   /user/trades:
     get:
       tags:
@@ -251,9 +251,11 @@ paths:
                 recieve: 15
                 mkey: "anothermktadress"
         "404":
-          description: "User not found"
-        "405":
-          description: "Invalid input"
+          description: "Not found (User not found)"
+        "406":
+          description: "Not acceptable (bad input)"
+        "503":
+          description: "Service Unavailable (server error)"
   /user/message:
     put:
       tags:
@@ -285,13 +287,17 @@ paths:
         "200":
           description: "OK"
         "401":
-          description: "Sign verification error"
+          description: "Unauthorized (Sign verification error)"
         "404":
-          description: "User not found"
-        "405":
-          description: "Invalid input"
+          description: "Not found (User not found error)"
+        "406":
+          description: "Not acceptable (bad input)"
+        "421":
+          description: "Misdirected Request (Wrong host key - hkey)"
         "423":
           description: "Locked"
+        "503":
+          description: "Service Unavailable (server error)"
   /user/order:
     post:
       tags:
@@ -329,15 +335,19 @@ paths:
         "200":
           description: "OK"
         "401":
-          description: "Sign verification error"
+          description: "Unauthorized (Sign verification error)"
         "404":
-          description: "User not found"
-        "405":
-          description: "Invalid input"
+          description: "Not found (User not found error)"
+        "406":
+          description: "Not acceptable (bad input)"
+        "409":
+          description: "Conflict (bad balance)"
+        "421":
+          description: "Misdirected Request (Wrong host key - hkey)"
         "423":
           description: "Locked"
-        "456":
-          description: "Bad balance"
+        "503":
+          description: "Service Unavailable (server error)"
   /user/cancelorders:
     post:
       tags:
@@ -366,13 +376,19 @@ paths:
         "200":
           description: "OK"
         "401":
-          description: "Sign verification error"
+          description: "Unauthorized (Sign verification error)"
         "404":
-          description: "User not found"
+          description: "Not found (User not found error)"
+        "406":
+          description: "Not acceptable (bad input)"
+        "409":
+          description: "Conflict (no active trades)"
+        "421":
+          description: "Misdirected Request (Wrong host key - hkey)"
         "423":
           description: "Locked"
-        "457":
-          description: "No active trades"
+        "503":
+          description: "Service Unavailable (server error)"
   /market/create:
     put:
       tags:
@@ -407,9 +423,13 @@ paths:
         "200":
           description: "OK"
         "401":
-          description: "Sign verification error"
-        "405":
-          description: "Invalid input"
+          description: "Unauthorized (Sign verification error)"
+        "403":
+          description: "Forbidden (market exists)"
+        "406":
+          description: "Not acceptable (bad input)"
+        "421":
+          description: "Misdirected Request (Wrong host key - hkey)"
   /market/decrease:
     post:
       tags:
@@ -447,15 +467,19 @@ paths:
         "200":
           description: "OK"
         "401":
-          description: "Sign verification error"
-        "404":
-          description: "Trade not found"
-        "405":
-          description: "Invalid input"
+          description: "Unauthorized (Sign verification error)"
+        "403":
+          description: "Forbidden (market exists)"
+        "406":
+          description: "Not acceptable (bad input)"
+        "409":
+          description: "Conflict (bad balance)"
+        "421":
+          description: "Misdirected Request (Wrong host key - hkey)"
         "423":
           description: "Locked"
-        "457":
-          description: "No active trades"
+        "503":
+          description: "Service Unavailable (server error)"
   /market/related:
     get:
       tags:
@@ -491,9 +515,11 @@ paths:
               offer: 54
               recieve: 87
         "404":
-          description: "Market not found"
-        "405":
-          description: "Invalid input"
+          description: "Not found (Makret not found)"
+        "406":
+          description: "Not acceptable (bad input)"
+        "503":
+          description: "Service Unavailable (server error)"
   /market/close:
     delete:
       tags:
@@ -525,18 +551,17 @@ paths:
         "200":
           description: "OK"
         "401":
-          description: "Sign verification error"
-        "404":
-          description: "Trade not found"
-        "405":
-          description: "Invalid input"
+          description: "Unauthorized (Sign verification error)"
+        "403":
+          description: "Forbidden (market exists)"
+        "406":
+          description: "Not acceptable (bad input)"
+        "421":
+          description: "Misdirected Request (Wrong host key - hkey)"
         "423":
           description: "Locked"
-        "457":
-          description: "No active trades"
-  #  ###################
-  #   OPERATOR REQUESTS
-  #  ###################
+        "503":
+          description: "Service Unavailable (server error)"
   /operator/message:
     put:
       tags:
@@ -568,11 +593,15 @@ paths:
         "200":
           description: "OK"
         "401":
-          description: "Sign verification error"
-        "404":
-          description: "User not found"
-        "405":
-          description: "Invalid input"
+          description: "Unauthorized (Sign verification error)"
+        "406":
+          description: "Not acceptable (bad input)"
+        "421":
+          description: "Misdirected Request (Wrong host key - hkey)"
+        "423":
+          description: "Locked"
+        "503":
+          description: "Service Unavailable (server error)"
   /operator/deposit:
     post:
       tags:
@@ -604,13 +633,15 @@ paths:
         "200":
           description: "OK"
         "401":
-          description: "Sign verification error"
-        "404":
-          description: "User not found"
-        "405":
-          description: "Invalid input"
+          description: "Unauthorized (Sign verification error)"
+        "406":
+          description: "Not acceptable (bad input)"
+        "421":
+          description: "Misdirected Request (Wrong host key - hkey)"
         "423":
           description: "Locked"
+        "503":
+          description: "Service Unavailable (server error)"
   /operator/withdrawal:
     post:
       tags:
@@ -642,12 +673,12 @@ paths:
         "200":
           description: "OK"
         "401":
-          description: "Sign verification error"
-        "404":
-          description: "User not found"
-        "405":
-          description: "Invalid input"
+          description: "Unauthorized (Sign verification error)"
+        "406":
+          description: "Not acceptable (bad input)"
+        "421":
+          description: "Misdirected Request (Wrong host key - hkey)"
         "423":
           description: "Locked"
-        "456":
-          description: "Bad balance"
+        "503":
+          description: "Service Unavailable (server error)"
