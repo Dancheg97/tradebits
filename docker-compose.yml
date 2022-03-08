@@ -1,34 +1,39 @@
 version: "3.9"
 services:
 
-  # bits:
-  #   build: .
-  #   ports:
-  #     - 8080:8080
-  #   environment:
-  #     REDIS_HOST: ${REDIS_HOST:-}
-  #     MONGO_HOST: ${MONGO_HOST:-}
-  #     MONGO_NAME: ${MONGO_NAME:-}
-  #     MONGO_PASSWORD: ${MONGO_PASSWORD:-}
-  #     MONGO_DB: ${MONGO_DB:-}
-  #     MARKET_PORT: ${MARKET_PORT:-}
-  #     MARKET_NAME: ${MARKET_NAME:-}
-  #     MARKET_DESCR: ${MARKET_DESCR:-}
-  #     MARKET_IMG: ${MARKET_IMG:-}
-  #     MARKET_WORKTIME: ${MARKET_WORKTIME:-}
-  #     MARKET_FEE: ${MARKET_FEE:-}
-  #     MARKET_DELIMITER: ${MARKET_DELIMITER:-}
-  #     MARKET_PRIVATEKEY: ${MARKET_PRIVATEKEY:-}
-  #     MARKET_PUBLICKEY: ${MARKET_PUBLICKEY:-}
-  #   depends_on:
-  #     - mongo
-  #     - redis
-    
-    
+  bits:
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      REDIS_HOST: ${REDIS_HOST:-}
+      MONGO_HOST: ${MONGO_HOST:-}
+      MONGO_NAME: ${MONGO_NAME:-}
+      MARKET_PORT: ${MARKET_PORT:-}
+      MARKET_NAME: ${MARKET_NAME:-}
+      MARKET_DESCR: ${MARKET_DESCR:-}
+      MARKET_IMG: ${MARKET_IMG:-}
+      MARKET_WORKTIME: ${MARKET_WORKTIME:-}
+      MARKET_FEE: ${MARKET_FEE:-}
+      MARKET_DELIMITER: ${MARKET_DELIMITER:-}
+      MARKET_PRIVATEKEY: ${MARKET_PRIVATEKEY:-}
+      MARKET_PUBLICKEY: ${MARKET_PUBLICKEY:-}
+    depends_on:
+      - mongo
+      - redis
+      - graylog
+    logging:
+      driver: "gelf"
+      options:
+        gelf-address: ${GRAYLOG_HOST:-}
+        tag: "tradebits"
+
   mongo:
     image: mongo:4.2
+    ports:
+      - 27017:27017
     extra_hosts:
-    - "host.docker.internal:host-gateway"
+      - "host.docker.internal:host-gateway"
 
   mongo-express:
     image: mongo-express
@@ -38,8 +43,6 @@ services:
     environment:
       ME_CONFIG_BASICAUTH_USERNAME: admin
       ME_CONFIG_BASICAUTH_PASSWORD: admin
-    extra_hosts:
-    - "host.docker.internal:host-gateway"
 
   redis:
     image: redis:alpine
@@ -47,7 +50,7 @@ services:
     ports:
       - 6379:6379
     extra_hosts:
-    - "host.docker.internal:host-gateway"
+      - "host.docker.internal:host-gateway"
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
@@ -64,11 +67,9 @@ services:
       resources:
         limits:
           memory: 1g
-    extra_hosts:
-    - "host.docker.internal:host-gateway"
 
   graylog:
-    image: graylog/graylog:4.2
+    image: dangdancheg/custom_graylog:latest
     environment:
       GRAYLOG_PASSWORD_SECRET: somepasswordpepper
       GRAYLOG_ROOT_PASSWORD_SHA2: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
@@ -87,5 +88,3 @@ services:
       - 1514:1514/udp
       - 12201:12201
       - 12201:12201/udp
-    extra_hosts:
-    - "host.docker.internal:host-gateway"

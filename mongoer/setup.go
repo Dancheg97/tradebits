@@ -49,7 +49,7 @@ func (m *mongoer) CreateCollection(name string) error {
 	defer cancel()
 	err := m.database.CreateCollection(ctx, name)
 	if err != nil {
-		if strings.Contains(err.Error(), "Collection already exists") {
+		if strings.Contains(err.Error(), "already exists") {
 			return nil
 		}
 		return err
