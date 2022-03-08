@@ -13,11 +13,12 @@ import (
 type IMongoer interface {
 	CreateCollection(name string) error
 	CreateIndex(col string, key string, value string) error
-	Check(key string, coll string) bool
-	Get(key string, coll string, i interface{}) error
+	Check(coll string, k string, v string) bool
+	Get(coll string, k string, v string, i interface{}) error
 	Put(coll string, i interface{}) error
-	Update(key string, coll string, i interface{}) error
+	Update(coll string, k string, v string, i interface{}) error
 	GetCollection(coll string) ([]map[string]string, error)
+	FindIdx(coll string, k string, v string) ([]string, error)
 }
 
 type mongoer struct {
