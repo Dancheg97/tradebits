@@ -20,7 +20,7 @@ func UserBalanceGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	user := User{}
-	notFound := mongo.Get(ukey, "user", &user)
+	notFound := mongo.Get("user", "ukey", ukey, &user)
 	if notFound != nil {
 		w.WriteHeader(404)
 		return
@@ -62,13 +62,14 @@ func UserCreatePut(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(401)
 		return
 	}
-	exists := mongo.Check(ukey, "user")
+	exists := mongo.Check("user", "ukey", ukey)
 	if exists {
 		w.WriteHeader(403)
 		return
 	}
 	mongo.Put("user", User{
 		Key:      ukey,
+		Balance:  0,
 		Messages: []string{},
 	})
 	w.WriteHeader(201)
@@ -95,19 +96,19 @@ func UserMessagePut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	lockedSuccess := redis.Lock(ukey)
-	defer redis.Unlock(ukey)
 	if !lockedSuccess {
 		w.WriteHeader(423)
 		return
 	}
+	defer redis.Unlock(ukey)
 	user := User{}
-	notFound := mongo.Get(ukey, "user", &user)
+	notFound := mongo.Get("user", "ukey", ukey, &user)
 	if notFound != nil {
 		w.WriteHeader(404)
 		return
 	}
 	user.Messages = append(user.Messages, mess)
-	updateErr := mongo.Update(ukey, "user", user)
+	updateErr := mongo.Update("user", "ukey", ukey, user)
 	if updateErr != nil {
 		w.WriteHeader(503)
 		return
@@ -129,7 +130,7 @@ func UserMessagesGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	user := User{}
-	notFound := mongo.Get(ukey, "user", &user)
+	notFound := mongo.Get("user", "ukey", ukey, &user)
 	if notFound != nil {
 		w.WriteHeader(404)
 		return
