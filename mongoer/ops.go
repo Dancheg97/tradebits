@@ -99,3 +99,8 @@ func (m *mongoer) FindIdx(coll string, k string, v string) ([]string, error) {
 	}
 	return results, nil
 }
+
+func (m *mongoer) GetIdx(coll string, id string, i interface{}) error {
+	// TODO write when i wake up
+	return nil
+}
