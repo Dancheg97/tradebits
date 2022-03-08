@@ -8,25 +8,25 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (m *mongoer) Check(key string, coll string) bool {
+func (m *mongoer) Check(coll string, k string, v string) bool {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		45*time.Millisecond,
 	)
 	defer cancel()
 	collection := m.database.Collection(coll)
-	rez := collection.FindOne(ctx, bson.M{"key": key})
+	rez := collection.FindOne(ctx, bson.M{k: v})
 	return rez.Err() == nil
 }
 
-func (m *mongoer) Get(key string, coll string, i interface{}) error {
+func (m *mongoer) Get(coll string, k string, v string, i interface{}) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		45*time.Millisecond,
 	)
 	defer cancel()
 	collection := m.database.Collection(coll)
-	resp := collection.FindOne(ctx, bson.M{"key": key})
+	resp := collection.FindOne(ctx, bson.M{k: v})
 	if resp.Err() != nil {
 		return resp.Err()
 	}
@@ -44,14 +44,14 @@ func (m *mongoer) Put(coll string, i interface{}) error {
 	return err
 }
 
-func (m *mongoer) Update(key string, coll string, i interface{}) error {
+func (m *mongoer) Update(coll string, k string, v string, i interface{}) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		45*time.Millisecond,
 	)
 	defer cancel()
 	collection := m.database.Collection(coll)
-	return collection.FindOneAndReplace(ctx, bson.M{"key": key}, i).Err()
+	return collection.FindOneAndReplace(ctx, bson.M{k: v}, i).Err()
 }
 
 func (m *mongoer) GetCollection(coll string) ([]map[string]string, error) {
@@ -77,7 +77,7 @@ func (m *mongoer) GetCollection(coll string) ([]map[string]string, error) {
 	return results, nil
 }
 
-func (m *mongoer) FindIndexes(coll string, key string, value string) ([]string, error) {
+func (m *mongoer) FindIdx(coll string, k string, v string) ([]string, error) {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
 		65*time.Millisecond,
@@ -85,7 +85,7 @@ func (m *mongoer) FindIndexes(coll string, key string, value string) ([]string, 
 	defer cancel()
 	collection := m.database.Collection(coll)
 	results := []string{}
-	cur, err := collection.Find(ctx, bson.M{key: value}, options.Find())
+	cur, err := collection.Find(ctx, bson.M{k: v}, options.Find())
 	if err != nil {
 		return nil, err
 	}

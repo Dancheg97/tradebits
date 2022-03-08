@@ -20,9 +20,7 @@ func setupTestEnv(collectioname string) *mongoer {
 func TestPut(t *testing.T) {
 	collectionname := "testputcol"
 	m := setupTestEnv(collectionname)
-	err := m.Put(collectionname, &map[string]string{
-		"key": "testputkey",
-	})
+	err := m.Put(collectionname, &map[string]string{"k": "v"})
 	if err != nil {
 		t.Error(err)
 	}
@@ -32,10 +30,8 @@ func TestPut(t *testing.T) {
 func TestCheck(t *testing.T) {
 	collectionname := "testcheckcol"
 	m := setupTestEnv(collectionname)
-	m.Put(collectionname, &map[string]string{
-		"key": "testcheckkey",
-	})
-	found := m.Check("testcheckkey", collectionname)
+	m.Put(collectionname, &map[string]string{"k": "v"})
+	found := m.Check(collectionname, "k", "v")
 	if !found {
 		t.Error("not found")
 	}
@@ -45,14 +41,11 @@ func TestCheck(t *testing.T) {
 func TestGet(t *testing.T) {
 	collectionname := "testgetcol"
 	m := setupTestEnv(collectionname)
-	m.Put(collectionname, &map[string]string{
-		"key":   "testgetkey",
-		"vaval": "tester",
-	})
+	m.Put(collectionname, &map[string]string{"k": "v", "k2": "v2"})
 	mp := map[string]string{}
-	m.Get("testgetkey", collectionname, &mp)
-	if mp["vaval"] != "tester" {
-		t.Error("mongo returned bad value")
+	m.Get(collectionname, "k", "v", &mp)
+	if mp["k2"] != "v2" {
+		t.Error("mongo returned incorrect value")
 	}
 	time.Sleep(time.Millisecond * 200)
 }
@@ -60,20 +53,18 @@ func TestGet(t *testing.T) {
 func TestUpdate(t *testing.T) {
 	collectionname := "testupdatecol"
 	m := setupTestEnv(collectionname)
-	m.Put(collectionname, &map[string]string{
-		"key":   "testupdatekey",
-		"vaval": "tester",
-	})
-	rez := m.Update("testupdatekey", collectionname, &map[string]string{
-		"key":   "testupdatekey",
-		"vaval": "tester2",
-	})
+	m.Put(collectionname, &map[string]string{"k": "v", "k2": "v2"})
+	rez := m.Update(
+		collectionname,
+		"k", "v",
+		&map[string]string{"k": "v", "k2": "v3"},
+	)
 	if rez != nil {
 		t.Error("Error with updating")
 	}
 	mp := map[string]string{}
-	m.Get("testupdatekey", collectionname, &mp)
-	if mp["vaval"] != "tester2" {
+	m.Get(collectionname, "k", "v", &mp)
+	if mp["k2"] != "v3" {
 		t.Error("mongo did not update value in database")
 	}
 }
@@ -81,12 +72,8 @@ func TestUpdate(t *testing.T) {
 func TestGetCollection(t *testing.T) {
 	collectionname := "testgetwholecollection"
 	m := setupTestEnv(collectionname)
-	m.Put(collectionname, &map[string]string{
-		"vaval": "tester1",
-	})
-	m.Put(collectionname, &map[string]string{
-		"vaval": "tester2",
-	})
+	m.Put(collectionname, &map[string]string{"k": "v"})
+	m.Put(collectionname, &map[string]string{"k": "v"})
 	vals, err := m.GetCollection(collectionname)
 	if err != nil {
 		t.Error(err)
@@ -101,13 +88,9 @@ func TestFindIndexes(t *testing.T) {
 	collectionname := "testgetindexes"
 	m := setupTestEnv(collectionname)
 	m.CreateIndex(collectionname, "vaval", "hashed")
-	m.Put(collectionname, &map[string]string{
-		"vaval": "tester",
-	})
-	m.Put(collectionname, &map[string]string{
-		"vaval": "tester",
-	})
-	vals, err := m.FindIndexes(collectionname, "vaval", "tester")
+	m.Put(collectionname, &map[string]string{"k": "v"})
+	m.Put(collectionname, &map[string]string{"k": "v"})
+	vals, err := m.FindIdx(collectionname, "k", "v")
 	if err != nil {
 		t.Error(err)
 	}
