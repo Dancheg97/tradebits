@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -101,6 +102,18 @@ func (m *mongoer) FindIdx(coll string, k string, v string) ([]string, error) {
 }
 
 func (m *mongoer) GetIdx(coll string, id string, i interface{}) error {
-	// TODO write when i wake up
-	return nil
+	ctx, cancel := context.WithTimeout(
+		context.Background(),
+		65*time.Millisecond,
+	)
+	defer cancel()
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+	rez := m.database.Collection(coll).FindOne(ctx, bson.M{"_id": objectId})
+	if rez.Err() != nil {
+		return rez.Err()
+	}
+	return rez.Decode(i)
 }

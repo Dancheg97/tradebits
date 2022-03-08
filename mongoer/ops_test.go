@@ -87,7 +87,7 @@ func TestGetCollection(t *testing.T) {
 func TestFindIndexes(t *testing.T) {
 	collectionname := "testgetindexes"
 	m := setupTestEnv(collectionname)
-	m.CreateIndex(collectionname, "vaval", "hashed")
+	m.CreateIndex(collectionname, "k", "hashed")
 	m.Put(collectionname, &map[string]string{"k": "v"})
 	m.Put(collectionname, &map[string]string{"k": "v"})
 	vals, err := m.FindIdx(collectionname, "k", "v")
@@ -98,4 +98,20 @@ func TestFindIndexes(t *testing.T) {
 		t.Error("bad length of output collection elements")
 	}
 	time.Sleep(time.Millisecond * 200)
+}
+
+func TestGetIdx(t *testing.T) {
+	collectionname := "testgetindexes"
+	m := setupTestEnv(collectionname)
+	m.CreateIndex(collectionname, "k", "hashed")
+	m.Put(collectionname, &map[string]string{"k": "v"})
+	vals, _ := m.FindIdx(collectionname, "k", "v")
+	mp := map[string]string{}
+	err := m.GetIdx(collectionname, vals[0], &mp)
+	if err != nil {
+		t.Error(err)
+	}
+	if mp["k"] != "v" {
+		t.Error("value not matching")
+	}
 }
