@@ -19,6 +19,7 @@ type IMongoer interface {
 	Update(coll string, k string, v string, i interface{}) error
 	GetCollection(coll string) ([]map[string]string, error)
 	FindIdx(coll string, k string, v string) ([]string, error)
+	GetIdx(coll string, id string, i interface{}) error
 }
 
 type mongoer struct {
