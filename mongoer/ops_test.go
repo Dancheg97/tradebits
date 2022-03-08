@@ -96,3 +96,23 @@ func TestGetCollection(t *testing.T) {
 	}
 	time.Sleep(time.Millisecond * 200)
 }
+
+func TestFindIndexes(t *testing.T) {
+	collectionname := "testgetindexes"
+	m := setupTestEnv(collectionname)
+	m.CreateIndex(collectionname, "vaval", "hashed")
+	m.Put(collectionname, &map[string]string{
+		"vaval": "tester",
+	})
+	m.Put(collectionname, &map[string]string{
+		"vaval": "tester",
+	})
+	vals, err := m.FindIndexes(collectionname, "vaval", "tester")
+	if err != nil {
+		t.Error(err)
+	}
+	if len(vals) < 1 {
+		t.Error("bad length of output collection elements")
+	}
+	time.Sleep(time.Millisecond * 200)
+}

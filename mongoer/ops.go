@@ -57,7 +57,7 @@ func (m *mongoer) Update(key string, coll string, i interface{}) error {
 func (m *mongoer) GetCollection(coll string) ([]map[string]string, error) {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
-		45*time.Millisecond,
+		65*time.Millisecond,
 	)
 	defer cancel()
 	collection := m.database.Collection(coll)
@@ -66,13 +66,36 @@ func (m *mongoer) GetCollection(coll string) ([]map[string]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	for cur.Next(context.TODO()) {
+	for cur.Next(ctx) {
 		var elem map[string]string
 		err := cur.Decode(&elem)
 		if err != nil {
 			return nil, err
 		}
 		results = append(results, elem)
+	}
+	return results, nil
+}
+
+func (m *mongoer) FindIndexes(coll string, key string, value string) ([]string, error) {
+	ctx, cancel := context.WithTimeout(
+		context.Background(),
+		65*time.Millisecond,
+	)
+	defer cancel()
+	collection := m.database.Collection(coll)
+	results := []string{}
+	cur, err := collection.Find(ctx, bson.M{key: value}, options.Find())
+	if err != nil {
+		return nil, err
+	}
+	for cur.Next(ctx) {
+		var elem map[string]string
+		err := cur.Decode(&elem)
+		if err != nil {
+			return nil, err
+		}
+		results = append(results, elem["_id"])
 	}
 	return results, nil
 }
