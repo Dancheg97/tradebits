@@ -6,7 +6,7 @@ import (
 )
 
 type User struct {
-	Key      string   `bson:"key"`
+	Key      string   `bson:"ukey"`
 	Balance  int      `bson:"balance"`
 	Messages []string `bson:"messages"`
 }
@@ -169,7 +169,7 @@ func UserTradesGet(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(404)
 		return
 	}
-	tradeIds, err := mongo.FindIdx("user", "ukey", ukey)
+	tradeIds, err := mongo.FindIdx("trades", "ukey", ukey)
 	if err != nil {
 		w.WriteHeader(503)
 		return
@@ -177,7 +177,7 @@ func UserTradesGet(w http.ResponseWriter, r *http.Request) {
 	response := []map[string]interface{}{}
 	for _, id := range tradeIds {
 		trade := map[string]interface{}{}
-		err := mongo.GetIdx("user", id, &trade)
+		err := mongo.GetIdx("trades", id, &trade)
 		if err != nil {
 			w.WriteHeader(503)
 			return
@@ -190,5 +190,5 @@ func UserTradesGet(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Write(respbytes)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(200)
 }
