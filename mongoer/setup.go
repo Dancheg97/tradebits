@@ -20,6 +20,7 @@ type IMongoer interface {
 	GetCollection(coll string) ([]map[string]string, error)
 	FindIdx(coll string, k string, v string) ([]string, error)
 	GetIdx(coll string, id string, i interface{}) error
+	Get2kv(coll string, k1 string, v1 string, k2 string, v2 string, i interface{}) error
 }
 
 type mongoer struct {

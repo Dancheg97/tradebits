@@ -22,7 +22,7 @@ Users can connect directly to TradeBits network markets, to process input, outpu
 To understand how it works, lets start with covering local terms:
 - Node - single instance of working market, unary element in TradeBits network
 - User - individual, that can process transaction in network
-- Transaction - single operation in network, that is changing actual dajgijta
+- Transaction - single operation in network, that is changing actual data
 
 Each node in network is a unique market, and has to store all actual data and verify related to that market.
 
@@ -87,4 +87,3 @@ go tool cover -func go_profile -o go_cover.md
 docker build -t dangdancheg/tradebits:tagname .
 docker push dangdancheg/tradebits:tagname
 ```
-

@@ -25,7 +25,7 @@ func readConfigField(field string) string {
 
 func init() {
 	godotenv.Load()
-	gerr := graylog.Setup(readConfigField("GRAYLOG_API"))
+	gerr := graylog.Setup(readConfigField("GRAYLOG_API"), 15)
 	if gerr != nil {
 		log.Fatal("Unable to setup graylog", gerr)
 	}

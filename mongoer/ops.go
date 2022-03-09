@@ -34,6 +34,25 @@ func (m *mongoer) Get(coll string, k string, v string, i interface{}) error {
 	return resp.Decode(i)
 }
 
+func (m *mongoer) Get2kv(
+	coll string, 
+	k1 string, v1 string,
+	k2 string, v2 string, 
+	i interface{},
+) error {
+	ctx, cancel := context.WithTimeout(
+		context.Background(),
+		45*time.Millisecond,
+	)
+	defer cancel()
+	collection := m.database.Collection(coll)
+	resp := collection.FindOne(ctx, bson.M{k1: v1, k2: v2})
+	if resp.Err() != nil {
+		return resp.Err()
+	}
+	return resp.Decode(i)
+}
+
 func (m *mongoer) Put(coll string, i interface{}) error {
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
