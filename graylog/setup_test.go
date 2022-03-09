@@ -10,7 +10,7 @@ import (
 func TestSetup(t *testing.T) {
 	godotenv.Load("../.env")
 	grayApi, _ := os.LookupEnv("GRAYLOG_API")
-	err := Setup(grayApi)
+	err := Setup(grayApi, 15)
 	if err != nil {
 		t.Error(err)
 	}

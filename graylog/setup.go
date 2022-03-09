@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"time"
@@ -34,8 +33,7 @@ var graylogreq string = `{
     "node": null
 }`
 
-func Setup(graylogHost string) error {
-	time.Sleep(time.Second * 30)
+func Setup(graylogHost string, retry int) error {
 	req, err := http.NewRequest(
 		"POST",
 		graylogHost,
@@ -48,12 +46,13 @@ func Setup(graylogHost string) error {
 	req.Header.Set("Authorization", "Basic YWRtaW46YWRtaW4=")
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
-	resp, err := client.Do(req)
-	if resp.StatusCode != 201 {
-		respBytes, _ := io.ReadAll(resp.Body)
-		return errors.New(
-			fmt.Sprint("Graylog err: ", resp.StatusCode, string(respBytes)),
-		)
+	for retry != 0 {
+		retry -= 1
+		resp, _ := client.Do(req)
+		if resp.StatusCode == 201 {
+			return nil
+		}
+		time.Sleep(time.Second)
 	}
-	return nil
+	return errors.New(fmt.Sprint("Graylog setup error"))
 }
