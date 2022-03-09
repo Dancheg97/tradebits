@@ -2,6 +2,8 @@ package api
 
 import (
 	"tradebits/api/info"
+	"tradebits/api/market"
+	"tradebits/api/operator"
 	"tradebits/api/user"
 	"tradebits/crypter"
 	"tradebits/mongoer"
@@ -21,6 +23,8 @@ func Setup(
 ) {
 	user.Setup(marketInfo, mongo, crypt, redis)
 	info.Setup(marketInfo, mongo, crypt, redis)
+	market.Setup(marketInfo, mongo, crypt, redis)
+	operator.Setup(marketInfo, mongo, crypt, redis)
 	marketinfo = marketInfo
 	mongo = mongoer
 	crypt = crypter
