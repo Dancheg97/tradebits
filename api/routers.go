@@ -4,6 +4,11 @@ import (
 	"net/http"
 	"strings"
 
+	"tradebits/api/info"
+	"tradebits/api/market"
+	"tradebits/api/operator"
+	"tradebits/api/user"
+
 	"github.com/gorilla/mux"
 )
 
@@ -38,111 +43,111 @@ var routes = Routes{
 		"InfoMarketGet",
 		strings.ToUpper("Get"),
 		"/info/market",
-		InfoMarketGet,
+		info.InfoMarketGet,
 	},
 
 	Route{
 		"InfoNetGet",
 		strings.ToUpper("Get"),
 		"/info/net",
-		InfoNetGet,
+		info.InfoNetGet,
 	},
 
 	Route{
 		"MarketCloseDelete",
 		strings.ToUpper("Delete"),
 		"/market/close",
-		MarketCloseDelete,
+		market.MarketCloseDelete,
 	},
 
 	Route{
 		"MarketCreatePut",
 		strings.ToUpper("Put"),
 		"/market/create",
-		MarketCreatePut,
+		market.MarketCreatePut,
 	},
 
 	Route{
 		"MarketDecreasePost",
 		strings.ToUpper("Post"),
 		"/market/decrease",
-		MarketDecreasePost,
+		market.MarketDecreasePost,
 	},
 
 	Route{
 		"MarketRelatedGet",
 		strings.ToUpper("Get"),
 		"/market/related",
-		MarketRelatedGet,
+		market.MarketRelatedGet,
 	},
 
 	Route{
 		"OperatorDepositPost",
 		strings.ToUpper("Post"),
 		"/operator/deposit",
-		OperatorDepositPost,
+		operator.OperatorDepositPost,
 	},
 
 	Route{
 		"OperatorMessagePut",
 		strings.ToUpper("Put"),
 		"/operator/message",
-		OperatorMessagePut,
+		operator.OperatorMessagePut,
 	},
 
 	Route{
 		"OperatorWithdrawalPost",
 		strings.ToUpper("Post"),
 		"/operator/withdrawal",
-		OperatorWithdrawalPost,
+		operator.OperatorWithdrawalPost,
 	},
 
 	Route{
 		"UserBalanceGet",
 		strings.ToUpper("Get"),
 		"/user/balance",
-		UserBalanceGet,
+		user.UserBalanceGet,
 	},
 
 	Route{
 		"UserCancelordersPost",
 		strings.ToUpper("Post"),
 		"/user/cancelorders",
-		UserCancelordersPost,
+		user.UserCancelordersPost,
 	},
 
 	Route{
 		"UserCreatePut",
 		strings.ToUpper("Put"),
 		"/user/create",
-		UserCreatePut,
+		user.UserCreatePut,
 	},
 
 	Route{
 		"UserMessagePut",
 		strings.ToUpper("Put"),
 		"/user/message",
-		UserMessagePut,
+		user.UserMessagePut,
 	},
 
 	Route{
 		"UserMessagesGet",
 		strings.ToUpper("Get"),
 		"/user/messages",
-		UserMessagesGet,
+		user.UserMessagesGet,
 	},
 
 	Route{
 		"UserOrderPost",
 		strings.ToUpper("Post"),
 		"/user/order",
-		UserOrderPost,
+		user.UserOrderPost,
 	},
 
 	Route{
 		"UserTradesGet",
 		strings.ToUpper("Get"),
 		"/user/trades",
-		UserTradesGet,
+		user.UserTradesGet,
 	},
 }
