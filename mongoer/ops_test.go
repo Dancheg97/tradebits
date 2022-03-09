@@ -114,4 +114,22 @@ func TestGetIdx(t *testing.T) {
 	if mp["k"] != "v" {
 		t.Error("value not matching")
 	}
+	time.Sleep(time.Millisecond * 200)
+}
+
+func TestGet2kv(t *testing.T) {
+	collectionname := "testgetindexes"
+	m := setupTestEnv(collectionname)
+	m.CreateIndex(collectionname, "k", "hashed")
+	m.Put(collectionname, &map[string]string{"k1": "v1", "k2": "v2"})
+	m.Put(collectionname, &map[string]string{"k1": "v2", "k2": "v1"})
+	mp := map[string]string{}
+	err := m.Get2kv(collectionname, "k1", "v1", "k2", "v2", &mp)
+	if err != nil {
+		t.Error(err)
+	}
+	if mp["k1"] != "v1" || mp["k2"] != "v2" {
+		t.Error("value not matching")
+	}
+	time.Sleep(time.Millisecond * 200)
 }

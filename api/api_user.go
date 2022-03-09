@@ -11,6 +11,13 @@ type User struct {
 	Messages []string `bson:"messages"`
 }
 
+type Trade struct {
+	Ukey    string `bson:"ukey"`
+	Mkey    string `bson:"mkey"`
+	Offer   int    `bson:"offer"`
+	Recieve int    `bson:"recieve"`
+}
+
 func UserBalanceGet(w http.ResponseWriter, r *http.Request) {
 	request := map[string]string{}
 	json.NewDecoder(r.Body).Decode(&request)
@@ -43,8 +50,9 @@ func UserCancelordersPost(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&request)
 	hkey, exist1 := request["hkey"]
 	ukey, exist2 := request["ukey"]
-	sign, exist3 := request["sign"]
-	if !exist1 || !exist2 || !exist3 {
+	mkey, exist3 := request["mkey"]
+	sign, exist4 := request["sign"]
+	if !exist1 || !exist2 || !exist3 || !exist4 {
 		w.WriteHeader(406)
 		return
 	}
@@ -62,26 +70,7 @@ func UserCancelordersPost(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(404)
 		return
 	}
-	lockedSuccess := redis.Lock(ukey)
-	if !lockedSuccess {
-		w.WriteHeader(423)
-		return
-	}
-	defer redis.Unlock(ukey)
-	ids, err := mongo.FindIdx("trades", "ukey", ukey)
-	if err != nil {
-		w.WriteHeader(503)
-		return
-	}
-	for _, id := range ids {
-		trade := map[string]interface{}{}
-		err := mongo.GetIdx("trades", id, &trade)
-		if err != nil {
-			w.WriteHeader(503)
-			return
-		}
-		
-	}
+	
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
