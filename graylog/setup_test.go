@@ -15,11 +15,3 @@ func TestSetup(t *testing.T) {
 		t.Error(err)
 	}
 }
-
-
-func dobule(a []*int) {
-	for i, v := range a {
-	  a[i] = &v*2
-	}
-  }
-  
