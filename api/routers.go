@@ -103,6 +103,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"OperatorNewmessagesPost",
+		strings.ToUpper("Post"),
+		"/operator/newmessages",
+		operator.OperatorNewmessagesPost,
+	},
+
+	Route{
 		"UserBalanceGet",
 		strings.ToUpper("Get"),
 		"/user/balance",
