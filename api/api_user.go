@@ -39,6 +39,49 @@ func UserBalanceGet(w http.ResponseWriter, r *http.Request) {
 }
 
 func UserCancelordersPost(w http.ResponseWriter, r *http.Request) {
+	request := map[string]string{}
+	json.NewDecoder(r.Body).Decode(&request)
+	hkey, exist1 := request["hkey"]
+	ukey, exist2 := request["ukey"]
+	sign, exist3 := request["sign"]
+	if !exist1 || !exist2 || !exist3 {
+		w.WriteHeader(406)
+		return
+	}
+	if hkey != crypt.Pub() {
+		w.WriteHeader(421)
+		return
+	}
+	verfied := crypt.Verify(hkey+ukey, ukey, sign)
+	if !verfied {
+		w.WriteHeader(401)
+		return
+	}
+	exists := mongo.Check("user", "ukey", ukey)
+	if exists {
+		w.WriteHeader(404)
+		return
+	}
+	lockedSuccess := redis.Lock(ukey)
+	if !lockedSuccess {
+		w.WriteHeader(423)
+		return
+	}
+	defer redis.Unlock(ukey)
+	ids, err := mongo.FindIdx("trades", "ukey", ukey)
+	if err != nil {
+		w.WriteHeader(503)
+		return
+	}
+	for _, id := range ids {
+		trade := map[string]interface{}{}
+		err := mongo.GetIdx("trades", id, &trade)
+		if err != nil {
+			w.WriteHeader(503)
+			return
+		}
+		
+	}
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }

@@ -87,4 +87,3 @@ go tool cover -func go_profile -o go_cover.md
 docker build -t dangdancheg/tradebits:tagname .
 docker push dangdancheg/tradebits:tagname
 ```
-

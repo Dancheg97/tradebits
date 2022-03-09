@@ -316,7 +316,7 @@ paths:
                 type: string
               ukey:
                 type: string
-              marketkey:
+              mkey:
                 type: string
               offer:
                 type: integer
@@ -327,7 +327,7 @@ paths:
             example:
               hkey: "putbase64contents"
               ukey: "putbase64contents"
-              marketkey: "putbase64contents"
+              mkey: "putbase64contents"
               offer: 46582
               recieve: 3652
               sign: "putbase64contents"
@@ -366,10 +366,13 @@ paths:
                 type: string
               ukey:
                 type: string
+              mkey:
+                type: string
               sign:
                 type: string
             example:
               hkey: "putbase64contents"
+              mkey: "putbase64contents"
               ukey: "putbase64contents"
               sign: "putbase64contents"
       responses:
