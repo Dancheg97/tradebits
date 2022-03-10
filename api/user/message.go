@@ -5,40 +5,43 @@ import (
 	"net/http"
 )
 
+type MessageRequest struct {
+	Hkey string `json:"hkey"`
+	Ukey string `json:"ukey"`
+	Mess string `json:"mess"`
+	Sign string `json:"sign"`
+}
+
 func UserMessagePut(w http.ResponseWriter, r *http.Request) {
-	request := map[string]string{}
-	json.NewDecoder(r.Body).Decode(&request)
-	hkey, exist1 := request["hkey"]
-	ukey, exist2 := request["ukey"]
-	mess, exist3 := request["message"]
-	sign, exist4 := request["sign"]
-	if !exist1 || !exist2 || !exist3 || !exist4 {
+	req := MessageRequest{}
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
 		w.WriteHeader(406)
 		return
 	}
-	if hkey != crypt.Pub() {
+	if req.Hkey != crypt.Pub() {
 		w.WriteHeader(421)
 		return
 	}
-	verfied := crypt.Verify(hkey+ukey+mess, ukey, sign)
+	verfied := crypt.Verify(req.Hkey+req.Ukey+req.Mess, req.Ukey, req.Sign)
 	if !verfied {
 		w.WriteHeader(401)
 		return
 	}
-	lockedSuccess := redis.Lock(ukey)
+	lockedSuccess := redis.Lock(req.Ukey)
 	if !lockedSuccess {
 		w.WriteHeader(423)
 		return
 	}
-	defer redis.Unlock(ukey)
+	defer redis.Unlock(req.Ukey)
 	user := User{}
-	notFound := mongo.Get("user", "ukey", ukey, &user)
+	notFound := mongo.Get("user", "ukey", req.Ukey, &user)
 	if notFound != nil {
 		w.WriteHeader(404)
 		return
 	}
-	user.Messages = append(user.Messages, mess)
-	updateErr := mongo.Update("user", "ukey", ukey, user)
+	user.Messages = append(user.Messages, req.Mess)
+	updateErr := mongo.Update("user", "ukey", req.Ukey, user)
 	if updateErr != nil {
 		w.WriteHeader(503)
 		return
