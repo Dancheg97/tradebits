@@ -1,6 +1,10 @@
 package user
 
-import "net/http"
+import (
+	"encoding/json"
+	"net/http"
+	"strconv"
+)
 
 type Order struct {
 	Ukey    string `bson:"ukey"`
@@ -19,7 +23,28 @@ type OrderRequest struct {
 }
 
 func UserOrderPost(w http.ResponseWriter, r *http.Request) {
-
+	req := OrderRequest{}
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		w.WriteHeader(406)
+		return
+	}
+	if req.Hkey != crypt.Pub() {
+		w.WriteHeader(421)
+		return
+	}
+	verfied := crypt.Verify(req.Hkey+req.Ukey+req.Mkey+strconv.Itoa(req.Offer)+strconv.Itoa(req.Recieve), req.Ukey, req.Sign)
+	if !verfied {
+		w.WriteHeader(401)
+		return
+	}
+	lockedSuccess := redis.Lock(req.Ukey)
+	if !lockedSuccess {
+		w.WriteHeader(423)
+		return
+	}
+	defer redis.Unlock(req.Ukey)
+	
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }

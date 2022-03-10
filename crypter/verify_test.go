@@ -11,8 +11,8 @@ func TestVerify(t *testing.T) {
 	godotenv.Load("../.env")
 	private, _ := os.LookupEnv("MARKET_PRIVATEKEY")
 	crypter, _ := Get(private)
-	success := crypter.Verify(testmes, crypter.pub, testsign)
-	if !success {
+	err := crypter.Verify(testmes, crypter.pub, testsign)
+	if err != nil {
 		t.Error("sign was not verified")
 	}
 }

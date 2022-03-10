@@ -8,18 +8,18 @@ import (
 	"encoding/base64"
 )
 
-func (c *crypter) Verify(message string, pubkey string, sign string) bool {
-	pubBytes, decodeKeyErr := base64.RawStdEncoding.DecodeString(pubkey)
-	if decodeKeyErr != nil {
-		return false
+func (c *crypter) Verify(message string, pubkey string, sign string) error {
+	pubBytes, err := base64.RawStdEncoding.DecodeString(pubkey)
+	if err != nil {
+		return err
 	}
-	signBytes, decodeSignErr := base64.RawStdEncoding.DecodeString(sign)
-	if decodeSignErr != nil {
-		return false
+	signBytes, err := base64.RawStdEncoding.DecodeString(sign)
+	if err != nil {
+		return err
 	}
-	pubKey, parseErr := x509.ParsePKCS1PublicKey(pubBytes)
-	if parseErr != nil {
-		return false
+	pubKey, err := x509.ParsePKCS1PublicKey(pubBytes)
+	if err != nil {
+		return err
 	}
 	h := sha512.New()
 	h.Write([]byte(message))
@@ -29,5 +29,5 @@ func (c *crypter) Verify(message string, pubkey string, sign string) bool {
 		h.Sum(nil),
 		signBytes,
 	)
-	return verifyErr == nil
+	return verifyErr
 }
