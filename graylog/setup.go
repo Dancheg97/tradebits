@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -33,6 +33,34 @@ var graylogreq string = `{
     "node": null
 }`
 
+func CheckInput(graylogHost string) (bool, error) {
+	req, err := http.NewRequest(
+		"GET",
+		graylogHost,
+		bytes.NewBuffer([]byte(graylogreq)),
+	)
+	if err != nil {
+		return false, err
+	}
+	req.Header.Set("X-Requested-By", "go_tradebits")
+	req.Header.Set("Authorization", "Basic YWRtaW46YWRtaW4=")
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return false, err
+	}
+	inputs := []byte{}
+	_, err = resp.Body.Read(inputs)
+	if err != nil {
+		return false, err
+	}
+	if !strings.Contains(string(inputs), "Standard GELF UDP input") {
+		return false, nil
+	}
+	return true, nil
+}
+
 func Setup(graylogHost string, retry int) error {
 	req, err := http.NewRequest(
 		"POST",
@@ -40,9 +68,9 @@ func Setup(graylogHost string, retry int) error {
 		bytes.NewBuffer([]byte(graylogreq)),
 	)
 	if err != nil {
-		log.Fatal("Unable to create request for graylog")
+		return err
 	}
-	req.Header.Set("X-Requested-By", "")
+	req.Header.Set("X-Requested-By", "go_tradebits")
 	req.Header.Set("Authorization", "Basic YWRtaW46YWRtaW4=")
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
