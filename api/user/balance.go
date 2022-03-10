@@ -5,22 +5,29 @@ import (
 	"net/http"
 )
 
+type UkeyRequst struct {
+	Ukey string `json:"ukey"`
+}
+
+type BalanceResponse struct {
+	Balance int `json:"balance"`
+}
+
 func UserBalanceGet(w http.ResponseWriter, r *http.Request) {
-	request := map[string]string{}
-	json.NewDecoder(r.Body).Decode(&request)
-	ukey, exists := request["ukey"]
-	if !exists {
+	req := UkeyRequst{}
+	json.NewDecoder(r.Body).Decode(&req)
+	if req.Ukey == "" {
 		w.WriteHeader(406)
 		return
 	}
 	user := User{}
-	notFound := mongo.Get("user", "ukey", ukey, &user)
+	notFound := mongo.Get("user", "ukey", req.Ukey, &user)
 	if notFound != nil {
 		w.WriteHeader(404)
 		return
 	}
-	response := map[string]int{
-		"balance": user.Balance,
+	response := BalanceResponse{
+		Balance: user.Balance,
 	}
 	respbytes, marshErr := json.Marshal(response)
 	if marshErr != nil {
