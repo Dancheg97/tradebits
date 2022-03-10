@@ -17,7 +17,7 @@ func TestLockLocked(t *testing.T) {
 	r, _ := getRedis()
 	r.Lock("locktest2")
 	err := r.Lock("locktest2")
-	if err != nil {
+	if err == nil {
 		t.Error(err)
 	}
 	r.Unlock("locktest")

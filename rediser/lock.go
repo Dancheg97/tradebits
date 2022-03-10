@@ -17,5 +17,5 @@ func (r *rediser) Lock(key string) error {
 	if connErr == nil && success {
 		return nil
 	}
-	return errors.New(connErr.Error() + "unable to lock: " + key)
+	return errors.New("unable to lock: " + key)
 }

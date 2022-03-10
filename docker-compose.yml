@@ -25,7 +25,7 @@ services:
     logging:
       driver: "gelf"
       options:
-        gelf-address: ${GRAYLOG_HOST:-}
+        gelf-address: udp://localhost:12201
         tag: "tradebits"
 
   mongo:
