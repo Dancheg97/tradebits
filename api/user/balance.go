@@ -15,8 +15,8 @@ type BalanceResponse struct {
 
 func UserBalanceGet(w http.ResponseWriter, r *http.Request) {
 	req := UkeyRequst{}
-	json.NewDecoder(r.Body).Decode(&req)
-	if req.Ukey == "" {
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
 		w.WriteHeader(406)
 		return
 	}

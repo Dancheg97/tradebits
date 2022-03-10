@@ -19,8 +19,8 @@ type CreateRequest struct {
 
 func UserCreatePut(w http.ResponseWriter, r *http.Request) {
 	req := CreateRequest{}
-	json.NewDecoder(r.Body).Decode(&req)
-	if req.Hkey == "" || req.Ukey == "" || req.Sign == "" {
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
 		w.WriteHeader(406)
 		return
 	}

@@ -5,28 +5,33 @@ import (
 	"net/http"
 )
 
+type Trade struct {
+	Offer   int    `json:"offer"`
+	Recieve int    `json:"recieve"`
+	Mkey    string `json:"mkey"`
+}
+
 func UserTradesGet(w http.ResponseWriter, r *http.Request) {
-	request := map[string]string{}
-	json.NewDecoder(r.Body).Decode(&request)
-	ukey, exists := request["ukey"]
-	if !exists {
+	req := UkeyRequst{}
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
 		w.WriteHeader(406)
 		return
 	}
 	user := User{}
-	notFound := mongo.Get("user", "ukey", ukey, &user)
+	notFound := mongo.Get("user", "ukey", req.Ukey, &user)
 	if notFound != nil {
 		w.WriteHeader(404)
 		return
 	}
-	tradeIds, err := mongo.FindIdx("trades", "ukey", ukey)
+	tradeIds, err := mongo.FindIdx("trades", "ukey", req.Ukey)
 	if err != nil {
 		w.WriteHeader(503)
 		return
 	}
-	response := []map[string]interface{}{}
+	response := []Trade{}
 	for _, id := range tradeIds {
-		trade := map[string]interface{}{}
+		trade := Trade{}
 		err := mongo.GetIdx("trades", id, &trade)
 		if err != nil {
 			w.WriteHeader(503)

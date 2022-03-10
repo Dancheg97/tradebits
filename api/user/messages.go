@@ -5,29 +5,29 @@ import (
 	"net/http"
 )
 
+type MessagesRequest struct {
+	Ukey   string `json:"ukey"`
+	Offset int    `json:"offset"`
+}
+
 func UserMessagesGet(w http.ResponseWriter, r *http.Request) {
-	request := map[string]interface{}{}
-	json.NewDecoder(r.Body).Decode(&request)
-	iukey, exist1 := request["ukey"]
-	ukey, asserted1 := iukey.(string)
-	ioffset, exist2 := request["offset"]
-	offsetFloat, asserted2 := ioffset.(float64)
-	offset := int(offsetFloat)
-	if !(exist1 && asserted1 && exist2 && asserted2) {
+	req := MessagesRequest{}
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
 		w.WriteHeader(406)
 		return
 	}
 	user := User{}
-	notFound := mongo.Get("user", "ukey", ukey, &user)
+	notFound := mongo.Get("user", "ukey", req.Ukey, &user)
 	if notFound != nil {
 		w.WriteHeader(404)
 		return
 	}
-	if len(user.Messages) < offset {
+	if len(user.Messages) < req.Offset {
 		w.WriteHeader(406)
 		return
 	}
-	response := user.Messages[offset:]
+	response := user.Messages[req.Offset:]
 	respbytes, marshErr := json.Marshal(response)
 	if marshErr != nil {
 		w.WriteHeader(503)
