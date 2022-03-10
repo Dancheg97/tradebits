@@ -35,6 +35,7 @@ func initCrypt(ch chan<- error) {
 	crp, err := crypter.Get(readConfigField("MARKET_PRIVATEKEY"))
 	ch <- err
 	crypt_client = crp
+	initInfo(ch)
 }
 
 func initMongo(ch chan<- error) {
@@ -58,11 +59,8 @@ func initInfo(ch chan<- error) {
 		"fee":       readConfigField("MARKET_FEE"),
 		"delimiter": readConfigField("MARKET_DELIMITER"),
 	}
-	mkt_info, err := json.Marshal(m)
-	info.Setup(mkt_info, mongo_client, crypt_client, redis_client)
-	market.Setup(mkt_info, mongo_client, crypt_client, redis_client)
-	operator.Setup(mkt_info, mongo_client, crypt_client, redis_client)
-	user.Setup(mongo_client, crypt_client, redis_client)
+	inf, err := json.Marshal(m)
+	mkt_info = inf
 	ch <- err
 }
 
@@ -73,14 +71,16 @@ func init() {
 	go initRedis(setchan)
 	go initCrypt(setchan)
 	go initMongo(setchan)
-	go initInfo(setchan)
-	for i := 0; i < 12; i++ {
+	for i := 0; i < 11; i++ {
 		err := <-setchan
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
-	initInfo(setchan)
+	info.Setup(mkt_info, mongo_client, crypt_client, redis_client)
+	market.Setup(mkt_info, mongo_client, crypt_client, redis_client)
+	operator.Setup(mkt_info, mongo_client, crypt_client, redis_client)
+	user.Setup(mongo_client, crypt_client, redis_client)
 	log.Println("Setup sucess...")
 }
 

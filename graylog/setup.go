@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 	"time"
@@ -37,7 +38,7 @@ func CheckInput(graylogHost string) (bool, error) {
 	req, err := http.NewRequest(
 		"GET",
 		graylogHost,
-		bytes.NewBuffer([]byte(graylogreq)),
+		nil,
 	)
 	if err != nil {
 		return false, err
@@ -50,12 +51,12 @@ func CheckInput(graylogHost string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	inputs := []byte{}
-	_, err = resp.Body.Read(inputs)
+	inputs, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return false, err
 	}
-	if !strings.Contains(string(inputs), "Standard GELF UDP input") {
+	inpstr := string(inputs)
+	if !strings.Contains(inpstr, "Standard GELF UDP input") {
 		return false, nil
 	}
 	return true, nil
@@ -76,6 +77,10 @@ func Setup(graylogHost string, retry int) error {
 	client := &http.Client{}
 	for retry != 0 {
 		retry -= 1
+		exist, _ := CheckInput(graylogHost)
+		if exist {
+			return nil
+		}
 		resp, _ := client.Do(req)
 		if resp.StatusCode == 201 {
 			return nil
