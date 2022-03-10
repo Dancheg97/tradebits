@@ -21,7 +21,7 @@ func Setup(
 	crypter crypter.ICrypter,
 	rediser rediser.IRediser,
 ) {
-	user.Setup(marketInfo, mongo, crypt, redis)
+	user.Setup(mongo, crypt, redis)
 	info.Setup(marketInfo, mongo, crypt, redis)
 	market.Setup(marketInfo, mongo, crypt, redis)
 	operator.Setup(marketInfo, mongo, crypt, redis)
