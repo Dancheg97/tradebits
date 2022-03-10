@@ -9,7 +9,7 @@ import (
 
 type IRediser interface {
 	Lock(key string) error
-	Unlock(key string) bool
+	Unlock(key string) error
 }
 
 type rediser struct {

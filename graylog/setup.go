@@ -53,6 +53,7 @@ func Setup(graylogHost string, retry int) error {
 			return nil
 		}
 		time.Sleep(time.Second)
+		fmt.Println("Graylog connection failed: ", retry)
 	}
-	return errors.New(fmt.Sprint("Graylog setup error"))
+	return errors.New("graylog setup error")
 }

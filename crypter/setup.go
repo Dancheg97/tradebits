@@ -4,6 +4,7 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
+	"time"
 )
 
 type ICrypter interface {
@@ -36,5 +37,9 @@ func Get(privateBase64 string) (*crypter, error) {
 }
 
 func (c *crypter) Pub() string {
+	if c.pub == "" {
+		time.Sleep(time.Second)
+		return c.Pub()
+	}
 	return c.pub
 }

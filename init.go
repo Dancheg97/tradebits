@@ -16,44 +16,71 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func init() {
-	godotenv.Load()
-	gerr := graylog.Setup(readConfigField("GRAYLOG_API"), 15)
-	if gerr != nil {
-		log.Fatal("Unable to setup graylog", gerr)
-	}
-	crypt, err1 := crypter.Get(readConfigField("MARKET_PRIVATEKEY"))
-	redis, err2 := rediser.Get(readConfigField("REDIS_HOST"))
-	mongo, err3 := mongoer.Get(readConfigField("MONGO_HOST"))
+var redis_client rediser.IRediser
+var mongo_client mongoer.IMongoer
+var crypt_client crypter.ICrypter
+var mkt_info []byte
+
+func initGraylog(ch chan<- error) {
+	ch <- graylog.Setup(readConfigField("GRAYLOG_API"), 60)
+}
+
+func initRedis(ch chan<- error) {
+	rds, err := rediser.Get(readConfigField("REDIS_HOST"))
+	ch <- err
+	redis_client = rds
+}
+
+func initCrypt(ch chan<- error) {
+	crp, err := crypter.Get(readConfigField("MARKET_PRIVATEKEY"))
+	ch <- err
+	crypt_client = crp
+}
+
+func initMongo(ch chan<- error) {
+	mongo, err := mongoer.Get(readConfigField("MONGO_HOST"))
+	ch <- err
+	ch <- mongo.CreateCollection("user")
+	ch <- mongo.CreateCollection("net")
+	ch <- mongo.CreateCollection("trades")
+	ch <- mongo.CreateIndex("user", "key", "hashed")
+	ch <- mongo.CreateIndex("trades", "ukey", "hashed")
+	ch <- mongo.CreateIndex("trades", "mkey", "hashed")
+}
+
+func initInfo(ch chan<- error) {
 	m := map[string]string{
 		"name":      readConfigField("MARKET_NAME"),
-		"mkey":      crypt.Pub(),
+		"mkey":      crypt_client.Pub(),
 		"descr":     readConfigField("MARKET_DESCR"),
 		"img":       readConfigField("MARKET_IMG"),
 		"worktime":  readConfigField("MARKET_WORKTIME"),
 		"fee":       readConfigField("MARKET_FEE"),
 		"delimiter": readConfigField("MARKET_DELIMITER"),
 	}
-	marketinfo, err4 := json.Marshal(m)
-	if err1 != nil || err2 != nil || err3 != nil || err4 != nil {
-		log.Fatal("1) Setup err: ", err1, err2, err3, err4)
+	mkt_info, err := json.Marshal(m)
+	info.Setup(mkt_info, mongo_client, crypt_client, redis_client)
+	market.Setup(mkt_info, mongo_client, crypt_client, redis_client)
+	operator.Setup(mkt_info, mongo_client, crypt_client, redis_client)
+	user.Setup(mongo_client, crypt_client, redis_client)
+	ch <- err
+}
+
+func init() {
+	godotenv.Load()
+	setchan := make(chan error)
+	go initGraylog(setchan)
+	go initRedis(setchan)
+	go initCrypt(setchan)
+	go initMongo(setchan)
+	go initInfo(setchan)
+	for i := 0; i < 12; i++ {
+		err := <-setchan
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
-	colErr1 := mongo.CreateCollection("user")
-	colErr2 := mongo.CreateCollection("net")
-	colErr3 := mongo.CreateCollection("trades")
-	if colErr1 != nil || colErr2 != nil || colErr3 != nil {
-		log.Fatal("2) Setup err: ", colErr1, colErr2, colErr3)
-	}
-	idxErr1 := mongo.CreateIndex("user", "key", "hashed")
-	idxErr2 := mongo.CreateIndex("trades", "ukey", "hashed")
-	idxErr3 := mongo.CreateIndex("trades", "mkey", "hashed")
-	if idxErr1 != nil || idxErr2 != nil || idxErr3 != nil {
-		log.Fatal("3) Setup err: ", idxErr1, idxErr2, idxErr3)
-	}
-	info.Setup(marketinfo, mongo, crypt, redis)
-	market.Setup(marketinfo, mongo, crypt, redis)
-	operator.Setup(marketinfo, mongo, crypt, redis)
-	user.Setup(mongo, crypt, redis)
+	initInfo(setchan)
 	log.Println("Setup sucess...")
 }
 

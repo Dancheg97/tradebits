@@ -7,8 +7,8 @@ import (
 func TestUnlock(t *testing.T) {
 	r, _ := getRedis()
 	r.Lock("unlocktest")
-	rez := r.Unlock("unlocktest")
-	if !rez {
+	err := r.Unlock("unlocktest")
+	if err != nil {
 		t.Error("value should be successfully unlcoked")
 	}
 }
