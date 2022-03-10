@@ -1,13 +1,13 @@
-package api
+package main
 
 import (
 	"net/http"
 	"strings"
 
-	"tradebits/api/info"
-	"tradebits/api/market"
-	"tradebits/api/operator"
-	"tradebits/api/user"
+	"tradebits/info"
+	"tradebits/market"
+	"tradebits/operator"
+	"tradebits/user"
 
 	"github.com/gorilla/mux"
 )

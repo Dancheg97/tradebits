@@ -8,7 +8,7 @@ import (
 
 type ICrypter interface {
 	Sign(message string) (string, error)
-	Verify(message string, pubkey string, sign string) bool
+	Verify(message string, pubkey string, sign string) error
 	Pub() string
 }
 
