@@ -23,8 +23,8 @@ func UserMessagePut(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(421)
 		return
 	}
-	verfied := crypt.Verify(req.Hkey+req.Ukey+req.Mess, req.Ukey, req.Sign)
-	if !verfied {
+	err = crypt.Verify(req.Hkey+req.Ukey+req.Mess, req.Ukey, req.Sign)
+	if err != nil {
 		w.WriteHeader(401)
 		return
 	}
