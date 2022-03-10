@@ -8,7 +8,7 @@ import (
 )
 
 type IRediser interface {
-	Lock(key string) bool
+	Lock(key string) error
 	Unlock(key string) bool
 }
 

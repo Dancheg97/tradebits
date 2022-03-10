@@ -28,8 +28,8 @@ func UserMessagePut(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(401)
 		return
 	}
-	lockedSuccess := redis.Lock(req.Ukey)
-	if !lockedSuccess {
+	err = redis.Lock(req.Ukey)
+	if err != nil {
 		w.WriteHeader(423)
 		return
 	}

@@ -38,13 +38,31 @@ func UserOrderPost(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(401)
 		return
 	}
-	lockedSuccess := redis.Lock(req.Ukey)
-	if !lockedSuccess {
+	err = redis.Lock(req.Ukey)
+	if err != nil {
 		w.WriteHeader(423)
 		return
 	}
 	defer redis.Unlock(req.Ukey)
-	
+	err = redis.Lock(req.Mkey)
+	if err != nil {
+		w.WriteHeader(423)
+		return
+	}
+	defer redis.Unlock(req.Mkey)
+	user := User{}
+	err = mongo.Get("user", "ukey", req.Ukey, &user)
+	if err != nil {
+		w.WriteHeader(503)
+		return
+	}
+	if user.Balance < req.Offer {
+		w.WriteHeader(409)
+		return
+	}
+	// TODO check trades on market foreign market
+	// TODO check wether some of them could be operated
+	// TODO insert trading logic
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }

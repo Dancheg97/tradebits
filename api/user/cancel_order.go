@@ -5,46 +5,49 @@ import (
 	"net/http"
 )
 
+type CancelOrderRequest struct {
+	Hkey string `json:"hkey"`
+	Ukey string `json:"ukey"`
+	Mkey string `json:"mkey"`
+	Sign string `json:"sign"`
+}
+
 func UserCancelordersPost(w http.ResponseWriter, r *http.Request) {
-	request := map[string]string{}
-	json.NewDecoder(r.Body).Decode(&request)
-	hkey, exist1 := request["hkey"]
-	ukey, exist2 := request["ukey"]
-	mkey, exist3 := request["mkey"]
-	sign, exist4 := request["sign"]
-	if !exist1 || !exist2 || !exist3 || !exist4 {
+	req := CancelOrderRequest{}
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
 		w.WriteHeader(406)
 		return
 	}
-	if hkey != crypt.Pub() {
+	if req.Hkey != crypt.Pub() {
 		w.WriteHeader(421)
 		return
 	}
-	verfied := crypt.Verify(hkey+ukey, ukey, sign)
+	verfied := crypt.Verify(req.Hkey+req.Ukey, req.Ukey, req.Sign)
 	if !verfied {
 		w.WriteHeader(401)
 		return
 	}
-	userLocked := redis.Lock(ukey)
-	if !userLocked {
+	err = redis.Lock(req.Ukey)
+	if err != nil {
 		w.WriteHeader(423)
 		return
 	}
-	defer redis.Unlock(ukey)
+	defer redis.Unlock(req.Ukey)
 	user := User{}
-	err := mongo.Get("user", "ukey", ukey, &user)
+	err = mongo.Get("user", "ukey", req.Ukey, &user)
 	if err != nil {
 		w.WriteHeader(404)
 		return
 	}
-	marketLocked := redis.Lock(mkey)
-	if !marketLocked {
+	err = redis.Lock(req.Mkey)
+	if err != nil {
 		w.WriteHeader(423)
 		return
 	}
-	defer redis.Unlock(mkey)
+	defer redis.Unlock(req.Mkey)
 	order := Order{}
-	err = mongo.Get2kv("trades", "ukey", ukey, "mkey", mkey, &order)
+	err = mongo.Get2kv("trades", "ukey", req.Ukey, "mkey", req.Mkey, &order)
 	if err != nil {
 		w.WriteHeader(409)
 		return
@@ -54,7 +57,7 @@ func UserCancelordersPost(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(503)
 		return
 	}
-	mongo.Update("user", "ukey", ukey, user)
+	mongo.Update("user", "ukey", req.Ukey, user)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(200)
 }
