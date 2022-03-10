@@ -11,32 +11,35 @@ type User struct {
 	Messages []string `bson:"messages"`
 }
 
+type CreateRequest struct {
+	Hkey string `json:"hkey"`
+	Ukey string `json:"ukey"`
+	Sign string `json:"sign"`
+}
+
 func UserCreatePut(w http.ResponseWriter, r *http.Request) {
-	request := map[string]string{}
-	json.NewDecoder(r.Body).Decode(&request)
-	hkey, exist1 := request["hkey"]
-	ukey, exist2 := request["ukey"]
-	sign, exist3 := request["sign"]
-	if !exist1 || !exist2 || !exist3 {
+	req := CreateRequest{}
+	json.NewDecoder(r.Body).Decode(&req)
+	if req.Hkey == "" || req.Ukey == "" || req.Sign == "" {
 		w.WriteHeader(406)
 		return
 	}
-	if hkey != crypt.Pub() {
+	if req.Hkey != crypt.Pub() {
 		w.WriteHeader(421)
 		return
 	}
-	verfied := crypt.Verify(hkey+ukey, ukey, sign)
+	verfied := crypt.Verify(req.Hkey+req.Ukey, req.Ukey, req.Sign)
 	if !verfied {
 		w.WriteHeader(401)
 		return
 	}
-	exists := mongo.Check("user", "ukey", ukey)
+	exists := mongo.Check("user", "ukey", req.Ukey)
 	if exists {
 		w.WriteHeader(403)
 		return
 	}
 	mongo.Put("user", User{
-		Key:      ukey,
+		Key:      req.Ukey,
 		Balance:  0,
 		Messages: []string{},
 	})
