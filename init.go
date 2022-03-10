@@ -16,40 +16,73 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var redis_client rediser.IRediser
-var mongo_client mongoer.IMongoer
-var crypt_client crypter.ICrypter
-var mkt_info []byte
-
-func initGraylog(ch chan<- error) {
-	ch <- graylog.Setup(readConfigField("GRAYLOG_API"), 60)
+func initGraylog() {
+	err := graylog.Setup(readConfigField("GRAYLOG_API"), 60)
+	if err != nil {
+		log.Panic("error connecting to graylog")
+	}
+	log.Println("Connected to graylog")
 }
 
-func initRedis(ch chan<- error) {
+func initRedis() rediser.IRediser {
 	rds, err := rediser.Get(readConfigField("REDIS_HOST"))
-	ch <- err
-	redis_client = rds
+	if err != nil {
+		log.Panic("Unable to connect to Redis")
+	}
+	log.Println("Connected to redis")
+	return rds
 }
 
-func initCrypt(ch chan<- error) {
-	crp, err := crypter.Get(readConfigField("MARKET_PRIVATEKEY"))
-	ch <- err
-	crypt_client = crp
-	initInfo(ch)
+func initCrypt() crypter.ICrypter {
+	crypter, err := crypter.Get(readConfigField("MARKET_PRIVATEKEY"))
+	if err != nil {
+		log.Panic("Unable to prepare cryptography for crypt module")
+	}
+	log.Println("Crypter prepared")
+	return crypter
 }
 
-func initMongo(ch chan<- error) {
+func initMongo() mongoer.IMongoer {
+	mongoErrors := []error{}
 	mongo, err := mongoer.Get(readConfigField("MONGO_HOST"))
-	ch <- err
-	ch <- mongo.CreateCollection("user")
-	ch <- mongo.CreateCollection("net")
-	ch <- mongo.CreateCollection("trades")
-	ch <- mongo.CreateIndex("user", "key", "hashed")
-	ch <- mongo.CreateIndex("trades", "ukey", "hashed")
-	ch <- mongo.CreateIndex("trades", "mkey", "hashed")
+	mongoErrors = append(mongoErrors, err)
+	mongoErrors = append(
+		mongoErrors,
+		mongo.CreateCollection("user"),
+	)
+	mongoErrors = append(
+		mongoErrors,
+		mongo.CreateCollection("net"),
+	)
+	mongoErrors = append(
+		mongoErrors,
+		mongo.CreateCollection("trades"),
+	)
+	mongoErrors = append(
+		mongoErrors,
+		mongo.CreateIndex("user", "key", "hashed"),
+	)
+	mongoErrors = append(
+		mongoErrors,
+		mongo.CreateIndex("trades", "ukey", "hashed"),
+	)
+	mongoErrors = append(
+		mongoErrors,
+		mongo.CreateIndex("trades", "mkey", "hashed"),
+	)
+	for _, err := range mongoErrors {
+		if err != nil {
+			log.Panic(err)
+		}
+	}
+	return mongo
 }
 
-func initInfo(ch chan<- error) {
+func initAPIs(
+	redis_client rediser.IRediser,
+	mongo_client mongoer.IMongoer,
+	crypt_client crypter.ICrypter,
+) {
 	m := map[string]string{
 		"name":      readConfigField("MARKET_NAME"),
 		"mkey":      crypt_client.Pub(),
@@ -59,29 +92,25 @@ func initInfo(ch chan<- error) {
 		"fee":       readConfigField("MARKET_FEE"),
 		"delimiter": readConfigField("MARKET_DELIMITER"),
 	}
-	inf, err := json.Marshal(m)
-	mkt_info = inf
-	ch <- err
-}
-
-func init() {
-	godotenv.Load()
-	setchan := make(chan error)
-	go initGraylog(setchan)
-	go initRedis(setchan)
-	go initCrypt(setchan)
-	go initMongo(setchan)
-	for i := 0; i < 11; i++ {
-		err := <-setchan
-		if err != nil {
-			log.Fatal(err)
-		}
+	mkt_info, err := json.Marshal(m)
+	if err != nil {
+		log.Panic("unable to parse response")
 	}
 	info.Setup(mkt_info, mongo_client, crypt_client, redis_client)
 	market.Setup(mkt_info, mongo_client, crypt_client, redis_client)
 	operator.Setup(mkt_info, mongo_client, crypt_client, redis_client)
 	user.Setup(mongo_client, crypt_client, redis_client)
 	log.Println("Setup sucess...")
+}
+
+func init() {
+	godotenv.Load()
+	go initGraylog()
+	initAPIs(
+		initRedis(),
+		initMongo(),
+		initCrypt(),
+	)
 }
 
 func readConfigField(field string) string {
