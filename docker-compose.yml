@@ -4,16 +4,16 @@ services:
   bits:
     build: .
     ports:
-      - 8080:8080
+      - 6542:6542
     environment:
       REDIS_HOST: localhost:6379
       MONGO_HOST: mongodb://localhost:27017
       GRAYLOG_HOST: udp://localhost:12201
       GRAYLOG_API: http://lcoalhost:9000/api/system/inputs
-      MARKET_PORT: :8080
-      MARKET_NAME: Example market name
+      MARKET_PORT: :6542
+      MARKET_NAME: Trade-RUB market
       MARKET_DESCR: >
-       Example of some market description kinda extended to ensure if fits well all checkboxes and fields on different devices on different applications. Duplication: Example of some market description kinda extended to ensure if fits well all checkboxes and fields on different devices on different applications. And agin: Example of some market description kinda extended to ensure if fits well all checkboxes and fields on different devices on different applications.
+        Example of some market description kinda extended to ensure if fits well all checkboxes and fields on different devices on different applications. Duplication: Example of some market description kinda extended to ensure if fits well all checkboxes and fields on different devices on different applications. And agin: Example of some market description kinda extended to ensure if fits well all checkboxes and fields on different devices on different applications.
       MARKET_IMG: https://upload.wikimedia.org/wikipedia/commons/9/9a/BTC_Logo.svg
       MARKET_WORKTIME: 24/7
       MARKET_FEE: "86"
@@ -30,63 +30,9 @@ services:
         gelf-address: udp://localhost:12201
         tag: "tradebits"
 
-  mongo:
-    image: mongo:4.2
+  dgraph:
+    image: dgraph/standalone:v21.12.0
     ports:
-      - 27017:27017
-    hostname: mongo
-      - "host.docker.internal:host-gateway"
-
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_BASICAUTH_USERNAME: admin
-      ME_CONFIG_BASICAUTH_PASSWORD: admin
-
-  redis:
-    image: redis:alpine
-    restart: always
-    ports:
-      - 6379:6379
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
-    environment:
-      - http.host=0.0.0.0
-      - transport.host=localhost
-      - network.host=0.0.0.0
-      - "ES_JAVA_OPTS=-Dlog4j2.formatMsgNoLookups=true -Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    deploy:
-      resources:
-        limits:
-          memory: 1g
-
-  graylog:
-    image: graylog/graylog:4.2
-    environment:
-      GRAYLOG_PASSWORD_SECRET: somepasswordpepper
-      GRAYLOG_ROOT_PASSWORD_SHA2: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
-      GRAYLOG_HTTP_EXTERNAL_URI: http://127.0.0.1:9000/
-    entrypoint: /usr/bin/tini -- wait-for-it elasticsearch:9200 --  /docker-entrypoint.sh
-    links:
-      - mongo
-      - elasticsearch
-    restart: always
-    depends_on:
-      - mongo
-      - elasticsearch
-    ports:
-      - 9000:9000
-      - 1514:1514
-      - 1514:1514/udp
-      - 12201:12201
-      - 12201:12201/udp
+      - 8080:8080
+      - 9080:9080
+      - 8000:8000
