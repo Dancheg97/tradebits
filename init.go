@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"tradebits/crypter"
-	"tradebits/graylog"
 	"tradebits/info"
 	"tradebits/market"
 	"tradebits/mongoer"
@@ -16,14 +15,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func initGraylog() {
-	err := graylog.Setup(readConfigField("GRAYLOG_API"))
-	if err != nil {
-		log.Panic("error connecting to graylog")
-	}
-	log.Println("Connected to graylog")
-}
-
 func initRedis(ch chan<- rediser.IRediser) {
 	rds, err := rediser.Get(readConfigField("REDIS_HOST"))
 	if err != nil {
@@ -31,6 +22,7 @@ func initRedis(ch chan<- rediser.IRediser) {
 	}
 	log.Println("Connected to redis")
 	ch <- rds
+	close(ch)
 }
 
 func initCrypt(ch chan<- crypter.ICrypter) {
@@ -40,6 +32,7 @@ func initCrypt(ch chan<- crypter.ICrypter) {
 	}
 	log.Println("Crypter prepared")
 	ch <- crypter
+	close(ch)
 }
 
 func initMongo(ch chan<- mongoer.IMongoer) {
@@ -77,6 +70,7 @@ func initMongo(ch chan<- mongoer.IMongoer) {
 	}
 	log.Println("Connected to mongo")
 	ch <- mongo
+	close(ch)
 }
 
 func initAPIs(
@@ -106,18 +100,13 @@ func initAPIs(
 
 func init() {
 	godotenv.Load()
-	go initGraylog()
 	redischan := make(chan rediser.IRediser)
 	mongochan := make(chan mongoer.IMongoer)
 	cryptchan := make(chan crypter.ICrypter)
 	go initRedis(redischan)
 	go initMongo(mongochan)
 	go initCrypt(cryptchan)
-	initAPIs(
-		<-redischan,
-		<-mongochan,
-		<-cryptchan,
-	)
+	initAPIs(<-redischan, <-mongochan, <-cryptchan)
 }
 
 func readConfigField(field string) string {
