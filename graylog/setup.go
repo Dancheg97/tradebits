@@ -34,11 +34,7 @@ var graylogreq string = `{
 }`
 
 func checkInput(graylogHost string) error {
-	req, err := http.NewRequest(
-		"GET",
-		graylogHost,
-		nil,
-	)
+	req, err := http.NewRequest("GET", graylogHost, nil)
 	if err != nil {
 		return err
 	}
@@ -66,11 +62,8 @@ func setInput(graylogHost string) error {
 	if err == nil {
 		return nil
 	}
-	req, err := http.NewRequest(
-		"POST",
-		graylogHost,
-		bytes.NewBuffer([]byte(graylogreq)),
-	)
+	requestBytes := bytes.NewBuffer([]byte(graylogreq))
+	req, err := http.NewRequest("POST", graylogHost, requestBytes)
 	if err != nil {
 		return err
 	}
