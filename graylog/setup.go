@@ -3,7 +3,6 @@ package graylog
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -34,14 +33,14 @@ var graylogreq string = `{
     "node": null
 }`
 
-func CheckInput(graylogHost string) (bool, error) {
+func checkInput(graylogHost string) error {
 	req, err := http.NewRequest(
 		"GET",
 		graylogHost,
 		nil,
 	)
 	if err != nil {
-		return false, err
+		return err
 	}
 	req.Header.Set("X-Requested-By", "go_tradebits")
 	req.Header.Set("Authorization", "Basic YWRtaW46YWRtaW4=")
@@ -49,20 +48,24 @@ func CheckInput(graylogHost string) (bool, error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return false, err
+		return err
 	}
 	inputs, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return false, err
+		return err
 	}
 	inpstr := string(inputs)
 	if !strings.Contains(inpstr, "Standard GELF UDP input") {
-		return false, nil
+		return errors.New("input not found")
 	}
-	return true, nil
+	return nil
 }
 
-func Setup(graylogHost string, retry int) error {
+func setInput(graylogHost string) error {
+	err := checkInput(graylogHost)
+	if err == nil {
+		return nil
+	}
 	req, err := http.NewRequest(
 		"POST",
 		graylogHost,
@@ -75,18 +78,24 @@ func Setup(graylogHost string, retry int) error {
 	req.Header.Set("Authorization", "Basic YWRtaW46YWRtaW4=")
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
-	for retry != 0 {
-		retry -= 1
-		exist, _ := CheckInput(graylogHost)
-		if exist {
-			return nil
-		}
-		resp, _ := client.Do(req)
-		if resp.StatusCode == 201 {
-			return nil
-		}
-		time.Sleep(time.Second)
-		fmt.Println("Graylog connection failed: ", retry)
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
 	}
-	return errors.New("graylog setup error")
+	if resp.StatusCode == 201 {
+		return nil
+	}
+	return errors.New("bad response code")
+}
+
+func Setup(graylogHost string) error {
+	for i := 0; i < 90; i++ {
+		err := setInput(graylogHost)
+		if err != nil {
+			time.Sleep(time.Second)
+			continue
+		}
+		return nil
+	}
+	return errors.New("number of retrys exceeded")
 }

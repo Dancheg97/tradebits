@@ -24,25 +24,25 @@ func initGraylog() {
 	log.Println("Connected to graylog")
 }
 
-func initRedis() rediser.IRediser {
+func initRedis(ch chan<- rediser.IRediser) {
 	rds, err := rediser.Get(readConfigField("REDIS_HOST"))
 	if err != nil {
 		log.Panic("Unable to connect to Redis")
 	}
 	log.Println("Connected to redis")
-	return rds
+	ch <- rds
 }
 
-func initCrypt() crypter.ICrypter {
+func initCrypt(ch chan<- crypter.ICrypter) {
 	crypter, err := crypter.Get(readConfigField("MARKET_PRIVATEKEY"))
 	if err != nil {
 		log.Panic("Unable to prepare cryptography for crypt module")
 	}
 	log.Println("Crypter prepared")
-	return crypter
+	ch <- crypter
 }
 
-func initMongo() mongoer.IMongoer {
+func initMongo(ch chan<- mongoer.IMongoer) {
 	mongoErrors := []error{}
 	mongo, err := mongoer.Get(readConfigField("MONGO_HOST"))
 	mongoErrors = append(mongoErrors, err)
@@ -75,7 +75,8 @@ func initMongo() mongoer.IMongoer {
 			log.Panic(err)
 		}
 	}
-	return mongo
+	log.Println("Connected to mongo")
+	ch <- mongo
 }
 
 func initAPIs(
@@ -106,10 +107,16 @@ func initAPIs(
 func init() {
 	godotenv.Load()
 	go initGraylog()
+	redischan := make(chan rediser.IRediser)
+	mongochan := make(chan mongoer.IMongoer)
+	cryptchan := make(chan crypter.ICrypter)
+	go initRedis(redischan)
+	go initMongo(mongochan)
+	go initCrypt(cryptchan)
 	initAPIs(
-		initRedis(),
-		initMongo(),
-		initCrypt(),
+		<-redischan,
+		<-mongochan,
+		<-cryptchan,
 	)
 }
 

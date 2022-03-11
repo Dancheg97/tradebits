@@ -7,10 +7,10 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func TestSetup(t *testing.T) {
+func TestSetInput(t *testing.T) {
 	godotenv.Load("../.env")
 	grayApi, _ := os.LookupEnv("GRAYLOG_API")
-	err := Setup(grayApi, 15)
+	err := setInput(grayApi)
 	if err != nil {
 		t.Error(err)
 	}
@@ -19,12 +19,9 @@ func TestSetup(t *testing.T) {
 func TestCheckInput(t *testing.T) {
 	godotenv.Load("../.env")
 	grayApi, _ := os.LookupEnv("GRAYLOG_API")
-	Setup(grayApi, 10)
-	found, err := CheckInput(grayApi)
+	setInput(grayApi)
+	err := checkInput(grayApi)
 	if err != nil {
 		t.Error(err)
-	}
-	if !found {
-		t.Error("input not found")
 	}
 }
