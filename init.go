@@ -31,6 +31,7 @@ func initRedis(ch chan<- rediser.IRediser) {
 	}
 	log.Println("Connected to redis")
 	ch <- rds
+	close(ch)
 }
 
 func initCrypt(ch chan<- crypter.ICrypter) {
@@ -40,6 +41,7 @@ func initCrypt(ch chan<- crypter.ICrypter) {
 	}
 	log.Println("Crypter prepared")
 	ch <- crypter
+	close(ch)
 }
 
 func initMongo(ch chan<- mongoer.IMongoer) {
@@ -77,6 +79,7 @@ func initMongo(ch chan<- mongoer.IMongoer) {
 	}
 	log.Println("Connected to mongo")
 	ch <- mongo
+	close(ch)
 }
 
 func initAPIs(
