@@ -6,9 +6,10 @@ services:
     ports:
       - 8080:8080
     environment:
-      REDIS_HOST: ${REDIS_HOST:-}
-      MONGO_HOST: ${MONGO_HOST:-}
-      MONGO_NAME: ${MONGO_NAME:-}
+      REDIS_HOST: host.docker.internal:6379
+      MONGO_HOST: mongodb://host.docker.internal:27017
+      GRAYLOG_HOST: udp://host.docker.internal:12201
+      GRAYLOG_API: http://host.docker.internal:9000/api/system/inputs
       MARKET_PORT: ${MARKET_PORT:-}
       MARKET_NAME: ${MARKET_NAME:-}
       MARKET_DESCR: ${MARKET_DESCR:-}

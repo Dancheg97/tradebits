@@ -17,7 +17,7 @@ import (
 )
 
 func initGraylog() {
-	err := graylog.Setup(readConfigField("GRAYLOG_API"), 60)
+	err := graylog.Setup(readConfigField("GRAYLOG_API"))
 	if err != nil {
 		log.Panic("error connecting to graylog")
 	}
