@@ -1,6 +1,7 @@
 package user
 
 import (
+	"bytes"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -17,9 +18,17 @@ type OrderRequest struct {
 	Hkey    string `json:"hkey"`
 	Ukey    string `json:"ukey"`
 	Mkey    string `json:"mkey"`
+	Madr    string `json:"madr"`
+	Mname   string `json:"mname"`
 	Offer   int    `json:"offer"`
 	Recieve int    `json:"recieve"`
 	Sign    string `json:"sign"`
+}
+
+type Market struct {
+	Name string `json:"name"`
+	Mkey string `json:"mkey"`
+	Link string `json:"link"`
 }
 
 func UserOrderPost(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +42,15 @@ func UserOrderPost(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(421)
 		return
 	}
-	err = crypt.Verify(req.Hkey+req.Ukey+req.Mkey+strconv.Itoa(req.Offer)+strconv.Itoa(req.Recieve), req.Ukey, req.Sign)
+	var bytestring bytes.Buffer
+	bytestring.WriteString(req.Hkey)
+	bytestring.WriteString(req.Ukey)
+	bytestring.WriteString(req.Mkey)
+	bytestring.WriteString(req.Madr)
+	bytestring.WriteString(req.Mname)
+	bytestring.WriteString(strconv.Itoa(req.Offer))
+	bytestring.WriteString(strconv.Itoa(req.Recieve))
+	err = crypt.Verify(bytestring.String(), req.Ukey, req.Sign)
 	if err != nil {
 		w.WriteHeader(401)
 		return
@@ -59,6 +76,11 @@ func UserOrderPost(w http.ResponseWriter, r *http.Request) {
 	if user.Balance < req.Offer {
 		w.WriteHeader(409)
 		return
+	}
+	m := Market{}
+	err = mongo.Get("net", "mkey", req.Mkey, &m)
+	if err != nil {
+
 	}
 	// TODO check trades on market foreign market
 	// TODO check wether some of them could be operated
