@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"tradebits/crypter"
+	"tradebits/mongoer"
 )
 
 type ConnectInfo struct {
@@ -24,7 +25,15 @@ type ConnectRequest struct {
 	Sign  string `json:"sign"`
 }
 
-func Connect(crypt crypter.ICrypter, info ConnectInfo) error {
+func Connect(
+	crypt crypter.ICrypter,
+	mongo mongoer.IMongoer,
+	info ConnectInfo,
+) error {
+	err := saveInformation(info.ConnectAdress, mongo)
+	if err != nil {
+		return err
+	}
 	var bytestring bytes.Buffer
 	bytestring.WriteString(info.ConnectAdress)
 	bytestring.WriteString(crypt.Pub())

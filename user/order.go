@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"tradebits/connect"
 )
 
 type Order struct {
@@ -79,6 +80,14 @@ func UserOrderPost(w http.ResponseWriter, r *http.Request) {
 	}
 	m := Market{}
 	err = mongo.Get("net", "mkey", req.Mkey, &m)
+	if err != nil {
+		err = connect.Connect(crypt, connect.ConnectInfo{
+			ConnectAdress: req.Madr,
+			ConnectKey:    req.Mkey,
+			SelfName:      req.Mname,
+			SelfAdress:    req.Madr,
+		})
+	}
 	if err != nil {
 
 	}
